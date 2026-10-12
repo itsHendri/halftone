@@ -8,11 +8,13 @@ import {
   CompassIcon,
   ImageIcon,
   LayersIcon,
+  MegaphoneIcon,
   MousePointerClickIcon,
   PaletteIcon,
   PenLineIcon,
   RulerIcon,
   SmartphoneIcon,
+  SparklesIcon,
   TypeIcon,
   type LucideIcon,
 } from 'lucide-react-native';
@@ -26,6 +28,8 @@ const CATEGORY_ICON: Record<CategoryId, LucideIcon> = {
   layout: BlocksIcon,
   overlays: LayersIcon,
   media: ImageIcon,
+  marketing: MegaphoneIcon,
+  ai: SparklesIcon,
   native: SmartphoneIcon,
 };
 

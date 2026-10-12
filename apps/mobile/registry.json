@@ -2727,6 +2727,355 @@
       }
     },
     {
+      "name": "pricing-card",
+      "type": "registry:component",
+      "title": "Pricing card",
+      "description": "one plan · stack 2–3 on a paywall · `highlighted` on one",
+      "dependencies": [
+        "lucide-react-native@^1.21.0"
+      ],
+      "registryDependencies": [
+        "@kit-native/badge",
+        "@kit-native/card",
+        "@kit-native/icon",
+        "@kit-native/lib-utils",
+        "@kit-native/text"
+      ],
+      "files": [
+        {
+          "path": "components/kit/pricing-card.tsx",
+          "type": "registry:component",
+          "target": "components/kit/pricing-card.tsx"
+        }
+      ],
+      "categories": [
+        "marketing"
+      ],
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "meta": {
+        "exports": [
+          "PricingCard"
+        ],
+        "api": "<PricingCard name price period? description? features action highlighted? />"
+      }
+    },
+    {
+      "name": "chat-message",
+      "type": "registry:component",
+      "title": "Chat message",
+      "description": "one turn · user = bubble on the right, assistant = plain text on the left",
+      "dependencies": [
+        "lucide-react-native@^1.21.0"
+      ],
+      "registryDependencies": [
+        "@kit-native/avatar",
+        "@kit-native/icon",
+        "@kit-native/lib-utils",
+        "@kit-native/text"
+      ],
+      "files": [
+        {
+          "path": "components/kit/chat-message.tsx",
+          "type": "registry:component",
+          "target": "components/kit/chat-message.tsx"
+        }
+      ],
+      "categories": [
+        "ai"
+      ],
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "meta": {
+        "exports": [
+          "ChatMessage"
+        ],
+        "api": "<ChatMessage role=\"user|assistant\" initials?>{content}</ChatMessage>"
+      }
+    },
+    {
+      "name": "chat-composer",
+      "type": "registry:component",
+      "title": "Chat composer",
+      "description": "the arrow sends · `busy` turns Send into Stop · `onAttach` turns on attachments (paperclip, chips)",
+      "dependencies": [
+        "lucide-react-native@^1.21.0"
+      ],
+      "registryDependencies": [
+        "@kit-native/attachment-chip",
+        "@kit-native/icon",
+        "@kit-native/lib-haptics",
+        "@kit-native/lib-utils",
+        "@kit-native/text"
+      ],
+      "files": [
+        {
+          "path": "components/kit/chat-composer.tsx",
+          "type": "registry:component",
+          "target": "components/kit/chat-composer.tsx"
+        }
+      ],
+      "categories": [
+        "ai"
+      ],
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "meta": {
+        "exports": [
+          "ChatComposer"
+        ],
+        "api": "<ChatComposer onSend={(text, files) => …} busy? onStop? placeholder? onAttach? maxFiles? />"
+      }
+    },
+    {
+      "name": "attachment-chip",
+      "type": "registry:component",
+      "title": "Attachment chip",
+      "description": "a file in a conversation: icon by type, name, size · `onRemove` while composing",
+      "dependencies": [
+        "lucide-react-native@^1.21.0"
+      ],
+      "registryDependencies": [
+        "@kit-native/icon",
+        "@kit-native/lib-utils",
+        "@kit-native/text"
+      ],
+      "files": [
+        {
+          "path": "components/kit/attachment-chip.tsx",
+          "type": "registry:component",
+          "target": "components/kit/attachment-chip.tsx"
+        }
+      ],
+      "categories": [
+        "ai"
+      ],
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "meta": {
+        "exports": [
+          "AttachmentChip",
+          "formatBytes"
+        ],
+        "api": "<AttachmentChip file={{ name, size, type? }} onRemove? />"
+      }
+    },
+    {
+      "name": "chat-thread-list",
+      "type": "registry:component",
+      "title": "Chat thread list",
+      "description": "past conversations, grouped by when · `threads activeId onSelect onNew?`",
+      "dependencies": [
+        "lucide-react-native@^1.21.0"
+      ],
+      "registryDependencies": [
+        "@kit-native/button",
+        "@kit-native/icon",
+        "@kit-native/lib-utils",
+        "@kit-native/text"
+      ],
+      "files": [
+        {
+          "path": "components/kit/chat-thread-list.tsx",
+          "type": "registry:component",
+          "target": "components/kit/chat-thread-list.tsx"
+        }
+      ],
+      "categories": [
+        "ai"
+      ],
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "meta": {
+        "exports": [
+          "ChatThreadList"
+        ],
+        "api": "<ChatThreadList threads={[{id,title,preview?,group?}]} activeId onSelect onNew? />"
+      }
+    },
+    {
+      "name": "sources",
+      "type": "registry:component",
+      "title": "Sources",
+      "description": "what an answer is based on · numbered chips · `[n]` in text → inline citations · previews in a Sheet",
+      "dependencies": [
+        "lucide-react-native@^1.21.0"
+      ],
+      "registryDependencies": [
+        "@kit-native/icon",
+        "@kit-native/lib-utils",
+        "@kit-native/sheet",
+        "@kit-native/text"
+      ],
+      "files": [
+        {
+          "path": "components/kit/sources.tsx",
+          "type": "registry:component",
+          "target": "components/kit/sources.tsx"
+        }
+      ],
+      "categories": [
+        "ai"
+      ],
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "meta": {
+        "exports": [
+          "SourceList",
+          "CitedText",
+          "stripCitations"
+        ],
+        "api": "<CitedText text=\"… [1]\" sources={[{ title, meta?, snippet?, href? }]} /><SourceList sources />"
+      }
+    },
+    {
+      "name": "follow-up-suggestions",
+      "type": "registry:component",
+      "title": "Follow-up suggestions",
+      "description": "next questions under the latest answer · tapping one sends it",
+      "dependencies": [],
+      "registryDependencies": [
+        "@kit-native/lib-haptics",
+        "@kit-native/lib-utils",
+        "@kit-native/text"
+      ],
+      "files": [
+        {
+          "path": "components/kit/follow-up-suggestions.tsx",
+          "type": "registry:component",
+          "target": "components/kit/follow-up-suggestions.tsx"
+        }
+      ],
+      "categories": [
+        "ai"
+      ],
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "meta": {
+        "exports": [
+          "FollowUpSuggestions"
+        ],
+        "api": "<FollowUpSuggestions suggestions={[\"…\"]} onSelect />"
+      }
+    },
+    {
+      "name": "streaming-text",
+      "type": "registry:component",
+      "title": "Streaming text",
+      "description": "an answer arriving · all at once under reduced motion · screen readers get it once",
+      "dependencies": [],
+      "registryDependencies": [
+        "@kit-native/lib-reduced-motion",
+        "@kit-native/text"
+      ],
+      "files": [
+        {
+          "path": "components/kit/streaming-text.tsx",
+          "type": "registry:component",
+          "target": "components/kit/streaming-text.tsx"
+        }
+      ],
+      "categories": [
+        "ai"
+      ],
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "meta": {
+        "exports": [
+          "StreamingText",
+          "useStreamingText"
+        ],
+        "api": "<StreamingText text onDone? />"
+      }
+    },
+    {
+      "name": "thinking-indicator",
+      "type": "registry:component",
+      "title": "Thinking indicator",
+      "description": "the model is working · say what it is doing when you can · still dots under reduced motion",
+      "dependencies": [],
+      "registryDependencies": [
+        "@kit-native/lib-reduced-motion",
+        "@kit-native/lib-utils",
+        "@kit-native/text"
+      ],
+      "files": [
+        {
+          "path": "components/kit/thinking-indicator.tsx",
+          "type": "registry:component",
+          "target": "components/kit/thinking-indicator.tsx"
+        }
+      ],
+      "categories": [
+        "ai"
+      ],
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "meta": {
+        "exports": [
+          "ThinkingIndicator"
+        ],
+        "api": "<ThinkingIndicator label? />"
+      }
+    },
+    {
+      "name": "tool-call-card",
+      "type": "registry:component",
+      "title": "Tool call card",
+      "description": "an action the assistant took · `status` running/done/error/stopped · details collapsed",
+      "dependencies": [
+        "lucide-react-native@^1.21.0"
+      ],
+      "registryDependencies": [
+        "@kit-native/icon",
+        "@kit-native/lib-utils",
+        "@kit-native/spinner",
+        "@kit-native/text"
+      ],
+      "files": [
+        {
+          "path": "components/kit/tool-call-card.tsx",
+          "type": "registry:component",
+          "target": "components/kit/tool-call-card.tsx"
+        }
+      ],
+      "categories": [
+        "ai"
+      ],
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "meta": {
+        "exports": [
+          "ToolCallCard"
+        ],
+        "api": "<ToolCallCard title status input? output? />"
+      }
+    },
+    {
+      "name": "approval-card",
+      "type": "registry:component",
+      "title": "Approval card",
+      "description": "consent before consequence · says what changes and whether it can be undone",
+      "dependencies": [
+        "lucide-react-native@^1.21.0"
+      ],
+      "registryDependencies": [
+        "@kit-native/button",
+        "@kit-native/icon",
+        "@kit-native/lib-haptics",
+        "@kit-native/lib-utils",
+        "@kit-native/summary-card",
+        "@kit-native/text"
+      ],
+      "files": [
+        {
+          "path": "components/kit/approval-card.tsx",
+          "type": "registry:component",
+          "target": "components/kit/approval-card.tsx"
+        }
+      ],
+      "categories": [
+        "ai"
+      ],
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "meta": {
+        "exports": [
+          "ApprovalCard"
+        ],
+        "api": "<ApprovalCard title description? details? onApprove onDeny />"
+      }
+    },
+    {
       "name": "photo-capture",
       "type": "registry:component",
       "title": "Camera",

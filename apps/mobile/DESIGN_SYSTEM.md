@@ -243,6 +243,33 @@ App tabs and stacks are Expo Router: `app/(kit)/_layout.tsx` shows the pattern; 
 | Spot | `components/kit/spot.tsx` | an icon at illustration scale (≥64px) · EmptyState, SuccessScreen and PermissionPrimer all use it |
 <!-- /GENERATED:registry:media -->
 
+### Marketing
+<!-- GENERATED:registry:marketing -->
+| Component | Path | Notes |
+|---|---|---|
+| PricingCard | `components/kit/pricing-card.tsx` | one plan · stack 2–3 on a paywall · `highlighted` on one |
+<!-- /GENERATED:registry:marketing -->
+
+### AI product
+
+The parts of an assistant inside an app: turns, the composer, sources, tool calls and approvals. The web kit has
+the same components with the same props (presses become `onPress`; the composer's attachments come from `onAttach`).
+
+<!-- GENERATED:registry:ai -->
+| Component | Path | Notes |
+|---|---|---|
+| ChatMessage | `components/kit/chat-message.tsx` | one turn · user = bubble on the right, assistant = plain text on the left |
+| ChatComposer | `components/kit/chat-composer.tsx` | the arrow sends · `busy` turns Send into Stop · `onAttach` turns on attachments (paperclip, chips) |
+| AttachmentChip / `formatBytes` | `components/kit/attachment-chip.tsx` | a file in a conversation: icon by type, name, size · `onRemove` while composing |
+| ChatThreadList | `components/kit/chat-thread-list.tsx` | past conversations, grouped by when · `threads activeId onSelect onNew?` |
+| SourceList / CitedText / `stripCitations` | `components/kit/sources.tsx` | what an answer is based on · numbered chips · `[n]` in text → inline citations · previews in a Sheet |
+| FollowUpSuggestions | `components/kit/follow-up-suggestions.tsx` | next questions under the latest answer · tapping one sends it |
+| StreamingText / `useStreamingText` | `components/kit/streaming-text.tsx` | an answer arriving · all at once under reduced motion · screen readers get it once |
+| ThinkingIndicator | `components/kit/thinking-indicator.tsx` | the model is working · say what it is doing when you can · still dots under reduced motion |
+| ToolCallCard | `components/kit/tool-call-card.tsx` | an action the assistant took · `status` running/done/error/stopped · details collapsed |
+| ApprovalCard | `components/kit/approval-card.tsx` | consent before consequence · says what changes and whether it can be undone |
+<!-- /GENERATED:registry:ai -->
+
 ### Device capabilities
 
 Everything here resolves through `lib/native.ts` + `useCapability()`: when the real thing cannot

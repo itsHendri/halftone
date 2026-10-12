@@ -26,6 +26,8 @@ import { KIT_FEEDBACK_DEMOS } from './sections/kit-feedback';
 import { KIT_LAYOUT_DEMOS } from './sections/kit-layout';
 import { KIT_OVERLAYS_DEMOS } from './sections/kit-overlays';
 import { KIT_MEDIA_DEMOS } from './sections/kit-media';
+import { KIT_MARKETING_DEMOS } from './sections/kit-marketing';
+import { KIT_AI_DEMOS } from './sections/kit-ai';
 import { KIT_NATIVE_DEMOS } from './sections/kit-native';
 
 /** ui/ (reusables) demos live in <category>.tsx; kit/ demos in kit-<category>.tsx. */
@@ -46,6 +48,8 @@ const DEMOS: Record<string, ComponentType> = {
   ...KIT_OVERLAYS_DEMOS,
   ...MEDIA_DEMOS,
   ...KIT_MEDIA_DEMOS,
+  ...KIT_MARKETING_DEMOS,
+  ...KIT_AI_DEMOS,
   ...KIT_NATIVE_DEMOS,
 };
 
