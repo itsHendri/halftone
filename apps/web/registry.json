@@ -298,6 +298,290 @@
       }
     },
     {
+      "name": "filter-chip",
+      "type": "registry:component",
+      "title": "Filter chip",
+      "description": "neutral-active chips in a scrolling row",
+      "dependencies": [
+        "cn@^0.4.0",
+        "lucide-react@^1.52.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/kit/filter-chip.tsx",
+          "type": "registry:component",
+          "target": "components/kit/filter-chip.tsx"
+        }
+      ],
+      "categories": [
+        "inputs"
+      ],
+      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "FilterChip",
+          "FilterChipRow"
+        ],
+        "api": "<FilterChipRow><FilterChip label selected onClick icon? /></FilterChipRow>"
+      }
+    },
+    {
+      "name": "segmented-control",
+      "type": "registry:component",
+      "title": "Segmented control",
+      "description": "2–4 options, sliding thumb",
+      "dependencies": [
+        "cn@^0.4.0"
+      ],
+      "registryDependencies": [
+        "@kit/hook-use-reduced-motion"
+      ],
+      "files": [
+        {
+          "path": "components/kit/segmented-control.tsx",
+          "type": "registry:component",
+          "target": "components/kit/segmented-control.tsx"
+        }
+      ],
+      "categories": [
+        "inputs"
+      ],
+      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "SegmentedControl"
+        ],
+        "api": "<SegmentedControl segments={[{value,label}]} value onChange aria-label />"
+      }
+    },
+    {
+      "name": "search-field",
+      "type": "registry:component",
+      "title": "Search field",
+      "description": "Input + search icon + clear",
+      "dependencies": [
+        "cn@^0.4.0",
+        "lucide-react@^1.52.0"
+      ],
+      "registryDependencies": [
+        "input"
+      ],
+      "files": [
+        {
+          "path": "components/kit/search-field.tsx",
+          "type": "registry:component",
+          "target": "components/kit/search-field.tsx"
+        }
+      ],
+      "categories": [
+        "inputs"
+      ],
+      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "SearchField"
+        ],
+        "api": "<SearchField value onChangeText placeholder />"
+      }
+    },
+    {
+      "name": "quantity-stepper",
+      "type": "registry:component",
+      "title": "Quantity stepper",
+      "description": "− value + · `min max step`",
+      "dependencies": [
+        "cn@^0.4.0",
+        "lucide-react@^1.52.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/kit/quantity-stepper.tsx",
+          "type": "registry:component",
+          "target": "components/kit/quantity-stepper.tsx"
+        }
+      ],
+      "categories": [
+        "inputs"
+      ],
+      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "QuantityStepper"
+        ],
+        "api": "<QuantityStepper value onChange min? max? step? aria-label />"
+      }
+    },
+    {
+      "name": "rating",
+      "type": "registry:component",
+      "title": "Rating",
+      "description": "stars · display (half stars, `showValue`, `count`) or input with `onChange`",
+      "dependencies": [
+        "cn@^0.4.0",
+        "lucide-react@^1.52.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/kit/rating.tsx",
+          "type": "registry:component",
+          "target": "components/kit/rating.tsx"
+        }
+      ],
+      "categories": [
+        "inputs"
+      ],
+      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "Rating"
+        ],
+        "api": "<Rating value onChange? showValue? count? size? aria-label? />"
+      }
+    },
+    {
+      "name": "amount-input",
+      "type": "registry:component",
+      "title": "Amount input",
+      "description": "hero money field · MAX and currency switch",
+      "dependencies": [
+        "cn@^0.4.0",
+        "lucide-react@^1.52.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/kit/amount-input.tsx",
+          "type": "registry:component",
+          "target": "components/kit/amount-input.tsx"
+        }
+      ],
+      "categories": [
+        "inputs"
+      ],
+      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "AmountInput"
+        ],
+        "api": "<AmountInput value onChangeText symbol helper? onMax? onToggleCurrency? error? />"
+      }
+    },
+    {
+      "name": "otp-input",
+      "type": "registry:component",
+      "title": "OTP input",
+      "description": "N-digit code, paste-aware",
+      "dependencies": [
+        "cn@^0.4.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/kit/otp-input.tsx",
+          "type": "registry:component",
+          "target": "components/kit/otp-input.tsx"
+        }
+      ],
+      "categories": [
+        "inputs"
+      ],
+      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "OtpInput"
+        ],
+        "api": "<OtpInput length value onChange onComplete error? />"
+      }
+    },
+    {
+      "name": "password-input",
+      "type": "registry:component",
+      "title": "Password input",
+      "description": "Input + show/hide",
+      "dependencies": [
+        "cn@^0.4.0",
+        "lucide-react@^1.52.0"
+      ],
+      "registryDependencies": [
+        "input"
+      ],
+      "files": [
+        {
+          "path": "components/kit/password-input.tsx",
+          "type": "registry:component",
+          "target": "components/kit/password-input.tsx"
+        }
+      ],
+      "categories": [
+        "inputs"
+      ],
+      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "PasswordInput"
+        ],
+        "api": "<PasswordInput id value onChange />"
+      }
+    },
+    {
+      "name": "selectable-card",
+      "type": "registry:component",
+      "title": "Selectable card",
+      "description": "card as a radio/checkbox choice",
+      "dependencies": [
+        "cn@^0.4.0",
+        "lucide-react@^1.52.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/kit/selectable-card.tsx",
+          "type": "registry:component",
+          "target": "components/kit/selectable-card.tsx"
+        }
+      ],
+      "categories": [
+        "inputs"
+      ],
+      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "SelectableCard"
+        ],
+        "api": "<SelectableCard title description? icon? detail? selected onClick mode=\"radio|checkbox\" />"
+      }
+    },
+    {
+      "name": "range-selector",
+      "type": "registry:component",
+      "title": "Range selector",
+      "description": "chart range (1D·1W·1M·1Y·ALL), the active one inverts",
+      "dependencies": [
+        "cn@^0.4.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/kit/range-selector.tsx",
+          "type": "registry:component",
+          "target": "components/kit/range-selector.tsx"
+        }
+      ],
+      "categories": [
+        "inputs"
+      ],
+      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "RangeSelector"
+        ],
+        "api": "<RangeSelector options value onChange aria-label />"
+      }
+    },
+    {
       "name": "app-shell",
       "type": "registry:component",
       "title": "App shell",
@@ -417,6 +701,289 @@
           "badgeVariants"
         ],
         "api": "<Badge variant?>Label</Badge>"
+      }
+    },
+    {
+      "name": "avatar-group",
+      "type": "registry:component",
+      "title": "Avatar group",
+      "description": "overlapping avatars + \"+N\"",
+      "dependencies": [
+        "cn@^0.4.0"
+      ],
+      "registryDependencies": [
+        "avatar"
+      ],
+      "files": [
+        {
+          "path": "components/kit/avatar-group.tsx",
+          "type": "registry:component",
+          "target": "components/kit/avatar-group.tsx"
+        }
+      ],
+      "categories": [
+        "data"
+      ],
+      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "AvatarGroup"
+        ],
+        "api": "<AvatarGroup items={[{id,initials,src?}]} max? size? />"
+      }
+    },
+    {
+      "name": "list-row",
+      "type": "registry:component",
+      "title": "List row",
+      "description": "ONE row · the canonical row · `last` on the final row · `select={{mode,selected}}` makes it a radio/checkbox row",
+      "dependencies": [
+        "cn@^0.4.0",
+        "lucide-react@^1.52.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/kit/list-row.tsx",
+          "type": "registry:component",
+          "target": "components/kit/list-row.tsx"
+        }
+      ],
+      "categories": [
+        "data"
+      ],
+      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "ListRow"
+        ],
+        "api": "<ListRow leading title subtitle? value? sublabel? trailing? chevron? onClick? href? last? />"
+      }
+    },
+    {
+      "name": "list-group",
+      "type": "registry:component",
+      "title": "List group",
+      "description": "the CONTAINER around rows: title, dividers, footnote, card/plain surface · sets `last` for you",
+      "dependencies": [
+        "cn@^0.4.0"
+      ],
+      "registryDependencies": [
+        "card"
+      ],
+      "files": [
+        {
+          "path": "components/kit/list-group.tsx",
+          "type": "registry:component",
+          "target": "components/kit/list-group.tsx"
+        }
+      ],
+      "categories": [
+        "data"
+      ],
+      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "ListGroup"
+        ],
+        "api": "<ListGroup title? footnote? variant=\"card|plain\">{rows}</ListGroup>"
+      }
+    },
+    {
+      "name": "icon-circle",
+      "type": "registry:component",
+      "title": "Icon circle",
+      "description": "leading icon well, row scale (≤64px) · `shape` circle/square · `tone`",
+      "dependencies": [
+        "cn@^0.4.0",
+        "lucide-react@^1.52.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/kit/icon-circle.tsx",
+          "type": "registry:component",
+          "target": "components/kit/icon-circle.tsx"
+        }
+      ],
+      "categories": [
+        "data"
+      ],
+      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "IconCircle"
+        ],
+        "api": "<IconCircle as size? shape=\"circle|square\" tone? />"
+      }
+    },
+    {
+      "name": "summary-card",
+      "type": "registry:component",
+      "title": "Summary card",
+      "description": "label/value rows, optionally in a Card",
+      "dependencies": [
+        "cn@^0.4.0"
+      ],
+      "registryDependencies": [
+        "card"
+      ],
+      "files": [
+        {
+          "path": "components/kit/key-value-list.tsx",
+          "type": "registry:component",
+          "target": "components/kit/key-value-list.tsx"
+        }
+      ],
+      "categories": [
+        "data"
+      ],
+      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "KeyValueList",
+          "SummaryCard"
+        ],
+        "api": "<SummaryCard title? rows={[{label,value}]} /> · <KeyValueList rows />"
+      }
+    },
+    {
+      "name": "percent-change",
+      "type": "registry:component",
+      "title": "Percent change",
+      "description": "signed % with trend icon",
+      "dependencies": [
+        "cn@^0.4.0",
+        "lucide-react@^1.52.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/kit/percent-change.tsx",
+          "type": "registry:component",
+          "target": "components/kit/percent-change.tsx"
+        }
+      ],
+      "categories": [
+        "data"
+      ],
+      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "PercentChange"
+        ],
+        "api": "<PercentChange value decimals? showIcon? />"
+      }
+    },
+    {
+      "name": "progress-ring",
+      "type": "registry:component",
+      "title": "Progress ring",
+      "description": "circular determinate progress",
+      "dependencies": [
+        "cn@^0.4.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/kit/progress-ring.tsx",
+          "type": "registry:component",
+          "target": "components/kit/progress-ring.tsx"
+        }
+      ],
+      "categories": [
+        "data"
+      ],
+      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "ProgressRing"
+        ],
+        "api": "<ProgressRing value size? tone? aria-label>{centre}</ProgressRing>"
+      }
+    },
+    {
+      "name": "status-dot",
+      "type": "registry:component",
+      "title": "Status dot",
+      "description": "small semantic status indicator, beside its label",
+      "dependencies": [
+        "class-variance-authority@^0.7.1",
+        "cn@^0.4.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/kit/status-dot.tsx",
+          "type": "registry:component",
+          "target": "components/kit/status-dot.tsx"
+        }
+      ],
+      "categories": [
+        "data"
+      ],
+      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "StatusDot"
+        ],
+        "api": "<StatusDot tone size />"
+      }
+    },
+    {
+      "name": "timeline",
+      "type": "registry:component",
+      "title": "Timeline",
+      "description": "vertical status steps joined by a line · each `done` / `current` / `upcoming` with time and note",
+      "dependencies": [
+        "cn@^0.4.0",
+        "lucide-react@^1.52.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/kit/timeline.tsx",
+          "type": "registry:component",
+          "target": "components/kit/timeline.tsx"
+        }
+      ],
+      "categories": [
+        "data"
+      ],
+      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "Timeline"
+        ],
+        "api": "<Timeline items={[{ title, time?, description?, state }]} tone? />"
+      }
+    },
+    {
+      "name": "value-header",
+      "type": "registry:component",
+      "title": "Value header",
+      "description": "hero figure + caption · `maskable` adds the eye toggle",
+      "dependencies": [
+        "cn@^0.4.0",
+        "lucide-react@^1.52.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/kit/value-header.tsx",
+          "type": "registry:component",
+          "target": "components/kit/value-header.tsx"
+        }
+      ],
+      "categories": [
+        "data"
+      ],
+      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "ValueHeader"
+        ],
+        "api": "<ValueHeader value label? caption? captionTone? maskable? align? />"
       }
     },
     {

@@ -30,7 +30,9 @@ components/showcase/    its mock data, cards and typeset fixtures (kept by eject
 components/ui/          shadcn/ui — add more with the add-component skill (`npx shadcn@latest add <name>`)
 components/kit/         ours: AppShell, PageHeader, StatTile, DataTable, EmptyState, DatePicker, Hero,
                         FeatureGrid, PricingCard, ChatMessage, ChatComposer, AttachmentChip, ChatThreadList,
-                        Sources, FollowUpSuggestions, StreamingText, ThinkingIndicator, ToolCallCard, ApprovalCard
+                        Sources, FollowUpSuggestions, StreamingText, ThinkingIndicator, ToolCallCard, ApprovalCard; and web versions of
+                        the native kit's own (same ids): ListRow, ListGroup, SegmentedControl, FilterChip, Rating,
+                        OtpInput, AmountInput, Timeline, ValueHeader… (registry/components.ts has them all)
 components/devkit/      the Kitchen Sink: demos.tsx keyed by registry id
 components/site/        the kit shell's own chrome (header, theme toggle, providers) and KitChip, a
                         prototype's way back to the kit

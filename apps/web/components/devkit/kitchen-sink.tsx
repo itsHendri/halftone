@@ -69,7 +69,10 @@ function Tiles({ ids }: { ids: string[] }) {
             <ArrowUpRightIcon className="size-4" aria-hidden />
           </button>
           <div className="flex max-h-80 min-h-44 flex-1 justify-center overflow-hidden p-6 [align-items:safe_center] [mask-image:linear-gradient(to_bottom,black_85%,transparent)]">
-            <Section c={c} bare />
+            {/* min-w-0: a full-width demo (an amount field, a chip row) fits the tile instead of widening it. */}
+            <div className="max-w-full min-w-0">
+              <Section c={c} bare />
+            </div>
           </div>
         </div>
       ))}
