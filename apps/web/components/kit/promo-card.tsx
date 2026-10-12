@@ -1,5 +1,6 @@
 import { cn } from 'cn';
 import { ArrowRightIcon, type LucideIcon, XIcon } from 'lucide-react';
+import Link from 'next/link';
 import { Placeholder } from '@/components/kit/placeholder';
 
 export type PromoTone = 'primary' | 'success' | 'info' | 'warning' | 'muted';
@@ -53,9 +54,9 @@ export function PromoCard({ title, body, action, onDismiss, tone = 'primary', se
         {body ? <p className="text-muted-foreground text-sm leading-5">{body}</p> : null}
         {action ? (
           action.href ? (
-            <a href={action.href} aria-label={action.label ?? title} className={buttonClass}>
+            <Link href={action.href} aria-label={action.label ?? title} className={buttonClass}>
               <ArrowRightIcon className="size-[18px]" aria-hidden />
-            </a>
+            </Link>
           ) : (
             <button type="button" onClick={action.onClick} aria-label={action.label ?? title} className={buttonClass}>
               <ArrowRightIcon className="size-[18px]" aria-hidden />

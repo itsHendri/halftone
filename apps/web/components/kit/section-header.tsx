@@ -1,4 +1,5 @@
 import { cn } from 'cn';
+import Link from 'next/link';
 
 type Props = {
   title: string;
@@ -21,9 +22,9 @@ export function SectionHeader({ title, action, onAction, actionHref, level = 2, 
       <Heading className="text-lg font-semibold">{title}</Heading>
       {action ? (
         actionHref ? (
-          <a href={actionHref} className={actionClass}>
+          <Link href={actionHref} className={actionClass}>
             {action}
-          </a>
+          </Link>
         ) : (
           <button type="button" onClick={onAction} className={actionClass}>
             {action}
