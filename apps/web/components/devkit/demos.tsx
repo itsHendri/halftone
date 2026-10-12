@@ -26,6 +26,7 @@ import type { ComponentType } from 'react';
 import * as React from 'react';
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
 import { toast } from 'sonner';
+import { TWIN_DEMOS } from './demos-native-twins';
 import { AppShell } from '@/components/kit/app-shell';
 import { ApprovalCard } from '@/components/kit/approval-card';
 import { AttachmentChip } from '@/components/kit/attachment-chip';
@@ -275,6 +276,7 @@ function ThreadListDemo() {
 }
 
 export const DEMOS: Record<string, ComponentType> = {
+  ...TWIN_DEMOS,
   button: () => (
     <Row>
       <Button>Primary</Button>

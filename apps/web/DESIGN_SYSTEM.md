@@ -110,6 +110,16 @@ the tables. Text between `GENERATED` markers is overwritten.
 | DatePicker | `components/kit/date-picker.tsx` | one date in a form · field-styled button → Calendar in a Popover · `value onChange disabled?` |
 | Calendar / CalendarDayButton | `components/ui/calendar.tsx` | a month grid (react-day-picker) · `mode` single/range/multiple · use DatePicker for a form field |
 | Slider | `components/ui/slider.tsx` | a value on a range · two thumbs for a range |
+| FilterChip / FilterChipRow | `components/kit/filter-chip.tsx` | neutral-active chips in a scrolling row |
+| SegmentedControl | `components/kit/segmented-control.tsx` | 2–4 options, sliding thumb |
+| SearchField | `components/kit/search-field.tsx` | Input + search icon + clear |
+| QuantityStepper | `components/kit/quantity-stepper.tsx` | − value + · `min max step` |
+| Rating | `components/kit/rating.tsx` | stars · display (half stars, `showValue`, `count`) or input with `onChange` |
+| AmountInput | `components/kit/amount-input.tsx` | hero money field · MAX and currency switch |
+| OtpInput | `components/kit/otp-input.tsx` | N-digit code, paste-aware |
+| PasswordInput | `components/kit/password-input.tsx` | Input + show/hide |
+| SelectableCard | `components/kit/selectable-card.tsx` | card as a radio/checkbox choice |
+| RangeSelector | `components/kit/range-selector.tsx` | chart range (1D·1W·1M·1Y·ALL), the active one inverts |
 <!-- /GENERATED:registry:inputs -->
 
 ### Navigation
@@ -135,6 +145,16 @@ the tables. Text between `GENERATED` markers is overwritten.
 | Badge / `badgeVariants` | `components/ui/badge.tsx` | a status or tag · a status is an outline Badge with a coloured dot (`bg-success` …), the word in foreground text |
 | Avatar / AvatarImage / AvatarFallback | `components/ui/avatar.tsx` | image with initials fallback |
 | Separator | `components/ui/separator.tsx` | a hairline between groups · prefer spacing |
+| AvatarGroup | `components/kit/avatar-group.tsx` | overlapping avatars + "+N" |
+| ListRow | `components/kit/list-row.tsx` | ONE row · the canonical row · `last` on the final row · `select={{mode,selected}}` makes it a radio/checkbox row |
+| ListGroup | `components/kit/list-group.tsx` | the CONTAINER around rows: title, dividers, footnote, card/plain surface · sets `last` for you |
+| IconCircle | `components/kit/icon-circle.tsx` | leading icon well, row scale (≤64px) · `shape` circle/square · `tone` |
+| KeyValueList / SummaryCard | `components/kit/key-value-list.tsx` | label/value rows, optionally in a Card |
+| PercentChange | `components/kit/percent-change.tsx` | signed % with trend icon |
+| ProgressRing | `components/kit/progress-ring.tsx` | circular determinate progress |
+| StatusDot | `components/kit/status-dot.tsx` | small semantic status indicator, beside its label |
+| Timeline | `components/kit/timeline.tsx` | vertical status steps joined by a line · each `done` / `current` / `upcoming` with time and note |
+| ValueHeader | `components/kit/value-header.tsx` | hero figure + caption · `maskable` adds the eye toggle |
 <!-- /GENERATED:registry:data -->
 
 ### Feedback & status
