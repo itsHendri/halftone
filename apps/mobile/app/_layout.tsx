@@ -63,6 +63,7 @@ function AppShell() {
             <Stack.Screen name="(kit)" />
             <Stack.Screen name="shop" />
             <Stack.Screen name="habits" />
+            <Stack.Screen name="northwind" />
           </Stack>
           <PortalHost />
         </NotifyProvider>

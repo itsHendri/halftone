@@ -20,12 +20,13 @@ and the hallucination guard. This file covers engineering, workflows and gotchas
 ```
 app/_layout.tsx         providers (theme, toast, portal, nav theme) + root Stack
 app/(kit)/              the kit shell: Home · Components (kitchen sink) · Foundations · Settings
-app/shop/, app/habits/    two sample apps (named segments, not groups). `npm run eject-samples` removes them.
+app/shop/, app/habits/, app/northwind/   three sample apps (named segments, not groups); the web kit has each
+                        too. `npm run eject-samples` removes them.
 components/ui/          reusables — install more with the add-component skill
 components/kit/         ported/custom components
 registry/               components.ts: what the kit ships (metadata) → DESIGN_SYSTEM.md tables, llms.txt, registry
 components/devkit/      Kitchen Sink: demos keyed by registry id (sections/<category>.tsx, sections/kit-<category>.tsx)
-components/shop/, components/habits/  sample data + stores. Go with `npm run eject-samples`.
+components/shop/, components/habits/, components/northwind/  sample data + stores. Go with `npm run eject-samples`.
 lib/                    theme.ts (generated), theme-context, embed (docs iframe mode), haptics, utils(cn)
 tokens/                 tokens.json (edit), tokens.config.json (outputs), generated/ — built by `kit-tokens` (@itshendri/kit-tokens)
 DESIGN.md, llms.txt     GENERATED agent-facing summaries (tokens:build, registry:build)
@@ -48,7 +49,7 @@ npm run typecheck && npm run lint -- --max-warnings 0   # CI runs these plus tok
 npm run tokens:build   # after editing tokens/tokens.json (fails if any pairing drops below WCAG AA)
 npm run registry:build # after editing registry/components.ts: DESIGN_SYSTEM.md tables, llms.txt, index
 npm run tokens:check && npm run registry:build -- --check   # what CI checks (plus the kit-tokens tests in the monorepo)
-npm run eject-samples  # delete the shop + habits samples, their stores and every reference
+npm run eject-samples  # delete the shop, habits and Northwind samples, their stores and every reference
 npm run share -- "msg" # EAS Update to the main channel, prints the links
 npm run export:web && eas deploy   # hosted web preview URL
 npx expo run:ios       # build + install the dev client on the simulator (needs LANG=en_US.UTF-8, see gotchas)
@@ -62,7 +63,7 @@ npx expo run:ios       # build + install the dev client on the simulator (needs 
    gives it `/acme` and leaves `/` to the kit. When the prototype IS the product, point the root
    `Stack` at it and make it the initial route.
 2. Screens compose ONLY registry components. Screen skeleton, multi-step flow and success patterns
-   are in `DESIGN_SYSTEM.md › Patterns`. The sample apps (`app/shop`, `app/habits`) are the worked examples; `KitChip` in their root layouts is the way back to the kit.
+   are in `DESIGN_SYSTEM.md › Patterns`. The sample apps (`app/shop`, `app/habits`, `app/northwind`) are the worked examples; `KitChip` in their root layouts is the way back to the kit.
 3. Mock data lives beside the prototype (`components/<slug>/data.ts`). Never call real APIs.
 4. New component needed? Use the `add-component` skill — it must land in the registry and the docs.
 5. Before saying "done": run the `qc-pass` skill (typecheck, lint, guards, simulator look in both themes).
