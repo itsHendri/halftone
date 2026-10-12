@@ -1,4 +1,4 @@
-import { ArrowRightIcon, BlocksIcon, BotIcon, LayoutDashboardIcon, MegaphoneIcon, PaletteIcon, type LucideIcon } from 'lucide-react';
+import { ArrowRightIcon, BlocksIcon, BotIcon, LayoutDashboardIcon, MegaphoneIcon, PaletteIcon, ShoppingBagIcon, TargetIcon, type LucideIcon } from 'lucide-react';
 import Link from 'next/link';
 import { Card } from '@/components/ui/card';
 import { CATEGORY_META } from '@/registry/categories';
@@ -14,6 +14,8 @@ const SAMPLES = [
   { href: '/dashboard', icon: LayoutDashboardIcon, title: 'Dashboard', body: 'A SaaS app: overview with a chart, an invoices table with filters and a dialog, settings forms.' },
   { href: '/landing', icon: MegaphoneIcon, title: 'Landing page', body: 'Marketing: hero, proof, features, pricing, FAQ and a closing call to action.' },
   { href: '/assistant', icon: BotIcon, title: 'Assistant', body: 'An AI conversation: thinking, a tool call, a streamed answer and an approval before it acts.' },
+  { href: '/shop', icon: ShoppingBagIcon, title: 'Shop', body: 'A small store: browse and filter, a product page, a cart, a three-step checkout and order tracking.' },
+  { href: '/habits', icon: TargetIcon, title: 'Habits', body: 'A habit tracker: today’s progress, charts, a calendar of perfect days, settings.' },
 ];
 // samples:end
 
@@ -51,9 +53,12 @@ export default function KitHome() {
           <h2 id="samples" className="text-lg font-semibold">
             Sample apps
           </h2>
-          <p className="text-muted-foreground text-sm">One made-up product, Northwind, built three ways from the registry. Delete them with npm run eject-samples.</p>
+          <p className="text-muted-foreground text-sm">
+            Northwind, a made-up invoicing product, three ways; and the Shop and Habits apps the native kit has too. Delete them
+            with npm run eject-samples.
+          </p>
         </div>
-        <div className="grid gap-4 md:grid-cols-3">
+        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
           {SAMPLES.map((l) => (
             <LinkCard key={l.href} {...l} />
           ))}
