@@ -206,6 +206,90 @@
       }
     },
     {
+      "name": "floating-button",
+      "type": "registry:component",
+      "title": "Floating button",
+      "description": "floats OVER the scroll (a Button flows with it) · Material calls it a FAB · `icon label? variant position` · one per page",
+      "dependencies": [
+        "cn@^0.4.0",
+        "lucide-react@^1.52.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/kit/floating-button.tsx",
+          "type": "registry:component",
+          "target": "components/kit/floating-button.tsx"
+        }
+      ],
+      "categories": [
+        "actions"
+      ],
+      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "FloatingButton"
+        ],
+        "api": "<FloatingButton icon label? variant=\"primary|secondary\" position=\"inline|bottom-right|bottom-center\" aria-label? />"
+      }
+    },
+    {
+      "name": "icon-badge",
+      "type": "registry:component",
+      "title": "Icon badge",
+      "description": "icon button with unread count/dot · always labelled",
+      "dependencies": [
+        "cn@^0.4.0",
+        "lucide-react@^1.52.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/kit/icon-badge.tsx",
+          "type": "registry:component",
+          "target": "components/kit/icon-badge.tsx"
+        }
+      ],
+      "categories": [
+        "actions"
+      ],
+      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "IconBadge"
+        ],
+        "api": "<IconBadge icon count? dot? aria-label onClick? />"
+      }
+    },
+    {
+      "name": "action-grid",
+      "type": "registry:component",
+      "title": "Action grid",
+      "description": "the row of shortcuts under a page hero · 3–4 `items`, one row only, last tile is \"More\"",
+      "dependencies": [
+        "cn@^0.4.0",
+        "lucide-react@^1.52.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/kit/action-grid.tsx",
+          "type": "registry:component",
+          "target": "components/kit/action-grid.tsx"
+        }
+      ],
+      "categories": [
+        "actions"
+      ],
+      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "ActionGrid"
+        ],
+        "api": "<ActionGrid items={[{icon,label,onClick|href,badge?}]} />"
+      }
+    },
+    {
       "name": "date-picker",
       "type": "registry:component",
       "title": "Date picker",
@@ -610,6 +694,116 @@
           "AppShell"
         ],
         "api": "<AppShell brand nav={[{href,label,icon}]} footer? topbar?>{page}</AppShell>"
+      }
+    },
+    {
+      "name": "stepper",
+      "type": "registry:component",
+      "title": "Stepper",
+      "description": "`numbered` / `compact` flow progress",
+      "dependencies": [
+        "cn@^0.4.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/kit/stepper.tsx",
+          "type": "registry:component",
+          "target": "components/kit/stepper.tsx"
+        }
+      ],
+      "categories": [
+        "navigation"
+      ],
+      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "Stepper"
+        ],
+        "api": "<Stepper current total labels? variant=\"numbered|compact\" />"
+      }
+    },
+    {
+      "name": "section-header",
+      "type": "registry:component",
+      "title": "Section header",
+      "description": "title + action, outside the card",
+      "dependencies": [
+        "cn@^0.4.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/kit/section-header.tsx",
+          "type": "registry:component",
+          "target": "components/kit/section-header.tsx"
+        }
+      ],
+      "categories": [
+        "navigation"
+      ],
+      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "SectionHeader"
+        ],
+        "api": "<SectionHeader title action? onAction? actionHref? level? />"
+      }
+    },
+    {
+      "name": "pager-dots",
+      "type": "registry:component",
+      "title": "Pager dots",
+      "description": "page indicator · HorizontalPager renders them for you",
+      "dependencies": [
+        "cn@^0.4.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/kit/pager-dots.tsx",
+          "type": "registry:component",
+          "target": "components/kit/pager-dots.tsx"
+        }
+      ],
+      "categories": [
+        "navigation"
+      ],
+      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "PagerDots"
+        ],
+        "api": "<PagerDots count activeIndex />"
+      }
+    },
+    {
+      "name": "horizontal-pager",
+      "type": "registry:component",
+      "title": "Horizontal pager",
+      "description": "CSS scroll-snap pager + dots · keyboard scrollable",
+      "dependencies": [
+        "cn@^0.4.0"
+      ],
+      "registryDependencies": [
+        "@kit/pager-dots"
+      ],
+      "files": [
+        {
+          "path": "components/kit/horizontal-pager.tsx",
+          "type": "registry:component",
+          "target": "components/kit/horizontal-pager.tsx"
+        }
+      ],
+      "categories": [
+        "navigation"
+      ],
+      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "HorizontalPager"
+        ],
+        "api": "<HorizontalPager itemWidth? gap? showDots? onIndexChange?>{cards}</HorizontalPager>"
       }
     },
     {
@@ -1045,6 +1239,65 @@
       }
     },
     {
+      "name": "spinner",
+      "type": "registry:component",
+      "title": "Spinner",
+      "description": "themed loading indicator · announced as \"Loading\"",
+      "dependencies": [
+        "cn@^0.4.0",
+        "lucide-react@^1.52.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/kit/spinner.tsx",
+          "type": "registry:component",
+          "target": "components/kit/spinner.tsx"
+        }
+      ],
+      "categories": [
+        "feedback"
+      ],
+      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "Spinner"
+        ],
+        "api": "<Spinner size=\"small|large\" tone=\"primary|primary-foreground|foreground|muted\" aria-label? />"
+      }
+    },
+    {
+      "name": "success-screen",
+      "type": "registry:component",
+      "title": "Success screen",
+      "description": "the one success template",
+      "dependencies": [
+        "cn@^0.4.0",
+        "lucide-react@^1.52.0"
+      ],
+      "registryDependencies": [
+        "@kit/spinner",
+        "@kit/spot"
+      ],
+      "files": [
+        {
+          "path": "components/kit/success-screen.tsx",
+          "type": "registry:component",
+          "target": "components/kit/success-screen.tsx"
+        }
+      ],
+      "categories": [
+        "feedback"
+      ],
+      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "SuccessScreen"
+        ],
+        "api": "<SuccessScreen title body? amount? amountSubtitle? loading?>{extra}</SuccessScreen>"
+      }
+    },
+    {
       "name": "page-header",
       "type": "registry:component",
       "title": "Page header",
@@ -1096,6 +1349,176 @@
           "Prose"
         ],
         "api": "<Prose as?=\"div|article|section\">{html}</Prose>"
+      }
+    },
+    {
+      "name": "sticky-bottom-bar",
+      "type": "registry:component",
+      "title": "Sticky bottom bar",
+      "description": "action bar that sticks to the bottom of its scroll container · safe-area aware",
+      "dependencies": [
+        "cn@^0.4.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/kit/sticky-bottom-bar.tsx",
+          "type": "registry:component",
+          "target": "components/kit/sticky-bottom-bar.tsx"
+        }
+      ],
+      "categories": [
+        "layout"
+      ],
+      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "StickyBottomBar"
+        ],
+        "api": "<StickyBottomBar transparent?>{buttons}</StickyBottomBar>"
+      }
+    },
+    {
+      "name": "promo-card",
+      "type": "registry:component",
+      "title": "Promo card",
+      "description": "tinted offer/nudge card · arrow CTA, dismiss X, generated art · one per page",
+      "dependencies": [
+        "cn@^0.4.0",
+        "lucide-react@^1.52.0"
+      ],
+      "registryDependencies": [
+        "@kit/placeholder"
+      ],
+      "files": [
+        {
+          "path": "components/kit/promo-card.tsx",
+          "type": "registry:component",
+          "target": "components/kit/promo-card.tsx"
+        }
+      ],
+      "categories": [
+        "layout"
+      ],
+      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "PromoCard"
+        ],
+        "api": "<PromoCard title body? action? onDismiss? tone? seed? icon? />"
+      }
+    },
+    {
+      "name": "footnote",
+      "type": "registry:component",
+      "title": "Footnote",
+      "description": "small print / disclosure, last on the page",
+      "dependencies": [
+        "cn@^0.4.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/kit/footnote.tsx",
+          "type": "registry:component",
+          "target": "components/kit/footnote.tsx"
+        }
+      ],
+      "categories": [
+        "layout"
+      ],
+      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "Footnote"
+        ],
+        "api": "<Footnote action?={{label,href|onClick}}>{copy}</Footnote>"
+      }
+    },
+    {
+      "name": "image-tile",
+      "type": "registry:component",
+      "title": "Image tile",
+      "description": "rounded image · `seed` draws generated art when there is no `src`",
+      "dependencies": [
+        "cn@^0.4.0",
+        "lucide-react@^1.52.0"
+      ],
+      "registryDependencies": [
+        "@kit/placeholder"
+      ],
+      "files": [
+        {
+          "path": "components/kit/image-tile.tsx",
+          "type": "registry:component",
+          "target": "components/kit/image-tile.tsx"
+        }
+      ],
+      "categories": [
+        "media"
+      ],
+      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "ImageTile"
+        ],
+        "api": "<ImageTile src? alt? ratio? caption? fallbackIcon? seed? />"
+      }
+    },
+    {
+      "name": "placeholder",
+      "type": "registry:component",
+      "title": "Placeholder",
+      "description": "deterministic abstract SVG art from a `seed` · the kit ships no raster imagery",
+      "dependencies": [
+        "cn@^0.4.0",
+        "lucide-react@^1.52.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/kit/placeholder.tsx",
+          "type": "registry:component",
+          "target": "components/kit/placeholder.tsx"
+        }
+      ],
+      "categories": [
+        "media"
+      ],
+      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "Placeholder"
+        ],
+        "api": "<Placeholder seed ratio? palette=\"chart|mono|primary\" icon? />"
+      }
+    },
+    {
+      "name": "spot",
+      "type": "registry:component",
+      "title": "Spot",
+      "description": "an icon at illustration scale (≥64px) · SuccessScreen uses it",
+      "dependencies": [
+        "cn@^0.4.0",
+        "lucide-react@^1.52.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/kit/spot.tsx",
+          "type": "registry:component",
+          "target": "components/kit/spot.tsx"
+        }
+      ],
+      "categories": [
+        "media"
+      ],
+      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "Spot"
+        ],
+        "api": "<Spot icon size=\"md|lg|xl\" tone? shape=\"circle|square\" ring? />"
       }
     },
     {

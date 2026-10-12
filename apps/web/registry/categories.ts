@@ -9,6 +9,7 @@ export const CATEGORY_META: CategoryMeta[] = [
   { id: 'feedback', label: 'Feedback & status', blurb: 'Alerts, toasts, progress, empty states' },
   { id: 'layout', label: 'Containers & layout', blurb: 'Cards, page headers, accordions' },
   { id: 'overlays', label: 'Overlays', blurb: 'Dialogs, sheets, drawers, popovers, tooltips' },
+  { id: 'media', label: 'Media', blurb: 'Images, placeholders, illustration-scale icons' },
   { id: 'marketing', label: 'Marketing', blurb: 'Heroes, feature grids, pricing' },
   { id: 'ai', label: 'AI product', blurb: 'Chat, history, streaming, tool calls, approvals' },
 ];

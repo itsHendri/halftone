@@ -12,6 +12,7 @@ export type CategoryId =
   | 'feedback'
   | 'layout'
   | 'overlays'
+  | 'media'
   | 'marketing'
   | 'ai';
 

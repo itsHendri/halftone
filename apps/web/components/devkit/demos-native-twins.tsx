@@ -1,8 +1,50 @@
 'use client';
-import { BellIcon, CreditCardIcon, LandmarkIcon, PackageIcon, RepeatIcon, TruckIcon, UserIcon, WalletIcon } from 'lucide-react';
+import {
+  BellIcon,
+  CheckIcon,
+  CreditCardIcon,
+  GiftIcon,
+  ImageIcon,
+  InboxIcon,
+  LandmarkIcon,
+  LockIcon,
+  MoreHorizontalIcon,
+  PackageIcon,
+  PencilIcon,
+  PlayIcon,
+  PlusIcon,
+  ReceiptIcon,
+  RepeatIcon,
+  SendIcon,
+  ShieldIcon,
+  ShoppingBagIcon,
+  TruckIcon,
+  UserIcon,
+  WalletIcon,
+} from 'lucide-react';
 import type { ComponentType } from 'react';
 import * as React from 'react';
 import { toast } from 'sonner';
+import { ActionGrid } from '@/components/kit/action-grid';
+import { FloatingButton } from '@/components/kit/floating-button';
+import { Footnote } from '@/components/kit/footnote';
+import { HorizontalPager } from '@/components/kit/horizontal-pager';
+import { IconBadge } from '@/components/kit/icon-badge';
+import { ImageTile } from '@/components/kit/image-tile';
+import { PagerDots } from '@/components/kit/pager-dots';
+import { Placeholder } from '@/components/kit/placeholder';
+import { PromoCard } from '@/components/kit/promo-card';
+import { SectionHeader } from '@/components/kit/section-header';
+import { Spinner } from '@/components/kit/spinner';
+import { Spot } from '@/components/kit/spot';
+import { Stepper } from '@/components/kit/stepper';
+import { StickyBottomBar } from '@/components/kit/sticky-bottom-bar';
+import { SuccessScreen } from '@/components/kit/success-screen';
+import { AspectRatio } from '@/components/ui/aspect-ratio';
+import { Button } from '@/components/ui/button';
+import { ContextMenu, ContextMenuContent, ContextMenuItem, ContextMenuSeparator, ContextMenuShortcut, ContextMenuTrigger } from '@/components/ui/context-menu';
+import { HoverCard, HoverCardContent, HoverCardTrigger } from '@/components/ui/hover-card';
+import { Menubar, MenubarCheckboxItem, MenubarContent, MenubarItem, MenubarMenu, MenubarSeparator, MenubarShortcut, MenubarTrigger } from '@/components/ui/menubar';
 import { AmountInput } from '@/components/kit/amount-input';
 import { AvatarGroup } from '@/components/kit/avatar-group';
 import { FilterChip, FilterChipRow } from '@/components/kit/filter-chip';
@@ -152,6 +194,63 @@ const TEAM = [
   { id: '6', initials: 'NW' },
 ];
 
+function StepperFlowDemo() {
+  const [step, setStep] = React.useState(3);
+  return (
+    <div className="flex w-full max-w-md flex-col gap-6">
+      <Stepper current={step} total={4} labels={['Cart', 'Delivery', 'Payment', 'Review']} />
+      <Stepper current={step} total={4} variant="compact" />
+      <div className="flex gap-2">
+        <Button variant="outline" size="sm" disabled={step === 1} onClick={() => setStep((s) => s - 1)}>
+          Back
+        </Button>
+        <Button size="sm" disabled={step === 4} onClick={() => setStep((s) => s + 1)}>
+          Next
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+const SLIDES = [
+  { seed: 'Get paid faster', title: 'Get paid faster', body: 'Reminders chase late invoices for you.' },
+  { seed: 'Cards for the team', title: 'Cards for the team', body: 'Spending limits per person.' },
+  { seed: 'Export to accounting', title: 'Export to accounting', body: 'Xero and QuickBooks, every night.' },
+];
+
+function SuccessDemo() {
+  const [loading, setLoading] = React.useState(false);
+  const replay = () => {
+    setLoading(true);
+    setTimeout(() => setLoading(false), 1200);
+  };
+  return (
+    <SuccessScreen className="w-full" title="Payment sent" amount="£2,310.00" amountSubtitle="to Lumen Labs" body="It arrives today, by 6pm." loading={loading}>
+      <Button variant="outline" className="w-full" onClick={replay}>
+        Send another
+      </Button>
+    </SuccessScreen>
+  );
+}
+
+function PromoDemo() {
+  const [open, setOpen] = React.useState(true);
+  return (
+    <div className="flex w-80 max-w-full flex-col gap-3">
+      {open ? (
+        <PromoCard title="Invite your accountant" body="They get read-only access to invoices and exports." action={{ label: 'Invite your accountant', onClick: () => toast('Would open the invite') }} onDismiss={() => setOpen(false)} />
+      ) : (
+        <Button variant="outline" size="sm" className="self-start" onClick={() => setOpen(true)}>
+          Show the card again
+        </Button>
+      )}
+      <PromoCard tone="success" icon={GiftIcon} title="Refer a friend, get £50" action={{ onClick: () => toast('Would open referrals') }} />
+    </div>
+  );
+}
+
+const Row = ({ children }: { children: React.ReactNode }) => <div className="flex flex-wrap items-center gap-3">{children}</div>;
+
 export const TWIN_DEMOS: Record<string, ComponentType> = {
   'filter-chip': FilterChipDemo,
   'segmented-control': SegmentedDemo,
@@ -241,4 +340,205 @@ export const TWIN_DEMOS: Record<string, ComponentType> = {
     />
   ),
   'value-header': () => <ValueHeader label="Available balance" value="£12,480.00" caption="+£1,840 this week" captionTone="positive" maskable />,
+  'floating-button': () => (
+    <div className="flex w-full flex-col gap-6">
+      <Row>
+        <FloatingButton icon={PlusIcon} aria-label="New invoice" onClick={() => toast('Would start an invoice')} />
+        <FloatingButton icon={PencilIcon} label="Compose" onClick={() => toast('Would compose')} />
+        <FloatingButton icon={PlusIcon} variant="secondary" aria-label="Add" />
+      </Row>
+      <div className="bg-muted/40 relative h-48 w-72 max-w-full overflow-hidden rounded-xl border">
+        <div className="flex flex-col gap-2 p-4">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="bg-card h-10 rounded-md border" />
+          ))}
+        </div>
+        <FloatingButton icon={PlusIcon} position="bottom-right" aria-label="New invoice" className="right-4 bottom-4" />
+      </div>
+    </div>
+  ),
+  'icon-badge': () => (
+    <Row>
+      <IconBadge icon={BellIcon} count={3} aria-label="Notifications" />
+      <IconBadge icon={ShoppingBagIcon} count={120} aria-label="Basket" />
+      <IconBadge icon={InboxIcon} dot aria-label="Inbox" />
+      <IconBadge icon={BellIcon} aria-label="Notifications" />
+    </Row>
+  ),
+  'action-grid': () => (
+    <ActionGrid
+      className="w-full max-w-sm"
+      items={[
+        { icon: PlusIcon, label: 'Add funds', onClick: () => toast('Add funds') },
+        { icon: SendIcon, label: 'Send', onClick: () => toast('Send') },
+        { icon: ReceiptIcon, label: 'Invoices', badge: 2, onClick: () => toast('Invoices') },
+        { icon: MoreHorizontalIcon, label: 'More', onClick: () => toast('More') },
+      ]}
+    />
+  ),
+  menubar: () => (
+    <Menubar>
+      <MenubarMenu>
+        <MenubarTrigger>File</MenubarTrigger>
+        <MenubarContent>
+          <MenubarItem>
+            New invoice <MenubarShortcut>⌘N</MenubarShortcut>
+          </MenubarItem>
+          <MenubarItem>Duplicate</MenubarItem>
+          <MenubarSeparator />
+          <MenubarItem>
+            Export PDF <MenubarShortcut>⌘E</MenubarShortcut>
+          </MenubarItem>
+        </MenubarContent>
+      </MenubarMenu>
+      <MenubarMenu>
+        <MenubarTrigger>Edit</MenubarTrigger>
+        <MenubarContent>
+          <MenubarItem>
+            Undo <MenubarShortcut>⌘Z</MenubarShortcut>
+          </MenubarItem>
+          <MenubarItem>
+            Redo <MenubarShortcut>⇧⌘Z</MenubarShortcut>
+          </MenubarItem>
+        </MenubarContent>
+      </MenubarMenu>
+      <MenubarMenu>
+        <MenubarTrigger>View</MenubarTrigger>
+        <MenubarContent>
+          <MenubarCheckboxItem checked>Show totals</MenubarCheckboxItem>
+          <MenubarCheckboxItem>Show tax lines</MenubarCheckboxItem>
+        </MenubarContent>
+      </MenubarMenu>
+    </Menubar>
+  ),
+  stepper: StepperFlowDemo,
+  'section-header': () => (
+    <div className="flex w-full max-w-md flex-col gap-3">
+      <SectionHeader title="Recent invoices" action="See all" onAction={() => toast('Would open invoices')} />
+      <ListGroup>
+        <ListRow title="Lumen Labs" subtitle="INV-1044 · Overdue" value="£2,310.00" />
+        <ListRow title="Northwind" subtitle="INV-1042 · Paid" value="£1,240.00" />
+      </ListGroup>
+    </div>
+  ),
+  'pager-dots': () => (
+    <div className="flex flex-col items-center gap-4">
+      <PagerDots count={4} activeIndex={0} />
+      <PagerDots count={4} activeIndex={2} />
+    </div>
+  ),
+  'horizontal-pager': () => (
+    <HorizontalPager className="w-80 max-w-full" aria-label="What’s new">
+      {SLIDES.map((s) => (
+        <div key={s.seed} className="bg-card flex flex-col gap-3 rounded-xl border p-3">
+          <Placeholder seed={s.seed} ratio={2} />
+          <div className="px-1 pb-1">
+            <p className="font-semibold">{s.title}</p>
+            <p className="text-muted-foreground text-sm">{s.body}</p>
+          </div>
+        </div>
+      ))}
+    </HorizontalPager>
+  ),
+  spinner: () => (
+    <Row>
+      <Spinner />
+      <Spinner size="large" aria-label="Loading invoices" />
+      <Spinner tone="muted" />
+      <Button disabled>
+        <Spinner tone="primary-foreground" aria-label="Saving" />
+        Saving…
+      </Button>
+    </Row>
+  ),
+  'success-screen': SuccessDemo,
+  'sticky-bottom-bar': () => (
+    <div className="bg-background relative h-64 w-80 max-w-full overflow-y-auto rounded-xl border">
+      <div className="flex flex-col gap-3 p-5">
+        <p className="font-semibold">Review payment</p>
+        {['To', 'Amount', 'Fee', 'Reference', 'Arrives', 'From'].map((l) => (
+          <div key={l} className="flex justify-between border-b py-2 text-sm">
+            <span className="text-muted-foreground">{l}</span>
+            <span>—</span>
+          </div>
+        ))}
+      </div>
+      <StickyBottomBar>
+        <Button variant="outline">Cancel</Button>
+        <Button onClick={() => toast.success('Payment sent')}>Send £2,310</Button>
+      </StickyBottomBar>
+    </div>
+  ),
+  'promo-card': PromoDemo,
+  footnote: () => (
+    <Footnote className="max-w-md" action={{ label: 'Read the fee schedule', onClick: () => toast('Would open the fees') }}>
+      Transfers to UK accounts are free. International transfers cost 0.4% plus a fixed fee shown before you confirm. Exchange rates update every minute.
+    </Footnote>
+  ),
+  'context-menu': () => (
+    <ContextMenu>
+      <ContextMenuTrigger className="text-muted-foreground flex h-32 w-full max-w-sm items-center justify-center rounded-lg border border-dashed text-sm">Right-click invoice INV-1044</ContextMenuTrigger>
+      <ContextMenuContent className="w-56">
+        <ContextMenuItem>
+          Open <ContextMenuShortcut>↵</ContextMenuShortcut>
+        </ContextMenuItem>
+        <ContextMenuItem>Download PDF</ContextMenuItem>
+        <ContextMenuItem>Send reminder</ContextMenuItem>
+        <ContextMenuSeparator />
+        <ContextMenuItem variant="destructive">Void invoice</ContextMenuItem>
+      </ContextMenuContent>
+    </ContextMenu>
+  ),
+  'hover-card': () => (
+    <p className="text-sm">
+      Billed to{' '}
+      <HoverCard>
+        <HoverCardTrigger asChild>
+          <a href="#lumen" className="font-medium underline underline-offset-4">
+            Lumen Labs
+          </a>
+        </HoverCardTrigger>
+        <HoverCardContent className="w-72">
+          <div className="flex gap-3">
+            <IconCircle as={LandmarkIcon} tone="primary" size={40} />
+            <div className="flex flex-col gap-1">
+              <p className="font-semibold">Lumen Labs Ltd</p>
+              <p className="text-muted-foreground text-sm">12 invoices · £18,420 paid · always on time</p>
+            </div>
+          </div>
+        </HoverCardContent>
+      </HoverCard>
+    </p>
+  ),
+  'image-tile': () => (
+    <div className="grid w-80 max-w-full grid-cols-2 gap-4">
+      <ImageTile seed="Linen overshirt" caption="Linen overshirt" />
+      <ImageTile caption="No image yet" />
+    </div>
+  ),
+  'aspect-ratio': () => (
+    <div className="w-80 max-w-full">
+      <AspectRatio ratio={16 / 9} className="overflow-hidden rounded-lg">
+        <Placeholder seed="Product walkthrough" ratio={16 / 9} icon={PlayIcon} className="h-full" />
+      </AspectRatio>
+    </div>
+  ),
+  placeholder: () => (
+    <div className="grid w-72 max-w-full grid-cols-3 gap-3">
+      <Placeholder seed="Ada" />
+      <Placeholder seed="Ada" palette="mono" />
+      <Placeholder seed="Ada" palette="primary" />
+      <Placeholder seed="Northwind" />
+      <Placeholder seed="Lumen Labs" />
+      <Placeholder seed="Acme Studio" icon={ImageIcon} />
+    </div>
+  ),
+  spot: () => (
+    <Row>
+      <Spot icon={BellIcon} size="md" />
+      <Spot icon={LockIcon} tone="primary" />
+      <Spot icon={CheckIcon} tone="success" size="xl" ring />
+      <Spot icon={ShieldIcon} tone="info" shape="square" />
+    </Row>
+  ),
 };

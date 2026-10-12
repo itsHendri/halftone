@@ -38,6 +38,11 @@
       "blurb": "Dialogs, sheets, drawers, popovers, tooltips"
     },
     {
+      "id": "media",
+      "label": "Media",
+      "blurb": "Images, placeholders, illustration-scale icons"
+    },
+    {
       "id": "marketing",
       "label": "Marketing",
       "blurb": "Heroes, feature grids, pricing"
@@ -109,6 +114,71 @@
         "view switcher"
       ],
       "install": "toggle-group"
+    },
+    {
+      "id": "floating-button",
+      "title": "Floating button",
+      "exports": [
+        "FloatingButton"
+      ],
+      "category": "actions",
+      "files": [
+        "components/kit/floating-button.tsx"
+      ],
+      "notes": "floats OVER the scroll (a Button flows with it) · Material calls it a FAB · `icon label? variant position` · one per page",
+      "api": "<FloatingButton icon label? variant=\"primary|secondary\" position=\"inline|bottom-right|bottom-center\" aria-label? />",
+      "caption": "Floats over the scroll instead of sitting in it, so the page’s one most important action stays reachable. A Button flows with the content; this does not. One per page; icon-only needs an aria-label.",
+      "aliases": [
+        "fab",
+        "floating action button",
+        "plus",
+        "extended",
+        "add button"
+      ],
+      "install": "@kit/floating-button"
+    },
+    {
+      "id": "icon-badge",
+      "title": "Icon badge",
+      "exports": [
+        "IconBadge"
+      ],
+      "category": "actions",
+      "files": [
+        "components/kit/icon-badge.tsx"
+      ],
+      "notes": "icon button with unread count/dot · always labelled",
+      "api": "<IconBadge icon count? dot? aria-label onClick? />",
+      "caption": "Header icon button with an unread count. The label announces the count for screen readers.",
+      "aliases": [
+        "notification",
+        "bell",
+        "cart",
+        "unread count",
+        "icon button"
+      ],
+      "install": "@kit/icon-badge"
+    },
+    {
+      "id": "action-grid",
+      "title": "Action grid",
+      "exports": [
+        "ActionGrid"
+      ],
+      "category": "actions",
+      "files": [
+        "components/kit/action-grid.tsx"
+      ],
+      "notes": "the row of shortcuts under a page hero · 3–4 `items`, one row only, last tile is \"More\"",
+      "api": "<ActionGrid items={[{icon,label,onClick|href,badge?}]} />",
+      "caption": "The row of shortcuts under a hero. Keep it to one row: the last tile should be \"More\", not a second row.",
+      "aliases": [
+        "quick actions",
+        "shortcuts",
+        "tiles",
+        "icon buttons"
+      ],
+      "install": "@kit/action-grid"
     },
     {
       "id": "input",
@@ -607,6 +677,115 @@
       "install": "command"
     },
     {
+      "id": "menubar",
+      "title": "Menubar",
+      "exports": [
+        "Menubar",
+        "MenubarMenu",
+        "MenubarTrigger",
+        "MenubarContent",
+        "MenubarItem",
+        "MenubarSeparator",
+        "MenubarShortcut",
+        "MenubarCheckboxItem"
+      ],
+      "category": "navigation",
+      "files": [
+        "components/ui/menubar.tsx"
+      ],
+      "notes": "desktop-app menus (File · Edit · View) across the top of an editor",
+      "api": "<Menubar><MenubarMenu><MenubarTrigger /><MenubarContent><MenubarItem /></MenubarContent></MenubarMenu></Menubar>",
+      "caption": "For tool-like apps (editors, builders). A product page wants a DropdownMenu or NavigationMenu instead.",
+      "aliases": [
+        "menu",
+        "toolbar",
+        "desktop",
+        "file menu"
+      ],
+      "install": "menubar"
+    },
+    {
+      "id": "stepper",
+      "title": "Stepper",
+      "exports": [
+        "Stepper"
+      ],
+      "category": "navigation",
+      "files": [
+        "components/kit/stepper.tsx"
+      ],
+      "notes": "`numbered` / `compact` flow progress",
+      "api": "<Stepper current total labels? variant=\"numbered|compact\" />",
+      "caption": "Progress through a multi-step flow (onboarding, checkout). Not for paging content: that is PagerDots.",
+      "aliases": [
+        "progress steps",
+        "wizard",
+        "onboarding progress"
+      ],
+      "install": "@kit/stepper"
+    },
+    {
+      "id": "section-header",
+      "title": "Section header",
+      "exports": [
+        "SectionHeader"
+      ],
+      "category": "navigation",
+      "files": [
+        "components/kit/section-header.tsx"
+      ],
+      "notes": "title + action, outside the card",
+      "api": "<SectionHeader title action? onAction? actionHref? level? />",
+      "caption": "Sits outside the card it introduces.",
+      "aliases": [
+        "title",
+        "see all",
+        "heading row"
+      ],
+      "install": "@kit/section-header"
+    },
+    {
+      "id": "pager-dots",
+      "title": "Pager dots",
+      "exports": [
+        "PagerDots"
+      ],
+      "category": "navigation",
+      "files": [
+        "components/kit/pager-dots.tsx"
+      ],
+      "notes": "page indicator · HorizontalPager renders them for you",
+      "api": "<PagerDots count activeIndex />",
+      "caption": "The dots are bound to the pager; use PagerDots alone only for a custom pager.",
+      "aliases": [
+        "page indicator",
+        "carousel dots",
+        "onboarding slides"
+      ],
+      "install": "@kit/pager-dots"
+    },
+    {
+      "id": "horizontal-pager",
+      "title": "Horizontal pager",
+      "exports": [
+        "HorizontalPager"
+      ],
+      "category": "navigation",
+      "files": [
+        "components/kit/horizontal-pager.tsx"
+      ],
+      "notes": "CSS scroll-snap pager + dots · keyboard scrollable",
+      "api": "<HorizontalPager itemWidth? gap? showDots? onIndexChange?>{cards}</HorizontalPager>",
+      "caption": "Peeking cards: an itemWidth under 100% shows the next card. Dots included.",
+      "aliases": [
+        "carousel",
+        "swipe",
+        "slides",
+        "banner"
+      ],
+      "install": "@kit/horizontal-pager"
+    },
+    {
       "id": "data-table",
       "title": "Data table",
       "exports": [
@@ -1019,6 +1198,47 @@
       "install": "@kit/empty-state"
     },
     {
+      "id": "spinner",
+      "title": "Spinner",
+      "exports": [
+        "Spinner"
+      ],
+      "category": "feedback",
+      "files": [
+        "components/kit/spinner.tsx"
+      ],
+      "notes": "themed loading indicator · announced as \"Loading\"",
+      "api": "<Spinner size=\"small|large\" tone=\"primary|primary-foreground|foreground|muted\" aria-label? />",
+      "caption": "For a wait of unknown length. When the layout is known, a Skeleton reads better.",
+      "aliases": [
+        "loading",
+        "activity indicator",
+        "loader"
+      ],
+      "install": "@kit/spinner"
+    },
+    {
+      "id": "success-screen",
+      "title": "Success screen",
+      "exports": [
+        "SuccessScreen"
+      ],
+      "category": "feedback",
+      "files": [
+        "components/kit/success-screen.tsx"
+      ],
+      "notes": "the one success template",
+      "api": "<SuccessScreen title body? amount? amountSubtitle? loading?>{extra}</SuccessScreen>",
+      "caption": "Use for EVERY success state: signup done, booking confirmed, order placed. Optional amount when a value matters.",
+      "aliases": [
+        "done",
+        "confirmation",
+        "checkmark",
+        "complete"
+      ],
+      "install": "@kit/success-screen"
+    },
+    {
       "id": "page-header",
       "title": "Page header",
       "exports": [
@@ -1127,6 +1347,70 @@
       "notes": "a fixed-height region that scrolls on its own",
       "preview": false,
       "install": "scroll-area"
+    },
+    {
+      "id": "sticky-bottom-bar",
+      "title": "Sticky bottom bar",
+      "exports": [
+        "StickyBottomBar"
+      ],
+      "category": "layout",
+      "files": [
+        "components/kit/sticky-bottom-bar.tsx"
+      ],
+      "notes": "action bar that sticks to the bottom of its scroll container · safe-area aware",
+      "api": "<StickyBottomBar transparent?>{buttons}</StickyBottomBar>",
+      "caption": "Put it last inside the scrolling element. Children share the width equally. Mostly a phone-width pattern.",
+      "aliases": [
+        "cta bar",
+        "footer actions",
+        "safe area"
+      ],
+      "install": "@kit/sticky-bottom-bar"
+    },
+    {
+      "id": "promo-card",
+      "title": "Promo card",
+      "exports": [
+        "PromoCard"
+      ],
+      "category": "layout",
+      "files": [
+        "components/kit/promo-card.tsx"
+      ],
+      "notes": "tinted offer/nudge card · arrow CTA, dismiss X, generated art · one per page",
+      "api": "<PromoCard title body? action? onDismiss? tone? seed? icon? />",
+      "caption": "At most one per page, and dismissible whenever it is promotional rather than required. The art is generated from the seed.",
+      "aliases": [
+        "banner",
+        "upsell",
+        "announcement",
+        "offer",
+        "nudge"
+      ],
+      "install": "@kit/promo-card"
+    },
+    {
+      "id": "footnote",
+      "title": "Footnote",
+      "exports": [
+        "Footnote"
+      ],
+      "category": "layout",
+      "files": [
+        "components/kit/footnote.tsx"
+      ],
+      "notes": "small print / disclosure, last on the page",
+      "api": "<Footnote action?={{label,href|onClick}}>{copy}</Footnote>",
+      "caption": "Disclosures at the foot of a page. Keep it last, after the final section.",
+      "aliases": [
+        "small print",
+        "legal",
+        "disclosure",
+        "terms",
+        "learn more"
+      ],
+      "install": "@kit/footnote"
     },
     {
       "id": "dialog",
@@ -1272,6 +1556,136 @@
       ],
       "notes": "names an icon button · never the only place information lives",
       "install": "tooltip"
+    },
+    {
+      "id": "context-menu",
+      "title": "Context menu",
+      "exports": [
+        "ContextMenu",
+        "ContextMenuTrigger",
+        "ContextMenuContent",
+        "ContextMenuItem",
+        "ContextMenuSeparator",
+        "ContextMenuShortcut"
+      ],
+      "category": "overlays",
+      "files": [
+        "components/ui/context-menu.tsx"
+      ],
+      "notes": "right-click menu on a thing",
+      "api": "<ContextMenu><ContextMenuTrigger /><ContextMenuContent><ContextMenuItem /></ContextMenuContent></ContextMenu>",
+      "caption": "A shortcut, never the only way: every action in it must also be reachable from a visible control (a DropdownMenu).",
+      "aliases": [
+        "right click",
+        "long press"
+      ],
+      "install": "context-menu"
+    },
+    {
+      "id": "hover-card",
+      "title": "Hover card",
+      "exports": [
+        "HoverCard",
+        "HoverCardTrigger",
+        "HoverCardContent"
+      ],
+      "category": "overlays",
+      "files": [
+        "components/ui/hover-card.tsx"
+      ],
+      "notes": "a preview on hover or focus (a profile, a link)",
+      "api": "<HoverCard><HoverCardTrigger asChild /><HoverCardContent /></HoverCard>",
+      "caption": "For sighted mouse users it previews; touch users never see it. Keep it supplementary.",
+      "aliases": [
+        "preview",
+        "profile card"
+      ],
+      "install": "hover-card"
+    },
+    {
+      "id": "image-tile",
+      "title": "Image tile",
+      "exports": [
+        "ImageTile"
+      ],
+      "category": "media",
+      "files": [
+        "components/kit/image-tile.tsx"
+      ],
+      "notes": "rounded image · `seed` draws generated art when there is no `src`",
+      "api": "<ImageTile src? alt? ratio? caption? fallbackIcon? seed? />",
+      "caption": "Rounded image with a muted placeholder while loading or when there is nothing to show.",
+      "aliases": [
+        "image",
+        "photo",
+        "thumbnail",
+        "placeholder",
+        "cover"
+      ],
+      "install": "@kit/image-tile"
+    },
+    {
+      "id": "aspect-ratio",
+      "title": "Aspect ratio",
+      "exports": [
+        "AspectRatio"
+      ],
+      "category": "media",
+      "files": [
+        "components/ui/aspect-ratio.tsx"
+      ],
+      "notes": "holds a box at a ratio (video, map, embed)",
+      "api": "<AspectRatio ratio={16 / 9}>…</AspectRatio>",
+      "aliases": [
+        "image",
+        "thumbnail",
+        "16:9",
+        "video"
+      ],
+      "install": "aspect-ratio"
+    },
+    {
+      "id": "placeholder",
+      "title": "Placeholder",
+      "exports": [
+        "Placeholder"
+      ],
+      "category": "media",
+      "files": [
+        "components/kit/placeholder.tsx"
+      ],
+      "notes": "deterministic abstract SVG art from a `seed` · the kit ships no raster imagery",
+      "api": "<Placeholder seed ratio? palette=\"chart|mono|primary\" icon? />",
+      "caption": "Stand-in imagery that never 404s. Drawn from theme colours, so it follows light/dark and re-brands. The same seed draws the same art in both kits.",
+      "aliases": [
+        "generated art",
+        "stand-in image",
+        "seeded",
+        "mock image",
+        "abstract"
+      ],
+      "install": "@kit/placeholder"
+    },
+    {
+      "id": "spot",
+      "title": "Spot",
+      "exports": [
+        "Spot"
+      ],
+      "category": "media",
+      "files": [
+        "components/kit/spot.tsx"
+      ],
+      "notes": "an icon at illustration scale (≥64px) · SuccessScreen uses it",
+      "api": "<Spot icon size=\"md|lg|xl\" tone? shape=\"circle|square\" ring? />",
+      "caption": "The whole illustration vocabulary: an icon at display scale. For a row’s leading slot use IconCircle; the boundary is 44px.",
+      "aliases": [
+        "illustration",
+        "icon well",
+        "hero icon",
+        "empty state art"
+      ],
+      "install": "@kit/spot"
     },
     {
       "id": "hero",

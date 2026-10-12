@@ -94,6 +94,9 @@ the tables. Text between `GENERATED` markers is overwritten.
 | Button / `buttonVariants` | `components/ui/button.tsx` | `variant` default/secondary/outline/ghost/link/destructive · `size` default/sm/lg/icon · `asChild` for links |
 | Toggle / `toggleVariants` | `components/ui/toggle.tsx` | a pressed/unpressed button (bold, mute, favourite) |
 | ToggleGroup / ToggleGroupItem | `components/ui/toggle-group.tsx` | `type` single (a segmented control) or multiple |
+| FloatingButton | `components/kit/floating-button.tsx` | floats OVER the scroll (a Button flows with it) · Material calls it a FAB · `icon label? variant position` · one per page |
+| IconBadge | `components/kit/icon-badge.tsx` | icon button with unread count/dot · always labelled |
+| ActionGrid | `components/kit/action-grid.tsx` | the row of shortcuts under a page hero · 3–4 `items`, one row only, last tile is "More" |
 <!-- /GENERATED:registry:actions -->
 
 ### Inputs & selection
@@ -132,6 +135,11 @@ the tables. Text between `GENERATED` markers is overwritten.
 | Breadcrumb / BreadcrumbList / BreadcrumbItem / BreadcrumbLink / BreadcrumbPage / BreadcrumbSeparator | `components/ui/breadcrumb.tsx` | where a detail page sits · the last item is the current page |
 | Pagination / PaginationContent / PaginationItem / PaginationLink / PaginationPrevious / PaginationNext / PaginationEllipsis | `components/ui/pagination.tsx` | pages of a long list or table · Previous/Next + page links · `isActive` on the current page |
 | Command / CommandDialog / CommandInput / CommandList / CommandEmpty / CommandGroup / CommandItem | `components/ui/command.tsx` | search-as-you-type list · `CommandDialog` for a ⌘K palette |
+| Menubar / MenubarMenu / MenubarTrigger / MenubarContent / MenubarItem / MenubarSeparator / MenubarShortcut / MenubarCheckboxItem | `components/ui/menubar.tsx` | desktop-app menus (File · Edit · View) across the top of an editor |
+| Stepper | `components/kit/stepper.tsx` | `numbered` / `compact` flow progress |
+| SectionHeader | `components/kit/section-header.tsx` | title + action, outside the card |
+| PagerDots | `components/kit/pager-dots.tsx` | page indicator · HorizontalPager renders them for you |
+| HorizontalPager | `components/kit/horizontal-pager.tsx` | CSS scroll-snap pager + dots · keyboard scrollable |
 <!-- /GENERATED:registry:navigation -->
 
 ### Data display
@@ -166,6 +174,8 @@ the tables. Text between `GENERATED` markers is overwritten.
 | Progress | `components/ui/progress.tsx` | determinate 0–100 |
 | Skeleton | `components/ui/skeleton.tsx` | the shape of content that is loading |
 | EmptyState | `components/kit/empty-state.tsx` | nothing here yet, and the way out · `default` page / `compact` in a card |
+| Spinner | `components/kit/spinner.tsx` | themed loading indicator · announced as "Loading" |
+| SuccessScreen | `components/kit/success-screen.tsx` | the one success template |
 <!-- /GENERATED:registry:feedback -->
 
 ### Containers & layout
@@ -178,6 +188,9 @@ the tables. Text between `GENERATED` markers is overwritten.
 | Accordion / AccordionItem / AccordionTrigger / AccordionContent | `components/ui/accordion.tsx` | FAQs and long optional detail |
 | Collapsible / CollapsibleTrigger / CollapsibleContent | `components/ui/collapsible.tsx` | one show/hide region |
 | ScrollArea / ScrollBar | `components/ui/scroll-area.tsx` | a fixed-height region that scrolls on its own |
+| StickyBottomBar | `components/kit/sticky-bottom-bar.tsx` | action bar that sticks to the bottom of its scroll container · safe-area aware |
+| PromoCard | `components/kit/promo-card.tsx` | tinted offer/nudge card · arrow CTA, dismiss X, generated art · one per page |
+| Footnote | `components/kit/footnote.tsx` | small print / disclosure, last on the page |
 <!-- /GENERATED:registry:layout -->
 
 ### Overlays
@@ -191,7 +204,19 @@ the tables. Text between `GENERATED` markers is overwritten.
 | Popover / PopoverTrigger / PopoverContent | `components/ui/popover.tsx` | a small panel anchored to a control |
 | DropdownMenu / DropdownMenuTrigger / DropdownMenuContent / DropdownMenuItem / DropdownMenuLabel / DropdownMenuSeparator | `components/ui/dropdown-menu.tsx` | actions on a thing (row menu, account menu) · `variant="destructive"` items last |
 | Tooltip / TooltipTrigger / TooltipContent | `components/ui/tooltip.tsx` | names an icon button · never the only place information lives |
+| ContextMenu / ContextMenuTrigger / ContextMenuContent / ContextMenuItem / ContextMenuSeparator / ContextMenuShortcut | `components/ui/context-menu.tsx` | right-click menu on a thing |
+| HoverCard / HoverCardTrigger / HoverCardContent | `components/ui/hover-card.tsx` | a preview on hover or focus (a profile, a link) |
 <!-- /GENERATED:registry:overlays -->
+
+### Media
+<!-- GENERATED:registry:media -->
+| Component | Path | Notes |
+|---|---|---|
+| ImageTile | `components/kit/image-tile.tsx` | rounded image · `seed` draws generated art when there is no `src` |
+| AspectRatio | `components/ui/aspect-ratio.tsx` | holds a box at a ratio (video, map, embed) |
+| Placeholder | `components/kit/placeholder.tsx` | deterministic abstract SVG art from a `seed` · the kit ships no raster imagery |
+| Spot | `components/kit/spot.tsx` | an icon at illustration scale (≥64px) · SuccessScreen uses it |
+<!-- /GENERATED:registry:media -->
 
 ### Marketing
 <!-- GENERATED:registry:marketing -->

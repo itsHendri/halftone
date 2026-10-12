@@ -14,6 +14,10 @@
       "upstream": true,
       "forked": true
     },
+    "aspect-ratio": {
+      "upstream": true,
+      "forked": false
+    },
     "avatar": {
       "upstream": true,
       "forked": false
@@ -54,6 +58,10 @@
       "upstream": true,
       "forked": false
     },
+    "context-menu": {
+      "upstream": true,
+      "forked": false
+    },
     "dialog": {
       "upstream": true,
       "forked": false
@@ -66,11 +74,19 @@
       "upstream": true,
       "forked": false
     },
+    "hover-card": {
+      "upstream": true,
+      "forked": false
+    },
     "input": {
       "upstream": true,
       "forked": false
     },
     "label": {
+      "upstream": true,
+      "forked": false
+    },
+    "menubar": {
       "upstream": true,
       "forked": false
     },
