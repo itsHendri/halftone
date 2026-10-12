@@ -3,6 +3,7 @@ import Link from "next/link";
 import { CopyPrompt } from "@/components/copy-prompt";
 import { BrowserFrame } from "@/components/browser-frame";
 import { PhoneFrame } from "@/components/phone-frame";
+import { phoneFrameHeight } from "@/lib/device";
 import { ShowcaseFrame } from "@/components/showcase-frame";
 import { KitBadges } from "@/components/kit-availability";
 import { CATALOGUE, entriesIn, GROUPS, SIDES } from "@/lib/catalogue";
@@ -89,18 +90,9 @@ export default function HomePage() {
         <h2 id="live" className="sr-only">
           Live components
         </h2>
-        <div className="mx-auto grid w-full max-w-[1600px] gap-6 xl:grid-cols-[minmax(0,1fr)_auto]">
+        {/* Components only: they work in both kits, so they explain the system without a device beside them. */}
+        <div className="mx-auto w-full max-w-[1600px]">
           <ShowcaseFrame title="Web kit components, live" />
-          <div className="hidden flex-col items-center gap-3 px-6 pt-6 xl:flex">
-            <PhoneFrame
-              path="/shop"
-              title="Shop sample app, live"
-              width={280}
-            />
-            <p className="text-muted-foreground text-sm">
-              The native kit, live
-            </p>
-          </div>
         </div>
       </section>
       <p className="text-muted-foreground mx-auto max-w-2xl px-4 pt-4 text-center text-sm">
@@ -167,10 +159,12 @@ export default function HomePage() {
               title="Habit tracker sample app, live"
               width={260}
             />
+            {/* As tall as the phone beside it, so the pair reads as one row. */}
             <BrowserFrame
               path="/dashboard"
               title="Dashboard sample app, live"
               className="lg:flex-1"
+              height={phoneFrameHeight(260)}
             />
           </div>
         </section>
