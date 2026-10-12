@@ -140,10 +140,10 @@ export default function HomePage() {
                 Sample apps, built only from the kits
               </h2>
               <p className="text-muted-foreground leading-7">
-                In the native kit, a shop and a habit tracker. On the web, one made-up
-                invoicing product as a dashboard, a landing page and an AI
-                assistant. They are the worked examples an agent copies the
-                structure of. All live, all following this page&apos;s theme.
+                A shop, a habit tracker and Northwind, a made-up invoicing
+                product, each built with both kits. They are the worked examples
+                an agent copies the structure of. All live, all following this
+                page&apos;s theme.
               </p>
             </div>
             <Link
@@ -155,14 +155,14 @@ export default function HomePage() {
           </div>
           <div className="flex flex-col items-center gap-10 lg:flex-row lg:items-start">
             <PhoneFrame
-              path="/habits"
-              title="Habit tracker sample app, live"
+              path="/northwind"
+              title="Northwind on a phone, live"
               width={260}
             />
             {/* As tall as the phone beside it, so the pair reads as one row. */}
             <BrowserFrame
               path="/dashboard"
-              title="Dashboard sample app, live"
+              title="Northwind on the web, live"
               className="lg:flex-1"
               height={phoneFrameHeight(260)}
             />

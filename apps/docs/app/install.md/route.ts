@@ -70,8 +70,8 @@ In the kit you are working in:
 - \`AGENTS.md\`: stack, commands, how a prototype is laid out (its own folder under \`app/\`), gotchas.
 - \`DESIGN_SYSTEM.md\`: tokens, the component registry, patterns, anti-patterns, the hallucination guard.
 - \`llms.txt\` in the project, or ${site('/llms.txt')}: every component with its API.
-- The sample apps are the worked examples. Mobile: \`app/shop\`, \`app/habits\`. Web: \`app/dashboard\`,
-  \`app/landing\`, \`app/assistant\`. Remove them with \`npm run eject-samples\` once you have copied their shape.
+- The sample apps are the worked examples, the same products in both kits. Native: \`app/shop\`, \`app/habits\`,
+  \`app/northwind\`. Web: \`app/shop\`, \`app/habits\`, and Northwind as \`app/dashboard\`, \`app/landing\`, \`app/assistant\`. Remove them with \`npm run eject-samples\` once you have copied their shape.
 
 ## 3. Rules (both kits)
 
