@@ -29,7 +29,7 @@ type RegistryItem = { name: string; dependencies?: string[]; registryDependencie
 
 export type KitInfo = {
   platform: Platform;
-  /** "Mobile kit" */
+  /** "Native kit" */
   label: string;
   /** What it is built on, one line. */
   stack: string;
@@ -71,7 +71,7 @@ const build = (
 };
 
 export const kits: Record<Platform, KitInfo> = {
-  mobile: build('mobile', 'Mobile kit', 'Expo, React Native, NativeWind, react-native-reusables', mobileIndex, mobileRegistry, kit.registry.native, '/r/native', '/kitchen-sink'),
+  mobile: build('mobile', 'Native kit', 'Expo, React Native, NativeWind, react-native-reusables', mobileIndex, mobileRegistry, kit.registry.native, '/r/native', '/kitchen-sink'),
   web: build('web', 'Web kit', 'Next.js, Tailwind 4, shadcn/ui', webIndex, webRegistry, kit.registry.web, '/r/web', '/components'),
 };
 

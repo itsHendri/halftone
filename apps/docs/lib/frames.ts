@@ -61,3 +61,26 @@ export function useKitFrame(kind: 'mobile' | 'web', path: string) {
 
   return { ref, src };
 }
+
+/**
+ * The height an embedded kit page reports for its content (`?autosize=1` → `{ type: 'kit:size', height }`), or
+ * null until it does. A kit build that never reports gets `fallback` after 8 seconds.
+ */
+export function useFrameHeight(ref: React.RefObject<HTMLIFrameElement | null>, src: string | null, fallback: number) {
+  const [height, setHeight] = React.useState<number | null>(null);
+  React.useEffect(() => {
+    const onMessage = (event: MessageEvent) => {
+      if (event.source !== ref.current?.contentWindow || event.data?.type !== 'kit:size') return;
+      const h = Number(event.data.height);
+      if (Number.isFinite(h) && h > 0 && h < 20000) setHeight(h);
+    };
+    window.addEventListener('message', onMessage);
+    return () => window.removeEventListener('message', onMessage);
+  }, [ref]);
+  React.useEffect(() => {
+    if (!src) return;
+    const t = setTimeout(() => setHeight((h) => h ?? fallback), 8000);
+    return () => clearTimeout(t);
+  }, [src, fallback]);
+  return height;
+}

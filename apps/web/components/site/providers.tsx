@@ -47,9 +47,16 @@ function EmbedBridge({ onTheme }: { onTheme: (scheme: EmbedScheme) => void }) {
     window.addEventListener('message', onMessage);
     for (const origin of origins) window.parent.postMessage({ type: 'kit:ready' }, origin);
     // ?autosize=1: report the content's height so the host can size the frame to it (no inner scroll).
+    // The page may render [data-autosize] after this effect (client-only pages behind Suspense): look for it
+    // each frame for a few seconds.
     let observer: ResizeObserver | undefined;
-    const content = document.querySelector('[data-autosize]');
-    if (content && new URLSearchParams(window.location.search).get('autosize') === '1') {
+    let frame = 0;
+    const watch = (tries: number) => {
+      const content = document.querySelector('[data-autosize]');
+      if (!content) {
+        if (tries > 0) frame = requestAnimationFrame(() => watch(tries - 1));
+        return;
+      }
       let last = 0;
       observer = new ResizeObserver(() => {
         const height = Math.ceil(content.getBoundingClientRect().height);
@@ -58,9 +65,11 @@ function EmbedBridge({ onTheme }: { onTheme: (scheme: EmbedScheme) => void }) {
         for (const origin of origins) window.parent.postMessage({ type: 'kit:size', height }, origin);
       });
       observer.observe(content);
-    }
+    };
+    if (new URLSearchParams(window.location.search).get('autosize') === '1') watch(300);
     return () => {
       window.removeEventListener('message', onMessage);
+      cancelAnimationFrame(frame);
       observer?.disconnect();
     };
   }, [onTheme]);

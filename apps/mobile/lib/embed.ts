@@ -8,16 +8,18 @@ import { Platform } from 'react-native';
  *   ?embed=1             hide the kit chrome: tab bar, header, KitChip
  *   ?theme=light|dark    start in that theme and never persist it (also works without embed)
  *   ?section=<id>        on /kitchen-sink: with embed, render just that component's demo
+ *   ?autosize=1          report that demo's height, so the host can size its frame to it (kit:size)
  *
  * The host page keeps the theme in step with postMessage (web only):
  *   host → kit   { type: 'kit:theme', value: 'light' | 'dark' }
  *   host → kit   { type: 'kit:tokens', … }   a live theme from the docs picker (lib/embed-theme.ts)
  *   kit → host   { type: 'kit:ready' }   once mounted
+ *   kit → host   { type: 'kit:size', height }   with ?autosize=1, whenever the demo's height changes
  * Messages are accepted from this page's own origin (the docs site serves the export under /m) and from
  * the origins in EXPO_PUBLIC_EMBED_ORIGINS (comma-separated, for a docs dev server on another port).
  */
 export type EmbedScheme = 'light' | 'dark';
-export type EmbedState = { embedded: boolean; theme?: EmbedScheme };
+export type EmbedState = { embedded: boolean; theme?: EmbedScheme; autosize?: boolean };
 
 const isScheme = (value: unknown): value is EmbedScheme => value === 'light' || value === 'dark';
 
@@ -25,7 +27,7 @@ function readInitial(): EmbedState {
   if (Platform.OS !== 'web' || typeof window === 'undefined') return { embedded: false };
   const params = new URLSearchParams(window.location.search);
   const theme = params.get('theme');
-  return { embedded: params.get('embed') === '1', theme: isScheme(theme) ? theme : undefined };
+  return { embedded: params.get('embed') === '1', theme: isScheme(theme) ? theme : undefined, autosize: params.get('autosize') === '1' };
 }
 
 /** Latched once, at startup. */
@@ -79,4 +81,14 @@ export function useEmbedBridge(onTheme: (scheme: EmbedScheme) => void) {
     for (const origin of origins) window.parent.postMessage({ type: 'kit:ready' }, origin);
     return () => window.removeEventListener('message', onMessage);
   }, [onTheme]);
+}
+
+let lastSize = 0;
+/** Tell the host the embedded content's height (px), for `?autosize=1`. Call it from an onLayout. */
+export function reportEmbedSize(height: number) {
+  if (!listening() || !EMBED.autosize) return;
+  const rounded = Math.ceil(height);
+  if (rounded === lastSize) return;
+  lastSize = rounded;
+  for (const origin of allowedOrigins()) window.parent.postMessage({ type: 'kit:size', height: rounded }, origin);
 }

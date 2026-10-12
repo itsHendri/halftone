@@ -1,10 +1,10 @@
 import { createSearchAPI } from 'fumadocs-core/search/server';
-import { categoryLabel, componentUrl, kits, PLATFORMS } from '@/lib/kit';
+import { CATALOGUE, entryUrl, groupOf, SIDE_LABEL } from '@/lib/catalogue';
 import { source } from '@/lib/source';
 
 export const revalidate = false;
 
-/** One static index: the MDX docs plus every component page of both kits (title, exports, notes, caption, aliases). */
+/** One static index: the MDX docs plus every component in the catalogue (title, exports, notes, caption, aliases). */
 export const { staticGET: GET } = createSearchAPI('advanced', {
   language: 'english',
   indexes: async () => [
@@ -16,20 +16,23 @@ export const { staticGET: GET } = createSearchAPI('advanced', {
       breadcrumbs: ['Docs'],
       structuredData: page.data.structuredData,
     })),
-    ...PLATFORMS.flatMap((platform) =>
-      kits[platform].components.map((c) => ({
-        id: componentUrl(platform, c.id),
-        title: c.title,
-        description: c.notes.replace(/`/g, ''),
-        url: componentUrl(platform, c.id),
-        breadcrumbs: [kits[platform].label, categoryLabel(platform, c.category)],
+    // One result per component, whichever kits have it; the breadcrumb says which.
+    ...CATALOGUE.map((e) => {
+      const versions = [e.native, e.web].filter((c) => c !== undefined);
+      return {
+        id: entryUrl(e.id),
+        title: e.title,
+        description: versions[0].notes.replace(/`/g, ''),
+        url: entryUrl(e.id),
+        breadcrumbs: ['Components', groupOf(e.group).label, e.sides.map((s) => SIDE_LABEL[s]).join(' · ')],
         structuredData: {
           headings: [],
-          contents: [c.exports.join(' '), c.notes, c.caption ?? '', (c.aliases ?? []).join(' ')]
+          contents: versions
+            .flatMap((c) => [c.exports.join(' '), c.notes, c.caption ?? '', (c.aliases ?? []).join(' ')])
             .filter(Boolean)
             .map((content) => ({ heading: undefined, content: content.replace(/`/g, '') })),
         },
-      }))
-    ),
+      };
+    }),
   ],
 });

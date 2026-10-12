@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Components wireframes</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
+<style>
+:root{--bg:#fafafa;--surface:#fff;--muted:#f4f4f5;--border:#e4e4e7;--strong:#d4d4d8;--fg:#09090b;--fg2:#52525b;--fg3:#71717a;--primary:#2563eb;--tint:#eff6ff;--tint-fg:#1d4ed8}
+@media (prefers-color-scheme:dark){:root{--bg:#09090b;--surface:#18181b;--muted:#27272a;--border:#27272a;--strong:#3f3f46;--fg:#fafafa;--fg2:#a1a1aa;--fg3:#a1a1aa;--primary:#448bff;--tint:#172554;--tint-fg:#bfdbfe}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;padding:32px 20px 64px}
+main{max-width:1100px;margin:0 auto}h1{font-size:24px;font-weight:600;margin:0 0 4px}h2{font-size:18px;font-weight:600;margin:48px 0 4px}
+.cap{color:var(--fg2);margin:0 0 14px;max-width:760px}
+.win{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.chrome{display:flex;gap:6px;align-items:center;height:30px;padding:0 12px;border-bottom:1px solid var(--border);background:var(--muted)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--strong)}
+.top{display:flex;gap:18px;align-items:center;height:44px;padding:0 18px;border-bottom:1px solid var(--border);font-size:13px;color:var(--fg2)}
+.top b{color:var(--fg);font-weight:600}.top .on{color:var(--fg);box-shadow:inset 0 -2px var(--fg)}
+.body{display:grid;grid-template-columns:240px minmax(0,1fr);min-height:420px}
+.side{border-right:1px solid var(--border);padding:14px 10px;font-size:13px}
+.seg{display:inline-flex;border:1px solid var(--strong);border-radius:8px;overflow:hidden;font-size:12px;margin-bottom:8px}
+.seg span{padding:3px 12px}.seg .s{background:var(--muted);font-weight:600}
+.g{display:flex;align-items:center;gap:8px;font-weight:600;margin:14px 0 4px;padding:0 6px}
+.g i{font-size:16px;color:var(--fg2)}
+.it{display:flex;justify-content:space-between;align-items:center;padding:4px 6px 4px 30px;border-radius:6px;color:var(--fg2)}
+.it.on{background:var(--muted);color:var(--fg)}
+.b{font-size:11px;padding:0 6px;border-radius:999px;border:1px solid var(--strong);color:var(--fg3);margin-left:3px}
+.b.a{background:var(--tint);color:var(--tint-fg);border-color:transparent}
+.main{padding:24px 28px}.t{font-size:22px;font-weight:600;margin:0}
+.stage{background:var(--muted);border-radius:12px;display:flex;align-items:center;justify-content:center;gap:12px;min-height:180px;margin:14px 0}
+.btn{padding:8px 16px;border-radius:999px;background:var(--fg);color:var(--surface);font-size:13px}.btn.o{background:transparent;color:var(--fg);border:1px solid var(--strong)}
+.tabs{display:flex;gap:18px;border-bottom:1px solid var(--border);font-size:13px;color:var(--fg2)}.tabs span{padding:8px 0}.tabs .on{color:var(--fg);box-shadow:inset 0 -2px var(--fg)}
+.tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--border);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.tile{background:var(--surface);min-height:150px;padding:12px;display:flex;flex-direction:column;justify-content:space-between}
+.phone{width:150px;height:260px;border-radius:26px;border:7px solid var(--fg);background:var(--surface);display:flex;align-items:flex-end;justify-content:center;padding-bottom:10px}
+.note{font-size:12px;color:var(--fg3)}
+</style>
+</head>
+<body><main>
+<h1>Components: one catalogue</h1>
+<p class="cap">Agreed 2026-10-12. Decision record: <code>components-wireframes.md</code>. Native = Expo, iOS and Android. Web = Next.js, responsive.</p>
+
+<h2>1 · Component page, both kits</h2>
+<p class="cap">Badges under the title; the Native | Web switch swaps the preview, usage, API and install. The component sits alone on a plain stage, no device frame. Sidebar: bold group titles with icons, items indented, badges on each item, the filter on top.</p>
+<div class="win"><div class="chrome"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<div class="top"><b>Protokit</b><span>Docs</span><span class="on">Components</span><span>Screens</span><span>Themes</span></div>
+<div class="body"><div class="side">
+<span class="seg"><span class="s">All</span><span>Native</span><span>Web</span></span>
+<div class="g"><i class="ti ti-click"></i>Actions</div>
+<div class="it on"><span>Button</span><span><span class="b">Native</span><span class="b">Web</span></span></div>
+<div class="it"><span>Floating button</span><span><span class="b">Native</span></span></div>
+<div class="it"><span>Toggle group</span><span><span class="b">Native</span><span class="b">Web</span></span></div>
+<div class="g"><i class="ti ti-forms"></i>Inputs</div>
+<div class="it"><span>Input</span><span><span class="b">Native</span><span class="b">Web</span></span></div>
+<div class="it"><span>OTP input</span><span><span class="b">Native</span></span></div>
+<div class="g"><i class="ti ti-device-mobile"></i>Native only</div>
+<div class="it"><span>Face ID</span></div><div class="it"><span>Camera</span></div>
+<div class="g"><i class="ti ti-browser"></i>Web only</div>
+<div class="it"><span>Data table</span></div><div class="it"><span>Hero</span></div>
+</div><div class="main">
+<p class="note">Actions</p><p class="t">Button</p>
+<p style="margin:4px 0 0"><span class="b a">Native</span><span class="b a">Web</span> <span class="note">One primary per screen; the rest outline or ghost.</span></p>
+<div style="margin-top:14px"><span class="seg"><span class="s">Native</span><span>Web</span></span></div>
+<div class="stage"><span class="btn">Save changes</span><span class="btn o">Cancel</span></div>
+<div class="tabs"><span class="on">Usage</span><span>API</span><span>Install</span><span>Details</span></div>
+</div></div></div>
+
+<h2>2 · Native-only, screen-level</h2>
+<p class="cap">One badge, no switch. Screen-level components keep a phone outline. A twin with another name is a cross-link, not a merge.</p>
+<div class="win"><div class="chrome"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+<div class="main"><p class="note">Native only</p><p class="t">Face ID</p>
+<p style="margin:4px 0 0"><span class="b a">Native</span> <span class="note">Falls back to a passcode sheet in Expo Go.</span></p>
+<div class="stage" style="min-height:300px"><div class="phone"><span class="btn">Unlock with Face ID</span></div></div>
+</div></div>
+
+<h2>3 · Index: live tiles</h2>
+<p class="cap">Like kumo-ui.com: every component live on its stage, grouped by category, lazy-loaded, following the theme bar. The filter narrows it.</p>
+<div class="win"><div class="main"><p class="t">Components</p><p class="note" style="margin:0 0 14px">114 · Native and Web · live</p>
+<div class="tiles">
+<div class="tile"><span>Button <span class="b">Native</span><span class="b">Web</span></span><span style="align-self:center" class="btn">Save changes</span><span></span></div>
+<div class="tile"><span>OTP input <span class="b">Native</span></span><span style="align-self:center;letter-spacing:6px">4 8 1 9</span><span></span></div>
+<div class="tile"><span>Data table <span class="b">Web</span></span><span style="align-self:center" class="note">Client · Status · Amount</span><span></span></div>
+</div></div></div>
+
+<h2>4 · Home: sample apps</h2>
+<p class="cap">No phone beside the showcase band. In Sample apps the browser frame matches the phone screen's height. Later: each product on both devices (Screens as matching pairs).</p>
+<div class="win"><div class="main" style="display:flex;gap:20px;align-items:stretch">
+<div class="phone" style="height:300px;width:150px"><span class="note">Habits</span></div>
+<div style="flex:1;border:1px solid var(--border);border-radius:12px;display:flex;flex-direction:column"><div class="chrome"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div><div style="flex:1;display:flex;align-items:center;justify-content:center" class="note">Dashboard, same height as the phone</div></div>
+</div></div>
+</main></body></html>

@@ -68,7 +68,12 @@ export function KitchenSink({ embedded }: { embedded?: boolean }) {
 
   if (embedded && section) {
     const c = PREVIEWED.find((x) => x.id === section);
-    return <div className="p-5">{c ? <Section c={c} bare /> : <p className="text-muted-foreground">No component called “{section}”.</p>}</div>;
+    // data-autosize: what the embed bridge measures for ?autosize=1 (the docs' plain-stage previews).
+    return (
+      <div data-autosize className="p-5">
+        {c ? <Section c={c} bare /> : <p className="text-muted-foreground">No component called “{section}”.</p>}
+      </div>
+    );
   }
 
   const results = q ? PREVIEWED.filter((c) => matches(c, q)) : null;

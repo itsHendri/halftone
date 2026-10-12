@@ -53,7 +53,7 @@ export default function ScreensPage() {
           <p className="text-muted-foreground text-sm">
             On a phone: clone the kit and run it in Expo Go or a development build. See{' '}
             <Link href="/docs/mobile" className="underline underline-offset-4">
-              Mobile setup
+              Native setup
             </Link>
             .
           </p>

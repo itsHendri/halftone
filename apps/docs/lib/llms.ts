@@ -29,7 +29,7 @@ export function siteLlmsHeader(): string {
     '',
     `> ${kit.tagline}`,
     '',
-    'Two prototype kits on one set of design tokens: a mobile kit (Expo, React Native, NativeWind,',
+    'Two prototype kits on one set of design tokens: a native kit (Expo, React Native, NativeWind,',
     'react-native-reusables) and a web kit (Next.js, Tailwind 4, shadcn/ui). Each kit lists the only components a',
     'prototype may use. Start with the install guide.',
     '',

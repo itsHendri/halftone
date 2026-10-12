@@ -4,6 +4,6 @@ import { docsLlms } from '@/lib/source';
 export const revalidate = false;
 
 export async function GET() {
-  const body = [siteLlmsHeader(), kitLlmsSection('mobile', 'Mobile kit'), kitLlmsSection('web', 'Web kit'), await docsLlms.full()].join('\n\n');
+  const body = [siteLlmsHeader(), kitLlmsSection('mobile', 'Native kit'), kitLlmsSection('web', 'Web kit'), await docsLlms.full()].join('\n\n');
   return new Response(body, { headers: { 'Content-Type': 'text/plain; charset=utf-8' } });
 }

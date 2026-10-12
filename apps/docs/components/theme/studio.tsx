@@ -8,7 +8,7 @@ import { redo, undo } from '@/lib/theme/store';
 /**
  * The theme studio (/themes), laid out like ui.shadcn.com/create: a floating control rail in the opposite
  * scheme on the left, the preview filling the rest, and a 01–04 switcher between previews: an overview this
- * site renders (instant), the mobile kit, the web kit, and the typeset beside components. The view is kept
+ * site renders (instant), the native kit, the web kit, and the typeset beside components. The view is kept
  * in `?view=`. Below lg the rail is a panel over the preview, opened from the switcher's Theme button.
  */
 export function ThemeStudio() {
