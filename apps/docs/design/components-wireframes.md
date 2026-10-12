@@ -96,3 +96,72 @@ iOS and Android) and **Web** (Next.js, any screen).
 - `components/kit-stage.tsx`: the plain stage, an iframe of the kit's single demo sized by `kit:size`
   (`?autosize=1`; the native kit reports it from `onLayout`, the web kit from `[data-autosize]`).
 - Old URLs: `scripts/build-docs.mjs` writes `/components/{mobile,web}/* → /components/:splat` into `_redirects`.
+
+## Status and next steps (2026-10-12)
+
+A fresh session can pick up here. PRs merge with `gh pr merge <n> --rebase --delete-branch`, and only when the user
+says so. Required checks: 6 CI jobs plus `Workers Builds: protokit-docs`.
+
+**Done (on main and live)**
+- Phase 1, the catalogue: #30. It also renamed the device components (Camera, Code scanner, Face ID, Permission
+  primer, Share, Notifications).
+- Phase 2, live tiles: #31.
+- Phase 3, home page: no phone in the band, and the dashboard matches the phone's height. #32.
+
+**Open PRs**
+- #33: the tile grid leaves an unfilled row blank instead of grey (`apps/web/components/devkit/kitchen-sink.tsx`).
+  All CI passed; it was waiting on the Workers Builds check when this was written.
+- #34: Phase 4 batch 1, web versions of the 20 native-only Inputs and Data components.
+
+**Phase 4, remaining web versions (19), one PR per batch**
+- Actions: floating-button, icon-badge, action-grid
+- Navigation: menubar, stepper, section-header, pager-dots, horizontal-pager
+- Feedback: spinner, success-screen
+- Layout: sticky-bottom-bar, promo-card, footnote
+- Overlays: context-menu, hover-card (shadcn has both: `npx shadcn@latest add context-menu hover-card`, then the
+  web add-component skill's checks)
+- Media: image-tile, aspect-ratio (shadcn), placeholder, spot
+
+**Phase 5:** native versions of the AI set (chat-message, chat-composer, attachment-chip, chat-thread-list,
+sources, follow-up-suggestions, streaming-text, thinking-indicator, tool-call-card, approval-card) and
+pricing-card. Use the native add-component skill: registry entry, a `components/devkit/sections/kit-<category>.tsx`
+demo, and `npm run registry:build -w apps/mobile`. The AI group in `lib/catalogue.ts` then shows both badges on its own.
+
+**Phase 6:** Screens as matching pairs. Add web versions of Shop and Habits and a native version of the invoicing
+product, then one Screens gallery with both devices side by side.
+
+### How a parity batch is built (what #34 did)
+1. Read the native source in `apps/mobile/components/kit/<id>.tsx`. Write `apps/web/components/kit/<id>.tsx` with
+   the **same id** and the native props. Use web idioms for presses (`onClick`, `href`) and labels (`aria-label`).
+   Style with className only, `cn` from `cn`, and the web radius scale (no pills). Anything that moves uses
+   `useReducedMotion()`.
+2. Register it in `apps/web/registry/components.ts` under the same category as the native one. Add a demo to
+   `TWIN_DEMOS` in `apps/web/components/devkit/demos-native-twins.tsx`. Run `npm run registry:build -w apps/web`.
+3. Check: `npm run typecheck -w apps/web`, `npm run lint -w apps/web`, `npm run tokens:check -w apps/web`,
+   `registry:build -- --check`, `registry:dist` and `registry:roundtrip`. Then root `npm run check`, plus the docs
+   `build`, `check:links` and `check:a11y`.
+4. Look at it: the web dev server (launch config `web-dev-embed`, port 3100) at
+   `/components?embed=1&tiles=<id>,<id>` shows the tiles exactly as the docs index does. Check 1280px and 375px, in
+   light and dark.
+
+### Things learned building it
+- Tiles: `?tiles=a,b,c&embed=1&autosize=1` on either kit's Kitchen Sink route. A kit reports its height with
+  `kit:size`: the web kit from `[data-autosize]`, the native kit from `reportEmbedSize` in an `onLayout`. A tile's
+  title posts `kit:open` and the docs navigate. One frame per kit per group; native frames are expensive.
+- Embedded web-kit pages drop the `(kit)` layout's width cap and padding (`[[data-embed]_&]:…`).
+- The docs filter is pure CSS: `<html data-kit-filter>` plus `data-sides` on sidebar items, index links and group
+  titles (`app/global.css`).
+- A `'use client'` module's functions can't be called from a server component. Server-safe constants live in
+  `lib/device.ts`.
+- `check-a11y` waits up to 60s for networkidle, then checks the page as it is (the studio loads every font).
+- Dev servers: launch configs `kit-web-embed` (8090), `web-dev-embed` (3100), `docs-dev-live` (3000).
+  Screenshots: headless Playwright from the repo's `node_modules/playwright` works when the browser pane is
+  hidden.
+
+### Open from the UI audit (2026-10-11), not yet done
+- Studio rail: single-line rows (label left, value right) and a scroll fade, so every group fits at 900px tall.
+- Studio Overview: a responsive colour grid (it truncates at 1024px). Replace the shadcn-like first-card copy with
+  our own line, and add a one-line description at the top of each picker.
+- Home hero: one primary button (make "Browse components" the outline one).
+- Radio groups (pickers, chips): roving tabindex with arrow keys.
+- On phones, keep the theme bar off the hero's buttons. Shorten the rail subtitle. Make the locks discoverable.
