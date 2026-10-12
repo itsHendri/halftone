@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * scripts/eject-samples.mjs — remove the dashboard, landing and assistant samples.
+ * scripts/eject-samples.mjs — remove the dashboard, landing, assistant, shop and habits samples.
  *
  *   npm run eject-samples
  *
@@ -16,7 +16,7 @@ import { fileURLToPath } from 'node:url';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const rel = (p) => join(root, p);
 
-const DIRS = ['app/dashboard', 'app/landing', 'app/assistant', 'components/dashboard', 'components/landing', 'components/assistant'];
+const DIRS = ['app/dashboard', 'app/landing', 'app/assistant', 'app/shop', 'app/habits', 'components/dashboard', 'components/landing', 'components/assistant', 'components/shop', 'components/habits'];
 
 const removed = DIRS.filter((d) => existsSync(rel(d)));
 if (!removed.length) {
@@ -37,7 +37,7 @@ for (const block of blocks) {
   }
   home = home.replace(block, '');
 }
-const ICONS = "import { ArrowRightIcon, BlocksIcon, BotIcon, LayoutDashboardIcon, MegaphoneIcon, PaletteIcon, type LucideIcon } from 'lucide-react';";
+const ICONS = "import { ArrowRightIcon, BlocksIcon, BotIcon, LayoutDashboardIcon, MegaphoneIcon, PaletteIcon, ShoppingBagIcon, TargetIcon, type LucideIcon } from 'lucide-react';";
 if (!home.includes(ICONS)) throw new Error('eject-samples: the lucide import in app/(kit)/page.tsx has changed. Remove the samples by hand.');
 home = home.replace(ICONS, "import { ArrowRightIcon, BlocksIcon, PaletteIcon, type LucideIcon } from 'lucide-react';");
 

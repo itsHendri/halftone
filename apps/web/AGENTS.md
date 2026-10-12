@@ -22,8 +22,10 @@ hallucination guard. This file covers engineering, workflows and gotchas.
 app/layout.tsx          providers (theme, tooltips, toasts) + the embed boot script
 app/(kit)/              the kit shell: Home (/) · Components (/components, the Kitchen Sink) · Foundations
 app/<slug>/             a prototype: its own folder with its own layout.tsx (AppShell, a marketing layout…)
-app/dashboard/, app/landing/, app/assistant/   the three samples (worked examples). `npm run eject-samples`
-                        removes them, their data in components/<sample>/ and the kit home's links.
+app/dashboard/, app/landing/, app/assistant/   Northwind, three ways (worked examples)
+app/shop/, app/habits/  the web halves of the native kit's Shop and Habits samples (same data, web layouts).
+                        `npm run eject-samples` removes all five, their data in components/<sample>/ and the kit
+                        home's links.
 app/showcase/           the showcase: registry components in a masonry, and /showcase/typeset (long-form Prose
                         beside components). The docs home page and theme studio frame it; not a sample to copy.
 components/showcase/    its mock data, cards and typeset fixtures (kept by eject-samples)
@@ -57,7 +59,7 @@ npm run registry:build    # after editing registry/components.ts
 npm run tokens:check && npm run registry:build -- --check   # what CI checks
 npm run registry:drift    # after `shadcn add`: which components/ui files differ from shadcn (network)
 npm run registry:dist && npm run registry:roundtrip         # build the shadcn registry and prove it reinstalls
-npm run eject-samples     # delete the dashboard, landing and assistant samples and every reference
+npm run eject-samples     # delete the dashboard, landing, assistant, shop and habits samples and every reference
 ```
 
 ## Building a prototype (the rules)
@@ -66,10 +68,12 @@ npm run eject-samples     # delete the dashboard, landing and assistant samples 
    prototype puts `AppShell` in that layout; a marketing page uses a plain layout. When the prototype IS the
    product, move it to `/` and delete `app/(kit)`.
 2. Pages compose ONLY registry components. Patterns are in `DESIGN_SYSTEM.md › Patterns`; the samples
-   (`app/dashboard`, `app/landing`, `app/assistant`) are the worked examples. `KitChip` in their top bars is
+   (`app/dashboard`, `app/landing`, `app/assistant`, `app/shop`, `app/habits`) are the worked examples. `KitChip` in their top bars is
    the way back to the kit (and the theme toggle); it hides itself in embed mode.
    Interactive pages that pass functions to kit components (DataTable cells, nav icons) are client
    components; keep `metadata` in a server `page.tsx` or `layout.tsx` that renders them.
+   A record created in the session (an order, a habit) opens by query (`/shop/order?id=…`), not a dynamic
+   segment: the static export only has the pages it built.
 3. Mock data lives beside the prototype (`app/<slug>/data.ts` or `components/<slug>/data.ts`). Never call
    real APIs; a route handler returning fixtures is fine when a flow needs one.
 4. New component needed? Use the `add-component` skill: it lands in the registry and the docs.
