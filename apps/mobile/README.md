@@ -27,7 +27,7 @@ Then open **Components** in the app.
 2. Brand: edit `tokens/tokens.json` (brand ramp + semantic colours + radius), run `npm run tokens:build`.
    Add a font with the `expo-font` config plugin and set `primitive.font.family.sans`.
 3. Replace `assets/images/*` (icon, splash, favicon).
-4. Delete the samples: `npm run eject-samples` (removes `app/shop`, `app/habits`, their data and every reference).
+4. Delete the samples: `npm run eject-samples` (removes `app/shop`, `app/habits`, `app/northwind`, their data and every reference).
 5. `eas init` under your account, then put the owner and project id it prints into `.env.local`
    (`EAS_OWNER`, `EAS_PROJECT_ID`) and into your EAS environment variables for cloud builds.
 6. Build your prototype as its own named segment, `app/<slug>/` (see `AGENTS.md › Building a prototype`).

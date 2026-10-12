@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * scripts/eject-samples.mjs — remove the shop and habits sample apps.
+ * scripts/eject-samples.mjs — remove the shop, habits and Northwind sample apps.
  *
  *   npm run eject-samples
  *
@@ -18,7 +18,7 @@ import { fileURLToPath } from 'node:url';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const rel = (p) => join(root, p);
 
-const DIRS = ['app/shop', 'app/habits', 'components/shop', 'components/habits'];
+const DIRS = ['app/shop', 'app/habits', 'app/northwind', 'components/shop', 'components/habits', 'components/northwind'];
 
 const removed = [];
 for (const dir of DIRS) {
@@ -50,7 +50,7 @@ function dropLines(file, predicate, expected) {
 }
 
 // 1. Root Stack no longer declares the sample groups.
-dropLines('app/_layout.tsx', (l) => /<Stack\.Screen name="(shop|habits)" \/>/.test(l), 2);
+dropLines('app/_layout.tsx', (l) => /<Stack\.Screen name="(shop|habits|northwind)" \/>/.test(l), 3);
 
 // 2. The kit home loses the whole "Sample apps" group, and the icons only it used.
 const homePath = rel('app/(kit)/index.tsx');
@@ -61,7 +61,7 @@ if (!group) {
 }
 home = home.replace(group[0], '\n');
 home = home.replace(
-  "import { BlocksIcon, ShoppingBagIcon, SwatchBookIcon, TargetIcon } from 'lucide-react-native';",
+  "import { BlocksIcon, ReceiptTextIcon, ShoppingBagIcon, SwatchBookIcon, TargetIcon } from 'lucide-react-native';",
   "import { BlocksIcon, SwatchBookIcon } from 'lucide-react-native';"
 );
 writeFileSync(homePath, home);
@@ -70,7 +70,7 @@ console.log(
   [
     'eject-samples → removed:',
     ...removed.map((d) => `  ${d}`),
-    '  app/_layout.tsx        (2 Stack.Screen entries)',
+    '  app/_layout.tsx        (3 Stack.Screen entries)',
     '  app/(kit)/index.tsx    ("Sample apps" group)',
     '',
     'Next:',

@@ -9,7 +9,7 @@ import { Card } from '@/components/ui/card';
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { Link } from 'expo-router';
-import { BlocksIcon, ShoppingBagIcon, SwatchBookIcon, TargetIcon } from 'lucide-react-native';
+import { BlocksIcon, ReceiptTextIcon, ShoppingBagIcon, SwatchBookIcon, TargetIcon } from 'lucide-react-native';
 import { ScrollView, View } from 'react-native';
 
 export default function KitHome() {
@@ -31,12 +31,15 @@ export default function KitHome() {
         </Link>
       </ListGroup>
 
-      <ListGroup title="Sample apps" footnote="Both are built only from the kit. Use the floating Kit chip to come back.">
+      <ListGroup title="Sample apps" footnote="All three are built only from the kit, and the web kit has each of them too. Use the floating Kit chip to come back.">
         <Link href="/shop/(tabs)" asChild>
           <ListRow leading={<Icon as={ShoppingBagIcon} size={22} className="text-primary" />} title="Shop and orders" subtitle="Browse, cart, checkout, track an order" chevron onPress={() => {}} />
         </Link>
         <Link href="/habits/(tabs)" asChild>
           <ListRow leading={<Icon as={TargetIcon} size={22} className="text-primary" />} title="Habit tracker" subtitle="Daily goals, streaks and insights" chevron onPress={() => {}} />
+        </Link>
+        <Link href="/northwind/(tabs)" asChild>
+          <ListRow leading={<Icon as={ReceiptTextIcon} size={22} className="text-primary" />} title="Northwind invoicing" subtitle="Outstanding, invoices, send and get paid" chevron onPress={() => {}} />
         </Link>
       </ListGroup>
 
