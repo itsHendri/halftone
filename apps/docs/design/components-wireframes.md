@@ -107,20 +107,12 @@ says so. Required checks: 6 CI jobs plus `Workers Builds: protokit-docs`.
   primer, Share, Notifications).
 - Phase 2, live tiles: #31.
 - Phase 3, home page: no phone in the band, and the dashboard matches the phone's height. #32.
+- Phase 4 batch 1, web versions of the 20 native-only Inputs and Data components: #34. Tile grid fix: #33.
 
-**Open PRs**
-- #33: the tile grid leaves an unfilled row blank instead of grey (`apps/web/components/devkit/kitchen-sink.tsx`).
-  All CI passed; it was waiting on the Workers Builds check when this was written.
-- #34: Phase 4 batch 1, web versions of the 20 native-only Inputs and Data components.
-
-**Phase 4, remaining web versions (19), one PR per batch**
-- Actions: floating-button, icon-badge, action-grid
-- Navigation: menubar, stepper, section-header, pager-dots, horizontal-pager
-- Feedback: spinner, success-screen
-- Layout: sticky-bottom-bar, promo-card, footnote
-- Overlays: context-menu, hover-card (shadcn has both: `npx shadcn@latest add context-menu hover-card`, then the
-  web add-component skill's checks)
-- Media: image-tile, aspect-ratio (shadcn), placeholder, spot
+**Phase 4 batch 2 (this branch, `feat/web-parity-batch-2`):** web versions of the remaining 19: FloatingButton,
+IconBadge, ActionGrid, Menubar, Stepper, SectionHeader, PagerDots, HorizontalPager, Spinner, SuccessScreen,
+StickyBottomBar, PromoCard, Footnote, ContextMenu, HoverCard, ImageTile, AspectRatio, Placeholder, Spot. The web kit
+gained a `media` category. After it, no shared group has a native-only entry.
 
 **Phase 5:** native versions of the AI set (chat-message, chat-composer, attachment-chip, chat-thread-list,
 sources, follow-up-suggestions, streaming-text, thinking-indicator, tool-call-card, approval-card) and
