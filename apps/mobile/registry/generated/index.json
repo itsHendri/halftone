@@ -43,6 +43,16 @@
       "blurb": "Icons, images, ratios"
     },
     {
+      "id": "marketing",
+      "label": "Marketing",
+      "blurb": "Paywalls and plans"
+    },
+    {
+      "id": "ai",
+      "label": "AI product",
+      "blurb": "Chat, streaming, tool calls, approvals"
+    },
+    {
       "id": "native",
       "label": "Device capabilities",
       "blurb": "Camera, photos, Face ID, alerts"
@@ -1726,6 +1736,235 @@
         "empty state art"
       ],
       "install": "@kit-native/spot"
+    },
+    {
+      "id": "pricing-card",
+      "title": "Pricing card",
+      "exports": [
+        "PricingCard"
+      ],
+      "category": "marketing",
+      "files": [
+        "components/kit/pricing-card.tsx"
+      ],
+      "notes": "one plan · stack 2–3 on a paywall · `highlighted` on one",
+      "api": "<PricingCard name price period? description? features action highlighted? />",
+      "caption": "A paywall stacks two or three plans; highlight the one you recommend, and only one.",
+      "aliases": [
+        "plan",
+        "pricing",
+        "tier",
+        "paywall",
+        "subscription"
+      ],
+      "install": "@kit-native/pricing-card"
+    },
+    {
+      "id": "chat-message",
+      "title": "Chat message",
+      "exports": [
+        "ChatMessage"
+      ],
+      "category": "ai",
+      "files": [
+        "components/kit/chat-message.tsx"
+      ],
+      "notes": "one turn · user = bubble on the right, assistant = plain text on the left",
+      "api": "<ChatMessage role=\"user|assistant\" initials?>{content}</ChatMessage>",
+      "caption": "Assistant turns are documents, not bubbles: long answers stay readable. A string child is wrapped in Text for you.",
+      "aliases": [
+        "chat",
+        "conversation",
+        "turn"
+      ],
+      "install": "@kit-native/chat-message"
+    },
+    {
+      "id": "chat-composer",
+      "title": "Chat composer",
+      "exports": [
+        "ChatComposer"
+      ],
+      "category": "ai",
+      "files": [
+        "components/kit/chat-composer.tsx"
+      ],
+      "notes": "the arrow sends · `busy` turns Send into Stop · `onAttach` turns on attachments (paperclip, chips)",
+      "api": "<ChatComposer onSend={(text, files) => …} busy? onStop? placeholder? onAttach? maxFiles? />",
+      "caption": "Pass `onAttach` only when the assistant can use files; it returns the files to attach (mock ones in a prototype). Files can be reviewed and removed before sending.",
+      "aliases": [
+        "prompt",
+        "input",
+        "message box",
+        "attachments",
+        "upload",
+        "file"
+      ],
+      "install": "@kit-native/chat-composer"
+    },
+    {
+      "id": "attachment-chip",
+      "title": "Attachment chip",
+      "exports": [
+        "AttachmentChip",
+        "formatBytes"
+      ],
+      "category": "ai",
+      "files": [
+        "components/kit/attachment-chip.tsx"
+      ],
+      "notes": "a file in a conversation: icon by type, name, size · `onRemove` while composing",
+      "api": "<AttachmentChip file={{ name, size, type? }} onRemove? />",
+      "caption": "ChatComposer shows these itself; use it to show the files in a sent message. Without `onRemove` it is read-only.",
+      "aliases": [
+        "file",
+        "upload",
+        "attachment"
+      ],
+      "install": "@kit-native/attachment-chip"
+    },
+    {
+      "id": "chat-thread-list",
+      "title": "Chat thread list",
+      "exports": [
+        "ChatThreadList"
+      ],
+      "category": "ai",
+      "files": [
+        "components/kit/chat-thread-list.tsx"
+      ],
+      "notes": "past conversations, grouped by when · `threads activeId onSelect onNew?`",
+      "api": "<ChatThreadList threads={[{id,title,preview?,group?}]} activeId onSelect onNew? />",
+      "caption": "A screen of its own on phones, or inside a Sheet. Title threads by their topic, not “New chat”.",
+      "aliases": [
+        "history",
+        "conversations",
+        "chat sidebar",
+        "threads"
+      ],
+      "install": "@kit-native/chat-thread-list"
+    },
+    {
+      "id": "sources",
+      "title": "Sources",
+      "exports": [
+        "SourceList",
+        "CitedText",
+        "stripCitations"
+      ],
+      "category": "ai",
+      "files": [
+        "components/kit/sources.tsx"
+      ],
+      "notes": "what an answer is based on · numbered chips · `[n]` in text → inline citations · previews in a Sheet",
+      "api": "<CitedText text=\"… [1]\" sources={[{ title, meta?, snippet?, href? }]} /><SourceList sources />",
+      "caption": "Cite whenever the answer uses the person’s data or a document. Stream the answer with stripCitations, then show CitedText and SourceList once it is complete.",
+      "aliases": [
+        "citations",
+        "references",
+        "footnotes",
+        "grounding"
+      ],
+      "install": "@kit-native/sources"
+    },
+    {
+      "id": "follow-up-suggestions",
+      "title": "Follow-up suggestions",
+      "exports": [
+        "FollowUpSuggestions"
+      ],
+      "category": "ai",
+      "files": [
+        "components/kit/follow-up-suggestions.tsx"
+      ],
+      "notes": "next questions under the latest answer · tapping one sends it",
+      "api": "<FollowUpSuggestions suggestions={[\"…\"]} onSelect />",
+      "caption": "Two to four, phrased as the person would ask them, only under the latest answer, and hidden while the assistant is answering.",
+      "aliases": [
+        "suggested replies",
+        "quick replies",
+        "next questions",
+        "chips"
+      ],
+      "install": "@kit-native/follow-up-suggestions"
+    },
+    {
+      "id": "streaming-text",
+      "title": "Streaming text",
+      "exports": [
+        "StreamingText",
+        "useStreamingText"
+      ],
+      "category": "ai",
+      "files": [
+        "components/kit/streaming-text.tsx"
+      ],
+      "notes": "an answer arriving · all at once under reduced motion · screen readers get it once",
+      "api": "<StreamingText text onDone? />",
+      "aliases": [
+        "typing",
+        "stream",
+        "typewriter"
+      ],
+      "install": "@kit-native/streaming-text"
+    },
+    {
+      "id": "thinking-indicator",
+      "title": "Thinking indicator",
+      "exports": [
+        "ThinkingIndicator"
+      ],
+      "category": "ai",
+      "files": [
+        "components/kit/thinking-indicator.tsx"
+      ],
+      "notes": "the model is working · say what it is doing when you can · still dots under reduced motion",
+      "api": "<ThinkingIndicator label? />",
+      "aliases": [
+        "loading",
+        "typing indicator"
+      ],
+      "install": "@kit-native/thinking-indicator"
+    },
+    {
+      "id": "tool-call-card",
+      "title": "Tool call card",
+      "exports": [
+        "ToolCallCard"
+      ],
+      "category": "ai",
+      "files": [
+        "components/kit/tool-call-card.tsx"
+      ],
+      "notes": "an action the assistant took · `status` running/done/error/stopped · details collapsed",
+      "api": "<ToolCallCard title status input? output? />",
+      "caption": "Name the action in words (“Searched orders”), not the function name. A call the person cancelled is `stopped`, not `error`.",
+      "aliases": [
+        "tool use",
+        "function call",
+        "action"
+      ],
+      "install": "@kit-native/tool-call-card"
+    },
+    {
+      "id": "approval-card",
+      "title": "Approval card",
+      "exports": [
+        "ApprovalCard"
+      ],
+      "category": "ai",
+      "files": [
+        "components/kit/approval-card.tsx"
+      ],
+      "notes": "consent before consequence · says what changes and whether it can be undone",
+      "api": "<ApprovalCard title description? details? onApprove onDeny />",
+      "caption": "Ask before anything irreversible or costly. The title is the action as a sentence the person can say yes to.",
+      "aliases": [
+        "confirm",
+        "human in the loop",
+        "permission"
+      ],
+      "install": "@kit-native/approval-card"
     },
     {
       "id": "photo-capture",

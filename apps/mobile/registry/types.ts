@@ -13,6 +13,8 @@ export type CategoryId =
   | 'layout'
   | 'overlays'
   | 'media'
+  | 'marketing'
+  | 'ai'
   | 'native';
 
 export type CategoryMeta = {
