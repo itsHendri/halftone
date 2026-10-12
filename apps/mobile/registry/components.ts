@@ -898,7 +898,7 @@ export const COMPONENTS: ComponentMeta[] = [
   },
   {
     id: 'photo-capture',
-    title: 'PhotoCapture',
+    title: 'Camera',
     exports: ['PhotoCapture'],
     category: 'native',
     files: ['components/kit/photo-capture.tsx'],
@@ -909,7 +909,7 @@ export const COMPONENTS: ComponentMeta[] = [
   },
   {
     id: 'code-scanner',
-    title: 'CodeScanner',
+    title: 'Code scanner',
     exports: ['CodeScanner'],
     category: 'native',
     files: ['components/kit/code-scanner.tsx'],
@@ -920,7 +920,7 @@ export const COMPONENTS: ComponentMeta[] = [
   },
   {
     id: 'biometric-gate',
-    title: 'BiometricGate',
+    title: 'Face ID',
     exports: ['BiometricGate', 'useBiometricAuth'],
     category: 'native',
     files: ['components/kit/biometric-gate.tsx'],
@@ -931,7 +931,7 @@ export const COMPONENTS: ComponentMeta[] = [
   },
   {
     id: 'permission-primer',
-    title: 'PermissionPrimer',
+    title: 'Permission primer',
     exports: ['PermissionPrimer'],
     category: 'native',
     files: ['components/kit/permission-primer.tsx'],
@@ -942,7 +942,7 @@ export const COMPONENTS: ComponentMeta[] = [
   },
   {
     id: 'share',
-    title: 'useShare',
+    title: 'Share',
     exports: ['useShare'],
     category: 'native',
     files: ['components/kit/share.ts'],
@@ -953,7 +953,7 @@ export const COMPONENTS: ComponentMeta[] = [
   },
   {
     id: 'notify',
-    title: 'useNotify',
+    title: 'Notifications',
     exports: ['useNotify', 'NotifyProvider'],
     category: 'native',
     files: ['components/kit/notify.tsx'],

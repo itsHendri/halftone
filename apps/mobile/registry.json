@@ -2729,7 +2729,7 @@
     {
       "name": "photo-capture",
       "type": "registry:component",
-      "title": "PhotoCapture",
+      "title": "Camera",
       "description": "camera + library · falls back to a seeded `Placeholder`",
       "dependencies": [
         "expo-image-picker@~57.0.19",
@@ -2766,7 +2766,7 @@
     {
       "name": "code-scanner",
       "type": "registry:component",
-      "title": "CodeScanner",
+      "title": "Code scanner",
       "description": "QR/barcode viewfinder · simulated emits a sample payload",
       "dependencies": [
         "expo-camera@~57.0.5",
@@ -2803,7 +2803,7 @@
     {
       "name": "biometric-gate",
       "type": "registry:component",
-      "title": "BiometricGate",
+      "title": "Face ID",
       "description": "Face ID gate, or the hook for a single action · real only in a dev build",
       "dependencies": [
         "expo-local-authentication@~57.0.3",
@@ -2840,7 +2840,7 @@
     {
       "name": "permission-primer",
       "type": "registry:component",
-      "title": "PermissionPrimer",
+      "title": "Permission primer",
       "description": "shown BEFORE the OS dialog · the skip is not optional",
       "dependencies": [
         "lucide-react-native@^1.21.0"
@@ -2874,7 +2874,7 @@
     {
       "name": "share",
       "type": "registry:component",
-      "title": "useShare",
+      "title": "Share",
       "description": "OS share sheet · copies to the clipboard on web",
       "dependencies": [
         "expo-clipboard@~57.0.2"
@@ -2904,7 +2904,7 @@
     {
       "name": "notify",
       "type": "registry:component",
-      "title": "useNotify",
+      "title": "Notifications",
       "description": "in-app banner now (`delay: 0`), real OS notification when scheduled",
       "dependencies": [
         "expo-notifications@~57.0.20",
