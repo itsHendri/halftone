@@ -12,6 +12,8 @@ type Props = {
   /** What the address bar shows (defaults to the path, without the query). */
   address?: string;
   className?: string;
+  /** The window's whole height (px), e.g. to match a phone beside it; the page renders taller to fill it. */
+  height?: number;
 };
 
 /**
@@ -19,7 +21,7 @@ type Props = {
  * browser window that fills its container. The page renders at `viewport` and scales down to fit, so a
  * dashboard keeps its desktop layout in a narrow column. The theme follows the site (see useKitFrame).
  */
-export function BrowserFrame({ path, title, viewport = { width: 1280, height: 800 }, address, className }: Props) {
+export function BrowserFrame({ path, title, viewport = { width: 1280, height: 800 }, address, className, height }: Props) {
   const { ref, src } = useKitFrame('web', path);
   const box = React.useRef<HTMLDivElement>(null);
   const [width, setWidth] = React.useState(0);
@@ -33,6 +35,12 @@ export function BrowserFrame({ path, title, viewport = { width: 1280, height: 80
   }, []);
 
   const scale = width ? Math.min(1, width / viewport.width) : 0;
+  // With a fixed height, the page area is what's left under the title bar (h-9 and borders), and the page renders
+  // at the viewport's width and however tall that area is at this scale.
+  // Only beside something (a wide frame); stacked on a phone, the page keeps its own proportions.
+  const fixed = height && width >= 560 ? height : undefined;
+  const body = fixed ? fixed - 38 : scale ? viewport.height * scale : viewport.height * 0.5;
+  const pageHeight = fixed && scale ? body / scale : viewport.height;
 
   return (
     <div className={`border-border bg-card w-full min-w-0 overflow-hidden rounded-xl border shadow-xl ${className ?? ''}`}>
@@ -47,7 +55,7 @@ export function BrowserFrame({ path, title, viewport = { width: 1280, height: 80
         </span>
         <span className="w-[42px]" />
       </div>
-      <div ref={box} className="bg-background relative w-full" style={{ height: scale ? viewport.height * scale : viewport.height * 0.5 }}>
+      <div ref={box} className="bg-background relative w-full" style={{ height: body }}>
         {src && scale ? (
           <iframe
             ref={ref}
@@ -55,7 +63,7 @@ export function BrowserFrame({ path, title, viewport = { width: 1280, height: 80
             title={title}
             loading="lazy"
             className="absolute left-0 top-0 origin-top-left border-0"
-            style={{ width: scale < 1 ? viewport.width : '100%', height: viewport.height, transform: scale < 1 ? `scale(${scale})` : undefined }}
+            style={{ width: scale < 1 ? viewport.width : '100%', height: pageHeight, transform: scale < 1 ? `scale(${scale})` : undefined }}
           />
         ) : (
           <div className="bg-muted absolute inset-0 animate-pulse" aria-hidden />

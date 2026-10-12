@@ -1,8 +1,9 @@
 'use client';
+import { PHONE_BEZEL, PHONE_VIEWPORT } from '@/lib/device';
 import { useKitFrame } from '@/lib/frames';
 
 /** The phone's logical viewport (iPhone 16/17), rendered at this size and scaled down to fit. */
-const VIEWPORT = { width: 390, height: 844 };
+const VIEWPORT = PHONE_VIEWPORT;
 
 type Props = {
   /** A native kit route with its query, e.g. `/kitchen-sink?section=list-row` or `/shop`. */
@@ -23,7 +24,7 @@ type Props = {
 export function PhoneFrame({ path, title, width = 300, viewportHeight = VIEWPORT.height, className }: Props) {
   const { ref, src } = useKitFrame('mobile', path);
   const scale = width / VIEWPORT.width;
-  const bezel = 10;
+  const bezel = PHONE_BEZEL;
 
   return (
     <div
