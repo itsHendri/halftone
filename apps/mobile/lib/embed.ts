@@ -15,6 +15,7 @@ import { Platform } from 'react-native';
  *   host → kit   { type: 'kit:tokens', … }   a live theme from the docs picker (lib/embed-theme.ts)
  *   kit → host   { type: 'kit:ready' }   once mounted
  *   kit → host   { type: 'kit:size', height }   with ?autosize=1, whenever the demo's height changes
+ *   kit → host   { type: 'kit:open', id }   a tile's title was pressed: open that component's docs page
  * Messages are accepted from this page's own origin (the docs site serves the export under /m) and from
  * the origins in EXPO_PUBLIC_EMBED_ORIGINS (comma-separated, for a docs dev server on another port).
  */
@@ -91,4 +92,10 @@ export function reportEmbedSize(height: number) {
   if (rounded === lastSize) return;
   lastSize = rounded;
   for (const origin of allowedOrigins()) window.parent.postMessage({ type: 'kit:size', height: rounded }, origin);
+}
+
+/** Ask the docs page around this frame to open a component's page (the index's live tiles). */
+export function openInHost(id: string) {
+  if (!listening()) return;
+  for (const origin of allowedOrigins()) window.parent.postMessage({ type: 'kit:open', id }, origin);
 }

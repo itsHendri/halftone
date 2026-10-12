@@ -1,5 +1,5 @@
 'use client';
-import { SearchIcon } from 'lucide-react';
+import { ArrowUpRightIcon, SearchIcon } from 'lucide-react';
 import { cn } from 'cn';
 import { useSearchParams } from 'next/navigation';
 import * as React from 'react';
@@ -8,6 +8,7 @@ import { Input } from '@/components/ui/input';
 import { CATEGORY_META } from '@/registry/categories';
 import { COMPONENTS } from '@/registry/components';
 import type { ComponentMeta } from '@/registry/types';
+import { allowedOrigins } from '@/lib/embed';
 import { DEMOS } from './demos';
 
 const PREVIEWED = COMPONENTS.filter((c) => c.preview !== false);
@@ -44,6 +45,38 @@ function Section({ c, highlighted, bare }: { c: ComponentMeta; highlighted?: boo
   );
 }
 
+/** Ask the docs page around this frame to open a component's page (the tile grid's titles). */
+function openInHost(id: string) {
+  if (window.parent === window) return;
+  for (const origin of allowedOrigins()) window.parent.postMessage({ type: 'kit:open', id }, origin);
+}
+
+/**
+ * The docs index's live tiles (?tiles=a,b,c with ?embed=1): each component's demo in a cell, its title a button
+ * that opens the component's page in the docs (`kit:open`). Measured for ?autosize=1.
+ */
+function Tiles({ ids }: { ids: string[] }) {
+  const list = ids.map((id) => PREVIEWED.find((c) => c.id === id)).filter((c) => c !== undefined);
+  return (
+    <div data-autosize className="bg-border grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-px">
+      {list.map((c) => (
+        <div key={c.id} className="bg-background flex flex-col">
+          <button
+            type="button"
+            onClick={() => openInHost(c.id)}
+            className="text-muted-foreground hover:text-foreground focus-visible:ring-ring flex items-center justify-between gap-2 px-4 pt-3 text-left text-sm font-medium focus-visible:outline-none focus-visible:ring-2">
+            {c.title}
+            <ArrowUpRightIcon className="size-4" aria-hidden />
+          </button>
+          <div className="flex max-h-80 min-h-44 flex-1 justify-center overflow-hidden p-6 [align-items:safe_center] [mask-image:linear-gradient(to_bottom,black_85%,transparent)]">
+            <Section c={c} bare />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 /**
  * Every component the kit ships, by category, searchable. Deep links: ?section=<id> scrolls to a
  * component and tints it; with ?embed=1 (docs site) only that component's demo renders.
@@ -65,6 +98,9 @@ export function KitchenSink({ embedded }: { embedded?: boolean }) {
       clearTimeout(fade);
     };
   }, [section]);
+
+  const tiles = params.get('tiles');
+  if (embedded && tiles) return <Tiles ids={tiles.split(',')} />;
 
   if (embedded && section) {
     const c = PREVIEWED.find((x) => x.id === section);

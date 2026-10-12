@@ -3,8 +3,8 @@ import { icons } from 'lucide-react';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { createElement } from 'react';
-import { InlineMd } from '@/components/inline-md';
 import { KitBadges } from '@/components/kit-availability';
+import { GroupTiles } from '@/components/kit-tiles';
 import { CATALOGUE, entriesIn, entryUrl, GROUPS, sidesAttr } from '@/lib/catalogue';
 import { kits } from '@/lib/kit';
 
@@ -15,14 +15,15 @@ export const metadata: Metadata = {
 
 const count = (side: 'native' | 'web') => CATALOGUE.filter((e) => e.sides.includes(side)).length;
 
-/** The catalogue: every component once, grouped, with the kits that have it. The filter in the sidebar narrows it. */
+/** The catalogue: every component once, grouped, as live tiles (like kumo-ui.com). The sidebar's filter narrows it. */
 export default function ComponentsIndex() {
   return (
     <DocsPage full className="*:mx-auto *:w-full">
       <DocsTitle>Components</DocsTitle>
       <DocsDescription className="mb-0">
         {CATALOGUE.length} components. {count('native')} in the native kit ({kits.mobile.stack}) and {count('web')} in the web kit (
-        {kits.web.stack}); the badges say which. Each one is live on its page and follows the theme.
+        {kits.web.stack}). Every tile is the real component, live and following the theme; open its page for the
+        other kit's version, the API and how to get it.
       </DocsDescription>
       <DocsBody>
         <div className="not-prose flex flex-col gap-12">
@@ -38,27 +39,20 @@ export default function ComponentsIndex() {
                   <span className="text-fd-muted-foreground text-sm font-normal">{entries.length}</span>
                 </h2>
                 <p className="text-fd-muted-foreground mb-4 text-sm">{g.blurb}</p>
-                <ul className="grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
-                  {entries.map((e) => {
-                    const c = (e.native ?? e.web)!;
-                    return (
-                      <li key={e.id} className="contents">
-                        <Link
-                          href={entryUrl(e.id)}
-                          className="border-border bg-card hover:bg-accent focus-visible:ring-ring flex flex-col gap-1.5 rounded-xl border p-4 transition-colors focus-visible:outline-none focus-visible:ring-2">
-                          <span data-sides={sidesAttr(e)} className="flex items-center justify-between gap-3">
-                            <span className="font-medium">{e.title}</span>
-                            <KitBadges sides={e.sides} />
-                          </span>
-                          {c.notes ? (
-                            <span className="text-fd-muted-foreground line-clamp-2 text-sm">
-                              <InlineMd text={c.notes} />
-                            </span>
-                          ) : null}
-                        </Link>
-                      </li>
-                    );
-                  })}
+                <GroupTiles entries={entries} label={g.label} />
+                {/* The same components as links, with the kits that have them: for the keyboard, search engines and
+                    anyone who wants the list. The filter hides what it hides in the sidebar. */}
+                <ul className="mt-3 flex flex-wrap gap-x-5 gap-y-1.5 text-sm">
+                  {entries.map((e) => (
+                    <li key={e.id}>
+                      <Link href={entryUrl(e.id)} className="hover:text-fd-foreground text-fd-muted-foreground inline-flex items-center gap-1.5 underline-offset-4 hover:underline">
+                        <span data-sides={sidesAttr(e)} className="inline-flex items-center gap-1.5">
+                          {e.title}
+                          <KitBadges sides={e.sides} />
+                        </span>
+                      </Link>
+                    </li>
+                  ))}
                 </ul>
               </section>
             );
