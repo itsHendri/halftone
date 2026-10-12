@@ -17,12 +17,12 @@ code (`pk1-…`, or `pk2-…` once you change the typeset) that reproduces the t
 | --- | --- |
 | **Brand colour** | Any colour. The swatches are Tailwind's ramps; any other colour generates an 11-step ramp in OKLCH around it. |
 | **Neutral** | Zinc, neutral, slate, stone, gray, or a grey tinted with the brand hue |
-| **Radius** | None to 2xl, and whether the mobile kit's buttons and chips are pills or follow the radius (web buttons always follow it) |
+| **Radius** | None to 2xl, and whether the native kit's buttons and chips are pills or follow the radius (web buttons always follow it) |
 | **Type** | A heading, a body and a mono font from a curated list of Google Fonts |
 | **Typeset** | Body text size (14–18px; every text size scales with it), leading (line height), and for long-form text, flow (space between paragraphs) and measure (the longest line) |
 | **Icons** | Lucide's stroke: thin, regular or bold |
 | **Depth** | Flat, soft, raised or hard (offset) shadows on cards, sheets and menus |
-| **Density** | Compact, comfortable or spacious: control heights and padding on mobile, the whole spacing scale on web |
+| **Density** | Compact, comfortable or spacious: control heights and padding in the native kit, the whole spacing scale on the web |
 | **Border** | Hairline, regular or heavy outlines |
 
 Status colours (success, warning, destructive, info) stay as they are.
@@ -41,7 +41,7 @@ before and after. A theme from the picker can never fail the build.
 
 - **Ask your coding agent.** Copy the prompt; the kits' `apply-theme` skill applies the code, runs the checks
   and tells you what it adjusted.
-- **In the Protokit repo**, from the root, so the mobile kit, the web kit and this site stay one brand:
+- **In the Protokit repo**, from the root, so the native kit, the web kit and this site stay one brand:
 
   ```bash
   npm run theme:apply -- pk1-XXXXXXXXXXXX

@@ -72,3 +72,28 @@ a[data-active='true'][href] {
   --color-fd-ring: var(--ring);
   color: var(--foreground);
 }
+
+/*
+ * Sidebar group titles (Fumadocs separators, Docs and Components): bold, in the foreground colour, so a group
+ * reads as a title and not as one more item (components-wireframes.md).
+ */
+:is(#nd-sidebar, #nd-sidebar-mobile) p {
+  color: var(--color-fd-foreground);
+  font-weight: 600;
+}
+
+/* Items under a group title line up with its text, past the icon (as kumo-ui.com does). */
+:is(#nd-sidebar, #nd-sidebar-mobile) p ~ a {
+  padding-inline-start: 2.25rem !important;
+}
+
+/*
+ * The components filter (All | Native | Web, components/kit-availability.tsx): <html data-kit-filter> hides
+ * every sidebar item, group title, index card and index group whose data-sides lacks the chosen kit.
+ */
+html[data-kit-filter='native'] :is(a, p):has(> [data-sides]:not([data-sides~='native'])),
+html[data-kit-filter='native'] section[data-group]:has(> h2[data-sides]:not([data-sides~='native'])),
+html[data-kit-filter='web'] :is(a, p):has(> [data-sides]:not([data-sides~='web'])),
+html[data-kit-filter='web'] section[data-group]:has(> h2[data-sides]:not([data-sides~='web'])) {
+  display: none;
+}

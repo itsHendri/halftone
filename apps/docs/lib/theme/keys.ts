@@ -15,6 +15,13 @@ export const FONTS_ID = 'protokit-theme-fonts';
 /** The Google Fonts stylesheet for the current theme's fonts, linked before paint too. */
 export const FONTS_KEY = 'protokit.theme.fonts';
 
-/** Inline in <head>: the last theme's CSS before first paint, so a themed site never flashes the default. */
+/** The components filter (All | Native | Web), as <html data-kit-filter>. */
+export const FILTER_KEY = 'protokit.kits';
+
+/**
+ * Inline in <head>: the last theme's CSS before first paint, so a themed site never flashes the default; and
+ * the components filter, so the sidebar doesn't flash entries it hides.
+ */
 export const themeBootScript = `(function(){try{var c=localStorage.getItem('${CSS_KEY}');if(c){var s=document.createElement('style');s.id='${STYLE_ID}';s.textContent=c;document.head.appendChild(s)}
-var f=localStorage.getItem('${FONTS_KEY}');if(c&&f&&f.indexOf('https://fonts.googleapis.com/')===0){var l=document.createElement('link');l.id='${FONTS_ID}';l.rel='stylesheet';l.href=f;document.head.appendChild(l)}}catch(e){}})();`;
+var f=localStorage.getItem('${FONTS_KEY}');if(c&&f&&f.indexOf('https://fonts.googleapis.com/')===0){var l=document.createElement('link');l.id='${FONTS_ID}';l.rel='stylesheet';l.href=f;document.head.appendChild(l)}
+var k=localStorage.getItem('${FILTER_KEY}');if(k==='native'||k==='web')document.documentElement.dataset.kitFilter=k}catch(e){}})();`;

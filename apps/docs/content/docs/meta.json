@@ -1,16 +1,16 @@
 {
   "title": "Docs",
   "pages": [
-    "---Get started---",
+    "---[Rocket]Get started---",
     "index",
     "install",
     "mobile",
     "web",
-    "---Design system---",
+    "---[Palette]Design system---",
     "foundations",
     "themes",
     "patterns",
-    "---Project---",
+    "---[BookOpen]Project---",
     "changelog"
   ]
 }

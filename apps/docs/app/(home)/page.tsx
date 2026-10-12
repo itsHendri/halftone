@@ -4,14 +4,9 @@ import { CopyPrompt } from "@/components/copy-prompt";
 import { BrowserFrame } from "@/components/browser-frame";
 import { PhoneFrame } from "@/components/phone-frame";
 import { ShowcaseFrame } from "@/components/showcase-frame";
-import {
-  colorNames,
-  componentsIn,
-  kit,
-  kits,
-  PLATFORMS,
-  totalComponents,
-} from "@/lib/kit";
+import { KitBadges } from "@/components/kit-availability";
+import { CATALOGUE, entriesIn, GROUPS, SIDES } from "@/lib/catalogue";
+import { colorNames, kit } from "@/lib/kit";
 
 const STEPS = [
   {
@@ -20,7 +15,7 @@ const STEPS = [
   },
   {
     title: "It builds from the registry only",
-    body: `${totalComponents} registered components across the mobile and web kits, each with an API, usage notes and a live demo. If something is missing, the agent says so instead of inventing it.`,
+    body: `${CATALOGUE.length} registered components across the native and web kits, each with an API, usage notes and a live demo. If something is missing, the agent says so instead of inventing it.`,
   },
   {
     title: "You get a themed prototype",
@@ -74,7 +69,7 @@ export default function HomePage() {
             href="/components"
             className="bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-ring inline-flex h-10 items-center gap-2 rounded-full px-5 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
           >
-            Browse {totalComponents} components{" "}
+            Browse {CATALOGUE.length} components{" "}
             <ArrowRightIcon className="size-4" aria-hidden />
           </Link>
           <Link
@@ -103,7 +98,7 @@ export default function HomePage() {
               width={280}
             />
             <p className="text-muted-foreground text-sm">
-              The mobile kit, live
+              The native kit, live
             </p>
           </div>
         </div>
@@ -153,7 +148,7 @@ export default function HomePage() {
                 Sample apps, built only from the kits
               </h2>
               <p className="text-muted-foreground leading-7">
-                On mobile, a shop and a habit tracker. On the web, one made-up
+                In the native kit, a shop and a habit tracker. On the web, one made-up
                 invoicing product as a dashboard, a landing page and an AI
                 assistant. They are the worked examples an agent copies the
                 structure of. All live, all following this page&apos;s theme.
@@ -190,47 +185,37 @@ export default function HomePage() {
               Everything a screen needs, and nothing else
             </h2>
             <p className="text-muted-foreground leading-7">
-              {kits.mobile.previewed.length + kits.web.previewed.length} live
-              previews: list rows, sheets, a camera and Face ID that fall back
-              to simulated versions on mobile; app shells, data tables, pricing
-              and AI chat with tool calls and approvals on the web.
+              {CATALOGUE.length} components, live and themed, each marked Native,
+              Web or both: list rows, sheets, a camera and Face ID in the native
+              kit; app shells, data tables, pricing and AI chat with tool calls
+              and approvals on the web.
             </p>
           </div>
-          <div className="grid gap-10 lg:grid-cols-2">
-            {PLATFORMS.map((p) => (
-              <div key={p} className="flex flex-col gap-4">
-                <h3 className="flex items-baseline justify-between gap-4 text-lg font-semibold">
-                  {kits[p].label}
+          <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+            {GROUPS.map((g) => {
+              const entries = entriesIn(g.id);
+              if (!entries.length) return null;
+              const sides = SIDES.filter((side) => entries.some((e) => e.sides.includes(side)));
+              return (
+                <li key={g.id}>
                   <Link
-                    href={`/components/${p}`}
-                    className="text-primary text-sm font-medium"
+                    href={`/components#${g.id}`}
+                    className="border-border bg-card hover:bg-accent focus-visible:ring-ring flex h-full flex-col gap-2 rounded-xl border p-4 focus-visible:outline-none focus-visible:ring-2"
                   >
-                    All {kits[p].components.length}
+                    <span className="flex items-start justify-between gap-4">
+                      <span className="font-medium">{g.label}</span>
+                      <span className="bg-muted rounded-full px-2.5 py-0.5 text-sm tabular-nums">{entries.length}</span>
+                    </span>
+                    <span className="text-muted-foreground text-sm">{g.blurb}</span>
+                    <KitBadges sides={sides} />
                   </Link>
-                </h3>
-                <ul className="grid gap-3 sm:grid-cols-2">
-                  {kits[p].categories.map((cat) => (
-                    <li key={cat.id}>
-                      <Link
-                        href={`/components/${p}#cat-${cat.id}`}
-                        className="border-border bg-card hover:bg-accent focus-visible:ring-ring flex h-full items-start justify-between gap-4 rounded-xl border p-4 focus-visible:outline-none focus-visible:ring-2"
-                      >
-                        <span>
-                          <span className="block font-medium">{cat.label}</span>
-                          <span className="text-muted-foreground block text-sm">
-                            {cat.blurb}
-                          </span>
-                        </span>
-                        <span className="bg-muted rounded-full px-2.5 py-0.5 text-sm tabular-nums">
-                          {componentsIn(p, cat.id).length}
-                        </span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
+                </li>
+              );
+            })}
+          </ul>
+          <Link href="/components" className="text-primary inline-flex items-center gap-1 self-start text-sm font-medium">
+            All {CATALOGUE.length} components <ArrowRightIcon className="size-4" aria-hidden />
+          </Link>
         </section>
 
         {/* Guardrails */}
@@ -267,7 +252,7 @@ export default function HomePage() {
           </h2>
           <div className="border-border bg-card flex flex-col gap-3 rounded-2xl border p-6">
             <p className="text-success text-sm font-semibold">Available</p>
-            <h3 className="text-xl font-semibold">Mobile kit</h3>
+            <h3 className="text-xl font-semibold">Native kit</h3>
             <p className="text-muted-foreground leading-7">
               Expo, React Native and NativeWind on react-native-reusables. Runs
               on a phone through Expo Go or a development build, and in the
@@ -277,7 +262,7 @@ export default function HomePage() {
               href="/docs/mobile"
               className="text-primary mt-auto inline-flex items-center gap-1 text-sm font-medium"
             >
-              Mobile setup <ArrowRightIcon className="size-4" aria-hidden />
+              Native setup <ArrowRightIcon className="size-4" aria-hidden />
             </Link>
           </div>
           <div className="border-border bg-card flex flex-col gap-3 rounded-2xl border p-6">

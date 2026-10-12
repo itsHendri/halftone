@@ -186,12 +186,12 @@ function MobileView() {
         <PhoneFrame
           key={screen}
           path={screen}
-          title="Mobile kit, live"
+          title="Native kit, live"
           width={320}
         />
         <PhoneFrame
           path="/kitchen-sink?open=inputs"
-          title="Mobile kit inputs, live"
+          title="Native kit inputs, live"
           width={320}
           className="max-xl:hidden"
         />
@@ -241,7 +241,7 @@ function TypesetView() {
         />
         <PhoneFrame
           path="/kitchen-sink?section=prose"
-          title="Prose in the mobile kit, live"
+          title="Prose in the native kit, live"
           width={280}
           className="max-2xl:hidden"
         />

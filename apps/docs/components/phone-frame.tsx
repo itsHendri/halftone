@@ -5,7 +5,7 @@ import { useKitFrame } from '@/lib/frames';
 const VIEWPORT = { width: 390, height: 844 };
 
 type Props = {
-  /** A mobile kit route with its query, e.g. `/kitchen-sink?section=list-row` or `/shop`. */
+  /** A native kit route with its query, e.g. `/kitchen-sink?section=list-row` or `/shop`. */
   path: string;
   /** Accessible name for the iframe ("List row preview"). */
   title: string;
@@ -17,7 +17,7 @@ type Props = {
 };
 
 /**
- * The real mobile kit, live: an iframe of its web export in embed mode (no tab bar, header or KitChip),
+ * The real native kit, live: an iframe of its web export in embed mode (no tab bar, header or KitChip),
  * scaled into a phone outline. The theme follows the site (see useKitFrame).
  */
 export function PhoneFrame({ path, title, width = 300, viewportHeight = VIEWPORT.height, className }: Props) {

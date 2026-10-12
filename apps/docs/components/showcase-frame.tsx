@@ -1,6 +1,6 @@
 'use client';
 import * as React from 'react';
-import { useKitFrame } from '@/lib/frames';
+import { useFrameHeight, useKitFrame } from '@/lib/frames';
 
 type Props = {
   /** A web kit route under /showcase, e.g. `/showcase` or `/showcase/typeset?fixture=docs`. */
@@ -30,24 +30,7 @@ export function ShowcaseFrame({ path = '/showcase', title, maxHeight: maxLarge =
   const maxHeight = wide ? maxLarge : maxHeightSmall;
   const sep = path.includes('?') ? '&' : '?';
   const { ref, src } = useKitFrame('web', `${path}${sep}autosize=1`);
-  const [height, setHeight] = React.useState<number | null>(null);
-
-  React.useEffect(() => {
-    const onMessage = (event: MessageEvent) => {
-      if (event.source !== ref.current?.contentWindow || event.data?.type !== 'kit:size') return;
-      const h = Number(event.data.height);
-      if (Number.isFinite(h) && h > 0 && h < 20000) setHeight(h);
-    };
-    window.addEventListener('message', onMessage);
-    return () => window.removeEventListener('message', onMessage);
-  }, [ref]);
-
-  // A kit that never reports its height (an older build) still shows, at maxHeight.
-  React.useEffect(() => {
-    if (!src) return;
-    const t = setTimeout(() => setHeight((h) => h ?? maxHeight), 8000);
-    return () => clearTimeout(t);
-  }, [src, maxHeight]);
+  const height = useFrameHeight(ref, src, maxHeight);
 
   const shown = Math.min(height ?? maxHeight, maxHeight);
   const clipped = height !== null && height > maxHeight;

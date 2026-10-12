@@ -70,3 +70,8 @@ Docs sidebar groups: **Get started** (How it works, Install, Mobile kit, Web kit
   header row spans every column, the outer gutters are 0px (sidebar flush left), and each `DocsPage` centres its
   article (`*:mx-auto *:w-full`). The full-width pages share one content width, `max-w-site` (72rem, `global.css`).
   `scripts/check-a11y.mjs` fails if the bar's width or the logo's x differ between pages at 1920px.
+
+## Superseded in part (2026-10-12)
+
+The Components section is now one catalogue, not a tree per kit: see `components-wireframes.md`. "Mobile kit" is
+called **Native** on the site, and sidebar group titles (Components and Docs) are bold with an icon.
