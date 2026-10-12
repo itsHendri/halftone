@@ -32,7 +32,8 @@ components/kit/         ours: AppShell, PageHeader, StatTile, DataTable, EmptySt
                         FeatureGrid, PricingCard, ChatMessage, ChatComposer, AttachmentChip, ChatThreadList,
                         Sources, FollowUpSuggestions, StreamingText, ThinkingIndicator, ToolCallCard, ApprovalCard; and web versions of
                         the native kit's own (same ids): ListRow, ListGroup, SegmentedControl, FilterChip, Rating,
-                        OtpInput, AmountInput, Timeline, ValueHeader… (registry/components.ts has them all)
+                        OtpInput, AmountInput, Timeline, ValueHeader, Stepper, PromoCard, Placeholder, Spot…
+                        (registry/components.ts has them all)
 components/devkit/      the Kitchen Sink: demos.tsx keyed by registry id
 components/site/        the kit shell's own chrome (header, theme toggle, providers) and KitChip, a
                         prototype's way back to the kit
