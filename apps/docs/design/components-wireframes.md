@@ -97,30 +97,27 @@ iOS and Android) and **Web** (Next.js, any screen).
   (`?autosize=1`; the native kit reports it from `onLayout`, the web kit from `[data-autosize]`).
 - Old URLs: `scripts/build-docs.mjs` writes `/components/{mobile,web}/* → /components/:splat` into `_redirects`.
 
-## Status and next steps (2026-10-12)
+## Status and next steps (updated 2026-10-13)
 
 A fresh session can pick up here. PRs merge with `gh pr merge <n> --rebase --delete-branch`, and only when the user
 says so. Required checks: 6 CI jobs plus `Workers Builds: protokit-docs`.
 
-**Done (on main and live)**
+**Done (on main and live).** Every phase of this contract is built.
 - Phase 1, the catalogue: #30. It also renamed the device components (Camera, Code scanner, Face ID, Permission
   primer, Share, Notifications).
-- Phase 2, live tiles: #31.
+- Phase 2, live tiles: #31. Tile grid fix: #33.
 - Phase 3, home page: no phone in the band, and the dashboard matches the phone's height. #32.
-- Phase 4 batch 1, web versions of the 20 native-only Inputs and Data components: #34. Tile grid fix: #33.
+- Phase 4, web versions of the 39 native-only components: #34 (inputs, data) and #35 (actions, navigation, feedback,
+  layout, overlays, media; the web kit gained a `media` category). #35 also made kit links use `next/link`, so they
+  keep the base path (`/w` in the docs).
+- Phase 5, native versions of the AI set and the pricing card: #36. The native kit gained `marketing` and `ai`
+  categories. Where a phone differs: presses are `onPress`, the composer's files come from `onAttach`, source
+  previews open in a Sheet.
+- Phase 6, Screens as matching pairs: web Shop and Habits (#37), native Northwind (#38), and `/screens` showing each
+  product on a phone and in a browser with one screen picker (#39, `components/screen-pair.tsx`). Northwind's
+  web-only pages (landing, assistant) sit under its pair; the home band pairs Northwind on both devices.
 
-**Phase 4 batch 2 (this branch, `feat/web-parity-batch-2`):** web versions of the remaining 19: FloatingButton,
-IconBadge, ActionGrid, Menubar, Stepper, SectionHeader, PagerDots, HorizontalPager, Spinner, SuccessScreen,
-StickyBottomBar, PromoCard, Footnote, ContextMenu, HoverCard, ImageTile, AspectRatio, Placeholder, Spot. The web kit
-gained a `media` category. After it, no shared group has a native-only entry.
-
-**Phase 5:** native versions of the AI set (chat-message, chat-composer, attachment-chip, chat-thread-list,
-sources, follow-up-suggestions, streaming-text, thinking-indicator, tool-call-card, approval-card) and
-pricing-card. Use the native add-component skill: registry entry, a `components/devkit/sections/kit-<category>.tsx`
-demo, and `npm run registry:build -w apps/mobile`. The AI group in `lib/catalogue.ts` then shows both badges on its own.
-
-**Phase 6:** Screens as matching pairs. Add web versions of Shop and Habits and a native version of the invoicing
-product, then one Screens gallery with both devices side by side.
+**Next:** the open UI-audit items below.
 
 ### How a parity batch is built (what #34 did)
 1. Read the native source in `apps/mobile/components/kit/<id>.tsx`. Write `apps/web/components/kit/<id>.tsx` with
