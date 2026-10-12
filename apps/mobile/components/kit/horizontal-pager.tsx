@@ -21,6 +21,10 @@ export function HorizontalPager({ children, itemWidth, gap = 12, sidePadding = 2
     <View className="self-stretch">
       <ScrollView
         className="flex-grow-0"
+        // Reachable by keyboard on the web (arrow keys scroll it), named for screen readers.
+        focusable
+        role="region"
+        aria-label="Pages"
         horizontal
         snapToInterval={stride}
         decelerationRate="fast"
