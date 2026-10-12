@@ -58,9 +58,12 @@ function openInHost(id: string) {
 function Tiles({ ids }: { ids: string[] }) {
   const list = ids.map((id) => PREVIEWED.find((c) => c.id === id)).filter((c) => c !== undefined);
   return (
-    <div data-autosize className="bg-border grid grid-cols-[repeat(auto-fill,minmax(300px,1fr))] gap-px">
+    <div data-autosize className="-mt-px -ml-px grid w-[calc(100%+1px)] grid-cols-[repeat(auto-fill,minmax(300px,1fr))]">
       {list.map((c) => (
-        <div key={c.id} className="bg-background flex flex-col">
+        // Each cell draws its own left and top line, inset so the next cell can't paint over it. The grid sits 1px up
+        // and left, so the outer edges fall outside the frame (the docs draw that border), and an unfilled last row
+        // stays blank.
+        <div key={c.id} className="bg-background flex flex-col shadow-[inset_1px_0_0_var(--border),inset_0_1px_0_var(--border)]">
           <button
             type="button"
             onClick={() => openInHost(c.id)}
