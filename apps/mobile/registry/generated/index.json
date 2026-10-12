@@ -1729,7 +1729,7 @@
     },
     {
       "id": "photo-capture",
-      "title": "PhotoCapture",
+      "title": "Camera",
       "exports": [
         "PhotoCapture"
       ],
@@ -1752,7 +1752,7 @@
     },
     {
       "id": "code-scanner",
-      "title": "CodeScanner",
+      "title": "Code scanner",
       "exports": [
         "CodeScanner"
       ],
@@ -1773,7 +1773,7 @@
     },
     {
       "id": "biometric-gate",
-      "title": "BiometricGate",
+      "title": "Face ID",
       "exports": [
         "BiometricGate",
         "useBiometricAuth"
@@ -1797,7 +1797,7 @@
     },
     {
       "id": "permission-primer",
-      "title": "PermissionPrimer",
+      "title": "Permission primer",
       "exports": [
         "PermissionPrimer"
       ],
@@ -1819,7 +1819,7 @@
     },
     {
       "id": "share",
-      "title": "useShare",
+      "title": "Share",
       "exports": [
         "useShare"
       ],
@@ -1840,7 +1840,7 @@
     },
     {
       "id": "notify",
-      "title": "useNotify",
+      "title": "Notifications",
       "exports": [
         "useNotify",
         "NotifyProvider"
