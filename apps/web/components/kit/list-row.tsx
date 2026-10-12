@@ -1,6 +1,7 @@
 'use client';
 import { cn } from 'cn';
 import { CheckIcon, ChevronRightIcon } from 'lucide-react';
+import Link from 'next/link';
 import type * as React from 'react';
 
 type Props = {
@@ -64,9 +65,9 @@ export function ListRow({ leading, select, title, subtitle, value, valueClassNam
   const interactive = 'hover:bg-accent/50 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:ring-inset';
   if (href) {
     return (
-      <a href={href} aria-disabled={disabled} className={cn(base, interactive)}>
+      <Link href={href} aria-disabled={disabled} className={cn(base, interactive)}>
         {body}
-      </a>
+      </Link>
     );
   }
   if (onClick) {

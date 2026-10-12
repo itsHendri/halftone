@@ -1,4 +1,5 @@
 import { cn } from 'cn';
+import Link from 'next/link';
 
 type Props = {
   children: string;
@@ -15,9 +16,9 @@ export function Footnote({ children, action, className }: Props) {
       <p className="text-muted-foreground text-xs leading-5">{children}</p>
       {action ? (
         action.href ? (
-          <a href={action.href} className={linkClass}>
+          <Link href={action.href} className={linkClass}>
             {action.label}
-          </a>
+          </Link>
         ) : (
           <button type="button" onClick={action.onClick} className={linkClass}>
             {action.label}

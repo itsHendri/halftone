@@ -1,5 +1,6 @@
 import { cn } from 'cn';
 import type { LucideIcon } from 'lucide-react';
+import Link from 'next/link';
 
 export type ActionTileItem = {
   icon: LucideIcon;
@@ -50,9 +51,9 @@ export function ActionGrid({ items, className }: Props) {
           </>
         );
         return item.href ? (
-          <a key={item.label} href={item.href} aria-disabled={item.disabled} className={tileClass}>
+          <Link key={item.label} href={item.href} aria-disabled={item.disabled} className={tileClass}>
             {body}
-          </a>
+          </Link>
         ) : (
           <button key={item.label} type="button" onClick={item.onClick} disabled={item.disabled} className={tileClass}>
             {body}
