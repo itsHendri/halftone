@@ -163,8 +163,9 @@ export function PaletteSpecimen() {
   const { theme } = useLiveTheme();
   const { resolvedTheme } = useTheme();
   const mode = resolvedTheme === 'dark' ? 'dark' : 'light';
+  // Fits the panel, not the window: in the two-column overview a five-wide row cut the values off at 1024px.
   return (
-    <div className="grid grid-cols-2 gap-2 sm:grid-cols-5">
+    <div className="grid grid-cols-[repeat(auto-fill,minmax(7.5rem,1fr))] gap-2">
       {PALETTE.map(([name, bg, fg]) => (
         <div key={name} className={`border-border flex h-20 flex-col justify-between rounded-lg border p-2.5 ${bg} ${fg}`}>
           <span className="text-xs font-medium">{name}</span>

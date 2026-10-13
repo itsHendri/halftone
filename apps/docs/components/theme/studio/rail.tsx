@@ -8,6 +8,7 @@ import { ExportPanel } from '@/components/theme/export-panel';
 import { fontFamily, fontLabel, LABELS, ORDER, PresetCard } from '@/components/theme/studio/parts';
 import { AdjustmentList, presetLabel, visibleAdjustments } from '@/components/theme/theme-pill';
 import { SWATCHES } from '@/lib/theme/swatches';
+import { rovingKeyDown, rovingTabIndex } from '@/lib/roving';
 import { previewRecipe, redo, reset, setRecipe, shuffle, toggleLock, undo, useLiveTheme, useLocks, type LockKey } from '@/lib/theme/store';
 
 /**
@@ -21,7 +22,7 @@ export function useInvertedScheme() {
   return resolvedTheme === 'dark' ? 'kit-light' : 'kit-dark dark';
 }
 
-const ROW = 'focus-visible:ring-ring flex min-w-0 flex-1 items-center justify-between gap-2 rounded-lg px-2.5 py-1.5 text-left hover:bg-accent focus-visible:outline-none focus-visible:ring-2 data-[state=open]:bg-accent';
+const ROW = 'focus-visible:ring-ring flex h-7 min-w-0 flex-1 items-center justify-between gap-3 rounded-lg px-2.5 text-left text-sm hover:bg-accent focus-visible:outline-none focus-visible:ring-2 data-[state=open]:bg-accent';
 
 function LockButton({ k, label }: { k: LockKey; label: string }) {
   const locked = useLocks().has(k);
@@ -32,8 +33,9 @@ function LockButton({ k, label }: { k: LockKey; label: string }) {
       aria-pressed={locked}
       aria-label={`Keep ${label.toLowerCase()} when shuffling`}
       title={locked ? 'Locked: shuffle keeps it' : 'Lock it for shuffle'}
-      className={`focus-visible:ring-ring inline-flex size-7 shrink-0 items-center justify-center rounded-md focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 [@media(hover:none)]:opacity-100 ${
-        locked ? 'text-foreground opacity-100' : 'text-muted-foreground hover:text-foreground opacity-0 group-hover:opacity-100'
+      // Always visible so people find them; the footer says what they do.
+      className={`focus-visible:ring-ring hover:bg-accent inline-flex size-7 shrink-0 items-center justify-center rounded-md focus-visible:outline-none focus-visible:ring-2 ${
+        locked ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
       }`}>
       {locked ? <LockIcon className="size-3.5" aria-hidden /> : <LockOpenIcon className="size-3.5" aria-hidden />}
     </button>
@@ -48,9 +50,12 @@ function Row({
   adornment,
   lock,
   wide,
+  hint,
   children,
 }: {
   label: string;
+  /** One line at the top of the picker: what this choice changes. */
+  hint?: string;
   value: React.ReactNode;
   valueStyle?: React.CSSProperties;
   adornment?: React.ReactNode;
@@ -70,13 +75,13 @@ function Row({
           if (!next) previewRecipe(null);
         }}>
         <PopoverTrigger className={ROW} aria-label={`${label}: ${typeof value === 'string' ? value : ''}`}>
-          <span className="flex min-w-0 flex-col">
-            <span className="text-muted-foreground text-[11px] leading-4">{label}</span>
-            <span className="truncate text-sm font-medium leading-5" style={valueStyle}>
+          <span className="text-muted-foreground shrink-0">{label}</span>
+          <span className="flex min-w-0 items-center gap-2">
+            <span className="truncate font-medium" style={valueStyle}>
               {value}
             </span>
+            {adornment}
           </span>
-          {adornment}
         </PopoverTrigger>
         <PopoverContent
           side="right"
@@ -84,6 +89,7 @@ function Row({
           sideOffset={12}
           className={`${scheme} bg-popover text-popover-foreground border-border ${wide ? 'w-72' : 'w-60'} p-1.5 shadow-xl backdrop-blur-none`}
           style={{ colorScheme: scheme.startsWith('kit-dark') ? 'dark' : 'light' }}>
+          {hint ? <p className="text-muted-foreground px-2 pb-2 pt-1 text-xs leading-5">{hint}</p> : null}
           {children(close)}
         </PopoverContent>
       </Popover>
@@ -95,13 +101,15 @@ function Row({
 /** A list of choices: hover or focus previews one, a click picks it. */
 function Choices({ label, items, close }: { label: string; items: { key: string; patch: RecipeInput; selected: boolean; node: React.ReactNode; style?: React.CSSProperties }[]; close: () => void }) {
   return (
-    <div role="radiogroup" aria-label={label} className="flex flex-col" onPointerLeave={() => previewRecipe(null)}>
-      {items.map((item) => (
+    // Arrows move focus, and focus previews; Enter or a click picks.
+    <div role="radiogroup" aria-label={label} className="flex flex-col" onPointerLeave={() => previewRecipe(null)} onKeyDown={(e) => rovingKeyDown(e)}>
+      {items.map((item, i) => (
         <button
           key={item.key}
           type="button"
           role="radio"
           aria-checked={item.selected}
+          tabIndex={rovingTabIndex(i, items.findIndex((x) => x.selected))}
           onPointerEnter={() => previewRecipe(item.patch)}
           onFocus={() => previewRecipe(item.patch)}
           onClick={() => {
@@ -119,6 +127,27 @@ function Choices({ label, items, close }: { label: string; items: { key: string;
 }
 
 type Axis = keyof typeof OPTIONS;
+
+/** One line at the top of each picker: what the choice changes, in both kits. */
+const HINTS: Record<string, string> = {
+  preset: 'A whole theme to start from. Every row below stays editable.',
+  brand: 'Buttons, links, focus rings and the charts’ first colour. Contrast is checked for you.',
+  neutral: 'The greys behind surfaces, borders and secondary text. Tinted mixes in the brand.',
+  heading: 'Titles and headings in both kits.',
+  body: 'Everything people read: labels, paragraphs, table cells.',
+  mono: 'Codes, amounts in tables, anything that must line up.',
+  size: 'The base text size long-form copy is set at.',
+  leading: 'The space between lines of text.',
+  flow: 'The space between paragraphs, headings and blocks.',
+  measure: 'How wide a column of text grows before it wraps.',
+  radius: 'The corners of cards, inputs and buttons.',
+  controls: 'The native kit’s buttons and chips: always round, or the radius above.',
+  border: 'How heavy every border and divider is.',
+  depth: 'Shadows: none, soft, raised, or a hard offset.',
+  stroke: 'The line weight of every icon.',
+  density: 'How much space controls and rows take.',
+  contrast: 'Colours the build moved to keep text at WCAG AA, in either scheme.',
+};
 function optionItems(axis: Axis, recipe: Recipe) {
   return (ORDER[axis] as readonly string[]).map((value) => ({
     key: value,
@@ -146,10 +175,10 @@ function fontItems(role: 'heading' | 'body' | 'mono', recipe: Recipe) {
   }));
 }
 
-function Group({ title, children }: { title: string; children: React.ReactNode }) {
+function Group({ title, children }: { title?: string; children: React.ReactNode }) {
   return (
-    <section className="flex flex-col gap-0.5 border-t px-1.5 py-2 first:border-t-0">
-      <h2 className="text-muted-foreground px-2.5 pb-1 pt-0.5 text-[11px] font-semibold uppercase tracking-wider">{title}</h2>
+    <section aria-label={title ? undefined : 'Preset'} className="flex flex-col border-t px-1.5 py-1 first:border-t-0">
+      {title ? <h2 className="text-muted-foreground px-2.5 pt-0.5 text-[11px] font-semibold uppercase leading-4 tracking-wider">{title}</h2> : null}
       {children}
     </section>
   );
@@ -160,14 +189,17 @@ function BrandPicker({ close }: { close: () => void }) {
   const [hex, setHex] = React.useState(recipe.brand);
   return (
     <div className="flex flex-col gap-3 p-1.5">
-      <div className="grid grid-cols-5 gap-2" onPointerLeave={() => previewRecipe(null)}>
-        {SWATCHES.map((s) => (
+      <div role="radiogroup" aria-label="Brand colour" className="grid grid-cols-5 gap-2" onPointerLeave={() => previewRecipe(null)} onKeyDown={(e) => rovingKeyDown(e)}>
+        {SWATCHES.map((s, i) => (
           <button
             key={s.hex}
             type="button"
+            role="radio"
             aria-label={s.name}
-            aria-pressed={recipe.brand === s.hex}
+            aria-checked={recipe.brand === s.hex}
+            tabIndex={rovingTabIndex(i, SWATCHES.findIndex((x) => x.hex === recipe.brand))}
             onPointerEnter={() => previewRecipe({ brand: s.hex })}
+            onFocus={() => previewRecipe({ brand: s.hex })}
             onClick={() => {
               setRecipe({ brand: s.hex });
               close();
@@ -216,8 +248,8 @@ function OpenCode() {
   };
   return (
     <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger className="border-border hover:bg-accent focus-visible:ring-ring inline-flex h-8 items-center justify-center rounded-md border px-2.5 text-xs font-medium focus-visible:outline-none focus-visible:ring-2">
-        Open code
+      <PopoverTrigger aria-label="Open a theme code" title="Open a theme code" className="border-border hover:bg-accent focus-visible:ring-ring inline-flex h-8 items-center justify-center rounded-md border px-2.5 text-xs font-medium focus-visible:outline-none focus-visible:ring-2">
+        Open
       </PopoverTrigger>
       <PopoverContent side="right" align="end" sideOffset={12} className={`${scheme} bg-popover text-popover-foreground border-border w-72 p-3 shadow-xl backdrop-blur-none`}>
         <form onSubmit={apply} className="flex flex-col gap-2">
@@ -246,6 +278,37 @@ function OpenCode() {
   );
 }
 
+/**
+ * The rail's scrolling middle, fading at whichever edge has more to scroll to, so a cut-off row reads as "more
+ * below" rather than as the end of the list.
+ */
+function ScrollFade({ children }: { children: React.ReactNode }) {
+  const ref = React.useRef<HTMLDivElement>(null);
+  const [edges, setEdges] = React.useState({ top: false, bottom: false });
+  const measure = React.useCallback(() => {
+    const el = ref.current;
+    if (!el) return;
+    const top = el.scrollTop > 1;
+    const bottom = el.scrollTop + el.clientHeight < el.scrollHeight - 1;
+    setEdges((e) => (e.top === top && e.bottom === bottom ? e : { top, bottom }));
+  }, []);
+  React.useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    measure();
+    const ro = new ResizeObserver(measure);
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, [measure]);
+  const fade = 24;
+  const mask = `linear-gradient(to bottom, ${edges.top ? 'transparent' : 'black'}, black ${fade}px, black calc(100% - ${fade}px), ${edges.bottom ? 'transparent' : 'black'})`;
+  return (
+    <div ref={ref} onScroll={measure} className="min-h-0 flex-1 overflow-y-auto" style={{ maskImage: mask, WebkitMaskImage: mask }}>
+      {children}
+    </div>
+  );
+}
+
 function IconButton({ label, onClick, disabled, children }: { label: string; onClick: () => void; disabled?: boolean; children: React.ReactNode }) {
   return (
     <button
@@ -269,7 +332,7 @@ export function Rail({ className, id }: { className?: string; id?: string }) {
   const label = presetLabel(recipe);
 
   const options = (axis: Axis, title: string, lock?: LockKey) => (
-    <Row label={title} value={LABELS[recipe[axis]] ?? recipe[axis]} lock={lock ?? (axis as LockKey)}>
+    <Row label={title} value={LABELS[recipe[axis]] ?? recipe[axis]} lock={lock ?? (axis as LockKey)} hint={HINTS[axis]}>
       {(close) => <Choices label={title} items={optionItems(axis, recipe)} close={close} />}
     </Row>
   );
@@ -284,6 +347,7 @@ export function Rail({ className, id }: { className?: string; id?: string }) {
         </span>
       }
       lock={role}
+      hint={HINTS[role]}
       wide>
       {(close) => (
         <div className="max-h-80 overflow-y-auto">
@@ -299,10 +363,10 @@ export function Rail({ className, id }: { className?: string; id?: string }) {
       aria-label="Theme controls"
       className={`${scheme} bg-card text-card-foreground border-border flex flex-col overflow-hidden rounded-2xl border shadow-2xl ${className ?? ''}`}
       style={{ colorScheme: scheme.startsWith('kit-dark') ? 'dark' : 'light' }}>
-      <div className="flex items-center justify-between gap-2 border-b px-4 py-3">
+      <div className="flex items-center justify-between gap-2 border-b px-4 py-2.5">
         <div className="min-w-0">
           <p className="text-sm font-semibold">Theme</p>
-          <p className="text-muted-foreground truncate text-xs">{isCommitted ? 'The kits’ current theme' : label}</p>
+          <p className="text-muted-foreground truncate text-xs">{isCommitted ? 'Kit default' : label}</p>
         </div>
         <div className="-mr-1.5 flex items-center">
           <IconButton label="Undo (⌘Z)" onClick={undo} disabled={!canUndo}>
@@ -320,9 +384,10 @@ export function Rail({ className, id }: { className?: string; id?: string }) {
         </div>
       </div>
 
-      <div className="min-h-0 flex-1 overflow-y-auto">
-        <Group title="Start from">
-          <Row label="Preset" value={label} wide>
+      <ScrollFade>
+        {/* No heading: the preset is where you start, and every group below is titled. */}
+        <Group>
+          <Row label="Preset" value={label} hint={HINTS.preset} wide>
             {(close) => (
               <div className="grid grid-cols-2 gap-1.5 p-1">
                 {PRESETS.map((p) => (
@@ -339,12 +404,13 @@ export function Rail({ className, id }: { className?: string; id?: string }) {
             value={recipe.brand.toUpperCase()}
             valueStyle={{ fontFamily: 'var(--font-mono)' }}
             adornment={<span className="ring-border size-4 shrink-0 rounded-full ring-1" style={{ background: recipe.brand }} aria-hidden />}
-            lock="brand">
+            lock="brand"
+            hint={HINTS.brand}>
             {(close) => <BrandPicker close={close} />}
           </Row>
           {options('neutral', 'Neutral')}
           {adjusted.length ? (
-            <Row label="Contrast" value={`${adjusted.length} adjusted`} adornment={<ShieldCheckIcon className="text-muted-foreground size-4" aria-hidden />} wide>
+            <Row label="Contrast" value={`${adjusted.length} adjusted`} adornment={<ShieldCheckIcon className="text-muted-foreground size-4" aria-hidden />} hint={HINTS.contrast} wide>
               {() => (
                 <div className="p-2">
                   <AdjustmentList adjustments={adjusted} />
@@ -378,9 +444,13 @@ export function Rail({ className, id }: { className?: string; id?: string }) {
           {options('stroke', 'Icon stroke')}
           {options('density', 'Density')}
         </Group>
-      </div>
+      </ScrollFade>
 
-      <div className="flex flex-col gap-2 border-t p-3">
+      <div className="flex flex-col gap-2 border-t px-3 py-2.5">
+        <p className="text-muted-foreground flex items-center gap-1.5 text-[11px] leading-4">
+          <LockIcon className="size-3 shrink-0" aria-hidden />
+          Lock a row to keep it when you shuffle.
+        </p>
         <button
           type="button"
           onClick={() => {
@@ -393,7 +463,7 @@ export function Rail({ className, id }: { className?: string; id?: string }) {
           <span className="truncate">{theme.code}</span>
           {copied ? <CheckIcon className="size-3.5 shrink-0" aria-hidden /> : <CopyIcon className="size-3.5 shrink-0" aria-hidden />}
         </button>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="flex gap-2">
           <OpenCode />
           <button
             type="button"
@@ -403,15 +473,15 @@ export function Rail({ className, id }: { className?: string; id?: string }) {
             <ShuffleIcon className="size-3.5" aria-hidden />
             Shuffle
           </button>
+          <Popover>
+            <PopoverTrigger className="bg-primary text-primary-foreground focus-visible:ring-ring inline-flex h-8 flex-1 items-center justify-center rounded-md text-xs font-semibold hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2">
+              Use theme
+            </PopoverTrigger>
+            <PopoverContent side="right" align="end" sideOffset={12} className="max-h-[75vh] w-96 max-w-[calc(100vw-2rem)] overflow-y-auto p-4">
+              <ExportPanel theme={theme} />
+            </PopoverContent>
+          </Popover>
         </div>
-        <Popover>
-          <PopoverTrigger className="bg-primary text-primary-foreground focus-visible:ring-ring inline-flex h-9 items-center justify-center rounded-md text-sm font-medium hover:opacity-90 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2">
-            Use theme
-          </PopoverTrigger>
-          <PopoverContent side="right" align="end" sideOffset={12} className="max-h-[75vh] w-96 max-w-[calc(100vw-2rem)] overflow-y-auto p-4">
-            <ExportPanel theme={theme} />
-          </PopoverContent>
-        </Popover>
       </div>
     </aside>
   );

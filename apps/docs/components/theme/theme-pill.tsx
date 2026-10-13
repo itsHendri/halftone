@@ -8,6 +8,7 @@ import { useTheme as useSiteMode } from 'next-themes';
 import * as React from 'react';
 import { ExportPanel } from '@/components/theme/export-panel';
 import { SWATCHES, swatchName } from '@/lib/theme/swatches';
+import { rovingKeyDown, rovingTabIndex } from '@/lib/roving';
 import { reset, setRecipe, themeFor, useLiveTheme } from '@/lib/theme/store';
 
 /** The preset a recipe came from, if it is still exactly that preset. */
@@ -16,6 +17,42 @@ export function presetLabel(recipe: Recipe) {
   const preset = PRESETS.find((p) => p.id === recipe.preset) ?? PRESETS.find((p) => sameRecipe(recipe, p.recipe));
   if (!preset) return 'Custom';
   return sameRecipe(recipe, preset.recipe) ? preset.name : `${preset.name}, edited`;
+}
+
+/**
+ * On a phone, whether the bar would sit on top of something marked `data-theme-bar-avoid` (the home hero's
+ * buttons): then it slides away until that has scrolled clear. From sm up the bar is narrow enough to leave them.
+ */
+function useCoversAvoided(bar: React.RefObject<HTMLDivElement | null>, pathname: string | null) {
+  const [covering, setCovering] = React.useState(false);
+  React.useEffect(() => {
+    const phone = window.matchMedia('(max-width: 639px)');
+    let frame = 0;
+    const check = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(() => {
+        const targets = document.querySelectorAll('[data-theme-bar-avoid]');
+        if (!phone.matches || !targets.length) return setCovering(false);
+        // The band the bar occupies: its own height plus the 1rem gap, measured from the bottom of the window.
+        const top = window.innerHeight - (bar.current?.offsetHeight ?? 48) - 24;
+        setCovering(Array.from(targets).some((el) => {
+          const r = el.getBoundingClientRect();
+          return r.bottom > top && r.top < window.innerHeight;
+        }));
+      });
+    };
+    check();
+    window.addEventListener('scroll', check, { passive: true });
+    window.addEventListener('resize', check);
+    phone.addEventListener('change', check);
+    return () => {
+      cancelAnimationFrame(frame);
+      window.removeEventListener('scroll', check);
+      window.removeEventListener('resize', check);
+      phone.removeEventListener('change', check);
+    };
+  }, [bar, pathname]);
+  return covering;
 }
 
 /** Linked tokens move with `primary`; list each change once. */
@@ -35,6 +72,7 @@ export function ThemePill() {
   const { resolvedTheme, setTheme } = useSiteMode();
   const [colours, setColours] = React.useState(false);
   const bar = React.useRef<HTMLDivElement>(null);
+  const covering = useCoversAvoided(bar, pathname);
 
   // Close the colour row on Escape or a click outside the bar.
   React.useEffect(() => {
@@ -54,7 +92,11 @@ export function ThemePill() {
   const dark = resolvedTheme === 'dark';
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-4 z-30 flex justify-center px-4 print:hidden">
+    <div
+      className={`pointer-events-none fixed inset-x-0 bottom-4 z-30 flex justify-center px-4 transition-[translate,opacity] duration-200 motion-reduce:transition-none print:hidden ${
+        covering ? 'translate-y-[calc(100%+1rem)] opacity-0' : ''
+      }`}
+      inert={covering}>
       <div
         ref={bar}
         role="toolbar"
@@ -67,16 +109,17 @@ export function ThemePill() {
             <ChevronDownIcon className="text-muted-foreground size-3.5" aria-hidden />
           </PopoverTrigger>
           <PopoverContent side="top" align="start" sideOffset={10} className="w-72 p-1.5">
-            <div role="listbox" aria-label="Presets" className="flex flex-col">
-              {PRESETS.map((p) => {
+            <div role="radiogroup" aria-label="Presets" className="flex flex-col" onKeyDown={(e) => rovingKeyDown(e)}>
+              {PRESETS.map((p, i) => {
                 const t = themeFor(normalizeRecipe(p.recipe));
                 const selected = sameRecipe(recipe, p.recipe);
                 return (
                   <button
                     key={p.id}
                     type="button"
-                    role="option"
-                    aria-selected={selected}
+                    role="radio"
+                    aria-checked={selected}
+                    tabIndex={rovingTabIndex(i, PRESETS.findIndex((x) => sameRecipe(recipe, x.recipe)))}
                     onClick={() => setRecipe({ ...p.recipe, preset: p.id })}
                     className="hover:bg-accent focus-visible:ring-ring flex items-center gap-3 rounded-lg px-2.5 py-2 text-left focus-visible:outline-none focus-visible:ring-2">
                     <span className="flex shrink-0 -space-x-1" aria-hidden>
@@ -115,16 +158,17 @@ export function ThemePill() {
           className="flex items-center overflow-hidden transition-[max-width,opacity] duration-300 ease-[cubic-bezier(0.2,0,0,1)] motion-reduce:transition-none"
           style={{ maxWidth: colours ? 400 : 0, opacity: colours ? 1 : 0 }}
           aria-hidden={!colours}>
-          <div className="flex items-center gap-1.5 px-1">
-            {SWATCHES.map((s) => {
+          <div role="radiogroup" aria-label="Brand colour" className="flex items-center gap-1.5 px-1" onKeyDown={(e) => rovingKeyDown(e)}>
+            {SWATCHES.map((s, i) => {
               const selected = recipe.brand === s.hex;
               return (
                 <button
                   key={s.hex}
                   type="button"
-                  tabIndex={colours ? 0 : -1}
+                  role="radio"
+                  tabIndex={colours ? rovingTabIndex(i, SWATCHES.findIndex((x) => x.hex === recipe.brand)) : -1}
                   aria-label={s.name}
-                  aria-pressed={selected}
+                  aria-checked={selected}
                   onClick={() => {
                     setRecipe({ brand: s.hex });
                     setColours(false);
