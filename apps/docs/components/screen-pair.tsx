@@ -3,6 +3,7 @@ import * as React from 'react';
 import { BrowserFrame } from '@/components/browser-frame';
 import { PhoneFrame } from '@/components/phone-frame';
 import { phoneFrameHeight } from '@/lib/device';
+import { rovingKeyDown, rovingTabIndex } from '@/lib/roving';
 
 export type PairScreen = {
   label: string;
@@ -24,12 +25,14 @@ export function ScreenPair({ product, screens }: { product: string; screens: Pai
   const screen = screens[index];
   return (
     <div className="flex flex-col gap-5">
-      <div role="group" aria-label={`${product} screens`} className="flex flex-wrap gap-2">
+      <div role="radiogroup" aria-label={`${product} screens`} onKeyDown={(e) => rovingKeyDown(e, { select: true })} className="flex flex-wrap gap-2">
         {screens.map((s, i) => (
           <button
             key={s.label}
             type="button"
-            aria-pressed={i === index}
+            role="radio"
+            aria-checked={i === index}
+            tabIndex={rovingTabIndex(i, index)}
             onClick={() => setIndex(i)}
             className={`focus-visible:ring-ring rounded-full border px-3.5 py-1 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 ${
               i === index ? 'bg-foreground border-foreground text-background' : 'border-border hover:bg-accent'

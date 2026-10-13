@@ -2,6 +2,7 @@
 import * as React from 'react';
 import { SIDE_LABEL, SIDES, type Side } from '@/lib/catalogue';
 import { FILTER_KEY } from '@/lib/theme/keys';
+import { rovingKeyDown, rovingTabIndex } from '@/lib/roving';
 
 /**
  * Which kits have a component, and the visitor's choice between them (apps/docs/design/components-wireframes.md).
@@ -58,13 +59,14 @@ export function KitFilter() {
   const filter = useFilter();
   const options: Filter[] = ['all', 'native', 'web'];
   return (
-    <div role="radiogroup" aria-label="Show components for" className="bg-fd-muted flex gap-0.5 rounded-lg p-0.5 text-sm">
-      {options.map((o) => (
+    <div role="radiogroup" aria-label="Show components for" onKeyDown={(e) => rovingKeyDown(e, { select: true })} className="bg-fd-muted flex gap-0.5 rounded-lg p-0.5 text-sm">
+      {options.map((o, i) => (
         <button
           key={o}
           type="button"
           role="radio"
           aria-checked={filter === o}
+          tabIndex={rovingTabIndex(i, options.indexOf(filter))}
           onClick={() => setFilter(o)}
           className={`focus-visible:ring-fd-ring flex-1 rounded-md px-2 py-1 font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 ${
             filter === o ? 'bg-fd-background text-fd-foreground shadow-sm' : 'text-fd-muted-foreground hover:text-fd-foreground'

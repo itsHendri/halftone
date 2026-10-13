@@ -117,7 +117,7 @@ says so. Required checks: 6 CI jobs plus `Workers Builds: protokit-docs`.
   product on a phone and in a browser with one screen picker (#39, `components/screen-pair.tsx`). Northwind's
   web-only pages (landing, assistant) sit under its pair; the home band pairs Northwind on both devices.
 
-**Next:** the open UI-audit items below.
+**Next:** nothing planned. The UI-audit items below are done.
 
 ### How a parity batch is built (what #34 did)
 1. Read the native source in `apps/mobile/components/kit/<id>.tsx`. Write `apps/web/components/kit/<id>.tsx` with
@@ -147,10 +147,15 @@ says so. Required checks: 6 CI jobs plus `Workers Builds: protokit-docs`.
   Screenshots: headless Playwright from the repo's `node_modules/playwright` works when the browser pane is
   hidden.
 
-### Open from the UI audit (2026-10-11), not yet done
-- Studio rail: single-line rows (label left, value right) and a scroll fade, so every group fits at 900px tall.
-- Studio Overview: a responsive colour grid (it truncates at 1024px). Replace the shadcn-like first-card copy with
-  our own line, and add a one-line description at the top of each picker.
-- Home hero: one primary button (make "Browse components" the outline one).
-- Radio groups (pickers, chips): roving tabindex with arrow keys.
-- On phones, keep the theme bar off the hero's buttons. Shorten the rail subtitle. Make the locks discoverable.
+### UI audit (2026-10-11), done 2026-10-13
+- Studio rail: single-line rows (label left, value right), compact group titles, the preset row untitled at the top, a
+  scroll fade (`ScrollFade`) at whichever edge has more, and a two-row footer. Every group fits at 900px tall.
+  Each picker opens with one line on what it changes (`HINTS` in `rail.tsx`).
+- Studio Overview: the colour grid fills the panel (`auto-fill`, 7.5rem minimum), and the first card says what the
+  theme does in our words.
+- Home hero: one primary action (Copy prompt); Browse components is outline, How it works plain.
+- Radio groups: `lib/roving.ts` gives every pick-one group one tab stop, arrows, Home and End: the rail's pickers and
+  swatches (focus previews, Enter picks), the studio's preview chips, the Screens picker and the components filter
+  (arrows pick), and the theme bar's presets and colours.
+- Phones: the theme bar slides away while it would cover anything marked `data-theme-bar-avoid` (the hero's copy row
+  and buttons). The rail's subtitle reads "Kit default". Locks are always visible, and the footer says what they do.

@@ -14,6 +14,7 @@ import {
   TypeScale,
 } from "@/components/theme/specimen";
 import { presetLabel } from "@/components/theme/theme-pill";
+import { rovingKeyDown, rovingTabIndex } from "@/lib/roving";
 import { useLiveTheme } from "@/lib/theme/store";
 
 export const VIEWS = [
@@ -60,14 +61,19 @@ function Chips({
     <div
       role="radiogroup"
       aria-label={label}
+      onKeyDown={(e) => rovingKeyDown(e, { select: true })}
       className="bg-card border-border inline-flex flex-wrap gap-0.5 rounded-full border p-0.5"
     >
-      {options.map((o) => (
+      {options.map((o, i) => (
         <button
           key={o.id}
           type="button"
           role="radio"
           aria-checked={value === o.id}
+          tabIndex={rovingTabIndex(
+            i,
+            options.findIndex((x) => x.id === value),
+          )}
           onClick={() => onChange(o.id)}
           className={`focus-visible:ring-ring rounded-full px-3 py-1 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 ${
             value === o.id
@@ -115,9 +121,9 @@ function Overview() {
           {presetLabel(recipe)} · {fontLabel(recipe.font.heading)}
         </p>
         <p className="text-muted-foreground leading-7">
-          Designers love packing quirky glyphs into test phrases. This is a
-          preview of the type, the colours and the shape of every screen the
-          kits build with this theme.
+          One theme code, two kits. Every screen an agent builds, on a phone
+          or in a browser, takes its colour, type, shape and depth from what
+          you set here.
         </p>
         <p className="text-muted-foreground font-mono text-xs">{theme.code}</p>
       </Panel>

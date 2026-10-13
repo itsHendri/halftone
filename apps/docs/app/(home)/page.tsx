@@ -65,17 +65,18 @@ export default function HomePage() {
           web, on one brand.
         </p>
         <CopyPrompt className="w-full max-w-2xl text-left" />
-        <div className="flex flex-wrap justify-center gap-3">
+        {/* The copy button above is the one primary action; these two follow it. The theme bar steps aside on phones. */}
+        <div data-theme-bar-avoid className="flex flex-wrap justify-center gap-3">
           <Link
             href="/components"
-            className="bg-primary text-primary-foreground hover:bg-primary/90 focus-visible:ring-ring inline-flex h-10 items-center gap-2 rounded-full px-5 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2"
+            className="border-border bg-card hover:bg-accent focus-visible:ring-ring inline-flex h-10 items-center gap-2 rounded-full border px-5 text-sm font-medium focus-visible:outline-none focus-visible:ring-2"
           >
             Browse {CATALOGUE.length} components{" "}
             <ArrowRightIcon className="size-4" aria-hidden />
           </Link>
           <Link
             href="/docs"
-            className="border-border hover:bg-accent focus-visible:ring-ring inline-flex h-10 items-center gap-2 rounded-full border px-5 text-sm font-medium focus-visible:outline-none focus-visible:ring-2"
+            className="hover:bg-accent focus-visible:ring-ring inline-flex h-10 items-center gap-2 rounded-full px-5 text-sm font-medium focus-visible:outline-none focus-visible:ring-2"
           >
             How it works
           </Link>
