@@ -8,8 +8,8 @@ components, no stray colours, light and dark from day one.
 
 | | |
 |---|---|
-| [`apps/mobile`](./apps/mobile) | **Mobile kit**: Expo + React Native, NativeWind, react-native-reusables. 89 components, two sample apps, a live Kitchen Sink. |
-| [`apps/web`](./apps/web) | **Web kit**: Next.js + shadcn/ui on the same tokens. 56 components for dashboards, marketing pages and AI product UI, three sample apps, a live Kitchen Sink. |
+| [`apps/mobile`](./apps/mobile) | **Native kit**: Expo + React Native, NativeWind, react-native-reusables. 101 components, three sample apps (Shop, Habits, Northwind), a live Kitchen Sink. |
+| [`apps/web`](./apps/web) | **Web kit**: Next.js + shadcn/ui on the same tokens. 96 components for dashboards, marketing pages and AI product UI, five sample apps (Northwind as a dashboard, a landing page and an assistant; Shop; Habits), a live Kitchen Sink. |
 | [`apps/docs`](./apps/docs) | **Docs site**: how it works, setup, every component live in a phone or browser frame. Static, on Cloudflare. |
 
 One token file drives every kit. `tokens.json` (W3C design-token format) builds the CSS variables and
