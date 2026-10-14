@@ -39,7 +39,7 @@ export type KitInfo = {
   components: KitComponent[];
   /** What the Kitchen Sink previews (some components have no demo of their own). */
   previewed: KitComponent[];
-  /** The shadcn registry namespace (`@kit-native`) and where this site serves it (`/r/native`). */
+  /** The shadcn registry namespace (`@halftone-native`) and where this site serves it (`/r/native`). */
   namespace: string;
   registryPath: string;
   registryItems: RegistryItem[];
@@ -93,7 +93,7 @@ export const colorNames = Object.keys(themeJson.web.cssVars.light).filter((k) =>
 /** Source link for a file in a kit. */
 export const sourceUrl = (platform: Platform, file: string) => `${kit.repo}/blob/main/apps/${platform}/${file}`;
 
-/** The published shadcn item behind a component (`@kit-native/list-row` → its deps), if the kit publishes it. */
+/** The published shadcn item behind a component (`@halftone-native/list-row` → its deps), if the kit publishes it. */
 export function registryItemFor(platform: Platform, c: KitComponent): RegistryItem | undefined {
   const { namespace, registryItems } = kits[platform];
   if (!c.install?.startsWith(`${namespace}/`)) return undefined;

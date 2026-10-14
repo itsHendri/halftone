@@ -116,7 +116,7 @@ components:
 A neutral, brand-agnostic base for clickable prototypes on phone and web. Calm surfaces, one brand
 colour reserved for the primary action and focus, generous spacing, and both light and dark themes
 from day one. ${status.applied ? `The applied theme is \`${status.code}\`${status.drift.length ? ' (edited by hand since)' : ''}. ` : ''}Re-branding means applying a
-theme (\`npx kit-tokens theme apply <code>\`, codes come from the docs theme picker) or editing
+theme (\`npx halftone-tokens theme apply <code>\`, codes come from the docs theme picker) or editing
 \`tokens/tokens.json\`; everything else follows. The full rules and the component registry are in
 \`DESIGN_SYSTEM.md\` — read it before building UI.
 
@@ -140,7 +140,7 @@ this palette it clears AA only for:
 ${describeTintLimits(textOnTintLimits(ctx.colors))}.
 
 On a stronger tint, the text stays \`text-foreground\` and the tint, an icon or a dot carries the
-colour. \`kit-tokens check\` flags class strings that break this.
+colour. \`halftone-tokens check\` flags class strings that break this.
 
 ## Typography
 

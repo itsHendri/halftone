@@ -6,5 +6,5 @@
   "repo": "https://github.com/itsHendri/halftone",
   "siteUrl": "https://halftonedesignsystem.com",
   "npmScope": "@halftone",
-  "registry": { "native": "@kit-native", "web": "@kit" }
+  "registry": { "native": "@halftone-native", "web": "@halftone-web" }
 }

@@ -19,7 +19,7 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { pathToFileURL } from 'node:url';
 
-// The app root: `kit-tokens figma --root` sets KIT_TOKENS_ROOT; `npm run tokens:figma` runs from it.
+// The app root: `halftone-tokens figma --root` sets KIT_TOKENS_ROOT; `npm run tokens:figma` runs from it.
 const root = process.env.KIT_TOKENS_ROOT ?? process.cwd();
 const theme = await import(pathToFileURL(join(root, 'tokens/generated/figma-theme.mjs')).href).catch(() => null);
 if (!theme) {

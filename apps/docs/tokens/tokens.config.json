@@ -1,5 +1,5 @@
 {
-  "$description": "The docs site dogfoods the mobile kit's brand: one tokens.json, emitted as the Tailwind 4 / shadcn theme. Run `kit-tokens build` (part of `npm run dev` and `npm run build`). Density and typeset are off: a theme's density and type scale apply to the kits, not this site's reading sizes.",
+  "$description": "The docs site dogfoods the mobile kit's brand: one tokens.json, emitted as the Tailwind 4 / shadcn theme. Run `halftone-tokens build` (part of `npm run dev` and `npm run build`). Density and typeset are off: a theme's density and type scale apply to the kits, not this site's reading sizes.",
   "source": "../mobile/tokens/tokens.json",
   "targets": {
     "shadcn-web": {

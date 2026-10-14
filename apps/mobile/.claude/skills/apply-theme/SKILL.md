@@ -6,7 +6,7 @@ description: Apply a theme from the Halftone docs theme picker (a `ht1-…` or `
 # Apply a theme
 
 A theme is a recipe (brand colour, neutral, radius, fonts, icon stroke, depth, density, border) that
-`kit-tokens` expands into `tokens/tokens.json`. It only rewrites the paths a theme owns and records the
+`halftone-tokens` expands into `tokens/tokens.json`. It only rewrites the paths a theme owns and records the
 recipe under `$extensions["com.halftonedesignsystem.theme"]`; everything else in tokens.json is left alone.
 
 ## 1. Where am I?
@@ -22,11 +22,11 @@ recipe under `$extensions["com.halftonedesignsystem.theme"]`; everything else in
 - **A kit copied out on its own**: from the app folder:
 
   ```bash
-  npx kit-tokens theme apply <code|preset> --dry-run
-  npx kit-tokens theme apply <code|preset>
+  npx halftone-tokens theme apply <code|preset> --dry-run
+  npx halftone-tokens theme apply <code|preset>
   ```
 
-`kit-tokens theme presets` lists the presets; `kit-tokens theme show` says which theme is applied now.
+`halftone-tokens theme presets` lists the presets; `halftone-tokens theme show` says which theme is applied now.
 
 ## 2. When it refuses
 

@@ -22,7 +22,7 @@ after(() => temps.forEach((t) => rmSync(t, { recursive: true, force: true })));
 
 /** A throwaway app root with the fixture tokens and a config that asks for every target. */
 function appRoot(tokens = JSON.parse(readFileSync(fixture, 'utf8'))) {
-  const root = mkdtempSync(join(tmpdir(), 'kit-tokens-'));
+  const root = mkdtempSync(join(tmpdir(), 'halftone-tokens-'));
   temps.push(root);
   cpSync(join(pkg, 'test/fixtures'), join(root, 'tokens'), { recursive: true });
   writeFileSync(join(root, 'tokens/tokens.json'), JSON.stringify(tokens));
@@ -100,7 +100,7 @@ test('text-on-tint limits: how strong a tone\'s own tint can be under its text',
 });
 
 test('the source scan flags tone text on a tint the palette cannot carry', () => {
-  const root = mkdtempSync(join(tmpdir(), 'kit-tokens-scan-'));
+  const root = mkdtempSync(join(tmpdir(), 'halftone-tokens-scan-'));
   temps.push(root);
   const write = (name, body) => {
     const file = join(root, 'components', name);
@@ -111,7 +111,7 @@ test('the source scan flags tone text on a tint the palette cannot carry', () =>
   write('fine.tsx', [
     `export const B = () => <span className="bg-destructive/15 text-foreground">Overdue</span>;`,
     `export const C = () => <a className="text-primary hover:bg-primary/20">Link</a>;`,
-    `// kit-tokens-ignore tint-text: icon only`,
+    `// halftone-tokens-ignore tint-text: icon only`,
     `export const D = () => <span className="bg-success/15 text-success"><Check /></span>;`,
   ].join('\n'));
   const problems = scanTintText(root, ['components'], { primary: 0.05, success: 0.05, warning: 0.05, info: 0.15, destructive: 0 });
@@ -163,9 +163,9 @@ test('build refuses a palette below AA and writes nothing', () => {
 });
 
 test('runs through a symlinked bin, the way npm installs it', () => {
-  const dir = mkdtempSync(join(tmpdir(), 'kit-tokens-bin-'));
+  const dir = mkdtempSync(join(tmpdir(), 'halftone-tokens-bin-'));
   temps.push(dir);
-  symlinkSync(cli, join(dir, 'kit-tokens'));
+  symlinkSync(cli, join(dir, 'halftone-tokens'));
   const version = JSON.parse(readFileSync(join(pkg, 'package.json'), 'utf8')).version;
-  assert.equal(execFileSync(process.execPath, [join(dir, 'kit-tokens'), '--version'], { encoding: 'utf8' }).trim(), version);
+  assert.equal(execFileSync(process.execPath, [join(dir, 'halftone-tokens'), '--version'], { encoding: 'utf8' }).trim(), version);
 });

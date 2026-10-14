@@ -35,7 +35,7 @@ const repo = join(pkg, '../..');
 const sources = {
   fixture: join(pkg, 'test/fixtures/tokens.json'),
   // The kit's tokens.json as it shipped before themes: the base the generator tests build on.
-  kit: join(pkg, 'test/fixtures/kit-tokens.json'),
+  kit: join(pkg, 'test/fixtures/halftone-tokens.json'),
   mobile: join(repo, 'apps/mobile/tokens/tokens.json'),
 };
 
@@ -125,7 +125,7 @@ test("the default recipe, before fixes, is exactly the kit's original semantic m
 test('theme codes round-trip and catch typos', () => {
   const rand = rng(3);
   for (let i = 0; i < 400; i++) {
-    // Half keep the default typeset: those must stay ht1 codes, readable by older kit-tokens.
+    // Half keep the default typeset: those must stay ht1 codes, readable by any version of halftone-tokens.
     const recipe = randomRecipe(rand, { typeset: i % 2 === 0 });
     const code = encodeRecipe(recipe);
     assert.match(code, /^(ht1-[0-9A-HJKMNP-TV-Z]{12}|ht2-[0-9A-HJKMNP-TV-Z]{16})$/);

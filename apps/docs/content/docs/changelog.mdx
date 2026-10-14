@@ -27,7 +27,7 @@ Pick a theme on this site and watch both kits change, live, then commit it with 
 - **Contrast fixes itself.** A colour that fails WCAG AA keeps its hue and moves the least lightness it needs;
   the bar lists each change. The contrast gate also checks brand and status colours on muted surfaces now,
   which brightened the dark theme's blue a little.
-- **Use a theme** with a `ht1-` code: `npm run theme:apply -- <code>` in the repo, `npx kit-tokens theme apply
+- **Use a theme** with a `ht1-` code: `npm run theme:apply -- <code>` in the repo, `npx halftone-tokens theme apply
   <code>` in a copied-out kit, a prompt for your coding agent (both kits have an `apply-theme` skill), a share
   link, or a tokens.json download. Each kit's Foundations page shows the applied theme.
 - In the mobile kit, buttons and chips use `rounded-control` (pills, or the radius) and controls `h-control`;
@@ -81,7 +81,7 @@ no name or state. Fixed in the kit's components, so every prototype gets them:
   - An unlabelled GitHub icon.
 - **Text on tints.** The token build works out, per status colour, the strongest tint its own text can sit
   on and still clear AA: with today's palette, primary, success and warning up to 5%, info up to 15%,
-  destructive never. Both kits' `DESIGN.md` list the limits, and `kit-tokens check` fails on a class string
+  destructive never. Both kits' `DESIGN.md` list the limits, and `halftone-tokens check` fails on a class string
   that goes past them, naming the file and line.
 - **Calendar hydration fix.** shadcn's Calendar wrote locale-formatted dates into its markup, so server and
   browser disagreed. The kit's copy uses `YYYY-MM-DD`.

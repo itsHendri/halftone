@@ -8,10 +8,10 @@
     "dev": "npm run prepare:content && next dev --port 3000",
     "build": "node scripts/build-docs.mjs",
     "build:next": "next build",
-    "prepare:content": "kit-tokens build && node scripts/prepare-content.mjs",
+    "prepare:content": "halftone-tokens build && node scripts/prepare-content.mjs",
     "preview": "wrangler dev --port 8788",
     "typecheck": "next typegen && tsc --noEmit",
-    "check": "kit-tokens check",
+    "check": "halftone-tokens check",
     "check:links": "node scripts/check-links.mjs",
     "check:a11y": "node scripts/check-a11y.mjs"
   },

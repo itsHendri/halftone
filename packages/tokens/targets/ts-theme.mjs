@@ -92,7 +92,7 @@ ${primitiveGroup(ctx.prim, ['easing'])}
   },
 } as const;
 
-/** The theme tokens.json was generated from (\`kit-tokens theme apply\`), or null. \`edited\`: theme tokens
+/** The theme tokens.json was generated from (\`halftone-tokens theme apply\`), or null. \`edited\`: theme tokens
  *  were changed by hand since. */
 export const THEME_INFO: ThemeInfo | null = ${themeInfo(ctx.source)};
 

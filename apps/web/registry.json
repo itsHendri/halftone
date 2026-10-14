@@ -105,7 +105,7 @@
       "title": "lib/embed-boot.ts",
       "dependencies": [],
       "registryDependencies": [
-        "@kit/lib-embed-theme"
+        "@halftone-web/lib-embed-theme"
       ],
       "files": [
         {
@@ -121,7 +121,7 @@
       "title": "lib/embed-theme.ts",
       "dependencies": [],
       "registryDependencies": [
-        "@kit/lib-theme"
+        "@halftone-web/lib-theme"
       ],
       "files": [
         {
@@ -137,7 +137,7 @@
       "title": "lib/embed.ts",
       "dependencies": [],
       "registryDependencies": [
-        "@kit/lib-embed-boot"
+        "@halftone-web/lib-embed-boot"
       ],
       "files": [
         {
@@ -196,7 +196,7 @@
       "categories": [
         "actions"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "Button",
@@ -225,7 +225,7 @@
       "categories": [
         "actions"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "FloatingButton"
@@ -253,7 +253,7 @@
       "categories": [
         "actions"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "IconBadge"
@@ -281,7 +281,7 @@
       "categories": [
         "actions"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "ActionGrid"
@@ -299,8 +299,8 @@
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
-        "@kit/button",
-        "@kit/calendar",
+        "@halftone-web/button",
+        "@halftone-web/calendar",
         "popover"
       ],
       "files": [
@@ -313,7 +313,7 @@
       "categories": [
         "inputs"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "DatePicker"
@@ -332,7 +332,7 @@
         "react-day-picker@^10.0.2"
       ],
       "registryDependencies": [
-        "@kit/button"
+        "@halftone-web/button"
       ],
       "files": [
         {
@@ -344,7 +344,7 @@
       "categories": [
         "inputs"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "Calendar",
@@ -373,7 +373,7 @@
       "categories": [
         "inputs"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "Slider"
@@ -401,7 +401,7 @@
       "categories": [
         "inputs"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "FilterChip",
@@ -419,7 +419,7 @@
         "cn@^0.4.0"
       ],
       "registryDependencies": [
-        "@kit/hook-use-reduced-motion"
+        "@halftone-web/hook-use-reduced-motion"
       ],
       "files": [
         {
@@ -431,7 +431,7 @@
       "categories": [
         "inputs"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "SegmentedControl"
@@ -461,7 +461,7 @@
       "categories": [
         "inputs"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "SearchField"
@@ -489,7 +489,7 @@
       "categories": [
         "inputs"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "QuantityStepper"
@@ -517,7 +517,7 @@
       "categories": [
         "inputs"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "Rating"
@@ -545,7 +545,7 @@
       "categories": [
         "inputs"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "AmountInput"
@@ -572,7 +572,7 @@
       "categories": [
         "inputs"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "OtpInput"
@@ -602,7 +602,7 @@
       "categories": [
         "inputs"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "PasswordInput"
@@ -630,7 +630,7 @@
       "categories": [
         "inputs"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "SelectableCard"
@@ -657,7 +657,7 @@
       "categories": [
         "inputs"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "RangeSelector"
@@ -675,7 +675,7 @@
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
-        "@kit/button",
+        "@halftone-web/button",
         "sheet"
       ],
       "files": [
@@ -688,7 +688,7 @@
       "categories": [
         "navigation"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "AppShell"
@@ -715,7 +715,7 @@
       "categories": [
         "navigation"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "Stepper"
@@ -742,7 +742,7 @@
       "categories": [
         "navigation"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "SectionHeader"
@@ -769,7 +769,7 @@
       "categories": [
         "navigation"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "PagerDots"
@@ -786,7 +786,7 @@
         "cn@^0.4.0"
       ],
       "registryDependencies": [
-        "@kit/pager-dots"
+        "@halftone-web/pager-dots"
       ],
       "files": [
         {
@@ -798,7 +798,7 @@
       "categories": [
         "navigation"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "HorizontalPager"
@@ -816,7 +816,7 @@
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
-        "@kit/empty-state",
+        "@halftone-web/empty-state",
         "table"
       ],
       "files": [
@@ -829,7 +829,7 @@
       "categories": [
         "data"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "DataTable"
@@ -859,7 +859,7 @@
       "categories": [
         "data"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "StatTile"
@@ -888,7 +888,7 @@
       "categories": [
         "data"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "Badge",
@@ -918,7 +918,7 @@
       "categories": [
         "data"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "AvatarGroup"
@@ -946,7 +946,7 @@
       "categories": [
         "data"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "ListRow"
@@ -975,7 +975,7 @@
       "categories": [
         "data"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "ListGroup"
@@ -1003,7 +1003,7 @@
       "categories": [
         "data"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "IconCircle"
@@ -1032,7 +1032,7 @@
       "categories": [
         "data"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "KeyValueList",
@@ -1061,7 +1061,7 @@
       "categories": [
         "data"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "PercentChange"
@@ -1088,7 +1088,7 @@
       "categories": [
         "data"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "ProgressRing"
@@ -1116,7 +1116,7 @@
       "categories": [
         "data"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "StatusDot"
@@ -1144,7 +1144,7 @@
       "categories": [
         "data"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "Timeline"
@@ -1172,7 +1172,7 @@
       "categories": [
         "data"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "ValueHeader"
@@ -1200,7 +1200,7 @@
       "categories": [
         "feedback"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "Alert",
@@ -1230,7 +1230,7 @@
       "categories": [
         "feedback"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "EmptyState"
@@ -1258,7 +1258,7 @@
       "categories": [
         "feedback"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "Spinner"
@@ -1276,8 +1276,8 @@
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
-        "@kit/spinner",
-        "@kit/spot"
+        "@halftone-web/spinner",
+        "@halftone-web/spot"
       ],
       "files": [
         {
@@ -1289,7 +1289,7 @@
       "categories": [
         "feedback"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "SuccessScreen"
@@ -1316,7 +1316,7 @@
       "categories": [
         "layout"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "PageHeader"
@@ -1343,7 +1343,7 @@
       "categories": [
         "layout"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "Prose"
@@ -1370,7 +1370,7 @@
       "categories": [
         "layout"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "StickyBottomBar"
@@ -1388,7 +1388,7 @@
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
-        "@kit/placeholder"
+        "@halftone-web/placeholder"
       ],
       "files": [
         {
@@ -1400,7 +1400,7 @@
       "categories": [
         "layout"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "PromoCard"
@@ -1427,7 +1427,7 @@
       "categories": [
         "layout"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "Footnote"
@@ -1445,7 +1445,7 @@
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
-        "@kit/placeholder"
+        "@halftone-web/placeholder"
       ],
       "files": [
         {
@@ -1457,7 +1457,7 @@
       "categories": [
         "media"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "ImageTile"
@@ -1485,7 +1485,7 @@
       "categories": [
         "media"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "Placeholder"
@@ -1513,7 +1513,7 @@
       "categories": [
         "media"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "Spot"
@@ -1540,7 +1540,7 @@
       "categories": [
         "marketing"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "Hero"
@@ -1568,7 +1568,7 @@
       "categories": [
         "marketing"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "FeatureGrid"
@@ -1586,7 +1586,7 @@
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
-        "@kit/badge",
+        "@halftone-web/badge",
         "card"
       ],
       "files": [
@@ -1599,7 +1599,7 @@
       "categories": [
         "marketing"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "PricingCard"
@@ -1629,7 +1629,7 @@
       "categories": [
         "ai"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "ChatMessage"
@@ -1647,8 +1647,8 @@
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
-        "@kit/attachment-chip",
-        "@kit/button",
+        "@halftone-web/attachment-chip",
+        "@halftone-web/button",
         "textarea"
       ],
       "files": [
@@ -1661,7 +1661,7 @@
       "categories": [
         "ai"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "ChatComposer"
@@ -1679,7 +1679,7 @@
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
-        "@kit/button"
+        "@halftone-web/button"
       ],
       "files": [
         {
@@ -1691,7 +1691,7 @@
       "categories": [
         "ai"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "AttachmentChip",
@@ -1710,7 +1710,7 @@
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
-        "@kit/button"
+        "@halftone-web/button"
       ],
       "files": [
         {
@@ -1722,7 +1722,7 @@
       "categories": [
         "ai"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "ChatThreadList"
@@ -1752,7 +1752,7 @@
       "categories": [
         "ai"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "SourceList",
@@ -1771,7 +1771,7 @@
         "cn@^0.4.0"
       ],
       "registryDependencies": [
-        "@kit/button"
+        "@halftone-web/button"
       ],
       "files": [
         {
@@ -1783,7 +1783,7 @@
       "categories": [
         "ai"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "FollowUpSuggestions"
@@ -1798,7 +1798,7 @@
       "description": "an answer arriving · all at once under reduced motion · screen readers get it once",
       "dependencies": [],
       "registryDependencies": [
-        "@kit/hook-use-reduced-motion"
+        "@halftone-web/hook-use-reduced-motion"
       ],
       "files": [
         {
@@ -1810,7 +1810,7 @@
       "categories": [
         "ai"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "StreamingText",
@@ -1838,7 +1838,7 @@
       "categories": [
         "ai"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "ThinkingIndicator"
@@ -1868,7 +1868,7 @@
       "categories": [
         "ai"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "ToolCallCard"
@@ -1886,7 +1886,7 @@
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
-        "@kit/button"
+        "@halftone-web/button"
       ],
       "files": [
         {
@@ -1898,7 +1898,7 @@
       "categories": [
         "ai"
       ],
-      "docs": "Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
       "meta": {
         "exports": [
           "ApprovalCard"

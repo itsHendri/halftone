@@ -8,6 +8,6 @@ Typeset in the theme: a mono font and four new recipe axes. **size** is the body
 - `nativewind3` writes the scaled `fontSize` plus `leading-prose`, `gap-flow` and `max-w-measure`.
 - `fonts` loads the mono font.
 
-A theme with the default typeset keeps its `ht1-` code. Any other theme gets a `ht2-` code (16 characters). Older kit-tokens can't read ht2 codes and say so.
+A theme with the default typeset keeps its `ht1-` code. Any other theme gets a `ht2-` code (16 characters). Older halftone-tokens can't read ht2 codes and say so.
 
 This release also fixes the contrast auto-fix: when neither label colour read on a brand fill, it moved the fill the wrong way and threw (for example `#cc4575`).

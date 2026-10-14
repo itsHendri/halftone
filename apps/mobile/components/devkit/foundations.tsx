@@ -15,12 +15,12 @@ const kebab = (s: string) => s.replace(/([A-Z0-9])/g, '-$1').toLowerCase();
 const FONT_NAMES: Record<string, string> = { system: 'System' };
 const fontName = (id: string) => FONT_NAMES[id] ?? id.split('-').map((w) => w[0].toUpperCase() + w.slice(1)).join(' ');
 
-/** The theme tokens.json was generated from, read-only. Themes are picked on the docs site and applied with kit-tokens. */
+/** The theme tokens.json was generated from, read-only. Themes are picked on the docs site and applied with halftone-tokens. */
 function ThemeSummary() {
   const live = useLiveThemeCode();
   const { copied, copy } = useCopy();
   if (!THEME_INFO) {
-    return <Text className="text-muted-foreground text-sm">No theme recorded. Apply one with `npx kit-tokens theme apply &lt;code&gt;`.</Text>;
+    return <Text className="text-muted-foreground text-sm">No theme recorded. Apply one with `npx halftone-tokens theme apply &lt;code&gt;`.</Text>;
   }
   const info = THEME_INFO;
   const { recipe } = info;
@@ -250,7 +250,7 @@ export const FOUNDATION_SECTIONS: FoundationSection[] = [
     title: 'Theme',
     category: 'color',
     aliases: ['preset', 'brand', 'theme code', 'recipe'],
-    caption: 'Pick and preview themes on the docs site (/themes), then apply one: npx kit-tokens theme apply <code>. Tap to copy the code.',
+    caption: 'Pick and preview themes on the docs site (/themes), then apply one: npx halftone-tokens theme apply <code>. Tap to copy the code.',
     Demo: ThemeSummary,
   },
   {

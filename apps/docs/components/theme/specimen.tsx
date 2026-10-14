@@ -36,7 +36,7 @@ import { useLiveTheme } from '@/lib/theme/store';
  * specimens apply the typeset's size and leading themselves, the way the kits' text classes do.
  */
 
-/** Tailwind's text sizes and their line heights at 16px (kit-tokens' TEXT_LINE_HEIGHT). */
+/** Tailwind's text sizes and their line heights at 16px (halftone-tokens' TEXT_LINE_HEIGHT). */
 const SCALE = [
   ['4xl', 36, 40],
   ['3xl', 30, 36],

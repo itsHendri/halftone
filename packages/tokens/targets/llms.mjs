@@ -35,7 +35,7 @@ ${rows}
 - Depth: \`shadow-sm\` (controls, cards), \`shadow-md\` (raised, popovers), \`shadow-lg\` (menus, dialogs) are the theme's three elevation levels; no shadow colour modifiers on surfaces (thumbs and floating elements may add \`shadow-black/20\`)
 - Border \`border\` ${ctx.shape.borderWidth}px · icon stroke ${ctx.shape.stroke} (an Icon's \`strokeWidth\` is relative to 2)
 - Fonts: headings ${fonts.heading?.family ?? 'system'}, body ${fonts.body?.family ?? 'system'}, mono ${fonts.mono?.family ?? 'system'} (applied by Text; \`font-heading\` makes any Text a heading, \`font-mono\` code and figures)
-- Typeset: body ${ctx.type.size}px, leading ${ctx.type.leading}; every \`text-*\` size below scales by ${ctx.type.scale}${theme.applied ? `\n- Theme: \`${theme.code}\` (\`npx kit-tokens theme show\`)` : ''}
+- Typeset: body ${ctx.type.size}px, leading ${ctx.type.leading}; every \`text-*\` size below scales by ${ctx.type.scale}${theme.applied ? `\n- Theme: \`${theme.code}\` (\`npx halftone-tokens theme show\`)` : ''}
 - Font sizes (\`text-*\`): ${steps(['font', 'size'])}
 - Durations: ${steps(['duration'], 'ms')}
 `;

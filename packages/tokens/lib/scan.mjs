@@ -7,7 +7,7 @@
  * stronger than `textOnTintLimits` allows. Only unprefixed classes count (`hover:bg-…` is another state).
  *
  * An element that holds only an icon may keep its tone (icons need 3:1, which the gate checks): put
- * `kit-tokens-ignore tint-text` in a comment on that line or the line above.
+ * `halftone-tokens-ignore tint-text` in a comment on that line or the line above.
  *
  * Limits: a class string has to contain both classes. Text inside a tinted parent (React Native's
  * View > Text) is not seen; DESIGN.md states the rule for those.
@@ -18,7 +18,7 @@ import { join, relative } from 'node:path';
 const TONES = ['primary', 'success', 'warning', 'info', 'destructive'];
 const EXTENSIONS = /\.(m?[jt]sx?)$/;
 const SKIP = new Set(['node_modules', '.next', '.expo', 'dist', 'out', 'generated', 'ios', 'android']);
-const PRAGMA = 'kit-tokens-ignore tint-text';
+const PRAGMA = 'halftone-tokens-ignore tint-text';
 
 function files(dir) {
   let out = [];

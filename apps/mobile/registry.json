@@ -153,8 +153,8 @@
       "title": "lib/embed-theme.ts",
       "dependencies": [],
       "registryDependencies": [
-        "@kit-native/lib-embed",
-        "@kit-native/lib-theme"
+        "@halftone-native/lib-embed",
+        "@halftone-native/lib-theme"
       ],
       "files": [
         {
@@ -216,7 +216,7 @@
         "@react-native-async-storage/async-storage@2.2.0"
       ],
       "registryDependencies": [
-        "@kit-native/lib-native"
+        "@halftone-native/lib-native"
       ],
       "files": [
         {
@@ -253,11 +253,11 @@
         "expo-router@~57.0.22"
       ],
       "registryDependencies": [
-        "@kit-native/lib-embed",
-        "@kit-native/lib-embed-theme",
-        "@kit-native/lib-fonts",
-        "@kit-native/lib-theme",
-        "@kit-native/lib-theme-context"
+        "@halftone-native/lib-embed",
+        "@halftone-native/lib-embed-theme",
+        "@halftone-native/lib-fonts",
+        "@halftone-native/lib-theme",
+        "@halftone-native/lib-theme-context"
       ],
       "files": [
         {
@@ -290,7 +290,7 @@
         "nativewind@^4.2.6"
       ],
       "registryDependencies": [
-        "@kit-native/lib-embed"
+        "@halftone-native/lib-embed"
       ],
       "files": [
         {
@@ -342,8 +342,8 @@
         "class-variance-authority@^0.7.1"
       ],
       "registryDependencies": [
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -355,7 +355,7 @@
       "categories": [
         "actions"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "Button"
@@ -373,9 +373,9 @@
         "class-variance-authority@^0.7.1"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/icon",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -387,7 +387,7 @@
       "categories": [
         "actions"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "Toggle"
@@ -405,10 +405,10 @@
         "class-variance-authority@^0.7.1"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-utils",
-        "@kit-native/text",
-        "@kit-native/toggle"
+        "@halftone-native/icon",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text",
+        "@halftone-native/toggle"
       ],
       "files": [
         {
@@ -420,7 +420,7 @@
       "categories": [
         "actions"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "ToggleGroup"
@@ -437,9 +437,9 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/icon",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -451,7 +451,7 @@
       "categories": [
         "actions"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "FloatingButton"
@@ -468,9 +468,9 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/icon",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -482,7 +482,7 @@
       "categories": [
         "actions"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "IconBadge"
@@ -500,11 +500,11 @@
         "react-native-gesture-handler@~2.32.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-haptics",
-        "@kit-native/lib-reduced-motion",
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/icon",
+        "@halftone-native/lib-haptics",
+        "@halftone-native/lib-reduced-motion",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -516,7 +516,7 @@
       "categories": [
         "actions"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "SwipeToConfirm"
@@ -533,10 +533,10 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-haptics",
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/icon",
+        "@halftone-native/lib-haptics",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -548,7 +548,7 @@
       "categories": [
         "actions"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "ActionGrid"
@@ -563,8 +563,8 @@
       "description": "always with `Label`",
       "dependencies": [],
       "registryDependencies": [
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -576,7 +576,7 @@
       "categories": [
         "inputs"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "Input"
@@ -593,7 +593,7 @@
         "@rn-primitives/label@^1.5.2"
       ],
       "registryDependencies": [
-        "@kit-native/lib-utils"
+        "@halftone-native/lib-utils"
       ],
       "files": [
         {
@@ -605,7 +605,7 @@
       "categories": [
         "inputs"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "Label"
@@ -619,8 +619,8 @@
       "description": "",
       "dependencies": [],
       "registryDependencies": [
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -632,7 +632,7 @@
       "categories": [
         "inputs"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "Textarea"
@@ -650,8 +650,8 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-utils"
+        "@halftone-native/icon",
+        "@halftone-native/lib-utils"
       ],
       "files": [
         {
@@ -663,7 +663,7 @@
       "categories": [
         "inputs"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "Checkbox"
@@ -680,8 +680,8 @@
         "@rn-primitives/radio-group@^1.5.2"
       ],
       "registryDependencies": [
-        "@kit-native/label",
-        "@kit-native/lib-utils"
+        "@halftone-native/label",
+        "@halftone-native/lib-utils"
       ],
       "files": [
         {
@@ -693,7 +693,7 @@
       "categories": [
         "inputs"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "RadioGroup"
@@ -710,8 +710,8 @@
         "@rn-primitives/switch@^1.5.2"
       ],
       "registryDependencies": [
-        "@kit-native/label",
-        "@kit-native/lib-utils"
+        "@halftone-native/label",
+        "@halftone-native/lib-utils"
       ],
       "files": [
         {
@@ -723,7 +723,7 @@
       "categories": [
         "inputs"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "Switch"
@@ -743,9 +743,9 @@
         "react-native-screens@~4.26.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-utils",
-        "@kit-native/text",
+        "@halftone-native/icon",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text",
         "https://reactnativereusables.com/r/nativewind/native-only-animated-view.json"
       ],
       "files": [
@@ -758,7 +758,7 @@
       "categories": [
         "inputs"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "Select"
@@ -775,10 +775,10 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-haptics",
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/icon",
+        "@halftone-native/lib-haptics",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -790,7 +790,7 @@
       "categories": [
         "inputs"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "FilterChip",
@@ -806,11 +806,11 @@
       "description": "2–4 options, animated thumb",
       "dependencies": [],
       "registryDependencies": [
-        "@kit-native/lib-haptics",
-        "@kit-native/lib-reduced-motion",
-        "@kit-native/lib-theme",
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/lib-haptics",
+        "@halftone-native/lib-reduced-motion",
+        "@halftone-native/lib-theme",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -822,7 +822,7 @@
       "categories": [
         "inputs"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "SegmentedControl"
@@ -839,9 +839,9 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/input",
-        "@kit-native/lib-utils"
+        "@halftone-native/icon",
+        "@halftone-native/input",
+        "@halftone-native/lib-utils"
       ],
       "files": [
         {
@@ -853,7 +853,7 @@
       "categories": [
         "inputs"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "SearchField"
@@ -870,10 +870,10 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-haptics",
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/icon",
+        "@halftone-native/lib-haptics",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -885,7 +885,7 @@
       "categories": [
         "inputs"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "QuantityStepper"
@@ -902,11 +902,11 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-haptics",
-        "@kit-native/lib-palette-context",
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/icon",
+        "@halftone-native/lib-haptics",
+        "@halftone-native/lib-palette-context",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -918,7 +918,7 @@
       "categories": [
         "inputs"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "Rating"
@@ -935,10 +935,10 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-haptics",
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/icon",
+        "@halftone-native/lib-haptics",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -950,7 +950,7 @@
       "categories": [
         "inputs"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "AmountInput"
@@ -967,10 +967,10 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-haptics",
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/icon",
+        "@halftone-native/lib-haptics",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -982,7 +982,7 @@
       "categories": [
         "inputs"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "NumericKeypad"
@@ -997,8 +997,8 @@
       "description": "N-digit code, paste-aware",
       "dependencies": [],
       "registryDependencies": [
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -1010,7 +1010,7 @@
       "categories": [
         "inputs"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "OtpInput"
@@ -1027,9 +1027,9 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/input",
-        "@kit-native/lib-utils"
+        "@halftone-native/icon",
+        "@halftone-native/input",
+        "@halftone-native/lib-utils"
       ],
       "files": [
         {
@@ -1041,7 +1041,7 @@
       "categories": [
         "inputs"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "PasswordInput"
@@ -1058,10 +1058,10 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-haptics",
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/icon",
+        "@halftone-native/lib-haptics",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -1073,7 +1073,7 @@
       "categories": [
         "inputs"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "SelectableCard"
@@ -1090,8 +1090,8 @@
         "react-native-gesture-handler@~2.32.0"
       ],
       "registryDependencies": [
-        "@kit-native/lib-haptics",
-        "@kit-native/lib-utils"
+        "@halftone-native/lib-haptics",
+        "@halftone-native/lib-utils"
       ],
       "files": [
         {
@@ -1103,7 +1103,7 @@
       "categories": [
         "inputs"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "Slider"
@@ -1120,11 +1120,11 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/calendar",
-        "@kit-native/icon",
-        "@kit-native/lib-utils",
-        "@kit-native/sheet",
-        "@kit-native/text"
+        "@halftone-native/calendar",
+        "@halftone-native/icon",
+        "@halftone-native/lib-utils",
+        "@halftone-native/sheet",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -1136,7 +1136,7 @@
       "categories": [
         "inputs"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "DatePicker"
@@ -1153,10 +1153,10 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-haptics",
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/icon",
+        "@halftone-native/lib-haptics",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -1168,7 +1168,7 @@
       "categories": [
         "inputs"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "Calendar"
@@ -1183,9 +1183,9 @@
       "description": "trackless chart range (1D·1W·1M·1Y·ALL), active is a filled disc",
       "dependencies": [],
       "registryDependencies": [
-        "@kit-native/lib-haptics",
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/lib-haptics",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -1197,7 +1197,7 @@
       "categories": [
         "inputs"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "RangeSelector"
@@ -1214,8 +1214,8 @@
         "@rn-primitives/tabs@^1.5.2"
       ],
       "registryDependencies": [
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -1227,7 +1227,7 @@
       "categories": [
         "navigation"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "Tabs"
@@ -1248,9 +1248,9 @@
         "react-native-screens@~4.26.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-utils",
-        "@kit-native/text",
+        "@halftone-native/icon",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text",
         "https://reactnativereusables.com/r/nativewind/native-only-animated-view.json"
       ],
       "files": [
@@ -1263,7 +1263,7 @@
       "categories": [
         "navigation"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "Menubar"
@@ -1281,10 +1281,10 @@
         "react-native-safe-area-context@~5.7.0"
       ],
       "registryDependencies": [
-        "@kit-native/lib-haptics",
-        "@kit-native/lib-palette-context",
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/lib-haptics",
+        "@halftone-native/lib-palette-context",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -1296,7 +1296,7 @@
       "categories": [
         "navigation"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "TabBar",
@@ -1313,8 +1313,8 @@
       "description": "`numbered` / `compact` flow progress",
       "dependencies": [],
       "registryDependencies": [
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -1326,7 +1326,7 @@
       "categories": [
         "navigation"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "Stepper"
@@ -1341,8 +1341,8 @@
       "description": "title + action, outside the card",
       "dependencies": [],
       "registryDependencies": [
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -1354,7 +1354,7 @@
       "categories": [
         "navigation"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "SectionHeader"
@@ -1369,8 +1369,8 @@
       "description": "the in-body page title + intro · one per screen, first child of the ScrollView",
       "dependencies": [],
       "registryDependencies": [
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -1382,7 +1382,7 @@
       "categories": [
         "navigation"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "ScreenHeader"
@@ -1397,7 +1397,7 @@
       "description": "Full-width slides: HorizontalPager with itemWidth = screen width.",
       "dependencies": [],
       "registryDependencies": [
-        "@kit-native/lib-utils"
+        "@halftone-native/lib-utils"
       ],
       "files": [
         {
@@ -1409,7 +1409,7 @@
       "categories": [
         "navigation"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "PagerDots"
@@ -1424,7 +1424,7 @@
       "description": "snap pager + dots",
       "dependencies": [],
       "registryDependencies": [
-        "@kit-native/pager-dots"
+        "@halftone-native/pager-dots"
       ],
       "files": [
         {
@@ -1436,7 +1436,7 @@
       "categories": [
         "navigation"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "HorizontalPager"
@@ -1454,9 +1454,9 @@
         "class-variance-authority@^0.7.1"
       ],
       "registryDependencies": [
-        "@kit-native/lib-fonts",
-        "@kit-native/lib-palette-context",
-        "@kit-native/lib-utils"
+        "@halftone-native/lib-fonts",
+        "@halftone-native/lib-palette-context",
+        "@halftone-native/lib-utils"
       ],
       "files": [
         {
@@ -1468,7 +1468,7 @@
       "categories": [
         "data"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "Text"
@@ -1484,7 +1484,7 @@
         "@rn-primitives/avatar@^1.5.2"
       ],
       "registryDependencies": [
-        "@kit-native/lib-utils"
+        "@halftone-native/lib-utils"
       ],
       "files": [
         {
@@ -1496,7 +1496,7 @@
       "categories": [
         "data"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "Avatar"
@@ -1511,9 +1511,9 @@
       "description": "overlapping avatars + \"+N\"",
       "dependencies": [],
       "registryDependencies": [
-        "@kit-native/avatar",
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/avatar",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -1525,7 +1525,7 @@
       "categories": [
         "data"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "AvatarGroup"
@@ -1543,8 +1543,8 @@
         "class-variance-authority@^0.7.1"
       ],
       "registryDependencies": [
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -1556,7 +1556,7 @@
       "categories": [
         "data"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "Badge"
@@ -1573,9 +1573,9 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/icon",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -1587,7 +1587,7 @@
       "categories": [
         "data"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "ListRow"
@@ -1602,9 +1602,9 @@
       "description": "the CONTAINER around rows: owns the title, dividers, footnote and card/plain surface · wraps ListRows and sets `last` for you · `variant` card/plain (plain = settings look)",
       "dependencies": [],
       "registryDependencies": [
-        "@kit-native/card",
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/card",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -1616,7 +1616,7 @@
       "categories": [
         "data"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "ListGroup"
@@ -1633,8 +1633,8 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-utils"
+        "@halftone-native/icon",
+        "@halftone-native/lib-utils"
       ],
       "files": [
         {
@@ -1646,7 +1646,7 @@
       "categories": [
         "data"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "IconCircle"
@@ -1661,9 +1661,9 @@
       "description": "label/value rows, optionally in a Card",
       "dependencies": [],
       "registryDependencies": [
-        "@kit-native/card",
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/card",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -1675,7 +1675,7 @@
       "categories": [
         "data"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "KeyValueList",
@@ -1693,10 +1693,10 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-utils",
-        "@kit-native/percent-change",
-        "@kit-native/text"
+        "@halftone-native/icon",
+        "@halftone-native/lib-utils",
+        "@halftone-native/percent-change",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -1708,7 +1708,7 @@
       "categories": [
         "data"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "StatTile"
@@ -1725,9 +1725,9 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/icon",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -1739,7 +1739,7 @@
       "categories": [
         "data"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "PercentChange"
@@ -1756,8 +1756,8 @@
         "react-native-svg@15.15.4"
       ],
       "registryDependencies": [
-        "@kit-native/lib-palette-context",
-        "@kit-native/lib-utils"
+        "@halftone-native/lib-palette-context",
+        "@halftone-native/lib-utils"
       ],
       "files": [
         {
@@ -1769,7 +1769,7 @@
       "categories": [
         "data"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "ProgressRing"
@@ -1786,7 +1786,7 @@
         "class-variance-authority@^0.7.1"
       ],
       "registryDependencies": [
-        "@kit-native/lib-utils"
+        "@halftone-native/lib-utils"
       ],
       "files": [
         {
@@ -1798,7 +1798,7 @@
       "categories": [
         "data"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "StatusDot"
@@ -1815,9 +1815,9 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/icon",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -1829,7 +1829,7 @@
       "categories": [
         "data"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "Timeline"
@@ -1846,7 +1846,7 @@
         "react-native-svg@15.15.4"
       ],
       "registryDependencies": [
-        "@kit-native/lib-palette-context"
+        "@halftone-native/lib-palette-context"
       ],
       "files": [
         {
@@ -1858,7 +1858,7 @@
       "categories": [
         "data"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "LineChart"
@@ -1873,8 +1873,8 @@
       "description": "plain Views",
       "dependencies": [],
       "registryDependencies": [
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -1886,7 +1886,7 @@
       "categories": [
         "data"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "BarChart"
@@ -1903,10 +1903,10 @@
         "react-native-svg@15.15.4"
       ],
       "registryDependencies": [
-        "@kit-native/lib-palette-context",
-        "@kit-native/lib-theme",
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/lib-palette-context",
+        "@halftone-native/lib-theme",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -1918,7 +1918,7 @@
       "categories": [
         "data"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "DonutChart",
@@ -1936,10 +1936,10 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-haptics",
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/icon",
+        "@halftone-native/lib-haptics",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -1951,7 +1951,7 @@
       "categories": [
         "data"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "ValueHeader"
@@ -1969,9 +1969,9 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/icon",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -1983,7 +1983,7 @@
       "categories": [
         "feedback"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "Alert"
@@ -2001,7 +2001,7 @@
         "react-native-reanimated@4.5.1"
       ],
       "registryDependencies": [
-        "@kit-native/lib-utils"
+        "@halftone-native/lib-utils"
       ],
       "files": [
         {
@@ -2013,7 +2013,7 @@
       "categories": [
         "feedback"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "Progress"
@@ -2032,8 +2032,8 @@
         "react-native-screens@~4.26.0"
       ],
       "registryDependencies": [
-        "@kit-native/lib-utils",
-        "@kit-native/text",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text",
         "https://reactnativereusables.com/r/nativewind/native-only-animated-view.json"
       ],
       "files": [
@@ -2046,7 +2046,7 @@
       "categories": [
         "feedback"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "Tooltip"
@@ -2064,12 +2064,12 @@
         "react-native-safe-area-context@~5.7.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-haptics",
-        "@kit-native/lib-reduced-motion",
-        "@kit-native/lib-theme",
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/icon",
+        "@halftone-native/lib-haptics",
+        "@halftone-native/lib-reduced-motion",
+        "@halftone-native/lib-theme",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -2081,7 +2081,7 @@
       "categories": [
         "feedback"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "useToast",
@@ -2097,7 +2097,7 @@
       "description": "themed ActivityIndicator · announced as \"Loading\"",
       "dependencies": [],
       "registryDependencies": [
-        "@kit-native/lib-palette-context"
+        "@halftone-native/lib-palette-context"
       ],
       "files": [
         {
@@ -2109,7 +2109,7 @@
       "categories": [
         "feedback"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "Spinner"
@@ -2126,11 +2126,11 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/button",
-        "@kit-native/icon",
-        "@kit-native/lib-utils",
-        "@kit-native/spot",
-        "@kit-native/text"
+        "@halftone-native/button",
+        "@halftone-native/icon",
+        "@halftone-native/lib-utils",
+        "@halftone-native/spot",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -2142,7 +2142,7 @@
       "categories": [
         "feedback"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "EmptyState"
@@ -2159,10 +2159,10 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/lib-utils",
-        "@kit-native/spinner",
-        "@kit-native/spot",
-        "@kit-native/text"
+        "@halftone-native/lib-utils",
+        "@halftone-native/spinner",
+        "@halftone-native/spot",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -2174,7 +2174,7 @@
       "categories": [
         "feedback"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "SuccessScreen"
@@ -2189,8 +2189,8 @@
       "description": "never nest cards; titles sit outside · **flat — a shadow means pressable or floating**",
       "dependencies": [],
       "registryDependencies": [
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -2202,7 +2202,7 @@
       "categories": [
         "layout"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "Card"
@@ -2221,9 +2221,9 @@
         "react-native-reanimated@4.5.1"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/icon",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -2235,7 +2235,7 @@
       "categories": [
         "layout"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "Accordion"
@@ -2252,7 +2252,7 @@
         "react-native-safe-area-context@~5.7.0"
       ],
       "registryDependencies": [
-        "@kit-native/lib-utils"
+        "@halftone-native/lib-utils"
       ],
       "files": [
         {
@@ -2264,7 +2264,7 @@
       "categories": [
         "layout"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "StickyBottomBar"
@@ -2281,11 +2281,11 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-haptics",
-        "@kit-native/lib-utils",
-        "@kit-native/placeholder",
-        "@kit-native/text"
+        "@halftone-native/icon",
+        "@halftone-native/lib-haptics",
+        "@halftone-native/lib-utils",
+        "@halftone-native/placeholder",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -2297,7 +2297,7 @@
       "categories": [
         "layout"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "PromoCard"
@@ -2312,8 +2312,8 @@
       "description": "small print / disclosure, last in the scroll",
       "dependencies": [],
       "registryDependencies": [
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -2325,7 +2325,7 @@
       "categories": [
         "layout"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "Footnote"
@@ -2340,8 +2340,8 @@
       "description": "long-form text (articles, help, onboarding copy) at the theme's typeset: flow, measure, leading",
       "dependencies": [],
       "registryDependencies": [
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -2353,7 +2353,7 @@
       "categories": [
         "layout"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "Prose"
@@ -2373,8 +2373,8 @@
         "react-native-screens@~4.26.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-utils",
+        "@halftone-native/icon",
+        "@halftone-native/lib-utils",
         "https://reactnativereusables.com/r/nativewind/native-only-animated-view.json"
       ],
       "files": [
@@ -2387,7 +2387,7 @@
       "categories": [
         "overlays"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "Dialog"
@@ -2406,9 +2406,9 @@
         "react-native-screens@~4.26.0"
       ],
       "registryDependencies": [
-        "@kit-native/button",
-        "@kit-native/lib-utils",
-        "@kit-native/text",
+        "@halftone-native/button",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text",
         "https://reactnativereusables.com/r/nativewind/native-only-animated-view.json"
       ],
       "files": [
@@ -2421,7 +2421,7 @@
       "categories": [
         "overlays"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "AlertDialog"
@@ -2440,8 +2440,8 @@
         "react-native-screens@~4.26.0"
       ],
       "registryDependencies": [
-        "@kit-native/lib-utils",
-        "@kit-native/text",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text",
         "https://reactnativereusables.com/r/nativewind/native-only-animated-view.json"
       ],
       "files": [
@@ -2454,7 +2454,7 @@
       "categories": [
         "overlays"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "Popover"
@@ -2474,9 +2474,9 @@
         "react-native-screens@~4.26.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-utils",
-        "@kit-native/text",
+        "@halftone-native/icon",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text",
         "https://reactnativereusables.com/r/nativewind/native-only-animated-view.json"
       ],
       "files": [
@@ -2489,7 +2489,7 @@
       "categories": [
         "overlays"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "DropdownMenu"
@@ -2509,9 +2509,9 @@
         "react-native-screens@~4.26.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-utils",
-        "@kit-native/text",
+        "@halftone-native/icon",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text",
         "https://reactnativereusables.com/r/nativewind/native-only-animated-view.json"
       ],
       "files": [
@@ -2524,7 +2524,7 @@
       "categories": [
         "overlays"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "ContextMenu"
@@ -2543,8 +2543,8 @@
         "react-native-screens@~4.26.0"
       ],
       "registryDependencies": [
-        "@kit-native/lib-utils",
-        "@kit-native/text",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text",
         "https://reactnativereusables.com/r/nativewind/native-only-animated-view.json"
       ],
       "files": [
@@ -2557,7 +2557,7 @@
       "categories": [
         "overlays"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "HoverCard"
@@ -2575,12 +2575,12 @@
         "react-native-safe-area-context@~5.7.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-haptics",
-        "@kit-native/lib-reduced-motion",
-        "@kit-native/lib-theme",
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/icon",
+        "@halftone-native/lib-haptics",
+        "@halftone-native/lib-reduced-motion",
+        "@halftone-native/lib-theme",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -2592,7 +2592,7 @@
       "categories": [
         "overlays"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "Sheet"
@@ -2610,9 +2610,9 @@
         "nativewind@^4.2.6"
       ],
       "registryDependencies": [
-        "@kit-native/lib-palette-context",
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/lib-palette-context",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -2624,7 +2624,7 @@
       "categories": [
         "media"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "Icon"
@@ -2641,10 +2641,10 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-utils",
-        "@kit-native/placeholder",
-        "@kit-native/text"
+        "@halftone-native/icon",
+        "@halftone-native/lib-utils",
+        "@halftone-native/placeholder",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -2656,7 +2656,7 @@
       "categories": [
         "media"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "ImageTile"
@@ -2674,9 +2674,9 @@
         "react-native-svg@15.15.4"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-palette-context",
-        "@kit-native/lib-utils"
+        "@halftone-native/icon",
+        "@halftone-native/lib-palette-context",
+        "@halftone-native/lib-utils"
       ],
       "files": [
         {
@@ -2688,7 +2688,7 @@
       "categories": [
         "media"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "Placeholder"
@@ -2705,8 +2705,8 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-utils"
+        "@halftone-native/icon",
+        "@halftone-native/lib-utils"
       ],
       "files": [
         {
@@ -2718,7 +2718,7 @@
       "categories": [
         "media"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "Spot"
@@ -2735,11 +2735,11 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/badge",
-        "@kit-native/card",
-        "@kit-native/icon",
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/badge",
+        "@halftone-native/card",
+        "@halftone-native/icon",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -2751,7 +2751,7 @@
       "categories": [
         "marketing"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "PricingCard"
@@ -2768,10 +2768,10 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/avatar",
-        "@kit-native/icon",
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/avatar",
+        "@halftone-native/icon",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -2783,7 +2783,7 @@
       "categories": [
         "ai"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "ChatMessage"
@@ -2800,11 +2800,11 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/attachment-chip",
-        "@kit-native/icon",
-        "@kit-native/lib-haptics",
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/attachment-chip",
+        "@halftone-native/icon",
+        "@halftone-native/lib-haptics",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -2816,7 +2816,7 @@
       "categories": [
         "ai"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "ChatComposer"
@@ -2833,9 +2833,9 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/icon",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -2847,7 +2847,7 @@
       "categories": [
         "ai"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "AttachmentChip",
@@ -2865,10 +2865,10 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/button",
-        "@kit-native/icon",
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/button",
+        "@halftone-native/icon",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -2880,7 +2880,7 @@
       "categories": [
         "ai"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "ChatThreadList"
@@ -2897,10 +2897,10 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-utils",
-        "@kit-native/sheet",
-        "@kit-native/text"
+        "@halftone-native/icon",
+        "@halftone-native/lib-utils",
+        "@halftone-native/sheet",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -2912,7 +2912,7 @@
       "categories": [
         "ai"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "SourceList",
@@ -2929,9 +2929,9 @@
       "description": "next questions under the latest answer · tapping one sends it",
       "dependencies": [],
       "registryDependencies": [
-        "@kit-native/lib-haptics",
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/lib-haptics",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -2943,7 +2943,7 @@
       "categories": [
         "ai"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "FollowUpSuggestions"
@@ -2958,8 +2958,8 @@
       "description": "an answer arriving · all at once under reduced motion · screen readers get it once",
       "dependencies": [],
       "registryDependencies": [
-        "@kit-native/lib-reduced-motion",
-        "@kit-native/text"
+        "@halftone-native/lib-reduced-motion",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -2971,7 +2971,7 @@
       "categories": [
         "ai"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "StreamingText",
@@ -2987,9 +2987,9 @@
       "description": "the model is working · say what it is doing when you can · still dots under reduced motion",
       "dependencies": [],
       "registryDependencies": [
-        "@kit-native/lib-reduced-motion",
-        "@kit-native/lib-utils",
-        "@kit-native/text"
+        "@halftone-native/lib-reduced-motion",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -3001,7 +3001,7 @@
       "categories": [
         "ai"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "ThinkingIndicator"
@@ -3018,10 +3018,10 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-utils",
-        "@kit-native/spinner",
-        "@kit-native/text"
+        "@halftone-native/icon",
+        "@halftone-native/lib-utils",
+        "@halftone-native/spinner",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -3033,7 +3033,7 @@
       "categories": [
         "ai"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "ToolCallCard"
@@ -3050,12 +3050,12 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/button",
-        "@kit-native/icon",
-        "@kit-native/lib-haptics",
-        "@kit-native/lib-utils",
-        "@kit-native/summary-card",
-        "@kit-native/text"
+        "@halftone-native/button",
+        "@halftone-native/icon",
+        "@halftone-native/lib-haptics",
+        "@halftone-native/lib-utils",
+        "@halftone-native/summary-card",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -3067,7 +3067,7 @@
       "categories": [
         "ai"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "ApprovalCard"
@@ -3085,14 +3085,14 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-haptics",
-        "@kit-native/lib-native-context",
-        "@kit-native/lib-utils",
-        "@kit-native/placeholder",
-        "@kit-native/sheet",
-        "@kit-native/text",
-        "@kit-native/toast"
+        "@halftone-native/icon",
+        "@halftone-native/lib-haptics",
+        "@halftone-native/lib-native-context",
+        "@halftone-native/lib-utils",
+        "@halftone-native/placeholder",
+        "@halftone-native/sheet",
+        "@halftone-native/text",
+        "@halftone-native/toast"
       ],
       "files": [
         {
@@ -3104,7 +3104,7 @@
       "categories": [
         "native"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "PhotoCapture"
@@ -3122,14 +3122,14 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/button",
-        "@kit-native/icon",
-        "@kit-native/lib-haptics",
-        "@kit-native/lib-native-context",
-        "@kit-native/lib-utils",
-        "@kit-native/permission-primer",
-        "@kit-native/placeholder",
-        "@kit-native/text"
+        "@halftone-native/button",
+        "@halftone-native/icon",
+        "@halftone-native/lib-haptics",
+        "@halftone-native/lib-native-context",
+        "@halftone-native/lib-utils",
+        "@halftone-native/permission-primer",
+        "@halftone-native/placeholder",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -3141,7 +3141,7 @@
       "categories": [
         "native"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "CodeScanner"
@@ -3159,13 +3159,13 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/button",
-        "@kit-native/lib-haptics",
-        "@kit-native/lib-native-context",
-        "@kit-native/lib-utils",
-        "@kit-native/spinner",
-        "@kit-native/spot",
-        "@kit-native/text"
+        "@halftone-native/button",
+        "@halftone-native/lib-haptics",
+        "@halftone-native/lib-native-context",
+        "@halftone-native/lib-utils",
+        "@halftone-native/spinner",
+        "@halftone-native/spot",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -3177,7 +3177,7 @@
       "categories": [
         "native"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "BiometricGate",
@@ -3195,12 +3195,12 @@
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
-        "@kit-native/button",
-        "@kit-native/lib-native",
-        "@kit-native/lib-utils",
-        "@kit-native/sheet",
-        "@kit-native/spot",
-        "@kit-native/text"
+        "@halftone-native/button",
+        "@halftone-native/lib-native",
+        "@halftone-native/lib-utils",
+        "@halftone-native/sheet",
+        "@halftone-native/spot",
+        "@halftone-native/text"
       ],
       "files": [
         {
@@ -3212,7 +3212,7 @@
       "categories": [
         "native"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "PermissionPrimer"
@@ -3229,8 +3229,8 @@
         "expo-clipboard@~57.0.2"
       ],
       "registryDependencies": [
-        "@kit-native/lib-haptics",
-        "@kit-native/toast"
+        "@halftone-native/lib-haptics",
+        "@halftone-native/toast"
       ],
       "files": [
         {
@@ -3242,7 +3242,7 @@
       "categories": [
         "native"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "useShare"
@@ -3261,13 +3261,13 @@
         "react-native-safe-area-context@~5.7.0"
       ],
       "registryDependencies": [
-        "@kit-native/icon",
-        "@kit-native/lib-haptics",
-        "@kit-native/lib-native-context",
-        "@kit-native/lib-reduced-motion",
-        "@kit-native/lib-utils",
-        "@kit-native/text",
-        "@kit-native/toast"
+        "@halftone-native/icon",
+        "@halftone-native/lib-haptics",
+        "@halftone-native/lib-native-context",
+        "@halftone-native/lib-reduced-motion",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text",
+        "@halftone-native/toast"
       ],
       "files": [
         {
@@ -3279,7 +3279,7 @@
       "categories": [
         "native"
       ],
-      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.",
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
       "meta": {
         "exports": [
           "useNotify",

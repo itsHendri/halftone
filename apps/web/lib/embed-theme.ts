@@ -26,7 +26,7 @@ const SANS = 'ui-sans-serif, system-ui, sans-serif';
 const MONO = 'ui-monospace, SFMono-Regular, Menlo, monospace';
 /** A theme code: ht1- and 12 characters (the default typeset), or ht2- and 16. */
 const THEME_CODE = /^(ht1-[0-9A-Z]{12}|ht2-[0-9A-Z]{16})$/i;
-/** The typeset's variables (kit-tokens' typeVars): app/tokens.css scales text-xs…4xl by them. */
+/** The typeset's variables (halftone-tokens' typeVars): app/tokens.css scales text-xs…4xl by them. */
 const TYPE_VARS = ['--type-scale', '--leading-factor', '--typeset-leading', '--typeset-flow', '--typeset-measure'];
 
 const kebab = (s: string) => s.replace(/([A-Z])/g, '-$1').replace(/([a-z])(\d)/g, '$1-$2').toLowerCase();

@@ -19,7 +19,7 @@ export function FeatureGrid({ features, columns = 3, className }: Props) {
     <ul className={cn('grid gap-8 sm:grid-cols-2', columns === 3 && 'lg:grid-cols-3', className)}>
       {features.map(({ icon: Icon, title, description }) => (
         <li key={title} className="flex flex-col gap-3">
-          {/* kit-tokens-ignore tint-text: holds only an icon, which needs 3:1 (the token gate checks it) */}
+          {/* halftone-tokens-ignore tint-text: holds only an icon, which needs 3:1 (the token gate checks it) */}
           <span className="bg-primary/10 text-primary flex size-10 items-center justify-center rounded-lg">
             <Icon className="size-5" aria-hidden />
           </span>

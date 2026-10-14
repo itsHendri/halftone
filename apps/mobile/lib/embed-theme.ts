@@ -4,7 +4,7 @@ import { Platform } from 'react-native';
 
 /**
  * A live theme from the docs site's picker, for the web export inside its phone frame. Native never
- * themes at runtime: a theme reaches the app by `kit-tokens theme apply`, which rewrites tokens.json.
+ * themes at runtime: a theme reaches the app by `halftone-tokens theme apply`, which rewrites tokens.json.
  *
  *   host → kit   { type: 'kit:tokens', v: 1, code, vars: { light, dark }, hex: { light, dark } }
  *                { type: 'kit:tokens', v: 1, code: null }   back to the committed theme
@@ -30,7 +30,7 @@ const FAMILY = /^[A-Za-z0-9 ]{1,40}$/;
 /** Shared with public/index.html (pre-paint) and the docs site (apps/docs/lib/theme), which writes it. */
 export const EMBED_THEME_KEY = 'kit.embed.tokens';
 
-/** The typeset's variables (kit-tokens' typeVars); TYPE_RULES points the text classes at them. */
+/** The typeset's variables (halftone-tokens' typeVars); TYPE_RULES points the text classes at them. */
 const TYPE_VARS = ['--type-scale', '--leading-factor', '--typeset-leading', '--typeset-flow', '--typeset-measure'];
 /** A theme code: ht1- and 12 characters (the default typeset), or ht2- and 16. */
 const THEME_CODE = /^(ht1-[0-9A-Z]{12}|ht2-[0-9A-Z]{16})$/i;
