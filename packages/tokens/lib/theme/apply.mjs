@@ -9,8 +9,6 @@ import { normalizeRecipe } from './recipe.mjs';
 import { flatten } from './refs.mjs';
 
 export const THEME_EXTENSION = 'com.halftonedesignsystem.theme';
-/** Where kit-tokens recorded the theme before the kit was renamed Halftone. Read, and moved on the next apply. */
-export const LEGACY_THEME_EXTENSIONS = ['dev.protokit.theme'];
 
 const clone = (value) => JSON.parse(JSON.stringify(value));
 
@@ -77,8 +75,7 @@ export function applyRecipe(tokens, recipe) {
   for (const [path, value] of Object.entries(ownedValues(theme))) {
     setPath(out, path, value);
   }
-  const { $extensions: { ...$extensions } = {}, ...rest } = out;
-  for (const key of LEGACY_THEME_EXTENSIONS) delete $extensions[key];
+  const { $extensions = {}, ...rest } = out;
   const record = { version: theme.recipe.v, code: theme.code, recipe: theme.recipe };
   if (theme.adjustments.length) record.adjustments = theme.adjustments;
   return { tokens: { ...rest, $extensions: { ...$extensions, [THEME_EXTENSION]: record } }, theme };
@@ -90,7 +87,7 @@ export function applyRecipe(tokens, recipe) {
  *   { applied: true, code, recipe, drift: [paths] }  drift = owned paths edited since the theme was applied
  */
 export function themeStatus(tokens) {
-  const record = [THEME_EXTENSION, ...LEGACY_THEME_EXTENSIONS].map((key) => tokens.$extensions?.[key]).find(Boolean);
+  const record = tokens.$extensions?.[THEME_EXTENSION];
   if (!record?.recipe) return { applied: false };
   const expected = ownedValues(generateTheme(record.recipe, tokens));
   const actual = Object.fromEntries(flatten(tokens).map((t) => [t.path.join('.'), t.$value]));

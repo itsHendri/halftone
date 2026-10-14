@@ -2,10 +2,10 @@
  * Theme codes: a recipe packed into bits and written in Crockford base32 after a prefix. Short enough to
  * read out, paste into a terminal or a URL.
  *
- *   pk1-  12 characters, 60 bits: a theme with the default typeset (every code made before the typeset)
- *   pk2-  16 characters, 80 bits: any theme
+ *   ht1-  12 characters, 60 bits: a theme with the default typeset (every code made before the typeset)
+ *   ht2-  16 characters, 80 bits: any theme
  *
- *   bits  field                                   pk1   pk2
+ *   bits  field                                   ht1   ht2
  *          recipe version (RECIPE_VERSION)          4     4
  *          brand hex                               24    24
  *          neutral, radius, controls            3+3+1 3+3+1   (option indexes, recipe.mjs)
@@ -14,7 +14,7 @@
  *          size, leading, flow, measure             –  3+3+3+3
  *          checksum (payload mod 127)               7     7   a typo is caught instead of making another theme
  *
- * encodeRecipe writes pk1 whenever it can, so a theme that doesn't touch the typeset keeps the code it
+ * encodeRecipe writes ht1 whenever it can, so a theme that doesn't touch the typeset keeps the code it
  * always had (and older kit-tokens can read it). The preset name is not in the code: a code is the theme,
  * whichever preset it started from.
  */
@@ -41,16 +41,16 @@ const TYPESET = [
 ];
 /** Per format: prefix, characters, font width, whether the typeset is in it. */
 const FORMATS = {
-  pk1: { prefix: 'pk1-', chars: 12, font: 5, typeset: false },
-  pk2: { prefix: 'pk2-', chars: 16, font: 6, typeset: true },
+  ht1: { prefix: 'ht1-', chars: 12, font: 5, typeset: false },
+  ht2: { prefix: 'ht2-', chars: 16, font: 6, typeset: true },
 };
 
 const fontIndex = (id) => FONTS.findIndex((f) => f.id === id);
 
 export function encodeRecipe(input) {
   const r = normalizeRecipe(input);
-  const pk1 = defaultTypeset(r) && fontIndex(r.font.heading) < 32 && fontIndex(r.font.body) < 32;
-  const format = pk1 ? FORMATS.pk1 : FORMATS.pk2;
+  const ht1 = defaultTypeset(r) && fontIndex(r.font.heading) < 32 && fontIndex(r.font.body) < 32;
+  const format = ht1 ? FORMATS.ht1 : FORMATS.ht2;
   let bits = BigInt(r.v);
   const push = (value, width) => {
     if (value < 0 || value >= 2 ** width) throw new Error(`encodeRecipe: ${value} does not fit in ${width} bits`);
@@ -76,13 +76,13 @@ export function encodeRecipe(input) {
 /** Code → recipe. Throws on a malformed code, a bad checksum or an unknown version. */
 export function decodeRecipe(code) {
   const clean = String(code).trim().toUpperCase();
-  const format = /^PK2/.test(clean) ? FORMATS.pk2 : FORMATS.pk1;
-  const raw = clean.replace(/^PK[12]-?/, '').replace(/[IL]/g, '1').replace(/O/g, '0').replace(/-/g, '');
-  if (!/^PK[12]/.test(clean) && /^PK\d/.test(clean)) {
+  const format = /^HT2/.test(clean) ? FORMATS.ht2 : FORMATS.ht1;
+  const raw = clean.replace(/^HT[12]-?/, '').replace(/[IL]/g, '1').replace(/O/g, '0').replace(/-/g, '');
+  if (!/^HT[12]/.test(clean) && /^HT\d/.test(clean)) {
     throw new Error(`"${code}" is a newer theme code than this kit-tokens reads. Update @halftone/tokens.`);
   }
   if (!new RegExp(`^[0-9A-HJKMNP-TV-Z]{${format.chars}}$`).test(raw)) {
-    throw new Error(`"${code}" is not a theme code (expected pk1- and 12 characters, or pk2- and 16)`);
+    throw new Error(`"${code}" is not a theme code (expected ht1- and 12 characters, or ht2- and 16)`);
   }
   let bits = 0n;
   for (const ch of raw) bits = (bits << 5n) | BigInt(ALPHABET.indexOf(ch));
@@ -119,4 +119,4 @@ export function decodeRecipe(code) {
   return normalizeRecipe({ v, brand, ...head, font: { heading, body, ...(mono ? { mono } : {}) }, ...tail, ...typeset });
 }
 
-export const isThemeCode = (value) => /^(pk1-?[0-9a-z]{12}|pk2-?[0-9a-z]{16})$/i.test(String(value).trim());
+export const isThemeCode = (value) => /^(ht1-?[0-9a-z]{12}|ht2-?[0-9a-z]{16})$/i.test(String(value).trim());

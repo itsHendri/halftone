@@ -1,6 +1,6 @@
 {
   "default": {
-    "code": "pk1-29B3XC60003T",
+    "code": "ht1-29B3XC60003T",
     "light": {
       "background": "#ffffff",
       "foreground": "#09090b",
@@ -111,7 +111,7 @@
     }
   },
   "editorial": {
-    "code": "pk2-36HM29K5GA98PG1P",
+    "code": "ht2-36HM29K5GA98PG1P",
     "light": {
       "background": "#ffffff",
       "foreground": "#0c0a09",
@@ -222,7 +222,7 @@
     }
   },
   "soft": {
-    "code": "pk2-32TWYTT2HA44GJ4K",
+    "code": "ht2-32TWYTT2HA44GJ4K",
     "light": {
       "background": "#ffffff",
       "foreground": "#09080e",
@@ -333,7 +333,7 @@
     }
   },
   "playful": {
-    "code": "pk2-3PS7EWR52AJG0G65",
+    "code": "ht2-3PS7EWR52AJG0G65",
     "light": {
       "background": "#ffffff",
       "foreground": "#0a0a0a",
@@ -444,7 +444,7 @@
     }
   },
   "brutalist": {
-    "code": "pk2-3R8X90H3HT2S49AM",
+    "code": "ht2-3R8X90H3HT2S49AM",
     "light": {
       "background": "#ffffff",
       "foreground": "#0a0a0a",
@@ -555,7 +555,7 @@
     }
   },
   "mono": {
-    "code": "pk2-260R3C510J4A29A8",
+    "code": "ht2-260R3C510J4A29A8",
     "light": {
       "background": "#ffffff",
       "foreground": "#09090b",
@@ -666,7 +666,7 @@
     }
   },
   "bold": {
-    "code": "pk2-2Z1TXN830A2M6041",
+    "code": "ht2-2Z1TXN830A2M6041",
     "light": {
       "background": "#ffffff",
       "foreground": "#020617",
@@ -777,7 +777,7 @@
     }
   },
   "calm": {
-    "code": "pk2-23CMH1S6H2NCGJ1F",
+    "code": "ht2-23CMH1S6H2NCGJ1F",
     "light": {
       "background": "#ffffff",
       "foreground": "#0c0a09",

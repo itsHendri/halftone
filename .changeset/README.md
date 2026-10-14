@@ -11,8 +11,8 @@ to npm through trusted publishing.
 
 npm cannot create a package through trusted publishing, so `1.0.0` goes up from a laptop:
 
-1. On npmjs.com, make sure you can publish to the `@itshendri` scope: it must be your npm username or an
-   organisation named `itshendri` (free for public packages). Turn on two-factor authentication.
+1. On npmjs.com, create the organisation `halftone` (free for public packages) so you can publish to the
+   `@halftone` scope. Turn on two-factor authentication.
 2. From the repo root, on `main`: `npm login`, then `npm publish -w packages/tokens --access public`.
 3. Package → Settings → Trusted Publisher → GitHub Actions: owner `itsHendri`, repository `halftone`,
    workflow `release.yml`, no environment. Under allowed actions, tick `npm publish`.

@@ -125,10 +125,10 @@ test("the default recipe, before fixes, is exactly the kit's original semantic m
 test('theme codes round-trip and catch typos', () => {
   const rand = rng(3);
   for (let i = 0; i < 400; i++) {
-    // Half keep the default typeset: those must stay pk1 codes, readable by older kit-tokens.
+    // Half keep the default typeset: those must stay ht1 codes, readable by older kit-tokens.
     const recipe = randomRecipe(rand, { typeset: i % 2 === 0 });
     const code = encodeRecipe(recipe);
-    assert.match(code, /^(pk1-[0-9A-HJKMNP-TV-Z]{12}|pk2-[0-9A-HJKMNP-TV-Z]{16})$/);
+    assert.match(code, /^(ht1-[0-9A-HJKMNP-TV-Z]{12}|ht2-[0-9A-HJKMNP-TV-Z]{16})$/);
     assert.deepEqual(decodeRecipe(code), decodeRecipe(code.toLowerCase()));
     assert.equal(encodeRecipe(decodeRecipe(code)), code);
     assert.deepEqual(decodeRecipe(code), normalizeRecipe(recipe));
@@ -137,17 +137,17 @@ test('theme codes round-trip and catch typos', () => {
     const typo = code.slice(0, -1) + (code.at(-1) === '0' ? '1' : '0');
     assert.throws(() => decodeRecipe(typo), /typo/);
   }
-  assert.throws(() => decodeRecipe('pk1-short'), /not a theme code/);
-  assert.throws(() => decodeRecipe('pk3-0000000000000000'), /newer theme code/);
+  assert.throws(() => decodeRecipe('ht1-short'), /not a theme code/);
+  assert.throws(() => decodeRecipe('ht3-0000000000000000'), /newer theme code/);
 });
 
-test('the default typeset keeps pk1 codes; anything else is pk2', () => {
+test('the default typeset keeps ht1 codes; anything else is ht2', () => {
   // The committed kit theme's code from before the typeset decodes, with the default typeset.
-  const old = decodeRecipe('pk1-29B3XC60003T');
+  const old = decodeRecipe('ht1-29B3XC60003T');
   assert.deepEqual(old, normalizeRecipe(DEFAULT_RECIPE));
-  assert.equal(encodeRecipe(DEFAULT_RECIPE), 'pk1-29B3XC60003T');
-  assert.match(encodeRecipe({ ...DEFAULT_RECIPE, leading: 'relaxed' }), /^pk2-/);
-  assert.match(encodeRecipe({ ...DEFAULT_RECIPE, font: { mono: 'geist-mono' } }), /^pk2-/);
+  assert.equal(encodeRecipe(DEFAULT_RECIPE), 'ht1-29B3XC60003T');
+  assert.match(encodeRecipe({ ...DEFAULT_RECIPE, leading: 'relaxed' }), /^ht2-/);
+  assert.match(encodeRecipe({ ...DEFAULT_RECIPE, font: { mono: 'geist-mono' } }), /^ht2-/);
   assert.throws(() => normalizeRecipe({ font: { mono: 'inter' } }), /mono font/);
   assert.throws(() => normalizeRecipe({ font: { heading: 'system-mono' } }), /can't be the heading font/);
 });
@@ -209,16 +209,6 @@ test('themeStatus reports the applied theme and hand edits as drift', () => {
   const edited = JSON.parse(JSON.stringify(tokens));
   edited.semantic.color.muted.$value.light = '#eeeeee';
   assert.deepEqual(themeStatus(edited).drift, ['semantic.color.muted']);
-});
-
-test('a theme recorded under the pre-rename key is read, and moved on the next apply', () => {
-  const { tokens, theme } = applyRecipe(base, DEFAULT_RECIPE);
-  const { 'com.halftonedesignsystem.theme': record, ...others } = tokens.$extensions;
-  const legacy = { ...tokens, $extensions: { ...others, 'dev.protokit.theme': record } };
-  assert.equal(themeStatus(legacy).code, theme.code);
-  const moved = applyRecipe(legacy, DEFAULT_RECIPE).tokens.$extensions;
-  assert.equal(moved['dev.protokit.theme'], undefined);
-  assert.equal(moved['com.halftonedesignsystem.theme'].code, theme.code);
 });
 
 test('theme variables match what the build writes for the same tokens', async () => {

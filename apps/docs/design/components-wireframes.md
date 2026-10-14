@@ -100,7 +100,7 @@ iOS and Android) and **Web** (Next.js, any screen).
 ## Status and next steps (updated 2026-10-13)
 
 A fresh session can pick up here. PRs merge with `gh pr merge <n> --rebase --delete-branch`, and only when the user
-says so. Required checks: 6 CI jobs plus `Workers Builds: protokit-docs`.
+says so. Required checks: 6 CI jobs plus `Workers Builds: halftone-docs`.
 
 **Done (on main and live).** Every phase of this contract is built.
 - Phase 1, the catalogue: #30. It also renamed the device components (Camera, Code scanner, Face ID, Permission

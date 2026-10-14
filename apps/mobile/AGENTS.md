@@ -81,7 +81,7 @@ npx expo run:ios       # build + install the dev client on the simulator (needs 
   posting `{ type: 'kit:theme', value }`; the kit answers `{ type: 'kit:ready' }`. Same origin only, plus
   `EXPO_PUBLIC_EMBED_ORIGINS` (comma-separated) for a docs dev server on another port. See `lib/embed.ts`.
 - **Dev client:** `LANG=en_US.UTF-8 npx expo run:ios --no-bundler` builds `Halftone` for the simulator; then
-  `xcrun simctl openurl booted "exp+mobile-app-prototype-kit://expo-development-client/?url=http%3A%2F%2Flocalhost%3A8091"`.
+  `xcrun simctl openurl booted "exp+halftone://expo-development-client/?url=http%3A%2F%2Flocalhost%3A8091"`.
   For phones: `eas build --profile development` (needs Apple credentials, interactive).
 - **Account config:** `app.config.ts` reads `APP_ID`, `EAS_OWNER`, `EAS_PROJECT_ID` and `KIT_WEB_BASE_URL` from
   `.env.local` (gitignored, see `.env.example`) or the environment, so the repo carries no account. EAS cloud

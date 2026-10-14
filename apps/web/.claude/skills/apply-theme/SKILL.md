@@ -1,6 +1,6 @@
 ---
 name: apply-theme
-description: Apply a theme from the Halftone docs theme picker (a `pk1-…` or `pk2-…` code, a preset name like `editorial`, or a recipe file) to this kit's tokens, then verify it. Use when the user pastes a theme code, says "apply this theme", "use the Editorial preset", "re-brand to <colour>", or hands over the prompt the docs' "Use theme" panel copies.
+description: Apply a theme from the Halftone docs theme picker (a `ht1-…` or `ht2-…` code, a preset name like `editorial`, or a recipe file) to this kit's tokens, then verify it. Use when the user pastes a theme code, says "apply this theme", "use the Editorial preset", "re-brand to <colour>", or hands over the prompt the docs' "Use theme" panel copies.
 ---
 
 # Apply a theme

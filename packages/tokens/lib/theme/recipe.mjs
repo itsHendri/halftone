@@ -5,7 +5,7 @@
  * Every option list is APPEND-ONLY: codes store an option's index. Add new options at the end.
  *
  * The typeset (font.mono, size, leading, flow, measure) came later. A recipe without it gets the defaults,
- * which are what the kits always had, and a theme with the default typeset still encodes as a pk1 code.
+ * which are what the kits always had, and a theme with the default typeset still encodes as a ht1 code.
  */
 import { FONTS } from './fonts.mjs';
 
@@ -140,7 +140,7 @@ export const DEFAULT_RECIPE = Object.freeze({
 
 const HEX = /^#[0-9a-f]{6}$/;
 
-/** Does the recipe use the default typeset (what every pk1 code means)? */
+/** Does the recipe use the default typeset (what every ht1 code means)? */
 export const defaultTypeset = (r) => r.font.mono === DEFAULT_RECIPE.font.mono && TYPESET_KEYS.every((k) => r[k] === DEFAULT_RECIPE[k]);
 
 /** Fill in defaults, normalise, and throw on anything invalid. Returns a new, plain recipe. */

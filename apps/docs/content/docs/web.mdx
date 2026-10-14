@@ -42,10 +42,10 @@ Set `name` in `package.json`, and the title and description in `app/layout.tsx`.
 Pick a theme on this site (the bar at the bottom, or the [theme studio](/themes)), then apply its code:
 
 ```bash
-npx kit-tokens theme apply pk1-XXXXXXXXXXXX
+npx kit-tokens theme apply ht1-XXXXXXXXXXXX
 ```
 
-In the monorepo, run `npm run theme:apply -- pk1-…` at the root instead: one theme drives both kits. See
+In the monorepo, run `npm run theme:apply -- ht1-…` at the root instead: one theme drives both kits. See
 [Themes](/docs/themes). To edit `tokens/tokens.json` by hand, run `npm run tokens:build` after: it writes
 `app/tokens.css` (Tailwind 4 and shadcn variables, in oklch) and refuses any palette below WCAG AA.
 
