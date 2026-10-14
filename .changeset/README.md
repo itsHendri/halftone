@@ -1,6 +1,6 @@
 # Changesets
 
-Releases of the packages in `packages/` (today: `@itshendri/kit-tokens`). The apps are private and never published.
+Releases of the packages in `packages/` (today: `@halftone/tokens`). The apps are private and never published.
 
 When a change to a package should ship, run `npx changeset` at the repo root, pick the package and the bump
 (patch: fix · minor: new target or option · major: a change an app has to react to), and commit the file it
@@ -14,7 +14,7 @@ npm cannot create a package through trusted publishing, so `1.0.0` goes up from 
 1. On npmjs.com, make sure you can publish to the `@itshendri` scope: it must be your npm username or an
    organisation named `itshendri` (free for public packages). Turn on two-factor authentication.
 2. From the repo root, on `main`: `npm login`, then `npm publish -w packages/tokens --access public`.
-3. Package → Settings → Trusted Publisher → GitHub Actions: owner `itsHendri`, repository `protokit`,
+3. Package → Settings → Trusted Publisher → GitHub Actions: owner `itsHendri`, repository `halftone`,
    workflow `release.yml`, no environment. Under allowed actions, tick `npm publish`.
 4. Package → Settings → Publishing access: "Require two-factor authentication and disallow tokens".
 5. GitHub repo → Settings → Actions → General: tick "Allow GitHub Actions to create and approve pull

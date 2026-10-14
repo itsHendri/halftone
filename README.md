@@ -1,10 +1,10 @@
-# Protokit
+# Halftone Design System
 
 Prototype kits for mobile and web that coding agents build from. Hand an agent a brief or a meeting
 transcript and get a working, themed prototype composed only from the components in the kit: no invented
 components, no stray colours, light and dark from day one.
 
-**Docs, live components and the install guide:** https://protokit-docs.empty-math-d572.workers.dev
+**Docs, live components and the install guide:** https://halftonedesignsystem.com
 
 | | |
 |---|---|
@@ -19,14 +19,14 @@ TypeScript theme each app reads, and the build refuses any palette that falls be
 
 1. **Start a prototype from a kit.** Copy just the app you need:
    ```bash
-   npx giget@latest gh:itsHendri/protokit/apps/mobile my-prototype   # or apps/web
+   npx giget@latest gh:itsHendri/halftone/apps/mobile my-prototype   # or apps/web
    cd my-prototype && npm install && npm run ios                       # web: npm run dev
    ```
    Or clone this whole repo for a client project that needs mobile and web on one brand.
-   *Not yet:* a single copied kit installs `@itshendri/kit-tokens` from npm, which is not published yet.
+   *Not yet:* a single copied kit installs `@halftone/tokens` from npm, which is not published yet.
    Until it is, clone the repo.
 2. **Add kit components to an existing Expo app** that uses react-native-reusables, through the shadcn
-   registry: `npx shadcn add @kit-native/<component>` (see the [install guide](https://protokit-docs.empty-math-d572.workers.dev/docs/install/)).
+   registry: `npx shadcn add @kit-native/<component>` (see the [install guide](https://halftonedesignsystem.com/docs/install/)).
 3. **Let your agent do it.** Point Claude Code or Cursor at the kit; it reads `AGENTS.md`,
    `DESIGN_SYSTEM.md` and `llms.txt` and builds only from what is registered.
 

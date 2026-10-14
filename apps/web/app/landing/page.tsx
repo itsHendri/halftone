@@ -143,7 +143,7 @@ export default function Landing() {
 
       <footer className="border-border border-t">
         <div className="text-muted-foreground mx-auto flex max-w-6xl flex-col gap-3 px-4 py-8 text-sm sm:flex-row sm:items-center sm:justify-between sm:px-6">
-          <p>Northwind is a made-up product: a sample in the Prototype Kit.</p>
+          <p>Northwind is a made-up product: a sample in Halftone.</p>
           <nav aria-label="Footer" className="flex gap-5">
             {NAV.map((l) => (
               <a key={l.href} href={l.href} className="hover:text-foreground">

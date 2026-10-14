@@ -13,6 +13,8 @@ import type * as Web from '../../web/registry/types';
 
 export const kit = kitJson as {
   name: string;
+  /** For titles and search: "Halftone Design System". `name` is what copy uses. */
+  fullName: string;
   tagline: string;
   repo: string;
   siteUrl: string | null;

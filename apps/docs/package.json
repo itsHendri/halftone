@@ -1,8 +1,8 @@
 {
-  "name": "@protokit/docs",
+  "name": "@halftone/docs",
   "private": true,
   "version": "0.0.0",
-  "description": "The Protokit docs site: how the kits work, setup, live component previews. Static export, hosted on Cloudflare.",
+  "description": "The Halftone docs site: how the kits work, setup, live component previews. Static export, hosted on Cloudflare.",
   "type": "module",
   "scripts": {
     "dev": "npm run prepare:content && next dev --port 3000",
@@ -16,7 +16,7 @@
     "check:a11y": "node scripts/check-a11y.mjs"
   },
   "dependencies": {
-    "@itshendri/kit-tokens": "^1.0.0",
+    "@halftone/tokens": "^1.0.0",
     "fumadocs-core": "16.16.2",
     "fumadocs-mdx": "15.4.6",
     "fumadocs-ui": "16.16.2",

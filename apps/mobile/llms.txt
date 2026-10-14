@@ -1,4 +1,4 @@
-# Prototype Kit
+# Halftone
 
 > A brand-agnostic Expo + React Native prototype kit (Expo Router, NativeWind, react-native-reusables).
 > Screens are composed ONLY from the components listed below; nothing else exists.

@@ -1,7 +1,7 @@
 {
   "$schema": "https://ui.shadcn.com/schema/registry.json",
   "name": "kit-native",
-  "homepage": "https://github.com/itsHendri/protokit",
+  "homepage": "https://github.com/itsHendri/halftone",
   "items": [
     {
       "name": "theme",

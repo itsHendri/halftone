@@ -79,7 +79,7 @@ export function decodeRecipe(code) {
   const format = /^PK2/.test(clean) ? FORMATS.pk2 : FORMATS.pk1;
   const raw = clean.replace(/^PK[12]-?/, '').replace(/[IL]/g, '1').replace(/O/g, '0').replace(/-/g, '');
   if (!/^PK[12]/.test(clean) && /^PK\d/.test(clean)) {
-    throw new Error(`"${code}" is a newer theme code than this kit-tokens reads. Update @itshendri/kit-tokens.`);
+    throw new Error(`"${code}" is a newer theme code than this kit-tokens reads. Update @halftone/tokens.`);
   }
   if (!new RegExp(`^[0-9A-HJKMNP-TV-Z]{${format.chars}}$`).test(raw)) {
     throw new Error(`"${code}" is not a theme code (expected pk1- and 12 characters, or pk2- and 16)`);
@@ -115,7 +115,7 @@ export function decodeRecipe(code) {
   const head = fields(LAYOUT);
   const brand = '#' + pull(24).toString(16).padStart(6, '0');
   const v = Number(bits);
-  if (v !== RECIPE_VERSION) throw new Error(`"${code}" is a version ${v} theme; this kit-tokens reads version ${RECIPE_VERSION}. Update @itshendri/kit-tokens.`);
+  if (v !== RECIPE_VERSION) throw new Error(`"${code}" is a version ${v} theme; this kit-tokens reads version ${RECIPE_VERSION}. Update @halftone/tokens.`);
   return normalizeRecipe({ v, brand, ...head, font: { heading, body, ...(mono ? { mono } : {}) }, ...tail, ...typeset });
 }
 

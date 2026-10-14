@@ -1,4 +1,4 @@
-# Prototype Kit (web) — agent guide
+# Halftone (web) — agent guide
 
 A brand-agnostic Next.js starter for web prototypes: dashboards, marketing pages and AI product
 interfaces. Designers hand it a brief (or a meeting transcript) and get a working, themed prototype built
@@ -12,7 +12,7 @@ hallucination guard. This file covers engineering, workflows and gotchas.
 - Next.js 16 (App Router) · React 19 · TypeScript strict · Tailwind 4 · shadcn/ui (owned source in
   `components/ui`) · lucide-react · next-themes · Recharts (through `components/ui/chart`) · sonner (toasts)
 - **className-only styling** with the semantic token classes. No inline colours, no hex.
-- Tokens: `tokens/tokens.json` → `npm run tokens:build` (@itshendri/kit-tokens) → `app/tokens.css`,
+- Tokens: `tokens/tokens.json` → `npm run tokens:build` (@halftone/tokens) → `app/tokens.css`,
   `lib/theme.ts`, `DESIGN.md`, `tokens/generated/`
 - Theme: next-themes (`class` on `<html>`, system by default). `ThemeToggle` in `components/site`.
 
@@ -47,7 +47,7 @@ DESIGN.md, llms.txt     GENERATED agent-facing summaries
 
 ## Commands
 
-Inside the Protokit monorepo, install once at the repo root and run these from `apps/web` (or with
+Inside the Halftone monorepo, install once at the repo root and run these from `apps/web` (or with
 `-w apps/web`). Copied out on its own, this app is a normal npm project.
 
 ```bash

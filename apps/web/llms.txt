@@ -1,4 +1,4 @@
-# Prototype Kit (web)
+# Halftone (web)
 
 > A brand-agnostic Next.js prototype kit (App Router, Tailwind 4, shadcn/ui) for dashboards, marketing pages and
 > AI product interfaces. Pages are composed ONLY from the components listed below; nothing else exists.

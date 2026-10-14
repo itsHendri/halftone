@@ -1,4 +1,4 @@
-# Protokit — agent guide (repo root)
+# Halftone — agent guide (repo root)
 
 A monorepo of prototype kits. Each app is self-contained; this file only covers how they fit together.
 
@@ -6,7 +6,7 @@ A monorepo of prototype kits. Each app is self-contained; this file only covers 
 apps/mobile/    Expo mobile kit. Its AGENTS.md, DESIGN_SYSTEM.md and .claude/skills are the rules for any mobile work.
 apps/docs/      Docs site (Next + Fumadocs, static export for Cloudflare). Reads apps/mobile; the one app allowed to.
 apps/web/       Web kit: Next.js + shadcn/ui. Its AGENTS.md, DESIGN_SYSTEM.md and .claude/skills are the rules for web work.
-packages/tokens/ @itshendri/kit-tokens: the token build (DTCG → NativeWind, Tailwind 4, TS, DESIGN.md, Figma) every app uses.
+packages/tokens/ @halftone/tokens: the token build (DTCG → NativeWind, Tailwind 4, TS, DESIGN.md, Figma) every app uses.
 kit.json        The kit's name and addresses, read by the generators.
 ```
 
@@ -16,7 +16,7 @@ kit.json        The kit's name and addresses, read by the generators.
   and `apps/mobile/DESIGN_SYSTEM.md`.
 - **Apps never import from each other or reach outside their folder** (except apps/docs, which documents them
   and is never extracted). An app must keep working when it
-  is copied out on its own (`npx giget gh:itsHendri/protokit/apps/mobile`). Shared code goes through a
+  is copied out on its own (`npx giget gh:itsHendri/halftone/apps/mobile`). Shared code goes through a
   published package in `packages/`, depended on by version range.
 - **One install, at the root.** `npm install` at the repo root (npm workspaces). Run an app's scripts
   from its folder or with `-w apps/<name>`. Never add a lockfile inside an app.
@@ -29,7 +29,7 @@ kit.json        The kit's name and addresses, read by the generators.
 
 ## Packages and releases
 
-- `packages/tokens` is `@itshendri/kit-tokens`. Apps depend on it by range (`^1.0.0`); inside the repo npm
+- `packages/tokens` is `@halftone/tokens`. Apps depend on it by range (`^1.0.0`); inside the repo npm
   links the workspace copy, outside it installs from npm. Change the build there, run
   `npm test -w packages/tokens`, then rebuild an app's tokens (`npm run tokens:build -w apps/mobile`).
 - Anything in a package that should ship needs a changeset: `npx changeset` at the root. Merging to main

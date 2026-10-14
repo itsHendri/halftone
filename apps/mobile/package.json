@@ -1,11 +1,11 @@
 {
-  "name": "mobile-app-prototype-kit",
+  "name": "halftone-mobile",
   "main": "expo-router/entry",
   "version": "0.1.0",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/itsHendri/protokit.git"
+    "url": "git+https://github.com/itsHendri/halftone.git"
   },
   "engines": {
     "node": ">=22.18"
@@ -96,7 +96,7 @@
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",
-    "@itshendri/kit-tokens": "^1.0.0",
+    "@halftone/tokens": "^1.0.0",
     "@types/node": "^26.6.4",
     "@types/react": "~19.2.10",
     "eslint": "^9.39.5",

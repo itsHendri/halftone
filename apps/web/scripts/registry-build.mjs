@@ -115,7 +115,7 @@ designSystem = replaceBlock(designSystem, 'tokens:radius', radiusLine + '.', 'DE
 
 // ---------- 3. llms.txt --------------------------------------------------------------------------
 
-const app = { name: 'Prototype Kit (web)' };
+const app = { name: 'Halftone (web)' };
 const llmsTokens = existsSync(join(root, 'tokens/generated/llms-tokens.md'))
   ? read('tokens/generated/llms-tokens.md').replace(/^<!--.*-->\n/, '')
   : '';

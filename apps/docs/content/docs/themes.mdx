@@ -41,7 +41,7 @@ before and after. A theme from the picker can never fail the build.
 
 - **Ask your coding agent.** Copy the prompt; the kits' `apply-theme` skill applies the code, runs the checks
   and tells you what it adjusted.
-- **In the Protokit repo**, from the root, so the native kit, the web kit and this site stay one brand:
+- **In the Halftone repo**, from the root, so the native kit, the web kit and this site stay one brand:
 
   ```bash
   npm run theme:apply -- pk1-XXXXXXXXXXXX
@@ -72,5 +72,5 @@ npx kit-tokens theme apply calm --dry-run
 
 A code is the whole recipe, packed into twelve characters with a checksum, so a typo is caught rather than
 quietly giving you a different theme. The same code produces the same theme in every version of
-`@itshendri/kit-tokens` that reads it; a generator change that would alter a theme comes with a new code
+`@halftone/tokens` that reads it; a generator change that would alter a theme comes with a new code
 version.

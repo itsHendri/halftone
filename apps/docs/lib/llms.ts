@@ -25,7 +25,7 @@ export function kitLlmsSection(platform: Platform, title: string): string {
 /** The top of the site's llms.txt and llms-full.txt. */
 export function siteLlmsHeader(): string {
   return [
-    `# ${kit.name}`,
+    `# ${kit.fullName}`,
     '',
     `> ${kit.tagline}`,
     '',

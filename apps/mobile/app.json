@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "Prototype Kit",
+    "name": "Halftone",
     "slug": "mobile-app-prototype-kit",
     "version": "0.1.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    "scheme": "protokit",
+    "scheme": "halftone",
     "userInterfaceStyle": "automatic",
     "assetBundlePatterns": [
       "**/*"

@@ -47,7 +47,7 @@ function typography(prim, type) {
 }
 
 export default function designMd(ctx, options) {
-  const name = options.name ?? 'Prototype Kit';
+  const name = options.name ?? 'Halftone';
   // Which radius buttons use: 'control' (the theme's pill setting, the mobile kit) or a scale step (web: 'md').
   const buttons = options.buttonRadius ?? 'control';
   const description =

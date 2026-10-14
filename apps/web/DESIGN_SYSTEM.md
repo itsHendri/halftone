@@ -11,7 +11,7 @@ Engineering conventions (routes, state, workflows) live in `AGENTS.md`.
 
 Single source of truth: `tokens/tokens.json` (DTCG), shared with the mobile kit. `npm run tokens:build`
 regenerates `app/tokens.css` (Tailwind 4 / shadcn variables, oklch), `lib/theme.ts`, `DESIGN.md` and
-`tokens/generated/`. Never edit the generated files. In the Protokit monorepo the brand is edited in
+`tokens/generated/`. Never edit the generated files. In the Halftone monorepo the brand is edited in
 `apps/mobile/tokens/tokens.json` and copied here with `npm run tokens:sync`.
 
 **The build enforces contrast.** Every `X` / `X-foreground` pairing, muted text on every surface, and each

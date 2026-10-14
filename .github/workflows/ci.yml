@@ -117,7 +117,7 @@ jobs:
       - name: Package contents
         run: npm pack -w packages/tokens --dry-run
 
-  # Each app must work when copied out on its own (npx giget gh:itsHendri/protokit/apps/<app>): no root
+  # Each app must work when copied out on its own (npx giget gh:itsHendri/halftone/apps/<app>): no root
   # lockfile, no root overrides, no workspace links. The tokens package comes from a packed tarball,
   # standing in for the published version.
   extract:
@@ -146,7 +146,7 @@ jobs:
           git archive HEAD:apps/${{ matrix.app }} | tar -x -C "$RUNNER_TEMP/app"
           npm pack -w packages/tokens --pack-destination "$RUNNER_TEMP"
           cd "$RUNNER_TEMP/app"
-          npm pkg set "devDependencies.@itshendri/kit-tokens=file:$(ls "$RUNNER_TEMP"/itshendri-kit-tokens-*.tgz)"
+          npm pkg set "devDependencies.@halftone/tokens=file:$(ls "$RUNNER_TEMP"/halftone-tokens-*.tgz)"
 
       - name: Install the standalone app
         working-directory: ${{ runner.temp }}/app

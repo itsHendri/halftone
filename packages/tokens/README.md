@@ -1,11 +1,11 @@
-# @itshendri/kit-tokens
+# @halftone/tokens
 
-The token build behind [Protokit](https://github.com/itsHendri/protokit). One `tokens.json` in the
+The token build behind [Halftone](https://github.com/itsHendri/halftone). One `tokens.json` in the
 [W3C design-token format](https://www.designtokens.org/tr/2025.10/format/) becomes everything an app reads,
 and the build refuses any palette that falls below WCAG AA.
 
 ```bash
-npm install -D @itshendri/kit-tokens
+npm install -D @halftone/tokens
 npx kit-tokens build      # write every output in tokens/tokens.config.json
 npx kit-tokens check      # write nothing; exit 1 if an output is stale (CI)
 npx kit-tokens figma      # mirror the tokens into Figma Variables

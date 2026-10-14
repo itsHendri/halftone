@@ -1,10 +1,10 @@
 {
-  "name": "protokit",
+  "name": "halftone",
   "private": true,
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/itsHendri/protokit.git"
+    "url": "git+https://github.com/itsHendri/halftone.git"
   },
   "engines": {
     "node": ">=22.18"

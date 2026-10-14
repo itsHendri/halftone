@@ -16,7 +16,7 @@ export default function KitHome() {
   return (
     <ScrollView className="bg-background flex-1" contentContainerClassName="gap-6 p-5 pb-16" contentInsetAdjustmentBehavior="automatic">
       <ScreenHeader
-        title="Prototype Kit"
+        title="Halftone"
         size="large"
         subtitle="A themeable Expo starter for mobile prototypes. Everything a screen needs is already here and previewed live."
       />

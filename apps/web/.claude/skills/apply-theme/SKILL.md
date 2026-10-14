@@ -1,17 +1,17 @@
 ---
 name: apply-theme
-description: Apply a theme from the Protokit docs theme picker (a `pk1-…` or `pk2-…` code, a preset name like `editorial`, or a recipe file) to this kit's tokens, then verify it. Use when the user pastes a theme code, says "apply this theme", "use the Editorial preset", "re-brand to <colour>", or hands over the prompt the docs' "Use theme" panel copies.
+description: Apply a theme from the Halftone docs theme picker (a `pk1-…` or `pk2-…` code, a preset name like `editorial`, or a recipe file) to this kit's tokens, then verify it. Use when the user pastes a theme code, says "apply this theme", "use the Editorial preset", "re-brand to <colour>", or hands over the prompt the docs' "Use theme" panel copies.
 ---
 
 # Apply a theme
 
 A theme is a recipe (brand colour, neutral, radius, fonts, icon stroke, depth, density, border) that
 `kit-tokens` expands into `tokens/tokens.json`. It only rewrites the paths a theme owns and records the
-recipe under `$extensions["dev.protokit.theme"]`; everything else in tokens.json is left alone.
+recipe under `$extensions["com.halftonedesignsystem.theme"]`; everything else in tokens.json is left alone.
 
 ## 1. Where am I?
 
-- **Inside the Protokit monorepo** (a `scripts/theme-apply.mjs` two levels up): run it from the repo root so
+- **Inside the Halftone monorepo** (a `scripts/theme-apply.mjs` two levels up): run it from the repo root so
   mobile, web and the docs stay one brand:
 
   ```bash

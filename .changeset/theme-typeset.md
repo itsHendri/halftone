@@ -1,5 +1,5 @@
 ---
-'@itshendri/kit-tokens': minor
+'@halftone/tokens': minor
 ---
 
 Typeset in the theme: a mono font and four new recipe axes. **size** is the body text size (14, 15, 16 or 18px), and every text size scales with it. **leading** is the line height of running text, and the text sizes' line heights scale with it. **flow** (space between blocks) and **measure** (longest line) apply to long-form text.

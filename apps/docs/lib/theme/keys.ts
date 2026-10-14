@@ -2,21 +2,21 @@
  * Storage keys and the pre-paint script for the live theme. A plain module (not 'use client') so the
  * root layout, a server component, can inline the script.
  */
-export const STORAGE_KEY = 'protokit.theme';
+export const STORAGE_KEY = 'halftone.theme';
 /** The site's CSS for the current theme, painted before hydration. */
-export const CSS_KEY = 'protokit.theme.css';
+export const CSS_KEY = 'halftone.theme.css';
 /**
  * The kits' payloads, read before paint by the embedded kits (same origin). The kits read this key too. Not
  * `kit.embed.theme`: the web kit keeps the frame's light/dark there.
  */
 export const EMBED_KEY = 'kit.embed.tokens';
-export const STYLE_ID = 'protokit-theme';
-export const FONTS_ID = 'protokit-theme-fonts';
+export const STYLE_ID = 'halftone-theme';
+export const FONTS_ID = 'halftone-theme-fonts';
 /** The Google Fonts stylesheet for the current theme's fonts, linked before paint too. */
-export const FONTS_KEY = 'protokit.theme.fonts';
+export const FONTS_KEY = 'halftone.theme.fonts';
 
 /** The components filter (All | Native | Web), as <html data-kit-filter>. */
-export const FILTER_KEY = 'protokit.kits';
+export const FILTER_KEY = 'halftone.kits';
 
 /**
  * Inline in <head>: the last theme's CSS before first paint, so a themed site never flashes the default; and

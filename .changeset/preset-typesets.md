@@ -1,5 +1,5 @@
 ---
-'@itshendri/kit-tokens': patch
+'@halftone/tokens': patch
 ---
 
 Each preset has its own typeset: Editorial 18px, relaxed, IBM Plex Mono; Mono 14px, tight, 80ch, Geist Mono; and so on. Default keeps the kits' typeset, so its code is still `pk1-29B3XC60003T`. The other presets now have pk2 codes.

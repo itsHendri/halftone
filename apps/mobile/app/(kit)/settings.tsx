@@ -73,7 +73,7 @@ export default function Settings() {
         <Text className="text-muted-foreground text-xs font-semibold uppercase tracking-widest">
           About
         </Text>
-        <Text className="text-sm">Prototype Kit {version}</Text>
+        <Text className="text-sm">Halftone {version}</Text>
         {sdk ? <Text className="text-muted-foreground text-sm">Expo SDK {sdk}</Text> : null}
         <Text className="text-muted-foreground text-sm">
           Tokens: tokens/tokens.json · Components: components/ui + components/kit

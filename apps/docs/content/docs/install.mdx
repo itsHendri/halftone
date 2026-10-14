@@ -18,7 +18,7 @@ The agent reads [`/install.md`](/install.md), picks the right path below, and th
 <Tab value="New prototype">
 
 <Callout type="warn" title="Not yet: copying a single kit">
-A kit copied out on its own installs `@itshendri/kit-tokens` from npm, which is not published yet, so
+A kit copied out on its own installs `@halftone/tokens` from npm, which is not published yet, so
 `npm install` fails. Until it is, clone the whole repo (the Monorepo tab) and work in `apps/mobile` or
 `apps/web`.
 </Callout>
@@ -26,7 +26,7 @@ A kit copied out on its own installs `@itshendri/kit-tokens` from npm, which is 
 Copy just the kit you need into a new folder and run it. A phone app:
 
 ```bash
-npx giget@latest gh:itsHendri/protokit/apps/mobile my-prototype
+npx giget@latest gh:itsHendri/halftone/apps/mobile my-prototype
 cd my-prototype && npm install
 npm run ios    # or: npm run web, npm run dev (Expo Go on a phone)
 ```
@@ -34,7 +34,7 @@ npm run ios    # or: npm run web, npm run dev (Expo Go on a phone)
 A web app:
 
 ```bash
-npx giget@latest gh:itsHendri/protokit/apps/web my-prototype
+npx giget@latest gh:itsHendri/halftone/apps/web my-prototype
 cd my-prototype && npm install
 npm run dev    # http://localhost:3100
 ```
@@ -52,7 +52,7 @@ Add kit components one at a time through a [shadcn registry](https://ui.shadcn.c
 ```json
 {
   "registries": {
-    "@kit-native": "https://protokit-docs.empty-math-d572.workers.dev/r/native/{name}.json"
+    "@kit-native": "https://halftonedesignsystem.com/r/native/{name}.json"
   }
 }
 ```
@@ -76,7 +76,7 @@ yours.
 ```json
 {
   "registries": {
-    "@kit": "https://protokit-docs.empty-math-d572.workers.dev/r/web/{name}.json"
+    "@kit": "https://halftonedesignsystem.com/r/web/{name}.json"
   }
 }
 ```
@@ -96,8 +96,8 @@ them.
 Clone the whole monorepo for a client project that needs mobile and web on one brand:
 
 ```bash
-git clone https://github.com/itsHendri/protokit.git
-cd protokit && npm install
+git clone https://github.com/itsHendri/halftone.git
+cd halftone && npm install
 npm run ios          # the native kit
 npm run web:dev      # the web kit, http://localhost:3100
 ```

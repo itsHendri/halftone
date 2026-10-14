@@ -1,5 +1,5 @@
 'use client';
-import { applyRecipe, type Theme } from '@itshendri/kit-tokens/theme';
+import { applyRecipe, type Theme } from '@halftone/tokens/theme';
 import { CheckIcon, CopyIcon, DownloadIcon } from 'lucide-react';
 import * as React from 'react';
 import kitJson from '../../../../kit.json';
@@ -60,7 +60,7 @@ export function ExportPanel({ theme }: { theme: Theme }) {
     <div className="flex flex-col gap-4">
       <CopyRow label="Theme code" value={theme.code} />
       <CopyRow label="Ask your coding agent" value={c.prompt} mono={false} />
-      <CopyRow label="In the Protokit repo" value={c.monorepo} />
+      <CopyRow label="In the Halftone repo" value={c.monorepo} />
       <CopyRow label="In a kit you copied out" value={c.app} />
       <CopyRow label="Share link" value={c.url} />
       <button

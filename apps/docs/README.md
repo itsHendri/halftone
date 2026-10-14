@@ -1,4 +1,4 @@
-# Protokit docs site
+# Halftone docs site
 
 How the kits work, setup, and every component live in a phone or browser frame. Next.js 16 + Fumadocs 16, styled with
 the kit's own tokens, built as a fully static site and served by Cloudflare as static assets (no Worker
@@ -43,7 +43,7 @@ then `next build`, then a check that it all landed in `out/`.
 ## Deploy (Cloudflare Workers, static assets)
 
 One-time, in the Cloudflare dashboard: **Workers & Pages → Create → Import a repository**, pick
-`itsHendri/protokit`, then:
+`itsHendri/halftone`, then:
 
 | Setting | Value |
 |---|---|
