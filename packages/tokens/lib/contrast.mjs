@@ -75,7 +75,7 @@ export const TEXT_TINTS = [0.05, 0.1, 0.15, 0.2];
  * `bg-success/15`) and still clear AA in both themes: `{ primary: 0.05, destructive: 0, … }`, where 0
  * means never. A different pairing from 3 above (the tone on the page) and 4 (an icon, 3:1): a colour
  * that reads fine on white loses contrast fast on its own tint. Not a gate on the palette, because the
- * kit can always put `text-foreground` on a tint; `kit-tokens check` holds the source to these limits.
+ * kit can always put `text-foreground` on a tint; `halftone-tokens check` holds the source to these limits.
  */
 export function textOnTintLimits(colors) {
   const modes = ['light', 'dark'].map((mode) => Object.fromEntries(colors.map((c) => [c.name, c[mode]])));

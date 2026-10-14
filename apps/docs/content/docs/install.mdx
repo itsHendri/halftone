@@ -52,14 +52,14 @@ Add kit components one at a time through a [shadcn registry](https://ui.shadcn.c
 ```json
 {
   "registries": {
-    "@kit-native": "https://halftonedesignsystem.com/r/native/{name}.json"
+    "@halftone-native": "https://halftonedesignsystem.com/r/native/{name}.json"
   }
 }
 ```
 
 ```bash
-npx shadcn@latest add @kit-native/theme @kit-native/lib-theme-context
-npx shadcn@latest add @kit-native/list-row @kit-native/sheet
+npx shadcn@latest add @halftone-native/theme @halftone-native/lib-theme-context
+npx shadcn@latest add @halftone-native/list-row @halftone-native/sheet
 npx expo install --fix
 ```
 
@@ -76,14 +76,14 @@ yours.
 ```json
 {
   "registries": {
-    "@kit": "https://halftonedesignsystem.com/r/web/{name}.json"
+    "@halftone-web": "https://halftonedesignsystem.com/r/web/{name}.json"
   }
 }
 ```
 
 ```bash
-npx shadcn@latest add @kit/theme
-npx shadcn@latest add @kit/data-table @kit/approval-card
+npx shadcn@latest add @halftone-web/theme
+npx shadcn@latest add @halftone-web/data-table @halftone-web/approval-card
 ```
 
 Components the kit did not change install from shadcn itself (`npx shadcn@latest add dialog`). The kit's

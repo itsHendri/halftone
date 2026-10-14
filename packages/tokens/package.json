@@ -20,7 +20,7 @@
     "wcag"
   ],
   "bin": {
-    "kit-tokens": "cli.mjs"
+    "halftone-tokens": "cli.mjs"
   },
   "exports": {
     ".": "./cli.mjs",

@@ -28,7 +28,7 @@ registry/               components.ts: what the kit ships (metadata) → DESIGN_
 components/devkit/      Kitchen Sink: demos keyed by registry id (sections/<category>.tsx, sections/kit-<category>.tsx)
 components/shop/, components/habits/, components/northwind/  sample data + stores. Go with `npm run eject-samples`.
 lib/                    theme.ts (generated), theme-context, embed (docs iframe mode), haptics, utils(cn)
-tokens/                 tokens.json (edit), tokens.config.json (outputs), generated/ — built by `kit-tokens` (@halftone/tokens)
+tokens/                 tokens.json (edit), tokens.config.json (outputs), generated/ — built by `halftone-tokens` (@halftone/tokens)
 DESIGN.md, llms.txt     GENERATED agent-facing summaries (tokens:build, registry:build)
 .claude/skills/         add-component, apply-theme, qc-pass, transcript-to-prototype
 .claude/launch.json     preview configs: kit-web (port 8090) and kit-ios (port 8091)
@@ -48,7 +48,7 @@ npm run web            # expo start --web
 npm run typecheck && npm run lint -- --max-warnings 0   # CI runs these plus tokens:build and export:web
 npm run tokens:build   # after editing tokens/tokens.json (fails if any pairing drops below WCAG AA)
 npm run registry:build # after editing registry/components.ts: DESIGN_SYSTEM.md tables, llms.txt, index
-npm run tokens:check && npm run registry:build -- --check   # what CI checks (plus the kit-tokens tests in the monorepo)
+npm run tokens:check && npm run registry:build -- --check   # what CI checks (plus the halftone-tokens tests in the monorepo)
 npm run eject-samples  # delete the shop, habits and Northwind samples, their stores and every reference
 npm run share -- "msg" # EAS Update to the main channel, prints the links
 npm run export:web && eas deploy   # hosted web preview URL
@@ -92,9 +92,9 @@ npx expo run:ios       # build + install the dev client on the simulator (needs 
 - **Web link for clients:** `npm run export:web && eas deploy` → immutable preview URL. `web.output` is `single`
   so deep links resolve.
 - **Re-brand:** pick a theme on the docs site (theme bar or `/themes`) and apply its code with the `apply-theme`
-  skill: `npx kit-tokens theme apply <theme-code|preset>` (in the monorepo, `npm run theme:apply -- <code>` at the
+  skill: `npx halftone-tokens theme apply <theme-code|preset>` (in the monorepo, `npm run theme:apply -- <code>` at the
   root). It rewrites only the theme's paths in `tokens/tokens.json` (colours, radius, fonts, depth, density, border,
-  icon stroke, typeset), fixes contrast itself and records the recipe (`kit-tokens theme show`). Editing tokens.json by hand
+  icon stroke, typeset), fixes contrast itself and records the recipe (`halftone-tokens theme show`). Editing tokens.json by hand
   still works: `tokens:build` refuses any pairing below 4.5:1 and prints the ratio. Then set `name`/`slug`/`scheme`
   in `app.json` and `APP_ID` in `.env.local`, and replace `assets/images/*`.
 

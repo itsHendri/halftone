@@ -1,5 +1,5 @@
 /**
- * `kit-tokens theme …` — commit a theme from the docs picker into tokens.json.
+ * `halftone-tokens theme …` — commit a theme from the docs picker into tokens.json.
  *
  *   theme apply <code|preset|recipe.json> [--dry-run] [--force]
  *        write the theme into tokens.json (only the paths a theme owns) and rebuild
@@ -27,7 +27,7 @@ import {
 } from './theme/index.mjs';
 
 const fail = (message, code = 1) => {
-  console.error(`kit-tokens theme: ${message}`);
+  console.error(`halftone-tokens theme: ${message}`);
   process.exit(code);
 };
 
@@ -48,7 +48,7 @@ function readRecipe(arg, root) {
 }
 
 const describe = (input) => {
-  // A recipe recorded by an older kit-tokens has no typeset: it gets the defaults.
+  // A recipe recorded by an older halftone-tokens has no typeset: it gets the defaults.
   const recipe = normalizeRecipe(input);
   const font = (id) => {
     const f = fontById(id);
@@ -103,7 +103,7 @@ export async function themeCommand({ positional, flags, root, sourcePath, config
   if (sub === 'show') {
     const status = themeStatus(tokens());
     if (!status.applied) {
-      console.log('No theme recorded in tokens.json. Apply one with `kit-tokens theme apply <code|preset>`.');
+      console.log('No theme recorded in tokens.json. Apply one with `halftone-tokens theme apply <code|preset>`.');
       if (flags.check) process.exit(0);
       return;
     }

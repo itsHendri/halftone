@@ -12,7 +12,7 @@ _Last updated: 2026-10-07_
 - **Tier 2 ports** from the old kit: Carousel, Lightbox, DataTable, StatusTimeline, ProfileHeader, OnboardingSlide,
   PermissionPrompt, SettingsGroup, Breadcrumb, Pagination, ChipInput, AvatarStack, StarRating, TimeRangePicker,
   CountrySelect (needs country data), Drawer, Coachmark.
-- **Figma:** `kit-tokens figma` (`npm run tokens:figma`) (one-way Variables push with code syntax) and Code Connect once the component
+- **Figma:** `halftone-tokens figma` (`npm run tokens:figma`) (one-way Variables push with code syntax) and Code Connect once the component
   set is stable.
 
 ## Component gap analysis (vs. Material 3, HIG, gluestack, HeroUI — refreshed 2026-10-07)
@@ -44,7 +44,7 @@ need them:
   horizontal scroll rows in that section are scrollable regions with nothing focusable; Feedback › `Progress` (the bar)
   has no name. On iOS, `RadioGroupItem` and `Switch` are named by their Label only on web and Android
   (`aria-labelledby`); VoiceOver reads the Label as its own element. A destructive menu item on its
-  pressed/focused tint is 4.14:1 in light (shadcn's pattern, same in the web kit). The kit-tokens contrast gate
+  pressed/focused tint is 4.14:1 in light (shadcn's pattern, same in the web kit). The halftone-tokens contrast gate
   could check `X` text on `X/15`; the kit puts no status text on its own tint.
 - `Sheet` exit is a plain fade (RN Modal); a slide-out needs a mounted-state dance the React Compiler rules dislike.
 - Haptics/blur only verified on the simulator; feel on a physical device still to confirm.

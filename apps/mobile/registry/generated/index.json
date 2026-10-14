@@ -82,7 +82,7 @@
         "destructive",
         "loading"
       ],
-      "install": "@kit-native/button"
+      "install": "@halftone-native/button"
     },
     {
       "id": "toggle",
@@ -100,7 +100,7 @@
         "pressed",
         "two-state button"
       ],
-      "install": "@kit-native/toggle"
+      "install": "@halftone-native/toggle"
     },
     {
       "id": "toggle-group",
@@ -119,7 +119,7 @@
         "segmented",
         "multi select buttons"
       ],
-      "install": "@kit-native/toggle-group"
+      "install": "@halftone-native/toggle-group"
     },
     {
       "id": "floating-button",
@@ -141,7 +141,7 @@
         "extended",
         "add button"
       ],
-      "install": "@kit-native/floating-button"
+      "install": "@halftone-native/floating-button"
     },
     {
       "id": "icon-badge",
@@ -163,7 +163,7 @@
         "unread count",
         "icon button"
       ],
-      "install": "@kit-native/icon-badge"
+      "install": "@halftone-native/icon-badge"
     },
     {
       "id": "swipe-to-confirm",
@@ -184,7 +184,7 @@
         "commit",
         "high stakes"
       ],
-      "install": "@kit-native/swipe-to-confirm"
+      "install": "@halftone-native/swipe-to-confirm"
     },
     {
       "id": "action-grid",
@@ -205,7 +205,7 @@
         "tiles",
         "icon buttons"
       ],
-      "install": "@kit-native/action-grid"
+      "install": "@halftone-native/action-grid"
     },
     {
       "id": "input",
@@ -225,7 +225,7 @@
         "textfield",
         "form"
       ],
-      "install": "@kit-native/input"
+      "install": "@halftone-native/input"
     },
     {
       "id": "label",
@@ -239,7 +239,7 @@
       ],
       "notes": "`htmlFor` · own `onPress` on native",
       "preview": false,
-      "install": "@kit-native/label"
+      "install": "@halftone-native/label"
     },
     {
       "id": "textarea",
@@ -257,7 +257,7 @@
         "multiline",
         "message"
       ],
-      "install": "@kit-native/textarea"
+      "install": "@halftone-native/textarea"
     },
     {
       "id": "checkbox",
@@ -276,7 +276,7 @@
         "tick",
         "check"
       ],
-      "install": "@kit-native/checkbox"
+      "install": "@halftone-native/checkbox"
     },
     {
       "id": "radio-group",
@@ -294,7 +294,7 @@
         "single choice",
         "option"
       ],
-      "install": "@kit-native/radio-group"
+      "install": "@halftone-native/radio-group"
     },
     {
       "id": "switch",
@@ -313,7 +313,7 @@
         "toggle",
         "on off"
       ],
-      "install": "@kit-native/switch"
+      "install": "@halftone-native/switch"
     },
     {
       "id": "select",
@@ -333,7 +333,7 @@
         "picker",
         "menu"
       ],
-      "install": "@kit-native/select"
+      "install": "@halftone-native/select"
     },
     {
       "id": "filter-chip",
@@ -354,7 +354,7 @@
         "tag filter",
         "pill"
       ],
-      "install": "@kit-native/filter-chip"
+      "install": "@halftone-native/filter-chip"
     },
     {
       "id": "segmented-control",
@@ -374,7 +374,7 @@
         "ios",
         "switcher"
       ],
-      "install": "@kit-native/segmented-control"
+      "install": "@halftone-native/segmented-control"
     },
     {
       "id": "search-field",
@@ -392,7 +392,7 @@
         "search bar",
         "find"
       ],
-      "install": "@kit-native/search-field"
+      "install": "@halftone-native/search-field"
     },
     {
       "id": "quantity-stepper",
@@ -411,7 +411,7 @@
         "counter",
         "increment"
       ],
-      "install": "@kit-native/quantity-stepper"
+      "install": "@halftone-native/quantity-stepper"
     },
     {
       "id": "rating",
@@ -432,7 +432,7 @@
         "score",
         "feedback"
       ],
-      "install": "@kit-native/rating"
+      "install": "@halftone-native/rating"
     },
     {
       "id": "amount-input",
@@ -454,7 +454,7 @@
         "hero field",
         "large number"
       ],
-      "install": "@kit-native/amount-input"
+      "install": "@halftone-native/amount-input"
     },
     {
       "id": "numeric-keypad",
@@ -474,7 +474,7 @@
         "pin pad",
         "digits"
       ],
-      "install": "@kit-native/numeric-keypad"
+      "install": "@halftone-native/numeric-keypad"
     },
     {
       "id": "otp-input",
@@ -496,7 +496,7 @@
         "2fa",
         "passcode"
       ],
-      "install": "@kit-native/otp-input"
+      "install": "@halftone-native/otp-input"
     },
     {
       "id": "password-input",
@@ -515,7 +515,7 @@
         "show hide",
         "login"
       ],
-      "install": "@kit-native/password-input"
+      "install": "@halftone-native/password-input"
     },
     {
       "id": "selectable-card",
@@ -536,7 +536,7 @@
         "plan",
         "choice"
       ],
-      "install": "@kit-native/selectable-card"
+      "install": "@halftone-native/selectable-card"
     },
     {
       "id": "slider",
@@ -555,7 +555,7 @@
         "drag",
         "percentage"
       ],
-      "install": "@kit-native/slider"
+      "install": "@halftone-native/slider"
     },
     {
       "id": "date-picker",
@@ -574,7 +574,7 @@
         "date",
         "calendar field"
       ],
-      "install": "@kit-native/date-picker"
+      "install": "@halftone-native/date-picker"
     },
     {
       "id": "calendar",
@@ -592,7 +592,7 @@
         "month",
         "day grid"
       ],
-      "install": "@kit-native/calendar"
+      "install": "@halftone-native/calendar"
     },
     {
       "id": "range-selector",
@@ -613,7 +613,7 @@
         "1D 1W 1M",
         "period"
       ],
-      "install": "@kit-native/range-selector"
+      "install": "@halftone-native/range-selector"
     },
     {
       "id": "tabs",
@@ -633,7 +633,7 @@
         "tab bar",
         "content switch"
       ],
-      "install": "@kit-native/tabs"
+      "install": "@halftone-native/tabs"
     },
     {
       "id": "menubar",
@@ -653,7 +653,7 @@
         "toolbar",
         "desktop"
       ],
-      "install": "@kit-native/menubar"
+      "install": "@halftone-native/menubar"
     },
     {
       "id": "tab-bar",
@@ -677,7 +677,7 @@
         "navigation bar",
         "tab icon"
       ],
-      "install": "@kit-native/tab-bar"
+      "install": "@halftone-native/tab-bar"
     },
     {
       "id": "kit-chip",
@@ -711,7 +711,7 @@
         "wizard",
         "onboarding progress"
       ],
-      "install": "@kit-native/stepper"
+      "install": "@halftone-native/stepper"
     },
     {
       "id": "section-header",
@@ -731,7 +731,7 @@
         "see all",
         "heading row"
       ],
-      "install": "@kit-native/section-header"
+      "install": "@halftone-native/section-header"
     },
     {
       "id": "screen-header",
@@ -752,7 +752,7 @@
         "hero title",
         "intro"
       ],
-      "install": "@kit-native/screen-header"
+      "install": "@halftone-native/screen-header"
     },
     {
       "id": "pager-dots",
@@ -773,7 +773,7 @@
         "onboarding slides",
         "full-width pager"
       ],
-      "install": "@kit-native/pager-dots"
+      "install": "@halftone-native/pager-dots"
     },
     {
       "id": "horizontal-pager",
@@ -794,7 +794,7 @@
         "slides",
         "banner"
       ],
-      "install": "@kit-native/horizontal-pager"
+      "install": "@halftone-native/horizontal-pager"
     },
     {
       "id": "text",
@@ -808,7 +808,7 @@
       ],
       "notes": "the only Text · the scale is previewed in **Foundations › Typography**, not Components",
       "preview": false,
-      "install": "@kit-native/text"
+      "install": "@halftone-native/text"
     },
     {
       "id": "avatar",
@@ -828,7 +828,7 @@
         "user",
         "initials"
       ],
-      "install": "@kit-native/avatar"
+      "install": "@halftone-native/avatar"
     },
     {
       "id": "avatar-group",
@@ -848,7 +848,7 @@
         "stack",
         "+n"
       ],
-      "install": "@kit-native/avatar-group"
+      "install": "@halftone-native/avatar-group"
     },
     {
       "id": "badge",
@@ -870,7 +870,7 @@
         "count",
         "status"
       ],
-      "install": "@kit-native/badge"
+      "install": "@halftone-native/badge"
     },
     {
       "id": "separator",
@@ -911,7 +911,7 @@
         "menu item",
         "list item"
       ],
-      "install": "@kit-native/list-row"
+      "install": "@halftone-native/list-row"
     },
     {
       "id": "list-group",
@@ -933,7 +933,7 @@
         "plain list",
         "choice rows"
       ],
-      "install": "@kit-native/list-group"
+      "install": "@halftone-native/list-group"
     },
     {
       "id": "icon-circle",
@@ -953,7 +953,7 @@
         "avatar icon",
         "leading icon"
       ],
-      "install": "@kit-native/icon-circle"
+      "install": "@halftone-native/icon-circle"
     },
     {
       "id": "summary-card",
@@ -975,7 +975,7 @@
         "summary",
         "confirmation"
       ],
-      "install": "@kit-native/summary-card"
+      "install": "@halftone-native/summary-card"
     },
     {
       "id": "stat-tile",
@@ -994,7 +994,7 @@
         "metric",
         "dashboard"
       ],
-      "install": "@kit-native/stat-tile"
+      "install": "@halftone-native/stat-tile"
     },
     {
       "id": "percent-change",
@@ -1013,7 +1013,7 @@
         "trend",
         "up down"
       ],
-      "install": "@kit-native/percent-change"
+      "install": "@halftone-native/percent-change"
     },
     {
       "id": "progress-ring",
@@ -1033,7 +1033,7 @@
         "percent",
         "donut"
       ],
-      "install": "@kit-native/progress-ring"
+      "install": "@halftone-native/progress-ring"
     },
     {
       "id": "status-dot",
@@ -1052,7 +1052,7 @@
         "online",
         "presence"
       ],
-      "install": "@kit-native/status-dot"
+      "install": "@halftone-native/status-dot"
     },
     {
       "id": "timeline",
@@ -1073,7 +1073,7 @@
         "history",
         "progress"
       ],
-      "install": "@kit-native/timeline"
+      "install": "@halftone-native/timeline"
     },
     {
       "id": "line-chart",
@@ -1094,7 +1094,7 @@
         "time series",
         "graph"
       ],
-      "install": "@kit-native/line-chart"
+      "install": "@halftone-native/line-chart"
     },
     {
       "id": "bar-chart",
@@ -1113,7 +1113,7 @@
         "histogram",
         "weekly"
       ],
-      "install": "@kit-native/bar-chart"
+      "install": "@halftone-native/bar-chart"
     },
     {
       "id": "donut-chart",
@@ -1134,7 +1134,7 @@
         "allocation",
         "breakdown"
       ],
-      "install": "@kit-native/donut-chart"
+      "install": "@halftone-native/donut-chart"
     },
     {
       "id": "value-header",
@@ -1157,7 +1157,7 @@
         "mask",
         "hide balance"
       ],
-      "install": "@kit-native/value-header"
+      "install": "@halftone-native/value-header"
     },
     {
       "id": "alert",
@@ -1179,7 +1179,7 @@
         "error",
         "success"
       ],
-      "install": "@kit-native/alert"
+      "install": "@halftone-native/alert"
     },
     {
       "id": "progress",
@@ -1199,7 +1199,7 @@
         "percent",
         "determinate"
       ],
-      "install": "@kit-native/progress"
+      "install": "@halftone-native/progress"
     },
     {
       "id": "skeleton",
@@ -1237,7 +1237,7 @@
         "hint",
         "hover"
       ],
-      "install": "@kit-native/tooltip"
+      "install": "@halftone-native/tooltip"
     },
     {
       "id": "toast",
@@ -1259,7 +1259,7 @@
         "message",
         "copied"
       ],
-      "install": "@kit-native/toast"
+      "install": "@halftone-native/toast"
     },
     {
       "id": "spinner",
@@ -1277,7 +1277,7 @@
         "loading",
         "activity indicator"
       ],
-      "install": "@kit-native/spinner"
+      "install": "@halftone-native/spinner"
     },
     {
       "id": "empty-state",
@@ -1296,7 +1296,7 @@
         "nothing here",
         "zero state"
       ],
-      "install": "@kit-native/empty-state"
+      "install": "@halftone-native/empty-state"
     },
     {
       "id": "success-screen",
@@ -1317,7 +1317,7 @@
         "checkmark",
         "complete"
       ],
-      "install": "@kit-native/success-screen"
+      "install": "@halftone-native/success-screen"
     },
     {
       "id": "card",
@@ -1337,7 +1337,7 @@
         "container",
         "panel"
       ],
-      "install": "@kit-native/card"
+      "install": "@halftone-native/card"
     },
     {
       "id": "accordion",
@@ -1356,7 +1356,7 @@
         "expand",
         "faq"
       ],
-      "install": "@kit-native/accordion"
+      "install": "@halftone-native/accordion"
     },
     {
       "id": "collapsible",
@@ -1394,7 +1394,7 @@
         "footer actions",
         "safe area"
       ],
-      "install": "@kit-native/sticky-bottom-bar"
+      "install": "@halftone-native/sticky-bottom-bar"
     },
     {
       "id": "promo-card",
@@ -1416,7 +1416,7 @@
         "offer",
         "nudge"
       ],
-      "install": "@kit-native/promo-card"
+      "install": "@halftone-native/promo-card"
     },
     {
       "id": "footnote",
@@ -1438,7 +1438,7 @@
         "terms",
         "learn more"
       ],
-      "install": "@kit-native/footnote"
+      "install": "@halftone-native/footnote"
     },
     {
       "id": "prose",
@@ -1460,7 +1460,7 @@
         "typeset",
         "body copy"
       ],
-      "install": "@kit-native/prose"
+      "install": "@halftone-native/prose"
     },
     {
       "id": "dialog",
@@ -1479,7 +1479,7 @@
         "modal",
         "form modal"
       ],
-      "install": "@kit-native/dialog"
+      "install": "@halftone-native/dialog"
     },
     {
       "id": "alert-dialog",
@@ -1498,7 +1498,7 @@
         "destructive confirmation",
         "are you sure"
       ],
-      "install": "@kit-native/alert-dialog"
+      "install": "@halftone-native/alert-dialog"
     },
     {
       "id": "popover",
@@ -1517,7 +1517,7 @@
         "bubble",
         "anchored"
       ],
-      "install": "@kit-native/popover"
+      "install": "@halftone-native/popover"
     },
     {
       "id": "dropdown-menu",
@@ -1536,7 +1536,7 @@
         "actions",
         "more"
       ],
-      "install": "@kit-native/dropdown-menu"
+      "install": "@halftone-native/dropdown-menu"
     },
     {
       "id": "context-menu",
@@ -1554,7 +1554,7 @@
         "long press",
         "right click"
       ],
-      "install": "@kit-native/context-menu"
+      "install": "@halftone-native/context-menu"
     },
     {
       "id": "hover-card",
@@ -1573,7 +1573,7 @@
         "preview",
         "profile card"
       ],
-      "install": "@kit-native/hover-card"
+      "install": "@halftone-native/hover-card"
     },
     {
       "id": "sheet",
@@ -1593,7 +1593,7 @@
         "drawer",
         "modal sheet"
       ],
-      "install": "@kit-native/sheet"
+      "install": "@halftone-native/sheet"
     },
     {
       "id": "option-sheet",
@@ -1612,7 +1612,7 @@
         "select sheet",
         "choose one"
       ],
-      "install": "@kit-native/sheet"
+      "install": "@halftone-native/sheet"
     },
     {
       "id": "action-sheet",
@@ -1631,7 +1631,7 @@
         "more menu",
         "share delete"
       ],
-      "install": "@kit-native/sheet"
+      "install": "@halftone-native/sheet"
     },
     {
       "id": "icon",
@@ -1651,7 +1651,7 @@
         "glyph",
         "symbol"
       ],
-      "install": "@kit-native/icon"
+      "install": "@halftone-native/icon"
     },
     {
       "id": "image-tile",
@@ -1673,7 +1673,7 @@
         "placeholder",
         "cover"
       ],
-      "install": "@kit-native/image-tile"
+      "install": "@halftone-native/image-tile"
     },
     {
       "id": "aspect-ratio",
@@ -1714,7 +1714,7 @@
         "mock image",
         "abstract"
       ],
-      "install": "@kit-native/placeholder"
+      "install": "@halftone-native/placeholder"
     },
     {
       "id": "spot",
@@ -1735,7 +1735,7 @@
         "hero icon",
         "empty state art"
       ],
-      "install": "@kit-native/spot"
+      "install": "@halftone-native/spot"
     },
     {
       "id": "pricing-card",
@@ -1757,7 +1757,7 @@
         "paywall",
         "subscription"
       ],
-      "install": "@kit-native/pricing-card"
+      "install": "@halftone-native/pricing-card"
     },
     {
       "id": "chat-message",
@@ -1777,7 +1777,7 @@
         "conversation",
         "turn"
       ],
-      "install": "@kit-native/chat-message"
+      "install": "@halftone-native/chat-message"
     },
     {
       "id": "chat-composer",
@@ -1800,7 +1800,7 @@
         "upload",
         "file"
       ],
-      "install": "@kit-native/chat-composer"
+      "install": "@halftone-native/chat-composer"
     },
     {
       "id": "attachment-chip",
@@ -1821,7 +1821,7 @@
         "upload",
         "attachment"
       ],
-      "install": "@kit-native/attachment-chip"
+      "install": "@halftone-native/attachment-chip"
     },
     {
       "id": "chat-thread-list",
@@ -1842,7 +1842,7 @@
         "chat sidebar",
         "threads"
       ],
-      "install": "@kit-native/chat-thread-list"
+      "install": "@halftone-native/chat-thread-list"
     },
     {
       "id": "sources",
@@ -1865,7 +1865,7 @@
         "footnotes",
         "grounding"
       ],
-      "install": "@kit-native/sources"
+      "install": "@halftone-native/sources"
     },
     {
       "id": "follow-up-suggestions",
@@ -1886,7 +1886,7 @@
         "next questions",
         "chips"
       ],
-      "install": "@kit-native/follow-up-suggestions"
+      "install": "@halftone-native/follow-up-suggestions"
     },
     {
       "id": "streaming-text",
@@ -1906,7 +1906,7 @@
         "stream",
         "typewriter"
       ],
-      "install": "@kit-native/streaming-text"
+      "install": "@halftone-native/streaming-text"
     },
     {
       "id": "thinking-indicator",
@@ -1924,7 +1924,7 @@
         "loading",
         "typing indicator"
       ],
-      "install": "@kit-native/thinking-indicator"
+      "install": "@halftone-native/thinking-indicator"
     },
     {
       "id": "tool-call-card",
@@ -1944,7 +1944,7 @@
         "function call",
         "action"
       ],
-      "install": "@kit-native/tool-call-card"
+      "install": "@halftone-native/tool-call-card"
     },
     {
       "id": "approval-card",
@@ -1964,7 +1964,7 @@
         "human in the loop",
         "permission"
       ],
-      "install": "@kit-native/approval-card"
+      "install": "@halftone-native/approval-card"
     },
     {
       "id": "photo-capture",
@@ -1987,7 +1987,7 @@
         "avatar photo",
         "attachment"
       ],
-      "install": "@kit-native/photo-capture"
+      "install": "@halftone-native/photo-capture"
     },
     {
       "id": "code-scanner",
@@ -2008,7 +2008,7 @@
         "scan",
         "camera viewfinder"
       ],
-      "install": "@kit-native/code-scanner"
+      "install": "@halftone-native/code-scanner"
     },
     {
       "id": "biometric-gate",
@@ -2032,7 +2032,7 @@
         "unlock",
         "biometrics"
       ],
-      "install": "@kit-native/biometric-gate"
+      "install": "@halftone-native/biometric-gate"
     },
     {
       "id": "permission-primer",
@@ -2054,7 +2054,7 @@
         "ask",
         "privacy"
       ],
-      "install": "@kit-native/permission-primer"
+      "install": "@halftone-native/permission-primer"
     },
     {
       "id": "share",
@@ -2075,7 +2075,7 @@
         "export",
         "copy link"
       ],
-      "install": "@kit-native/share"
+      "install": "@halftone-native/share"
     },
     {
       "id": "notify",
@@ -2098,7 +2098,7 @@
         "banner",
         "reminder"
       ],
-      "install": "@kit-native/notify"
+      "install": "@halftone-native/notify"
     }
   ]
 }

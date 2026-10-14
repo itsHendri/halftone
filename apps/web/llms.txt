@@ -202,6 +202,6 @@ primary up to /5, success up to /5, warning up to /5, info up to /15, destructiv
 - Border `border` 1px · icon stroke 2 (an Icon's `strokeWidth` is relative to 2)
 - Fonts: headings system, body system, mono system (applied by Text; `font-heading` makes any Text a heading, `font-mono` code and figures)
 - Typeset: body 16px, leading 1.75; every `text-*` size below scales by 1
-- Theme: `ht1-29B3XC60003T` (`npx kit-tokens theme show`)
+- Theme: `ht1-29B3XC60003T` (`npx halftone-tokens theme show`)
 - Font sizes (`text-*`): xs 12px · sm 14px · base 16px · lg 18px · xl 20px · 2xl 24px · 3xl 30px · 4xl 36px
 - Durations: fast 150ms · base 200ms · slow 300ms

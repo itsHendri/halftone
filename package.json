@@ -26,7 +26,7 @@
     "docs:preview": "npm run preview -w apps/docs",
     "web:dev": "npm run dev -w apps/web",
     "tokens:sync": "node scripts/tokens-sync.mjs",
-    "theme": "npm exec -w apps/mobile -- kit-tokens theme",
+    "theme": "npm exec -w apps/mobile -- halftone-tokens theme",
     "theme:apply": "node scripts/theme-apply.mjs"
   },
   "devDependencies": {

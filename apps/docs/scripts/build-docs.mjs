@@ -2,7 +2,7 @@
 /**
  * The whole site, ready for Cloudflare: `npm run build` (in apps/docs) → out/.
  *
- *   1. tokens.css from the kit's tokens.json (kit-tokens) and the generated MDX pages
+ *   1. tokens.css from the kit's tokens.json (halftone-tokens) and the generated MDX pages
  *   2. the mobile kit's web export, under the sub-path /m (embed mode for the phone frames)
  *   3. the web kit's static export, under /w (the browser frames)
  *   4. the shadcn registries: Expo apps at /r/native/*.json, Next.js apps at /r/web/*.json
@@ -26,7 +26,7 @@ const run = (cmd, args, cwd, env = {}) =>
 const step = (label) => console.log(`\n▸ ${label}`);
 
 step('tokens and generated content');
-run('npx', ['kit-tokens', 'build'], docs);
+run('npx', ['halftone-tokens', 'build'], docs);
 run('node', ['scripts/prepare-content.mjs'], docs);
 
 step(`mobile kit web export → public${KIT_PATH}`);

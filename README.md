@@ -26,7 +26,7 @@ TypeScript theme each app reads, and the build refuses any palette that falls be
    *Not yet:* a single copied kit installs `@halftone/tokens` from npm, which is not published yet.
    Until it is, clone the repo.
 2. **Add kit components to an existing Expo app** that uses react-native-reusables, through the shadcn
-   registry: `npx shadcn add @kit-native/<component>` (see the [install guide](https://halftonedesignsystem.com/docs/install/)).
+   registry: `npx shadcn add @halftone-native/<component>` (see the [install guide](https://halftonedesignsystem.com/docs/install/)).
 3. **Let your agent do it.** Point Claude Code or Cursor at the kit; it reads `AGENTS.md`,
    `DESIGN_SYSTEM.md` and `llms.txt` and builds only from what is registered.
 

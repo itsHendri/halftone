@@ -1,7 +1,7 @@
 /**
  * Commit a theme into a tokens.json object. Only the paths a theme owns are written; everything else
  * (status ramps, spacing, type sizes, motion, descriptions) is left exactly as it was. The recipe is
- * recorded under `$extensions["com.halftonedesignsystem.theme"]`, so the docs picker and `kit-tokens theme show`
+ * recorded under `$extensions["com.halftonedesignsystem.theme"]`, so the docs picker and `halftone-tokens theme show`
  * can tell which theme is applied, and whether anyone has hand-edited it since (drift).
  */
 import { generateTheme } from './generate.mjs';
@@ -91,10 +91,10 @@ export function themeStatus(tokens) {
   if (!record?.recipe) return { applied: false };
   const expected = ownedValues(generateTheme(record.recipe, tokens));
   const actual = Object.fromEntries(flatten(tokens).map((t) => [t.path.join('.'), t.$value]));
-  // A path the file doesn't have yet (a newer kit-tokens owns more) is not an edit; apply adds it.
+  // A path the file doesn't have yet (a newer halftone-tokens owns more) is not an edit; apply adds it.
   const drift = Object.entries(expected)
     .filter(([path, value]) => path in actual && JSON.stringify(actual[path]) !== JSON.stringify(value))
     .map(([path]) => path);
-  // Normalised: a recipe recorded by an older kit-tokens gets the axes it didn't have (the typeset).
+  // Normalised: a recipe recorded by an older halftone-tokens gets the axes it didn't have (the typeset).
   return { applied: true, code: record.code, recipe: normalizeRecipe(record.recipe), drift };
 }

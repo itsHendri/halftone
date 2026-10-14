@@ -33,7 +33,7 @@ npm run docs:preview        # serves out/ with Cloudflare's own rules, http://lo
 npm run check:links -w apps/docs
 ```
 
-`scripts/build-docs.mjs` does, in order: `kit-tokens build` (→ `app/tokens.css`), the generated pages
+`scripts/build-docs.mjs` does, in order: `halftone-tokens build` (→ `app/tokens.css`), the generated pages
 (`scripts/prepare-content.mjs`), the mobile kit's web export with `KIT_WEB_BASE_URL=/m` into `public/m`,
 its shadcn registry into `public/r/native`, the web kit's static export with `KIT_WEB_BASE_PATH=/w` into
 `public/w`, its registry into `public/r/web`, `_redirects` (one rule per mobile kit route; a blanket `/m/*`

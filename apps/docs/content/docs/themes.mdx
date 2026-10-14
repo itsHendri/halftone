@@ -50,7 +50,7 @@ before and after. A theme from the picker can never fail the build.
 - **In a kit you copied out**, from the app folder:
 
   ```bash
-  npx kit-tokens theme apply ht1-XXXXXXXXXXXX
+  npx halftone-tokens theme apply ht1-XXXXXXXXXXXX
   ```
 
 - **Share a link** (`/themes/?t=<code>`) to show someone the theme, or **download tokens.json** and drop it in.
@@ -58,14 +58,14 @@ before and after. A theme from the picker can never fail the build.
 `apply` only rewrites what a theme owns: the brand and neutral ramps, the semantic colours, radius, fonts,
 shadows, borders, icon stroke, control sizes and the typeset. Spacing, the base type scale, motion and your
 descriptions stay.
-It records the theme in `tokens.json`, so `kit-tokens theme show` (and each kit's Foundations page) can say
+It records the theme in `tokens.json`, so `halftone-tokens theme show` (and each kit's Foundations page) can say
 which theme is applied, and whether anyone has edited its tokens by hand since. `apply` won't overwrite hand
 edits without `--force`.
 
 ```bash
-npx kit-tokens theme presets     # the presets and their codes
-npx kit-tokens theme show        # the applied theme
-npx kit-tokens theme apply calm --dry-run
+npx halftone-tokens theme presets     # the presets and their codes
+npx halftone-tokens theme show        # the applied theme
+npx halftone-tokens theme apply calm --dry-run
 ```
 
 ## Codes

@@ -6,9 +6,9 @@ and the build refuses any palette that falls below WCAG AA.
 
 ```bash
 npm install -D @halftone/tokens
-npx kit-tokens build      # write every output in tokens/tokens.config.json
-npx kit-tokens check      # write nothing; exit 1 if an output is stale (CI)
-npx kit-tokens figma      # mirror the tokens into Figma Variables
+npx halftone-tokens build      # write every output in tokens/tokens.config.json
+npx halftone-tokens check      # write nothing; exit 1 if an output is stale (CI)
+npx halftone-tokens figma      # mirror the tokens into Figma Variables
 ```
 
 ## Inputs
@@ -43,7 +43,7 @@ npx kit-tokens figma      # mirror the tokens into Figma Variables
 | `registry-theme` | the theme as shadcn registry `cssVars`, native and web |
 | `design-md` | a [DESIGN.md](https://github.com/google-labs-code/design.md) (spec alpha) |
 | `llms` | a tokens section for `llms.txt` |
-| `figma` | the input `kit-tokens figma` pushes to Figma Variables |
+| `figma` | the input `halftone-tokens figma` pushes to Figma Variables |
 
 ## Guarantees
 
@@ -55,7 +55,7 @@ npx kit-tokens figma      # mirror the tokens into Figma Variables
   still clears AA in both themes, and writes it into `DESIGN.md` and the `llms` section
   (`primary up to /5, …, destructive never`). With `scan` set, `build` and `check` also read every class
   string in those folders and fail on a tone's text over a tint stronger than that, naming the file and line.
-  An element that holds only an icon (3:1) is exempt with a `kit-tokens-ignore tint-text` comment. A class
+  An element that holds only an icon (3:1) is exempt with a `halftone-tokens-ignore tint-text` comment. A class
   string has to contain both classes, so React Native's `View` > `Text` nesting is out of its reach;
   `DESIGN.md` states the rule for that case.
 - **No drift between platforms.** Every oklch value must render back to the same 8-bit hex as the source,

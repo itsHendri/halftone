@@ -15,7 +15,7 @@
  *          checksum (payload mod 127)               7     7   a typo is caught instead of making another theme
  *
  * encodeRecipe writes ht1 whenever it can, so a theme that doesn't touch the typeset keeps the code it
- * always had (and older kit-tokens can read it). The preset name is not in the code: a code is the theme,
+ * always had (and older halftone-tokens can read it). The preset name is not in the code: a code is the theme,
  * whichever preset it started from.
  */
 import { FONTS } from './fonts.mjs';
@@ -79,7 +79,7 @@ export function decodeRecipe(code) {
   const format = /^HT2/.test(clean) ? FORMATS.ht2 : FORMATS.ht1;
   const raw = clean.replace(/^HT[12]-?/, '').replace(/[IL]/g, '1').replace(/O/g, '0').replace(/-/g, '');
   if (!/^HT[12]/.test(clean) && /^HT\d/.test(clean)) {
-    throw new Error(`"${code}" is a newer theme code than this kit-tokens reads. Update @halftone/tokens.`);
+    throw new Error(`"${code}" is a newer theme code than this halftone-tokens reads. Update @halftone/tokens.`);
   }
   if (!new RegExp(`^[0-9A-HJKMNP-TV-Z]{${format.chars}}$`).test(raw)) {
     throw new Error(`"${code}" is not a theme code (expected ht1- and 12 characters, or ht2- and 16)`);
@@ -115,7 +115,7 @@ export function decodeRecipe(code) {
   const head = fields(LAYOUT);
   const brand = '#' + pull(24).toString(16).padStart(6, '0');
   const v = Number(bits);
-  if (v !== RECIPE_VERSION) throw new Error(`"${code}" is a version ${v} theme; this kit-tokens reads version ${RECIPE_VERSION}. Update @halftone/tokens.`);
+  if (v !== RECIPE_VERSION) throw new Error(`"${code}" is a version ${v} theme; this halftone-tokens reads version ${RECIPE_VERSION}. Update @halftone/tokens.`);
   return normalizeRecipe({ v, brand, ...head, font: { heading, body, ...(mono ? { mono } : {}) }, ...tail, ...typeset });
 }
 

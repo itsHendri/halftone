@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 /**
- * kit-tokens — turns tokens/tokens.json into everything an app reads.
+ * halftone-tokens — turns tokens/tokens.json into everything an app reads.
  *
- *   kit-tokens build    resolve, run the contrast gate, write every target in tokens.config.json
- *   kit-tokens check    same, but write nothing; exit 1 if any generated file is stale (CI)
- *   kit-tokens figma    mirror the tokens into Figma Variables (see push-figma.mjs)
- *   kit-tokens theme    apply, show or list themes (see lib/theme-cli.mjs)
- *   kit-tokens --version
+ *   halftone-tokens build    resolve, run the contrast gate, write every target in tokens.config.json
+ *   halftone-tokens check    same, but write nothing; exit 1 if any generated file is stale (CI)
+ *   halftone-tokens figma    mirror the tokens into Figma Variables (see push-figma.mjs)
+ *   halftone-tokens theme    apply, show or list themes (see lib/theme-cli.mjs)
+ *   halftone-tokens --version
  *
  *   --root <dir>        app root (default: cwd); every path in the config is relative to it
  *   --config <file>     default: tokens/tokens.config.json
@@ -54,13 +54,13 @@ export async function run(argv = process.argv.slice(2)) {
     return;
   }
   if (command !== 'build' && command !== 'check' && command !== 'theme') {
-    console.error(`kit-tokens: unknown command "${command}". Use build, check, theme or figma.`);
+    console.error(`halftone-tokens: unknown command "${command}". Use build, check, theme or figma.`);
     process.exit(2);
   }
 
   const configPath = join(root, flags.config ?? 'tokens/tokens.config.json');
   if (!existsSync(configPath)) {
-    console.error(`kit-tokens: no config at ${configPath}`);
+    console.error(`halftone-tokens: no config at ${configPath}`);
     process.exit(2);
   }
   const config = JSON.parse(readFileSync(configPath, 'utf8'));
@@ -81,7 +81,7 @@ export async function run(argv = process.argv.slice(2)) {
       `\ntokens:build FAILED — ${failures.length} colour pairing(s) below WCAG AA (${AA}:1):\n\n${failures.join('\n')}\n\n` +
         'Darken the fill, or flip its -foreground between neutral.0 and neutral.950.\n' +
         'A brightened accent (usually the dark theme) needs dark text, not white.\n' +
-        'Or let the theme generator fix it: `kit-tokens theme apply <code|preset>` keeps the hue and adjusts the lightness.\n'
+        'Or let the theme generator fix it: `halftone-tokens theme apply <code|preset>` keeps the hue and adjusts the lightness.\n'
     );
     process.exit(1);
   }
@@ -92,10 +92,10 @@ export async function run(argv = process.argv.slice(2)) {
     const problems = scanTintText(root, config.scan, limits);
     if (problems.length) {
       console.error(
-        `\nkit-tokens: ${problems.length} class string(s) put a tone's text on its own tint below WCAG AA (${AA}:1):\n\n${problems.join('\n')}\n\n` +
+        `\nhalftone-tokens: ${problems.length} class string(s) put a tone's text on its own tint below WCAG AA (${AA}:1):\n\n${problems.join('\n')}\n\n` +
           `This palette allows: ${describeTintLimits(limits)}.\n` +
           'Use text-foreground on the tint (let the tint, an icon or a dot carry the colour), or a lighter tint.\n' +
-          'An element that holds only an icon may keep its tone: add a `kit-tokens-ignore tint-text` comment.\n'
+          'An element that holds only an icon may keep its tone: add a `halftone-tokens-ignore tint-text` comment.\n'
       );
       process.exit(1);
     }
@@ -113,10 +113,10 @@ export async function run(argv = process.argv.slice(2)) {
       return !existsSync(path) || readFileSync(path, 'utf8') !== f.contents;
     });
     if (stale.length) {
-      console.error(`kit-tokens check: ${stale.length} generated file(s) out of date — run \`npm run tokens:build\`:\n${stale.map((f) => `  ${f.path}`).join('\n')}`);
+      console.error(`halftone-tokens check: ${stale.length} generated file(s) out of date — run \`npm run tokens:build\`:\n${stale.map((f) => `  ${f.path}`).join('\n')}`);
       process.exit(1);
     }
-    console.log(`kit-tokens check: ${files.length} files up to date · contrast AA ✓`);
+    console.log(`halftone-tokens check: ${files.length} files up to date · contrast AA ✓`);
     return;
   }
 

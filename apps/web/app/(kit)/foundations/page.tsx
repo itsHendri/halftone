@@ -22,9 +22,9 @@ const DEPTH: [string, string][] = [
 ];
 const fontName = (id: string) => (id === 'system' ? 'System' : id.split('-').map((w) => w[0].toUpperCase() + w.slice(1)).join(' '));
 
-/** The theme tokens.json was generated from. Themes are picked on the docs site and applied with kit-tokens. */
+/** The theme tokens.json was generated from. Themes are picked on the docs site and applied with halftone-tokens. */
 function ThemeSummary() {
-  if (!THEME_INFO) return <p className="text-muted-foreground text-sm">No theme recorded. Apply one with <code>npx kit-tokens theme apply &lt;code&gt;</code>.</p>;
+  if (!THEME_INFO) return <p className="text-muted-foreground text-sm">No theme recorded. Apply one with <code>npx halftone-tokens theme apply &lt;code&gt;</code>.</p>;
   const { recipe } = THEME_INFO;
   const rows: [string, string][] = [
     ['Neutral', recipe.neutral],
@@ -56,7 +56,7 @@ function ThemeSummary() {
         ))}
       </dl>
       <p className="text-muted-foreground text-xs">
-        Pick and preview themes on the docs site (/themes), then apply one: <code>npx kit-tokens theme apply &lt;code&gt;</code>.
+        Pick and preview themes on the docs site (/themes), then apply one: <code>npx halftone-tokens theme apply &lt;code&gt;</code>.
       </p>
     </div>
   );

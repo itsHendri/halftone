@@ -13,7 +13,7 @@ Engineering conventions (routing, state, workflows) live in `AGENTS.md`.
 Single source of truth: `tokens/tokens.json` (DTCG). `npm run tokens:build` regenerates
 `global.css` (CSS variables), `lib/theme.ts` (TS mirror), `tokens/generated/tailwind.theme.js`, the
 web theme `tokens/generated/web.css` (Tailwind 4 / shadcn, oklch) and `DESIGN.md`.
-Never edit the generated files. To re-brand a project, apply a theme (`npx kit-tokens theme apply <code>`, see
+Never edit the generated files. To re-brand a project, apply a theme (`npx halftone-tokens theme apply <code>`, see
 the `apply-theme` skill), or change `tokens.json` and rebuild.
 
 **The build enforces contrast.** Every `X` / `X-foreground` pairing, and muted text on every

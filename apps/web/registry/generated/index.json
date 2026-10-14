@@ -74,7 +74,7 @@
         "icon button",
         "destructive"
       ],
-      "install": "@kit/button"
+      "install": "@halftone-web/button"
     },
     {
       "id": "toggle",
@@ -135,7 +135,7 @@
         "extended",
         "add button"
       ],
-      "install": "@kit/floating-button"
+      "install": "@halftone-web/floating-button"
     },
     {
       "id": "icon-badge",
@@ -157,7 +157,7 @@
         "unread count",
         "icon button"
       ],
-      "install": "@kit/icon-badge"
+      "install": "@halftone-web/icon-badge"
     },
     {
       "id": "action-grid",
@@ -178,7 +178,7 @@
         "tiles",
         "icon buttons"
       ],
-      "install": "@kit/action-grid"
+      "install": "@halftone-web/action-grid"
     },
     {
       "id": "input",
@@ -311,7 +311,7 @@
         "due date",
         "deadline"
       ],
-      "install": "@kit/date-picker"
+      "install": "@halftone-web/date-picker"
     },
     {
       "id": "calendar",
@@ -332,7 +332,7 @@
         "date range",
         "availability"
       ],
-      "install": "@kit/calendar"
+      "install": "@halftone-web/calendar"
     },
     {
       "id": "slider",
@@ -349,7 +349,7 @@
       "aliases": [
         "range"
       ],
-      "install": "@kit/slider"
+      "install": "@halftone-web/slider"
     },
     {
       "id": "filter-chip",
@@ -370,7 +370,7 @@
         "tags",
         "filters"
       ],
-      "install": "@kit/filter-chip"
+      "install": "@halftone-web/filter-chip"
     },
     {
       "id": "segmented-control",
@@ -389,7 +389,7 @@
         "segments",
         "switcher"
       ],
-      "install": "@kit/segmented-control"
+      "install": "@halftone-web/segmented-control"
     },
     {
       "id": "search-field",
@@ -407,7 +407,7 @@
         "search",
         "filter box"
       ],
-      "install": "@kit/search-field"
+      "install": "@halftone-web/search-field"
     },
     {
       "id": "quantity-stepper",
@@ -425,7 +425,7 @@
         "counter",
         "stepper input"
       ],
-      "install": "@kit/quantity-stepper"
+      "install": "@halftone-web/quantity-stepper"
     },
     {
       "id": "rating",
@@ -444,7 +444,7 @@
         "stars",
         "review score"
       ],
-      "install": "@kit/rating"
+      "install": "@halftone-web/rating"
     },
     {
       "id": "amount-input",
@@ -463,7 +463,7 @@
         "money input",
         "currency field"
       ],
-      "install": "@kit/amount-input"
+      "install": "@halftone-web/amount-input"
     },
     {
       "id": "otp-input",
@@ -483,7 +483,7 @@
         "verification code",
         "pin"
       ],
-      "install": "@kit/otp-input"
+      "install": "@halftone-web/otp-input"
     },
     {
       "id": "password-input",
@@ -501,7 +501,7 @@
       "aliases": [
         "password"
       ],
-      "install": "@kit/password-input"
+      "install": "@halftone-web/password-input"
     },
     {
       "id": "selectable-card",
@@ -520,7 +520,7 @@
         "option card",
         "plan picker"
       ],
-      "install": "@kit/selectable-card"
+      "install": "@halftone-web/selectable-card"
     },
     {
       "id": "range-selector",
@@ -539,7 +539,7 @@
         "time range",
         "period picker"
       ],
-      "install": "@kit/range-selector"
+      "install": "@halftone-web/range-selector"
     },
     {
       "id": "app-shell",
@@ -560,7 +560,7 @@
         "navigation",
         "dashboard shell"
       ],
-      "install": "@kit/app-shell"
+      "install": "@halftone-web/app-shell"
     },
     {
       "id": "tabs",
@@ -722,7 +722,7 @@
         "wizard",
         "onboarding progress"
       ],
-      "install": "@kit/stepper"
+      "install": "@halftone-web/stepper"
     },
     {
       "id": "section-header",
@@ -742,7 +742,7 @@
         "see all",
         "heading row"
       ],
-      "install": "@kit/section-header"
+      "install": "@halftone-web/section-header"
     },
     {
       "id": "pager-dots",
@@ -762,7 +762,7 @@
         "carousel dots",
         "onboarding slides"
       ],
-      "install": "@kit/pager-dots"
+      "install": "@halftone-web/pager-dots"
     },
     {
       "id": "horizontal-pager",
@@ -783,7 +783,7 @@
         "slides",
         "banner"
       ],
-      "install": "@kit/horizontal-pager"
+      "install": "@halftone-web/horizontal-pager"
     },
     {
       "id": "data-table",
@@ -803,7 +803,7 @@
         "grid",
         "list"
       ],
-      "install": "@kit/data-table"
+      "install": "@halftone-web/data-table"
     },
     {
       "id": "table",
@@ -842,7 +842,7 @@
         "metric",
         "number"
       ],
-      "install": "@kit/stat-tile"
+      "install": "@halftone-web/stat-tile"
     },
     {
       "id": "chart",
@@ -887,7 +887,7 @@
         "pill",
         "status"
       ],
-      "install": "@kit/badge"
+      "install": "@halftone-web/badge"
     },
     {
       "id": "avatar",
@@ -934,7 +934,7 @@
         "facepile",
         "members"
       ],
-      "install": "@kit/avatar-group"
+      "install": "@halftone-web/avatar-group"
     },
     {
       "id": "list-row",
@@ -954,7 +954,7 @@
         "cell",
         "list item"
       ],
-      "install": "@kit/list-row"
+      "install": "@halftone-web/list-row"
     },
     {
       "id": "list-group",
@@ -973,7 +973,7 @@
         "list",
         "settings group"
       ],
-      "install": "@kit/list-group"
+      "install": "@halftone-web/list-group"
     },
     {
       "id": "icon-circle",
@@ -992,7 +992,7 @@
         "icon well",
         "icon badge"
       ],
-      "install": "@kit/icon-circle"
+      "install": "@halftone-web/icon-circle"
     },
     {
       "id": "summary-card",
@@ -1013,7 +1013,7 @@
         "receipt",
         "details list"
       ],
-      "install": "@kit/summary-card"
+      "install": "@halftone-web/summary-card"
     },
     {
       "id": "percent-change",
@@ -1031,7 +1031,7 @@
         "delta",
         "trend"
       ],
-      "install": "@kit/percent-change"
+      "install": "@halftone-web/percent-change"
     },
     {
       "id": "progress-ring",
@@ -1049,7 +1049,7 @@
         "donut progress",
         "circular progress"
       ],
-      "install": "@kit/progress-ring"
+      "install": "@halftone-web/progress-ring"
     },
     {
       "id": "status-dot",
@@ -1068,7 +1068,7 @@
         "indicator",
         "presence"
       ],
-      "install": "@kit/status-dot"
+      "install": "@halftone-web/status-dot"
     },
     {
       "id": "timeline",
@@ -1088,7 +1088,7 @@
         "history",
         "tracking"
       ],
-      "install": "@kit/timeline"
+      "install": "@halftone-web/timeline"
     },
     {
       "id": "value-header",
@@ -1108,7 +1108,7 @@
         "hero number",
         "big number"
       ],
-      "install": "@kit/value-header"
+      "install": "@halftone-web/value-header"
     },
     {
       "id": "alert",
@@ -1124,7 +1124,7 @@
       ],
       "notes": "inline and persistent · `variant` default/destructive",
       "api": "<Alert variant?><Icon /><AlertTitle /><AlertDescription /></Alert>",
-      "install": "@kit/alert"
+      "install": "@halftone-web/alert"
     },
     {
       "id": "toast",
@@ -1195,7 +1195,7 @@
         "zero state",
         "no results"
       ],
-      "install": "@kit/empty-state"
+      "install": "@halftone-web/empty-state"
     },
     {
       "id": "spinner",
@@ -1215,7 +1215,7 @@
         "activity indicator",
         "loader"
       ],
-      "install": "@kit/spinner"
+      "install": "@halftone-web/spinner"
     },
     {
       "id": "success-screen",
@@ -1236,7 +1236,7 @@
         "checkmark",
         "complete"
       ],
-      "install": "@kit/success-screen"
+      "install": "@halftone-web/success-screen"
     },
     {
       "id": "page-header",
@@ -1254,7 +1254,7 @@
         "title",
         "heading"
       ],
-      "install": "@kit/page-header"
+      "install": "@halftone-web/page-header"
     },
     {
       "id": "prose",
@@ -1276,7 +1276,7 @@
         "rich text",
         "typeset"
       ],
-      "install": "@kit/prose"
+      "install": "@halftone-web/prose"
     },
     {
       "id": "card",
@@ -1366,7 +1366,7 @@
         "footer actions",
         "safe area"
       ],
-      "install": "@kit/sticky-bottom-bar"
+      "install": "@halftone-web/sticky-bottom-bar"
     },
     {
       "id": "promo-card",
@@ -1388,7 +1388,7 @@
         "offer",
         "nudge"
       ],
-      "install": "@kit/promo-card"
+      "install": "@halftone-web/promo-card"
     },
     {
       "id": "footnote",
@@ -1410,7 +1410,7 @@
         "terms",
         "learn more"
       ],
-      "install": "@kit/footnote"
+      "install": "@halftone-web/footnote"
     },
     {
       "id": "dialog",
@@ -1622,7 +1622,7 @@
         "placeholder",
         "cover"
       ],
-      "install": "@kit/image-tile"
+      "install": "@halftone-web/image-tile"
     },
     {
       "id": "aspect-ratio",
@@ -1664,7 +1664,7 @@
         "mock image",
         "abstract"
       ],
-      "install": "@kit/placeholder"
+      "install": "@halftone-web/placeholder"
     },
     {
       "id": "spot",
@@ -1685,7 +1685,7 @@
         "hero icon",
         "empty state art"
       ],
-      "install": "@kit/spot"
+      "install": "@halftone-web/spot"
     },
     {
       "id": "hero",
@@ -1705,7 +1705,7 @@
         "banner",
         "landing"
       ],
-      "install": "@kit/hero"
+      "install": "@halftone-web/hero"
     },
     {
       "id": "feature-grid",
@@ -1724,7 +1724,7 @@
         "features",
         "benefits"
       ],
-      "install": "@kit/feature-grid"
+      "install": "@halftone-web/feature-grid"
     },
     {
       "id": "pricing-card",
@@ -1743,7 +1743,7 @@
         "pricing",
         "tier"
       ],
-      "install": "@kit/pricing-card"
+      "install": "@halftone-web/pricing-card"
     },
     {
       "id": "chat-message",
@@ -1763,7 +1763,7 @@
         "conversation",
         "turn"
       ],
-      "install": "@kit/chat-message"
+      "install": "@halftone-web/chat-message"
     },
     {
       "id": "chat-composer",
@@ -1786,7 +1786,7 @@
         "upload",
         "file"
       ],
-      "install": "@kit/chat-composer"
+      "install": "@halftone-web/chat-composer"
     },
     {
       "id": "attachment-chip",
@@ -1807,7 +1807,7 @@
         "upload",
         "attachment"
       ],
-      "install": "@kit/attachment-chip"
+      "install": "@halftone-web/attachment-chip"
     },
     {
       "id": "chat-thread-list",
@@ -1828,7 +1828,7 @@
         "chat sidebar",
         "threads"
       ],
-      "install": "@kit/chat-thread-list"
+      "install": "@halftone-web/chat-thread-list"
     },
     {
       "id": "sources",
@@ -1851,7 +1851,7 @@
         "footnotes",
         "grounding"
       ],
-      "install": "@kit/sources"
+      "install": "@halftone-web/sources"
     },
     {
       "id": "follow-up-suggestions",
@@ -1872,7 +1872,7 @@
         "next questions",
         "chips"
       ],
-      "install": "@kit/follow-up-suggestions"
+      "install": "@halftone-web/follow-up-suggestions"
     },
     {
       "id": "streaming-text",
@@ -1892,7 +1892,7 @@
         "stream",
         "typewriter"
       ],
-      "install": "@kit/streaming-text"
+      "install": "@halftone-web/streaming-text"
     },
     {
       "id": "thinking-indicator",
@@ -1910,7 +1910,7 @@
         "loading",
         "typing indicator"
       ],
-      "install": "@kit/thinking-indicator"
+      "install": "@halftone-web/thinking-indicator"
     },
     {
       "id": "tool-call-card",
@@ -1930,7 +1930,7 @@
         "function call",
         "action"
       ],
-      "install": "@kit/tool-call-card"
+      "install": "@halftone-web/tool-call-card"
     },
     {
       "id": "approval-card",
@@ -1950,7 +1950,7 @@
         "human in the loop",
         "permission"
       ],
-      "install": "@kit/approval-card"
+      "install": "@halftone-web/approval-card"
     }
   ]
 }

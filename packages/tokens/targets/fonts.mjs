@@ -6,7 +6,7 @@
  *            --kit-font-body and --kit-font-mono (app/tokens.css maps them to font-heading / font-sans / font-mono)
  * An empty family (heading, body) or Menlo (mono) is the platform's own font: nothing to load.
  *
- * Only fonts from the curated list (lib/theme/fonts.mjs) are supported; kit-tokens theme apply installs
+ * Only fonts from the curated list (lib/theme/fonts.mjs) are supported; halftone-tokens theme apply installs
  * the @expo-google-fonts packages they need (see expoPackages).
  */
 import { FONTS } from '../lib/theme/fonts.mjs';

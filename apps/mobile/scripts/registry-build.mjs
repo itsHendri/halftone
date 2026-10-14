@@ -12,7 +12,7 @@
  * 3. llms.txt: the agent-facing index (rules pointer, components, tokens).
  * 4. registry.json: the shadcn registry source (`npm run registry:dist` builds dist/r/native from it).
  *    Dependencies are read from each file's imports: unchanged components/ui files point at
- *    react-native-reusables, forked ones and components/kit are our own `@kit-native/*` items.
+ *    react-native-reusables, forked ones and components/kit are our own `@halftone-native/*` items.
  * 5. registry/generated/index.json: the same data for the docs site.
  */
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -156,7 +156,7 @@ ${llmsTokens}`;
 
 // ---------- 4. registry.json (shadcn) --------------------------------------------------------------
 
-const NS = '@kit-native';
+const NS = '@halftone-native';
 const RNR = 'https://reactnativereusables.com/r/nativewind';
 const forks = JSON.parse(read('registry/rnr-forks.json')).components;
 const pkg = JSON.parse(read('package.json'));
@@ -221,7 +221,7 @@ function depsOf(files, self) {
 }
 
 const INSTALL_NOTE =
-  'Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@kit-native/theme`) and `KitThemeProvider` from `@kit-native/lib-theme-context` at the root.';
+  'Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.';
 
 const items = [];
 const theme = JSON.parse(read('tokens/generated/theme.registry.json')).native;

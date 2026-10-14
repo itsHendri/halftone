@@ -47,11 +47,11 @@ try {
   const modules = dirname(dirname(createRequire(join(root, 'package.json')).resolve('expo/package.json')));
   symlinkSync(modules, join(copy, 'node_modules'));
   const config = JSON.parse(readFileSync(join(copy, 'components.json'), 'utf8'));
-  config.registries = { '@kit-native': `http://127.0.0.1:${port}/{name}.json` };
+  config.registries = { '@halftone-native': `http://127.0.0.1:${port}/{name}.json` };
   writeFileSync(join(copy, 'components.json'), JSON.stringify(config, null, 2));
 
   const { items } = JSON.parse(readFileSync(join(dist, 'registry.json'), 'utf8'));
-  const names = items.filter((i) => i.type !== 'registry:theme').map((i) => `@kit-native/${i.name}`);
+  const names = items.filter((i) => i.type !== 'registry:theme').map((i) => `@halftone-native/${i.name}`);
   // Async on purpose: the registry server above runs in this process, so a sync exec would deadlock.
   const run = async (args) => {
     const child = promisify(execFile)('npx', ['-y', SHADCN, 'add', ...names, '--dry-run', ...args], { cwd: copy, maxBuffer: 1 << 26 });

@@ -12,7 +12,7 @@
  * 3. llms.txt: the agent-facing index (rules pointer, components, tokens).
  * 4. registry.json: the shadcn registry source (`npm run registry:dist` builds dist/r/web from it).
  *    Dependencies are read from each file's imports: unchanged components/ui files are shadcn/ui's own
- *    items (bare names), forked ones, components/kit, lib and hooks are our own `@kit/*` items.
+ *    items (bare names), forked ones, components/kit, lib and hooks are our own `@halftone-web/*` items.
  * 5. registry/generated/index.json: the same data for the docs site.
  */
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -155,7 +155,7 @@ ${llmsTokens}`;
 
 // ---------- 4. registry.json (shadcn) --------------------------------------------------------------
 
-const NS = '@kit';
+const NS = '@halftone-web';
 const forks = JSON.parse(read('registry/shadcn-forks.json')).components;
 const pkg = JSON.parse(read('package.json'));
 const versions = { ...pkg.dependencies, ...pkg.devDependencies };
@@ -221,7 +221,7 @@ function depsOf(files, self) {
 }
 
 const INSTALL_NOTE =
-  'Needs the kit theme (`@kit/theme`) and a next-themes ThemeProvider (attribute="class") at the root.';
+  'Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute="class") at the root.';
 
 const items = [];
 const theme = JSON.parse(read('tokens/generated/theme.registry.json')).web;
