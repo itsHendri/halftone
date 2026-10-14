@@ -9,7 +9,7 @@ pick. The [theme studio](/themes) has every control, next to a phone and a brows
 **shuffle** that rolls new values for everything you haven't locked (lock the colour, shuffle the type).
 
 Nothing you pick here touches a project until you **use the theme**: the bar and the studio hand you a short
-code (`pk1-…`, or `pk2-…` once you change the typeset) that reproduces the theme exactly, and one command writes it into `tokens/tokens.json`.
+code (`ht1-…`, or `ht2-…` once you change the typeset) that reproduces the theme exactly, and one command writes it into `tokens/tokens.json`.
 
 ## What a theme sets
 
@@ -44,13 +44,13 @@ before and after. A theme from the picker can never fail the build.
 - **In the Halftone repo**, from the root, so the native kit, the web kit and this site stay one brand:
 
   ```bash
-  npm run theme:apply -- pk1-XXXXXXXXXXXX
+  npm run theme:apply -- ht1-XXXXXXXXXXXX
   ```
 
 - **In a kit you copied out**, from the app folder:
 
   ```bash
-  npx kit-tokens theme apply pk1-XXXXXXXXXXXX
+  npx kit-tokens theme apply ht1-XXXXXXXXXXXX
   ```
 
 - **Share a link** (`/themes/?t=<code>`) to show someone the theme, or **download tokens.json** and drop it in.

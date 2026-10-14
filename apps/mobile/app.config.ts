@@ -26,7 +26,7 @@ export default ({ config, projectRoot }: ConfigContext): ExpoConfig => {
   return {
     ...config,
     name: config.name ?? 'Halftone',
-    slug: config.slug ?? 'mobile-app-prototype-kit',
+    slug: config.slug ?? 'halftone',
     ios: { ...config.ios, bundleIdentifier: appId },
     android: { ...config.android, package: appId },
     ...(process.env.EAS_OWNER ? { owner: process.env.EAS_OWNER } : {}),

@@ -24,8 +24,8 @@ const FONTS_ID = 'kit-theme-fonts';
 const FAMILY = /^[A-Za-z0-9 ]{1,40}$/;
 const SANS = 'ui-sans-serif, system-ui, sans-serif';
 const MONO = 'ui-monospace, SFMono-Regular, Menlo, monospace';
-/** A theme code: pk1- and 12 characters (the default typeset), or pk2- and 16. */
-const THEME_CODE = /^(pk1-[0-9A-Z]{12}|pk2-[0-9A-Z]{16})$/i;
+/** A theme code: ht1- and 12 characters (the default typeset), or ht2- and 16. */
+const THEME_CODE = /^(ht1-[0-9A-Z]{12}|ht2-[0-9A-Z]{16})$/i;
 /** The typeset's variables (kit-tokens' typeVars): app/tokens.css scales text-xs…4xl by them. */
 const TYPE_VARS = ['--type-scale', '--leading-factor', '--typeset-leading', '--typeset-flow', '--typeset-measure'];
 

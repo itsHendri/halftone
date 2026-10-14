@@ -9,7 +9,7 @@ Built as six stacked PRs (#24–#28).
   spans the viewport and the sidebar sits flush left (see navigation-wireframes.md › How it is built).
 - **The typeset is part of the one theme**, not a separate builder: mono font, size, leading, flow, measure. Size
   and leading scale every `text-*` size in both kits (so components change); flow and measure apply to long-form
-  text in `Prose`. A theme with the default typeset keeps its `pk1-` code; any other gets `pk2-`.
+  text in `Prose`. A theme with the default typeset keeps its `ht1-` code; any other gets `ht2-`.
 - **Icons stay Lucide**, stroke only. No icon-set swap.
 - **Home page:** centred hero, then a full-bleed band of the web kit's `/showcase` (real registry components,
   in an iframe sized by `kit:size`), beside a live phone. The theme bar restyles all of it. The theme bar stays

@@ -2,7 +2,7 @@
 // Build: `npm run build` (writes out/). Deploy: `npx wrangler deploy`. Preview: `npm run preview`.
 {
   "$schema": "../../node_modules/wrangler/config-schema.json",
-  "name": "protokit-docs",
+  "name": "halftone-docs",
   "compatibility_date": "2026-10-06",
   "assets": {
     "directory": "./out",

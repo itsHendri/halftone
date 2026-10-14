@@ -158,7 +158,7 @@ export const TOKENS = {
 /** The theme tokens.json was generated from (`kit-tokens theme apply`), or null. `edited`: theme tokens
  *  were changed by hand since. */
 export const THEME_INFO: ThemeInfo | null = {
-  "code": "pk1-29B3XC60003T",
+  "code": "ht1-29B3XC60003T",
   "name": "Default",
   "edited": false,
   "recipe": {

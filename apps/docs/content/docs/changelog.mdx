@@ -5,13 +5,6 @@ description: What changed, newest first.
 
 ## October 2026
 
-### Protokit is now Halftone
-
-The kit has a name and a home: **Halftone**, at [halftonedesignsystem.com](https://halftonedesignsystem.com). The
-repository moved to [itsHendri/halftone](https://github.com/itsHendri/halftone) (the old address redirects), and the
-token package is `@halftone/tokens`. Theme codes (`pk1-`, `pk2-`) are unchanged, so every code you have still works.
-In the native kit the app is called Halftone and opens `halftone://` links.
-
 ### One top bar
 
 The site has one navigation now: a top bar that never moves, with Docs, Components, Screens and Themes,
@@ -34,7 +27,7 @@ Pick a theme on this site and watch both kits change, live, then commit it with 
 - **Contrast fixes itself.** A colour that fails WCAG AA keeps its hue and moves the least lightness it needs;
   the bar lists each change. The contrast gate also checks brand and status colours on muted surfaces now,
   which brightened the dark theme's blue a little.
-- **Use a theme** with a `pk1-` code: `npm run theme:apply -- <code>` in the repo, `npx kit-tokens theme apply
+- **Use a theme** with a `ht1-` code: `npm run theme:apply -- <code>` in the repo, `npx kit-tokens theme apply
   <code>` in a copied-out kit, a prompt for your coding agent (both kits have an `apply-theme` skill), a share
   link, or a tokens.json download. Each kit's Foundations page shows the applied theme.
 - In the mobile kit, buttons and chips use `rounded-control` (pills, or the radius) and controls `h-control`;
@@ -95,11 +88,11 @@ no name or state. Fixed in the kit's components, so every prototype gets them:
 
 ### The live site
 
-- **Live** at [protokit-docs.empty-math-d572.workers.dev](https://protokit-docs.empty-math-d572.workers.dev),
+- **Live** at [halftonedesignsystem.com](https://halftonedesignsystem.com),
   deployed by Cloudflare on every push to `main`. Pull requests get their own preview URL, and a PR that
   breaks the site's build cannot merge.
 - `install.md`, `llms.txt` and the install guide use full links to this site.
-- The [repository](https://github.com/itsHendri/protokit) is public.
+- The [repository](https://github.com/itsHendri/halftone) is public.
 
 ### Web kit
 
@@ -115,9 +108,9 @@ no name or state. Fixed in the kit's components, so every prototype gets them:
 
 ### Foundations
 
-- **Monorepo.** The kit moved to `apps/mobile` in the protokit repository, next to this site. Each app still
+- **Monorepo.** The kit moved to `apps/mobile` in the halftone repository, next to this site. Each app still
   works on its own when copied out.
-- **`@itshendri/kit-tokens`.** The token build is a package: one `tokens.json` to NativeWind, Tailwind 4 /
+- **`@halftone/tokens`.** The token build is a package: one `tokens.json` to NativeWind, Tailwind 4 /
   shadcn, TypeScript, Figma and `DESIGN.md`, with the WCAG AA gate. Not on npm yet.
 - **Registry as data.** One list of components generates `DESIGN_SYSTEM.md`, `llms.txt`, a shadcn registry
   and the component pages here.

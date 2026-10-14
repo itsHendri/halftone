@@ -260,7 +260,7 @@ function OpenCode() {
             id="studio-open-code"
             value={value}
             onChange={(e) => setValue(e.target.value)}
-            placeholder="pk1-… or pk2-…"
+            placeholder="ht1-… or ht2-…"
             spellCheck={false}
             className="border-border bg-background focus-visible:ring-ring h-9 rounded-lg border px-3 font-mono text-sm focus-visible:outline-none focus-visible:ring-2"
           />

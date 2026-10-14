@@ -32,7 +32,7 @@ const fail = (message, code = 1) => {
 };
 
 function readRecipe(arg, root) {
-  if (!arg) fail('say which theme: a code (pk1-… or pk2-…), a preset name or a recipe .json', 2);
+  if (!arg) fail('say which theme: a code (ht1-… or ht2-…), a preset name or a recipe .json', 2);
   if (isThemeCode(arg)) {
     try {
       return decodeRecipe(arg);

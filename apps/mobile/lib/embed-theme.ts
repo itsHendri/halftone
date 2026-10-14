@@ -32,8 +32,8 @@ export const EMBED_THEME_KEY = 'kit.embed.tokens';
 
 /** The typeset's variables (kit-tokens' typeVars); TYPE_RULES points the text classes at them. */
 const TYPE_VARS = ['--type-scale', '--leading-factor', '--typeset-leading', '--typeset-flow', '--typeset-measure'];
-/** A theme code: pk1- and 12 characters (the default typeset), or pk2- and 16. */
-const THEME_CODE = /^(pk1-[0-9A-Z]{12}|pk2-[0-9A-Z]{16})$/i;
+/** A theme code: ht1- and 12 characters (the default typeset), or ht2- and 16. */
+const THEME_CODE = /^(ht1-[0-9A-Z]{12}|ht2-[0-9A-Z]{16})$/i;
 
 const kebab = (s: string) => s.replace(/([A-Z])/g, '-$1').replace(/([a-z])(\d)/g, '$1-$2').toLowerCase();
 const ALLOWED_VARS = new Set([...Object.keys(THEME.light).map((k) => `--${kebab(k)}`), '--radius', '--radius-control', '--border-width', '--icon-stroke', '--shadow-1', '--shadow-2', '--shadow-3', '--control-sm', '--control-md', '--control-lg', '--control-x', ...TYPE_VARS]);
