@@ -7,7 +7,10 @@ When a change to a package should ship, run `npx changeset` at the repo root, pi
 writes with your change. On `main`, the release workflow opens a "Version Packages" PR; merging it publishes
 to npm through trusted publishing.
 
-## First publish (once, by hand)
+## First publish (once, by hand) — done 2026-10-14, 1.0.0
+
+Kept for the record, and for a second package if one is ever added.
+
 
 npm cannot create a package through trusted publishing, so `1.0.0` goes up from a laptop:
 
@@ -21,7 +24,6 @@ npm cannot create a package through trusted publishing, so `1.0.0` goes up from 
    requests" (the Version Packages PR needs it).
 6. GitHub repo → Settings → Secrets and variables → Actions → Variables: add `RELEASES_ENABLED` = `true`.
    Until then the release workflow skips, so main stays green.
-7. Remove the "Not yet: copying a single kit" notes: `git grep -n "not published yet"` finds them (README,
-   the docs site's install and web pages, install.md).
+7. Remove any "not published yet" notes from the docs.
 
 Provenance statements are added automatically once the repository is public.

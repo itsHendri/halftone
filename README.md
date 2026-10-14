@@ -23,8 +23,6 @@ TypeScript theme each app reads, and the build refuses any palette that falls be
    cd my-prototype && npm install && npm run ios                       # web: npm run dev
    ```
    Or clone this whole repo for a client project that needs mobile and web on one brand.
-   *Not yet:* a single copied kit installs `@halftone-ds/tokens` from npm, which is not published yet.
-   Until it is, clone the repo.
 2. **Add kit components to an existing Expo app** that uses react-native-reusables, through the shadcn
    registry: `npx shadcn add @halftone-native/<component>` (see the [install guide](https://halftonedesignsystem.com/docs/install/)).
 3. **Let your agent do it.** Point Claude Code or Cursor at the kit; it reads `AGENTS.md`,
