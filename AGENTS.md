@@ -6,7 +6,7 @@ A monorepo of prototype kits. Each app is self-contained; this file only covers 
 apps/mobile/    Expo mobile kit. Its AGENTS.md, DESIGN_SYSTEM.md and .claude/skills are the rules for any mobile work.
 apps/docs/      Docs site (Next + Fumadocs, static export for Cloudflare). Reads apps/mobile; the one app allowed to.
 apps/web/       Web kit: Next.js + shadcn/ui. Its AGENTS.md, DESIGN_SYSTEM.md and .claude/skills are the rules for web work.
-packages/tokens/ @halftone/tokens: the token build (DTCG → NativeWind, Tailwind 4, TS, DESIGN.md, Figma) every app uses.
+packages/tokens/ @halftone-ds/tokens: the token build (DTCG → NativeWind, Tailwind 4, TS, DESIGN.md, Figma) every app uses.
 kit.json        The kit's name and addresses, read by the generators.
 ```
 
@@ -29,7 +29,7 @@ kit.json        The kit's name and addresses, read by the generators.
 
 ## Packages and releases
 
-- `packages/tokens` is `@halftone/tokens`. Apps depend on it by range (`^1.0.0`); inside the repo npm
+- `packages/tokens` is `@halftone-ds/tokens`. Apps depend on it by range (`^1.0.0`); inside the repo npm
   links the workspace copy, outside it installs from npm. Change the build there, run
   `npm test -w packages/tokens`, then rebuild an app's tokens (`npm run tokens:build -w apps/mobile`).
 - Anything in a package that should ship needs a changeset: `npx changeset` at the root. Merging to main

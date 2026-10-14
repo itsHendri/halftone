@@ -3,7 +3,7 @@ import * as React from 'react';
 import { fontsHref, kitPayloads, siteCss } from '@/lib/theme/payload';
 import { CSS_KEY, EMBED_KEY, FONTS_ID, FONTS_KEY, STYLE_ID } from '@/lib/theme/keys';
 import { committed, currentRecipe, isPreviewing, startTheme, subscribeTheme, themeFor } from '@/lib/theme/store';
-import { sameRecipe } from '@halftone/tokens/theme';
+import { sameRecipe } from '@halftone-ds/tokens/theme';
 
 /**
  * Puts the live theme on the site: a stylesheet over app/tokens.css (the chrome), a cached copy for the

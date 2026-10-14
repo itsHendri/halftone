@@ -1,5 +1,5 @@
 /**
- * @halftone/tokens/theme — theme recipes, the generator, codes, presets and CSS output. Pure ESM
+ * @halftone-ds/tokens/theme — theme recipes, the generator, codes, presets and CSS output. Pure ESM
  * with no Node APIs: the docs site runs it in the browser for the live picker, and the CLI runs it to
  * commit a theme into tokens.json (`halftone-tokens theme apply`).
  */

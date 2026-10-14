@@ -146,7 +146,7 @@ jobs:
           git archive HEAD:apps/${{ matrix.app }} | tar -x -C "$RUNNER_TEMP/app"
           npm pack -w packages/tokens --pack-destination "$RUNNER_TEMP"
           cd "$RUNNER_TEMP/app"
-          npm pkg set "devDependencies.@halftone/tokens=file:$(ls "$RUNNER_TEMP"/halftone-tokens-*.tgz)"
+          npm pkg set "devDependencies.@halftone-ds/tokens=file:$(ls "$RUNNER_TEMP"/halftone-ds-tokens-*.tgz)"
 
       - name: Install the standalone app
         working-directory: ${{ runner.temp }}/app

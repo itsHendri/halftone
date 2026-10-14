@@ -1,5 +1,5 @@
 'use client';
-import { applyRecipe, type Theme } from '@halftone/tokens/theme';
+import { applyRecipe, type Theme } from '@halftone-ds/tokens/theme';
 import { CheckIcon, CopyIcon, DownloadIcon } from 'lucide-react';
 import * as React from 'react';
 import kitJson from '../../../../kit.json';

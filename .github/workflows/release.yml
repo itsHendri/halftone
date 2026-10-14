@@ -1,4 +1,4 @@
-# Releases the packages in packages/ (today @halftone/tokens) with Changesets.
+# Releases the packages in packages/ (today @halftone-ds/tokens) with Changesets.
 # On main: changesets present → open/update a "Version Packages" PR; that PR merged → publish to npm
 # through trusted publishing (OIDC, no npm token). The npm trusted-publisher entry must name this
 # repository and this file, `release.yml`. Apps are private and never published.

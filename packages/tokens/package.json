@@ -1,5 +1,5 @@
 {
-  "name": "@halftone/tokens",
+  "name": "@halftone-ds/tokens",
   "version": "1.0.0",
   "description": "Design tokens (W3C DTCG) to NativeWind, Tailwind 4 / shadcn, TypeScript, DESIGN.md and Figma, with a WCAG AA contrast gate. The token build behind Halftone.",
   "license": "MIT",

@@ -1,4 +1,4 @@
-/** Types for @halftone/tokens/theme (index.mjs). */
+/** Types for @halftone-ds/tokens/theme (index.mjs). */
 
 export type Neutral = 'zinc' | 'neutral' | 'slate' | 'stone' | 'gray' | 'brand';
 export type Radius = 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
