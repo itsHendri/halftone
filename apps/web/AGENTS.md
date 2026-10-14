@@ -12,7 +12,7 @@ hallucination guard. This file covers engineering, workflows and gotchas.
 - Next.js 16 (App Router) · React 19 · TypeScript strict · Tailwind 4 · shadcn/ui (owned source in
   `components/ui`) · lucide-react · next-themes · Recharts (through `components/ui/chart`) · sonner (toasts)
 - **className-only styling** with the semantic token classes. No inline colours, no hex.
-- Tokens: `tokens/tokens.json` → `npm run tokens:build` (@halftone/tokens) → `app/tokens.css`,
+- Tokens: `tokens/tokens.json` → `npm run tokens:build` (@halftone-ds/tokens) → `app/tokens.css`,
   `lib/theme.ts`, `DESIGN.md`, `tokens/generated/`
 - Theme: next-themes (`class` on `<html>`, system by default). `ThemeToggle` in `components/site`.
 

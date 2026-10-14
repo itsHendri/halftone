@@ -1,11 +1,11 @@
-# @halftone/tokens
+# @halftone-ds/tokens
 
 The token build behind [Halftone](https://github.com/itsHendri/halftone). One `tokens.json` in the
 [W3C design-token format](https://www.designtokens.org/tr/2025.10/format/) becomes everything an app reads,
 and the build refuses any palette that falls below WCAG AA.
 
 ```bash
-npm install -D @halftone/tokens
+npm install -D @halftone-ds/tokens
 npx halftone-tokens build      # write every output in tokens/tokens.config.json
 npx halftone-tokens check      # write nothing; exit 1 if an output is stale (CI)
 npx halftone-tokens figma      # mirror the tokens into Figma Variables

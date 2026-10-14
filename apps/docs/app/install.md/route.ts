@@ -19,7 +19,7 @@ If the person did not say which, ask: "a phone app, a web app, or both?"
 
 ## 1. Pick the path
 
-> **Not yet:** paths A and B copy one kit out of the repo, and that kit installs \`@halftone/tokens\`
+> **Not yet:** paths A and B copy one kit out of the repo, and that kit installs \`@halftone-ds/tokens\`
 > from npm, which is not published yet, so \`npm install\` fails. Until it is, use path E (clone the repo)
 > and work in \`apps/mobile\` or \`apps/web\`.
 

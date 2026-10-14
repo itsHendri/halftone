@@ -21,7 +21,7 @@ import {
   type RecipeInput,
   type Theme,
   type TokensJson,
-} from '@halftone/tokens/theme';
+} from '@halftone-ds/tokens/theme';
 import * as React from 'react';
 import { STORAGE_KEY } from './keys';
 import tokensJson from '../../../mobile/tokens/tokens.json';

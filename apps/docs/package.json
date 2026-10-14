@@ -1,5 +1,5 @@
 {
-  "name": "@halftone/docs",
+  "name": "@halftone-ds/docs",
   "private": true,
   "version": "0.0.0",
   "description": "The Halftone docs site: how the kits work, setup, live component previews. Static export, hosted on Cloudflare.",
@@ -16,7 +16,7 @@
     "check:a11y": "node scripts/check-a11y.mjs"
   },
   "dependencies": {
-    "@halftone/tokens": "^1.0.0",
+    "@halftone-ds/tokens": "^1.0.0",
     "fumadocs-core": "16.16.2",
     "fumadocs-mdx": "15.4.6",
     "fumadocs-ui": "16.16.2",

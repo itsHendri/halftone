@@ -1,5 +1,5 @@
 {
-  "$description": "What `npm run tokens:build` writes, and where. Paths are relative to the app root. Targets are the files in @halftone/tokens/targets (nativewind3, ts-theme, fonts, figma, shadcn-web, registry-theme, design-md, llms).",
+  "$description": "What `npm run tokens:build` writes, and where. Paths are relative to the app root. Targets are the files in @halftone-ds/tokens/targets (nativewind3, ts-theme, fonts, figma, shadcn-web, registry-theme, design-md, llms).",
   "source": "tokens/tokens.json",
   "scan": [
     "app",

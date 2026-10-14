@@ -28,7 +28,7 @@ registry/               components.ts: what the kit ships (metadata) → DESIGN_
 components/devkit/      Kitchen Sink: demos keyed by registry id (sections/<category>.tsx, sections/kit-<category>.tsx)
 components/shop/, components/habits/, components/northwind/  sample data + stores. Go with `npm run eject-samples`.
 lib/                    theme.ts (generated), theme-context, embed (docs iframe mode), haptics, utils(cn)
-tokens/                 tokens.json (edit), tokens.config.json (outputs), generated/ — built by `halftone-tokens` (@halftone/tokens)
+tokens/                 tokens.json (edit), tokens.config.json (outputs), generated/ — built by `halftone-tokens` (@halftone-ds/tokens)
 DESIGN.md, llms.txt     GENERATED agent-facing summaries (tokens:build, registry:build)
 .claude/skills/         add-component, apply-theme, qc-pass, transcript-to-prototype
 .claude/launch.json     preview configs: kit-web (port 8090) and kit-ios (port 8091)

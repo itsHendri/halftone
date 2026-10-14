@@ -2,7 +2,7 @@
  * What the docs site sends each embedded kit for a theme, in that kit's own variable format (the format
  * its tokens:build writes). Shared contract: apps/mobile/lib/embed-theme.ts and apps/web/lib/embed-theme.ts.
  */
-import { googleFontsHref, themeCss, themeHex, themeVars, type Theme } from '@halftone/tokens/theme';
+import { googleFontsHref, themeCss, themeHex, themeVars, type Theme } from '@halftone-ds/tokens/theme';
 
 type Fonts = { heading?: string; body?: string; mono?: string };
 export type KitPayload = {

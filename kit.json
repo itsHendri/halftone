@@ -5,6 +5,6 @@
   "tagline": "Prototype kits for mobile and web that coding agents build from.",
   "repo": "https://github.com/itsHendri/halftone",
   "siteUrl": "https://halftonedesignsystem.com",
-  "npmScope": "@halftone",
+  "npmScope": "@halftone-ds",
   "registry": { "native": "@halftone-native", "web": "@halftone-web" }
 }
