@@ -1,9 +1,10 @@
 {
   "$description": "The kit's name and addresses, in one place. Generators (docs site, llms.txt, registry) read it; rename the kit here.",
-  "name": "Protokit",
+  "name": "Halftone",
+  "fullName": "Halftone Design System",
   "tagline": "Prototype kits for mobile and web that coding agents build from.",
-  "repo": "https://github.com/itsHendri/protokit",
-  "siteUrl": "https://protokit-docs.empty-math-d572.workers.dev",
-  "npmScope": "@itshendri",
+  "repo": "https://github.com/itsHendri/halftone",
+  "siteUrl": "https://halftonedesignsystem.com",
+  "npmScope": "@halftone",
   "registry": { "native": "@kit-native", "web": "@kit" }
 }

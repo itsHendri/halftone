@@ -21,7 +21,7 @@
     },
     "design-md": {
       "out": "DESIGN.md",
-      "name": "Prototype Kit (web)",
+      "name": "Halftone (web)",
       "buttonRadius": "md"
     },
     "llms": {

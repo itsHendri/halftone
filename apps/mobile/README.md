@@ -1,4 +1,4 @@
-# Mobile app prototype kit
+# Halftone (native)
 
 A brand-agnostic, themeable **Expo** starter for mobile prototypes. Every component the kit ships is
 previewed live inside the app, so a designer can browse what exists, copy the exact token names, and

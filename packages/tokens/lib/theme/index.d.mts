@@ -1,4 +1,4 @@
-/** Types for @itshendri/kit-tokens/theme (index.mjs). */
+/** Types for @halftone/tokens/theme (index.mjs). */
 
 export type Neutral = 'zinc' | 'neutral' | 'slate' | 'stone' | 'gray' | 'brand';
 export type Radius = 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
@@ -83,6 +83,8 @@ export const FONTS: Font[];
 export const PRESETS: Preset[];
 export const BRAND_RAMPS: Record<string, Record<string, string>>;
 export const THEME_EXTENSION: string;
+/** Older keys the theme record may sit under; read, and moved to THEME_EXTENSION on the next apply. */
+export const LEGACY_THEME_EXTENSIONS: string[];
 
 export function normalizeRecipe(input?: RecipeInput): Recipe;
 export function sameRecipe(a: RecipeInput, b: RecipeInput): boolean;

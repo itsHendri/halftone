@@ -8,7 +8,7 @@ import type { ConfigContext, ExpoConfig } from 'expo/config';
 // Locally: `.env.local` (gitignored; see `.env.example`). EAS Build / Update / Workflows: the same
 // names as EAS environment variables. Leave them unset and the kit still runs everywhere except
 // EAS (run `eas init` and set them once you have a project).
-//   APP_ID            bundle identifier + Android package (default dev.protokit.app)
+//   APP_ID            bundle identifier + Android package (default com.halftonedesignsystem.app)
 //   EAS_OWNER         Expo account or org that owns the project
 //   EAS_PROJECT_ID    EAS project id; also sets the update URL
 //   KIT_WEB_BASE_URL  sub-path for a web export hosted below the root, e.g. /m (production only)
@@ -19,13 +19,13 @@ export default ({ config, projectRoot }: ConfigContext): ExpoConfig => {
     if (existsSync(path)) process.loadEnvFile(path);
   }
 
-  const appId = process.env.APP_ID || 'dev.protokit.app';
+  const appId = process.env.APP_ID || 'com.halftonedesignsystem.app';
   const projectId = process.env.EAS_PROJECT_ID;
   const baseUrl = process.env.KIT_WEB_BASE_URL;
 
   return {
     ...config,
-    name: config.name ?? 'Prototype Kit',
+    name: config.name ?? 'Halftone',
     slug: config.slug ?? 'mobile-app-prototype-kit',
     ios: { ...config.ios, bundleIdentifier: appId },
     android: { ...config.android, package: appId },

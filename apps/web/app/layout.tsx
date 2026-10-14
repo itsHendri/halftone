@@ -5,7 +5,7 @@ import { embedBootScript } from '@/lib/embed-boot';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: { default: 'Prototype Kit (web)', template: '%s · Prototype Kit' },
+  title: { default: 'Halftone (web)', template: '%s · Halftone' },
   description: 'A themeable Next.js + shadcn/ui starter for web prototypes, built only from registered components.',
 };
 

@@ -1,5 +1,5 @@
 ---
-"@itshendri/kit-tokens": minor
+"@halftone/tokens": minor
 ---
 
-Themes. `@itshendri/kit-tokens/theme` (browser-safe, typed) expands a small recipe (brand colour, neutral, radius, fonts, stroke, depth, density, border) into ramps, semantic tokens and CSS variables, auto-fixes contrast (same hue, least lightness change, strict WCAG AA in both modes) and packs the recipe into a `pk1-` code. `kit-tokens theme apply <code|preset> | show | presets | encode` commits a theme into tokens.json (only the paths a theme owns, recorded under `$extensions["dev.protokit.theme"]`, hand edits detected as drift). Eight personality presets. The contrast gate now also checks tones as text on `muted` and `accent`, and `ts-theme` emits `THEME_INFO`, the applied theme.
+Themes. `@halftone/tokens/theme` (browser-safe, typed) expands a small recipe (brand colour, neutral, radius, fonts, stroke, depth, density, border) into ramps, semantic tokens and CSS variables, auto-fixes contrast (same hue, least lightness change, strict WCAG AA in both modes) and packs the recipe into a `pk1-` code. `kit-tokens theme apply <code|preset> | show | presets | encode` commits a theme into tokens.json (only the paths a theme owns, recorded under `$extensions["com.halftonedesignsystem.theme"]`, hand edits detected as drift). Eight personality presets. The contrast gate now also checks tones as text on `muted` and `accent`, and `ts-theme` emits `THEME_INFO`, the applied theme.

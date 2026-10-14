@@ -137,7 +137,7 @@ function ShareDemo() {
   return (
     <View className="w-full gap-3">
       <Button
-        onPress={() => void share({ title: 'Prototype Kit', message: 'Take a look at this prototype', url })}>
+        onPress={() => void share({ title: 'Halftone', message: 'Take a look at this prototype', url })}>
         <Text>Share this prototype</Text>
       </Button>
       <Text className="text-muted-foreground text-sm" numberOfLines={2}>

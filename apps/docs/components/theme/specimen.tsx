@@ -1,5 +1,5 @@
 'use client';
-import { FONTS } from '@itshendri/kit-tokens/theme';
+import { FONTS } from '@halftone/tokens/theme';
 import {
   BellIcon,
   CalendarIcon,

@@ -1,5 +1,5 @@
 'use client';
-import { FONTS, googleFontsHref, normalizeRecipe, OPTIONS, PRESETS, type RecipeInput } from '@itshendri/kit-tokens/theme';
+import { FONTS, googleFontsHref, normalizeRecipe, OPTIONS, PRESETS, type RecipeInput } from '@halftone/tokens/theme';
 import { setRecipe, themeFor } from '@/lib/theme/store';
 
 /** Display names for option values (the codec's values are short ids). */

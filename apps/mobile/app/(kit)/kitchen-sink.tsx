@@ -11,7 +11,7 @@ import { Pressable, ScrollView, View } from 'react-native';
 
 /**
  * The Kitchen Sink: every component the kit ships, grouped by function, searchable.
- * Deep links (or protokit://kitchen-sink?…):
+ * Deep links (or halftone://kitchen-sink?…):
  *   /kitchen-sink?open=inputs          expand a category
  *   /kitchen-sink?section=list-row     expand its category, scroll to it, tint it briefly
  *   /kitchen-sink?section=list-row&embed=1   just that demo, no chrome (the docs' previews)

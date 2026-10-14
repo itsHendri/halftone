@@ -1,5 +1,5 @@
 'use client';
-import { fontById, normalizeRecipe, PRESETS, sameRecipe, type Adjustment, type Recipe } from '@itshendri/kit-tokens/theme';
+import { fontById, normalizeRecipe, PRESETS, sameRecipe, type Adjustment, type Recipe } from '@halftone/tokens/theme';
 import { Popover, PopoverContent, PopoverTrigger } from 'fumadocs-ui/components/ui/popover';
 import { CheckIcon, ChevronDownIcon, MoonIcon, PaintBucketIcon, RotateCcwIcon, ShieldCheckIcon, SlidersHorizontalIcon, SunIcon } from 'lucide-react';
 import Link from 'next/link';

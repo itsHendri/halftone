@@ -1,5 +1,5 @@
 'use client';
-import { decodeRecipe, FONTS, OPTIONS, PRESETS, sameRecipe, themeVars, type Recipe, type RecipeInput, type Theme } from '@itshendri/kit-tokens/theme';
+import { decodeRecipe, FONTS, OPTIONS, PRESETS, sameRecipe, themeVars, type Recipe, type RecipeInput, type Theme } from '@halftone/tokens/theme';
 import { Popover, PopoverContent, PopoverTrigger } from 'fumadocs-ui/components/ui/popover';
 import { CheckIcon, CopyIcon, LockIcon, LockOpenIcon, MoonIcon, Redo2Icon, RotateCcwIcon, ShieldCheckIcon, ShuffleIcon, SunIcon, Undo2Icon } from 'lucide-react';
 import { useTheme } from 'next-themes';

@@ -14,7 +14,7 @@ export function KitHeader() {
       <div className="mx-auto flex h-14 max-w-6xl items-center gap-6 px-4 sm:px-6">
         <Link href="/" className="flex shrink-0 items-center gap-2 font-semibold whitespace-nowrap">
           <span aria-hidden className="bg-primary size-5 rounded-md" />
-          <span className="hidden sm:inline">Prototype Kit</span>
+          <span className="hidden sm:inline">Halftone</span>
           <span className="sm:hidden">Kit</span>
         </Link>
         <nav aria-label="Kit" className="flex items-center gap-4 text-sm">

@@ -1,4 +1,4 @@
-# Prototype Kit (web)
+# Halftone (web)
 
 A brand-agnostic, themeable **Next.js** starter for web prototypes: dashboards, marketing pages and AI
 product interfaces. Every component the kit ships is previewed live at `/components`, so a designer can

@@ -197,7 +197,7 @@ test('applyRecipe writes only what a theme owns, records it, and is idempotent',
   assert.deepEqual(tokens.primitive.space, base.primitive.space);
   assert.deepEqual(tokens.primitive.color.success, base.primitive.color.success);
   assert.equal(tokens.semantic.color.primary.$value.light, theme.semantic.color.primary.light);
-  assert.equal(tokens.$extensions['dev.protokit.theme'].code, theme.code);
+  assert.equal(tokens.$extensions['com.halftonedesignsystem.theme'].code, theme.code);
   assert.deepEqual(applyRecipe(tokens, recipe).tokens, tokens);
   assert.deepEqual(base, JSON.parse(readFileSync(sources.kit, 'utf8')), 'the input is not mutated');
 });
@@ -209,6 +209,16 @@ test('themeStatus reports the applied theme and hand edits as drift', () => {
   const edited = JSON.parse(JSON.stringify(tokens));
   edited.semantic.color.muted.$value.light = '#eeeeee';
   assert.deepEqual(themeStatus(edited).drift, ['semantic.color.muted']);
+});
+
+test('a theme recorded under the pre-rename key is read, and moved on the next apply', () => {
+  const { tokens, theme } = applyRecipe(base, DEFAULT_RECIPE);
+  const { 'com.halftonedesignsystem.theme': record, ...others } = tokens.$extensions;
+  const legacy = { ...tokens, $extensions: { ...others, 'dev.protokit.theme': record } };
+  assert.equal(themeStatus(legacy).code, theme.code);
+  const moved = applyRecipe(legacy, DEFAULT_RECIPE).tokens.$extensions;
+  assert.equal(moved['dev.protokit.theme'], undefined);
+  assert.equal(moved['com.halftonedesignsystem.theme'].code, theme.code);
 });
 
 test('theme variables match what the build writes for the same tokens', async () => {

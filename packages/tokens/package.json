@@ -1,15 +1,15 @@
 {
-  "name": "@itshendri/kit-tokens",
+  "name": "@halftone/tokens",
   "version": "1.0.0",
-  "description": "Design tokens (W3C DTCG) to NativeWind, Tailwind 4 / shadcn, TypeScript, DESIGN.md and Figma, with a WCAG AA contrast gate. The token build behind Protokit.",
+  "description": "Design tokens (W3C DTCG) to NativeWind, Tailwind 4 / shadcn, TypeScript, DESIGN.md and Figma, with a WCAG AA contrast gate. The token build behind Halftone.",
   "license": "MIT",
   "type": "module",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/itsHendri/protokit.git",
+    "url": "git+https://github.com/itsHendri/halftone.git",
     "directory": "packages/tokens"
   },
-  "homepage": "https://github.com/itsHendri/protokit/tree/main/packages/tokens#readme",
+  "homepage": "https://github.com/itsHendri/halftone/tree/main/packages/tokens#readme",
   "keywords": [
     "design-tokens",
     "dtcg",
