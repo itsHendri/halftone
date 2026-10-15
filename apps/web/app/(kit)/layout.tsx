@@ -1,7 +1,7 @@
 import { KitHeader } from '@/components/site/kit-header';
 
 /**
- * The kit shell: Home · Components (the Kitchen Sink) · Foundations. A real prototype lives in its own
+ * The kit shell: Home · Components · Foundations. A real prototype lives in its own
  * folder (app/<slug>/) with its own layout; it does not use this one.
  */
 export default function KitLayout({ children }: LayoutProps<'/'>) {

@@ -75,7 +75,7 @@ function ProseDemo() {
   );
 }
 
-/** Kitchen Sink demos, keyed by the component id in registry/components.ts. */
+/** Components page demos, keyed by the component id in registry/components.ts. */
 export const KIT_LAYOUT_DEMOS: Record<string, ComponentType> = {
   'sticky-bottom-bar': StickyBottomBarDemo,
   'promo-card': PromoCardDemo,

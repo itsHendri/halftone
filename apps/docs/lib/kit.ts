@@ -37,14 +37,14 @@ export type KitInfo = {
   stack: string;
   categories: CategoryMeta[];
   components: KitComponent[];
-  /** What the Kitchen Sink previews (some components have no demo of their own). */
+  /** What the Components page previews (some components have no demo of their own). */
   previewed: KitComponent[];
   /** The shadcn registry namespace (`@halftone-native`) and where this site serves it (`/r/native`). */
   namespace: string;
   registryPath: string;
   registryItems: RegistryItem[];
-  /** The Kitchen Sink route inside the kit, for live previews. */
-  kitchenSink: string;
+  /** The Components page route inside the kit, for live previews. */
+  componentsRoute: string;
 };
 
 const build = (
@@ -55,7 +55,7 @@ const build = (
   registry: { items: RegistryItem[] },
   namespace: string,
   registryPath: string,
-  kitchenSink: string
+  componentsRoute: string
 ): KitInfo => {
   const components = index.components as KitComponent[];
   return {
@@ -68,12 +68,12 @@ const build = (
     namespace,
     registryPath,
     registryItems: registry.items,
-    kitchenSink,
+    componentsRoute,
   };
 };
 
 export const kits: Record<Platform, KitInfo> = {
-  mobile: build('mobile', 'Native kit', 'Expo, React Native, NativeWind, react-native-reusables', mobileIndex, mobileRegistry, kit.registry.native, '/r/native', '/kitchen-sink'),
+  mobile: build('mobile', 'Native kit', 'Expo, React Native, NativeWind, react-native-reusables', mobileIndex, mobileRegistry, kit.registry.native, '/r/native', '/components'),
   web: build('web', 'Web kit', 'Next.js, Tailwind 4, shadcn/ui', webIndex, webRegistry, kit.registry.web, '/r/web', '/components'),
 };
 

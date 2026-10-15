@@ -33,7 +33,7 @@ export async function generateMetadata(props: PageProps<'/components/[id]'>): Pr
   return { title: `${e.title} · Components`, description: c.notes.replace(/`/g, '') || c.caption };
 }
 
-/** Where a component without its own Kitchen Sink demo is shown instead. */
+/** Where a component without its own demo on the Components page is shown instead. */
 const PREVIEWED_ELSEWHERE: Record<Platform, Record<string, string>> = {
   mobile: {
     text: 'The type scale is previewed in the kit under Foundations › Typography.',
@@ -107,7 +107,7 @@ function Panel({ side, e, c }: { side: Side; e: Entry; c: KitComponent }) {
   const k = kits[platform];
   const item = registryItemFor(platform, c);
   const ours = c.install?.startsWith(`${k.namespace}/`) ?? false;
-  const demo = `${k.kitchenSink}?section=${c.id}`;
+  const demo = `${k.componentsRoute}?section=${c.id}`;
   const label = `${e.title} (${SIDE_LABEL[side]}), live preview`;
 
   let preview: React.ReactNode;

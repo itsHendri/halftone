@@ -96,7 +96,7 @@ function ToggleGroupDemo() {
   );
 }
 
-/** Kitchen Sink demos, keyed by the component id in registry/components.ts. */
+/** Components page demos, keyed by the component id in registry/components.ts. */
 export const ACTIONS_DEMOS: Record<string, ComponentType> = {
   'button': ButtonDemo,
   'toggle': ToggleDemo,

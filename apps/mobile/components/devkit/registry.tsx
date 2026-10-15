@@ -1,5 +1,5 @@
 /**
- * The Kitchen Sink registry: the metadata in registry/components.ts joined to the demos in
+ * The Components page registry: the metadata in registry/components.ts joined to the demos in
  * ./sections/*.tsx. registry/components.ts is the single source of truth for what the kit ships.
  *
  * Adding a component: add it under components/ui (reusables) or components/kit (ours), add an entry
@@ -60,7 +60,7 @@ if (__DEV__) {
   const orphaned = Object.keys(DEMOS).filter((id) => !PREVIEWED.some((c) => c.id === id));
   if (missing.length || orphaned.length) {
     throw new Error(
-      `Kitchen Sink registry out of sync. No demo for: ${missing.join(', ') || '—'}. ` +
+      `Components page out of sync. No demo for: ${missing.join(', ') || '—'}. ` +
         `Demo without a registry entry: ${orphaned.join(', ') || '—'}.`
     );
   }

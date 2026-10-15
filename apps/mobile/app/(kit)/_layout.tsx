@@ -16,7 +16,7 @@ export default function KitLayout() {
       screenOptions={{ headerShown: !EMBED.embedded, headerRight: () => <ThemeToggle /> }}>
       <Tabs.Screen name="index" options={{ title: 'Kit', tabBarIcon: tabIcon(HouseIcon) }} />
       <Tabs.Screen name="foundations" options={{ title: 'Foundations', tabBarIcon: tabIcon(SwatchBookIcon) }} />
-      <Tabs.Screen name="kitchen-sink" options={{ title: 'Components', tabBarIcon: tabIcon(BlocksIcon) }} />
+      <Tabs.Screen name="components" options={{ title: 'Components', tabBarIcon: tabIcon(BlocksIcon) }} />
       <Tabs.Screen name="settings" options={{ title: 'Settings', tabBarIcon: tabIcon(SettingsIcon) }} />
     </Tabs>
   );

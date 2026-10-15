@@ -19,13 +19,13 @@ and the hallucination guard. This file covers engineering, workflows and gotchas
 
 ```
 app/_layout.tsx         providers (theme, toast, portal, nav theme) + root Stack
-app/(kit)/              the kit shell: Home · Components (kitchen sink) · Foundations · Settings
+app/(kit)/              the kit shell: Home · Components · Foundations · Settings
 app/shop/, app/habits/, app/northwind/   three sample apps (named segments, not groups); the web kit has each
                         too. `npm run eject-samples` removes them.
 components/ui/          reusables — install more with the add-component skill
 components/kit/         ported/custom components
 registry/               components.ts: what the kit ships (metadata) → DESIGN_SYSTEM.md tables, llms.txt, registry
-components/devkit/      Kitchen Sink: demos keyed by registry id (sections/<category>.tsx, sections/kit-<category>.tsx)
+components/devkit/      the Components page: demos keyed by registry id (sections/<category>.tsx, sections/kit-<category>.tsx)
 components/shop/, components/habits/, components/northwind/  sample data + stores. Go with `npm run eject-samples`.
 lib/                    theme.ts (generated), theme-context, embed (docs iframe mode), haptics, utils(cn)
 tokens/                 tokens.json (edit), tokens.config.json (outputs), generated/ — built by `halftone-tokens` (@halftone-ds/tokens)
@@ -71,12 +71,12 @@ npx expo run:ios       # build + install the dev client on the simulator (needs 
 ## Workflows
 
 - **Preview:** `kit-web` (http://localhost:8090) and `kit-ios` (Expo Go on the booted simulator, port 8091)
-  launch configs. Deep link a section: `xcrun simctl openurl booted "exp://localhost:8091/--/kitchen-sink?open=inputs"`
-  (Expo Go) or `halftone://kitchen-sink?open=inputs` (dev client).
-- **Deep links into the Kitchen Sink:** `?open=<category>` expands a category; `?section=<id>` (a registry id)
+  launch configs. Deep link a section: `xcrun simctl openurl booted "exp://localhost:8091/--/components?open=inputs"`
+  (Expo Go) or `halftone://components?open=inputs` (dev client).
+- **Deep links into the Components page:** `?open=<category>` expands a category; `?section=<id>` (a registry id)
   expands its category, scrolls to it and tints it for 2s.
 - **Embedding (the docs site's phone frames):** the web export, loaded with `?embed=1`, drops the kit chrome
-  (tab bar, header, KitChip) for the whole session; `/kitchen-sink?section=<id>&embed=1` renders just that
+  (tab bar, header, KitChip) for the whole session; `/components?section=<id>&embed=1` renders just that
   demo. `?theme=light|dark` starts in that theme without persisting it. The host keeps the theme in step by
   posting `{ type: 'kit:theme', value }`; the kit answers `{ type: 'kit:ready' }`. Same origin only, plus
   `EXPO_PUBLIC_EMBED_ORIGINS` (comma-separated) for a docs dev server on another port. See `lib/embed.ts`.

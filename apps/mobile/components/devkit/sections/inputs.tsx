@@ -147,7 +147,7 @@ function SelectDemo() {
   );
 }
 
-/** Kitchen Sink demos, keyed by the component id in registry/components.ts. */
+/** Components page demos, keyed by the component id in registry/components.ts. */
 export const INPUTS_DEMOS: Record<string, ComponentType> = {
   'input': InputDemo,
   'textarea': TextareaDemo,

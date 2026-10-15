@@ -19,7 +19,7 @@ export type CapabilityId = 'camera' | 'photos' | 'biometrics' | 'notify' | 'shar
 /** `unsupported` is terminal for the session; `prompt` means the OS has not been asked yet. */
 export type CapabilityState = 'ready' | 'prompt' | 'denied' | 'unsupported';
 
-/** Why the kit is drawing the simulated experience. Surfaced in the Kitchen Sink, never in a prototype. */
+/** Why the kit is drawing the simulated experience. Surfaced on the Components page, never in a prototype. */
 export type SimulateReason = 'web' | 'no-hardware' | 'expo-go' | 'denied' | 'forced';
 
 export type Capability = {

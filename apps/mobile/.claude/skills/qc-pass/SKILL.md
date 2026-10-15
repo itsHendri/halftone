@@ -36,11 +36,11 @@ Registration is checked by `registry:build -- --check` in step 1 (helpers it ski
 Start the servers with the `kit-ios` (Expo Go on the booted simulator) and `kit-web` launch
 configs. For each affected section:
 
-1. Open it: `xcrun simctl openurl booted "exp://localhost:8091/--/kitchen-sink?open=<category>"`.
+1. Open it: `xcrun simctl openurl booted "exp://localhost:8091/--/components?open=<category>"`.
 2. Screenshot in the current scheme, flip the theme (header button), screenshot again.
 3. Tap the interactive parts: open overlays, toggle switches, type in inputs, long-press
    context menus. Confirm sheets clear the home indicator and nothing is clipped.
-4. On web (`http://localhost:8090/kitchen-sink?open=<category>`) confirm the same section renders
+4. On web (`http://localhost:8090/components?open=<category>`) confirm the same section renders
    and the console has no errors.
 
 Expo Go note: haptics and blur render on the simulator; a physical device is only needed for

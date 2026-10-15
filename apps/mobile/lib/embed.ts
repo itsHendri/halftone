@@ -7,7 +7,7 @@ import { Platform } from 'react-native';
  *
  *   ?embed=1             hide the kit chrome: tab bar, header, KitChip
  *   ?theme=light|dark    start in that theme and never persist it (also works without embed)
- *   ?section=<id>        on /kitchen-sink: with embed, render just that component's demo
+ *   ?section=<id>        on /components: with embed, render just that component's demo
  *   ?autosize=1          report that demo's height, so the host can size its frame to it (kit:size)
  *
  * The host page keeps the theme in step with postMessage (web only):

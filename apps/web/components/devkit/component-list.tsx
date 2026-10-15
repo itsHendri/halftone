@@ -17,7 +17,7 @@ if (process.env.NODE_ENV !== 'production') {
   const missing = PREVIEWED.filter((c) => !DEMOS[c.id]).map((c) => c.id);
   const orphaned = Object.keys(DEMOS).filter((id) => !PREVIEWED.some((c) => c.id === id));
   if (missing.length || orphaned.length) {
-    throw new Error(`Kitchen Sink out of sync. No demo for: ${missing.join(', ') || '—'}. Demo without an entry: ${orphaned.join(', ') || '—'}.`);
+    throw new Error(`Components page out of sync. No demo for: ${missing.join(', ') || '—'}. Demo without an entry: ${orphaned.join(', ') || '—'}.`);
   }
 }
 
@@ -87,7 +87,7 @@ function Tiles({ ids }: { ids: string[] }) {
  * Every component the kit ships, by category, searchable. Deep links: ?section=<id> scrolls to a
  * component and tints it; with ?embed=1 (docs site) only that component's demo renders.
  */
-export function KitchenSink({ embedded }: { embedded?: boolean }) {
+export function ComponentList({ embedded }: { embedded?: boolean }) {
   const params = useSearchParams();
   const section = params.get('section');
   const [query, setQuery] = React.useState('');

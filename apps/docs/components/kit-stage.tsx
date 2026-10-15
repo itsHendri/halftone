@@ -3,7 +3,7 @@ import { useFrameHeight, useKitFrame } from '@/lib/frames';
 
 type Props = {
   kind: 'mobile' | 'web';
-  /** The kit's single-demo route, e.g. `/kitchen-sink?section=button`. */
+  /** The kit's single-demo route, e.g. `/components?section=button`. */
   path: string;
   title: string;
   /** The least height (px): overlays need room to open. */

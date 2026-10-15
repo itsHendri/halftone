@@ -54,7 +54,7 @@ function SpotDemo() {
   );
 }
 
-/** Kitchen Sink demos, keyed by the component id in registry/components.ts. */
+/** Components page demos, keyed by the component id in registry/components.ts. */
 export const KIT_MEDIA_DEMOS: Record<string, ComponentType> = {
   'placeholder': PlaceholderDemo,
   'spot': SpotDemo,

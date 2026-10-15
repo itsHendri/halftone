@@ -27,7 +27,7 @@ export function GroupTiles({ entries, label }: { entries: Entry[]; label: string
 
 function TileFrame({ kind, ids, title }: { kind: 'mobile' | 'web'; ids: string[]; title: string }) {
   const router = useRouter();
-  const base = kind === 'mobile' ? '/kitchen-sink' : '/components';
+  const base = kind === 'mobile' ? '/components' : '/components';
   const { ref, src } = useKitFrame(kind, `${base}?tiles=${ids.join(',')}&autosize=1`);
   // Before the kit reports its height: a row of tiles per ~3 components.
   const height = useFrameHeight(ref, src, Math.ceil(ids.length / 3) * 260);

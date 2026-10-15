@@ -10,14 +10,14 @@ import { useLocalSearchParams } from 'expo-router';
 import { Pressable, ScrollView, View } from 'react-native';
 
 /**
- * The Kitchen Sink: every component the kit ships, grouped by function, searchable.
- * Deep links (or halftone://kitchen-sink?…):
- *   /kitchen-sink?open=inputs          expand a category
- *   /kitchen-sink?section=list-row     expand its category, scroll to it, tint it briefly
- *   /kitchen-sink?section=list-row&embed=1   just that demo, no chrome (the docs' previews)
+ * The Components page: every component the kit ships, grouped by function, searchable.
+ * Deep links (or halftone://components?…):
+ *   /components?open=inputs          expand a category
+ *   /components?section=list-row     expand its category, scroll to it, tint it briefly
+ *   /components?section=list-row&embed=1   just that demo, no chrome (the docs' previews)
  *   …&autosize=1                             and report its height (kit:size), for a frame sized to it
  */
-export default function KitchenSink() {
+export default function ComponentsScreen() {
   const { open, section, tiles } = useLocalSearchParams<{ open?: string; section?: string; tiles?: string }>();
 
   // The docs index's live tiles (?tiles=a,b,c): each demo in a cell, its title opens the docs page (kit:open).

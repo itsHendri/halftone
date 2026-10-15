@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { Suspense } from 'react';
-import { KitchenSinkPage } from '@/components/devkit/kitchen-sink-page';
+import { ComponentsView } from '@/components/devkit/components-view';
 import { COMPONENTS } from '@/registry/components';
 
 export const metadata: Metadata = { title: 'Components' };
@@ -15,7 +15,7 @@ export default function ComponentsPage() {
         </p>
       </header>
       <Suspense>
-        <KitchenSinkPage />
+        <ComponentsView />
       </Suspense>
     </div>
   );

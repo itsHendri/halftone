@@ -53,7 +53,7 @@ Rules:
   `success/15` 4.09, destructive 3.82). The status colour goes on the icon or a dot.
 - Selected / active states in chips and segments are **neutral** (inverted foreground), not the brand colour.
   The brand colour is for the primary action and focus.
-- Light and dark are both required. Every component is checked in both in the Kitchen Sink.
+- Light and dark are both required. Every component is checked in both on the Components page.
 
 ### Spacing — the 4-pt grid
 
@@ -156,7 +156,7 @@ tables. Text between `GENERATED` markers is overwritten.
 | Tabs | `components/ui/tabs.tsx` | in-page content switching |
 | Menubar | `components/ui/menubar.tsx` | web/desktop pattern |
 | TabBar / TabBarItem / `tabIcon` | `components/kit/tab-bar.tsx` | custom bottom tab bar: opaque tints, label, active dot under the label |
-| KitChip | `components/kit/kit-chip.tsx` | scaffolding, not a product component: the way back to the kit from a sample. Not in the Kitchen Sink; delete it with the kit shell |
+| KitChip | `components/kit/kit-chip.tsx` | scaffolding, not a product component: the way back to the kit from a sample. Not on the Components page; delete it with the kit shell |
 | Stepper | `components/kit/stepper.tsx` | `numbered` / `compact` flow progress |
 | SectionHeader | `components/kit/section-header.tsx` | title + action, outside the card |
 | ScreenHeader | `components/kit/screen-header.tsx` | the in-body page title + intro · one per screen, first child of the ScrollView |

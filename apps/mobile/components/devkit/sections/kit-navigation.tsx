@@ -93,7 +93,7 @@ function ScreenHeaderDemo() {
   );
 }
 
-/** Kitchen Sink demos, keyed by the component id in registry/components.ts. */
+/** Components page demos, keyed by the component id in registry/components.ts. */
 export const KIT_NAVIGATION_DEMOS: Record<string, ComponentType> = {
   'tab-bar': TabBarDemo,
   'stepper': StepperDemo,

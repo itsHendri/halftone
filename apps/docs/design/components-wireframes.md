@@ -134,7 +134,7 @@ says so. Required checks: 6 CI jobs plus `Workers Builds: halftone-docs`.
    light and dark.
 
 ### Things learned building it
-- Tiles: `?tiles=a,b,c&embed=1&autosize=1` on either kit's Kitchen Sink route. A kit reports its height with
+- Tiles: `?tiles=a,b,c&embed=1&autosize=1` on either kit's Components route. A kit reports its height with
   `kit:size`: the web kit from `[data-autosize]`, the native kit from `reportEmbedSize` in an `onLayout`. A tile's
   title posts `kit:open` and the docs navigate. One frame per kit per group; native frames are expensive.
 - Embedded web-kit pages drop the `(kit)` layout's width cap and padding (`[[data-embed]_&]:…`).

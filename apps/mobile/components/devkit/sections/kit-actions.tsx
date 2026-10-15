@@ -61,7 +61,7 @@ function ActionGridDemo() {
   );
 }
 
-/** Kitchen Sink demos, keyed by the component id in registry/components.ts. */
+/** Components page demos, keyed by the component id in registry/components.ts. */
 export const KIT_ACTIONS_DEMOS: Record<string, ComponentType> = {
   'floating-button': FloatingButtonDemo,
   'icon-badge': IconBadgeDemo,

@@ -1,11 +1,11 @@
 ---
 name: add-component
-description: Add a component to the web prototype kit the right way — install a shadcn/ui component or build one into components/kit — and register it in the Kitchen Sink and DESIGN_SYSTEM.md in the same change. Use when asked to "add a component", "we need a <thing>", or when a page needs something the registry lacks.
+description: Add a component to the web prototype kit the right way — install a shadcn/ui component or build one into components/kit — and register it on the Components page and in DESIGN_SYSTEM.md in the same change. Use when asked to "add a component", "we need a <thing>", or when a page needs something the registry lacks.
 ---
 
 # Add a component (web)
 
-The kit's rule: **nothing exists until it is in `registry/components.ts`, with a Kitchen Sink demo.** A
+The kit's rule: **nothing exists until it is in `registry/components.ts`, with a demo on the Components page.** A
 component that is only a file is invisible to designers and to the transcript-to-prototype skill.
 
 ## 0. Check it does not already exist

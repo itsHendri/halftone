@@ -3,7 +3,7 @@
  * scripts (Node) and the docs site (Next) can all read registry/*.ts.
  */
 
-/** Functional browse buckets for the Kitchen Sink (the industry taxonomy designers expect). */
+/** Functional browse buckets for the Components page (the industry taxonomy designers expect). */
 export type CategoryId =
   | 'actions'
   | 'inputs'
@@ -24,11 +24,11 @@ export type CategoryMeta = {
 };
 
 /**
- * One component (or hook) the kit ships. This is the source for the Kitchen Sink metadata, the
+ * One component (or hook) the kit ships. This is the source for the Components page metadata, the
  * registry tables in DESIGN_SYSTEM.md, llms.txt, the shadcn registry and the docs site.
  */
 export type ComponentMeta = {
-  /** Stable slug: Kitchen Sink deep-link anchor, shadcn registry item name, docs URL. */
+  /** Stable slug: Components page deep-link anchor, shadcn registry item name, docs URL. */
   id: string;
   /** Display title and primary search key. */
   title: string;
@@ -41,11 +41,11 @@ export type ComponentMeta = {
   notes: string;
   /** One-line API hint (docs, llms.txt). */
   api?: string;
-  /** Usage guidance shown under the Kitchen Sink demo. */
+  /** Usage guidance shown under the demo on the Components page. */
   caption?: string;
   /** Extra search terms ("toggle" → Switch). */
   aliases?: string[];
-  /** false = no Kitchen Sink section (previewed elsewhere, or scaffolding). */
+  /** false = no section on the Components page (previewed elsewhere, or scaffolding). */
   preview?: false;
   /** false = never published to the shadcn registry. */
   publish?: false;
