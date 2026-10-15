@@ -1,5 +1,12 @@
 # @halftone-ds/tokens
 
+## 1.2.0
+
+### Minor Changes
+
+- aa5526c: Add `apcaContrast(text, background)` (APCA-W3 0.0.98G-4g Lc, in `lib/apca.mjs`) and `contrastReport(resolved)`, which lists every pairing the contrast gate checks in both themes with its WCAG ratio, pass/fail and the APCA Lc. Both are exported from `@halftone-ds/tokens/theme`, along with `contrastPairs`, `AA` and `AA_NON_TEXT`. APCA is advisory: the build still gates on WCAG 2.1 AA only.
+- aa5526c: Add a colour-vision check (`lib/cvd.mjs`): `simulateCvd(hex, 'protanopia' | 'deuteranopia' | 'tritanopia')` (Machado 2009, severity 1.0, in linear sRGB) and `cvdWarnings(theme.resolved)`, which lists the status-tone pairs and adjacent chart colours that fall below OKLab ΔE 0.05 (`MIN_DELTA_E`) under normal sight or any of the three, in either theme. `color.mjs` gains `hexToOklab` and `deltaEOK`. Exported from `@halftone-ds/tokens/theme`; `halftone-tokens theme apply` prints the warnings. A warning only: nothing fails on it.
+
 ## 1.1.0
 
 ### Minor Changes
