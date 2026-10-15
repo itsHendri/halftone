@@ -31,9 +31,10 @@ import type * as React from 'react';
 import { useLiveTheme } from '@/lib/theme/store';
 
 /**
- * Specimens of the live theme, rendered by this site (its chrome follows the theme: colours, radius, fonts,
- * depth, stroke). This site keeps its own reading sizes (tokens.config.json `typeset: false`), so the type
- * specimens apply the typeset's size and leading themselves, the way the kits' text classes do.
+ * Specimens of the live theme, rendered by this site. The site itself takes only the theme's colour, so a
+ * specimen must sit inside `.kit-scope` (app/global.css) to show its fonts, radius, depth and stroke. This
+ * site keeps its own reading sizes (tokens.config.json `typeset: false`), so the type specimens apply the
+ * typeset's size and leading themselves, the way the kits' text classes do.
  */
 
 /** Tailwind's text sizes and their line heights at 16px (halftone-tokens' TEXT_LINE_HEIGHT). */
@@ -130,7 +131,7 @@ export function TypeSpecimen() {
   const { theme } = useLiveTheme();
   const { size, leading, flow, measure } = theme.type;
   return (
-    <div className="not-prose my-6 flex flex-col gap-6">
+    <div className="kit-scope not-prose my-6 flex flex-col gap-6">
       <FontFaces />
       <div className="border-border bg-card rounded-xl border p-4">
         <TypeScale />

@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Canvas, VIEWS, ViewSwitcher, type View } from '@/components/theme/studio/canvas';
 import { ALL_FONTS, PRESET_FONTS } from '@/components/theme/studio/parts';
 import { InvertedSchemeStyle, Rail } from '@/components/theme/studio/rail';
+import { holdAmbient } from '@/lib/theme/ambient';
 import { redo, undo } from '@/lib/theme/store';
 
 /**
@@ -15,6 +16,9 @@ export function ThemeStudio() {
   const [view, setView] = React.useState<View>('overview');
   // Below lg the rail is a panel over the preview, opened from the switcher.
   const [controls, setControls] = React.useState(false);
+
+  // The studio shows the theme being edited, so the ambient drift holds still here.
+  React.useEffect(() => holdAmbient('studio'), []);
 
   // ?view= in, and out on every change (the page is static: read it on the client).
   React.useEffect(() => {

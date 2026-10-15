@@ -1,6 +1,7 @@
 'use client';
 import { useTheme } from 'next-themes';
 import * as React from 'react';
+import { useAmbientStep } from '@/lib/theme/ambient';
 import { kitPayloads } from '@/lib/theme/payload';
 import { useLiveTheme } from '@/lib/theme/store';
 
@@ -25,6 +26,8 @@ export const frameBase = {
 export function useKitFrame(kind: 'mobile' | 'web', path: string) {
   const base = frameBase[kind];
   const { theme: liveTheme, isCommitted } = useLiveTheme();
+  // While the site's colours drift, the kits follow in steps of a few seconds (lib/theme/ambient.ts).
+  const ambientStep = useAmbientStep();
   const { resolvedTheme } = useTheme();
   const theme = resolvedTheme === 'dark' ? 'dark' : 'light';
   const ref = React.useRef<HTMLIFrameElement>(null);
@@ -55,9 +58,9 @@ export function useKitFrame(kind: 'mobile' | 'web', path: string) {
   React.useEffect(() => {
     const target = ref.current?.contentWindow;
     if (!ready || !target) return;
-    const payload = kitPayloads(liveTheme, !isCommitted)[kind];
+    const payload = ambientStep ? kitPayloads(ambientStep, true)[kind] : kitPayloads(liveTheme, !isCommitted)[kind];
     target.postMessage({ type: 'kit:tokens', v: 1, ...payload }, new URL(base, window.location.href).origin);
-  }, [base, kind, ready, liveTheme, isCommitted]);
+  }, [base, kind, ready, liveTheme, isCommitted, ambientStep]);
 
   return { ref, src };
 }

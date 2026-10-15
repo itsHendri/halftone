@@ -113,6 +113,18 @@
         "apps/docs"
       ],
       "port": 3000
+    },
+    {
+      "name": "design-lab",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": [
+        "-m",
+        "http.server",
+        "8095",
+        "--bind",
+        "127.0.0.1"
+      ],
+      "port": 8095
     }
   ]
 }

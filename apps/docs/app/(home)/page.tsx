@@ -1,6 +1,8 @@
 import { ArrowRightIcon, CheckIcon } from "lucide-react";
 import Link from "next/link";
 import { CopyPrompt } from "@/components/copy-prompt";
+import { HeroField } from "@/components/halftone/hero-field";
+import { MarkCard } from "@/components/halftone/mark-card";
 import { BrowserFrame } from "@/components/browser-frame";
 import { PhoneFrame } from "@/components/phone-frame";
 import { phoneFrameHeight } from "@/lib/device";
@@ -47,41 +49,44 @@ export default function HomePage() {
   return (
     <main className="flex w-full flex-col">
       {/* Hero */}
-      <section className="mx-auto flex w-full max-w-3xl flex-col items-center gap-6 px-4 pb-12 pt-14 text-center md:px-6 md:pt-20">
-        <Link
-          href="/themes"
-          className="border-border bg-card hover:bg-accent focus-visible:ring-ring inline-flex items-center gap-2 rounded-full border px-3 py-1 text-sm font-medium focus-visible:outline-none focus-visible:ring-2"
-        >
-          New: the typeset is part of the theme{" "}
-          <ArrowRightIcon className="size-3.5" aria-hidden />
-        </Link>
-        <h1 className="text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
-          Hand an agent a brief. Get a prototype that looks designed.
-        </h1>
-        <p className="text-muted-foreground max-w-2xl text-lg leading-8 text-balance">
-          {kit.name} is a set of prototype kits that coding agents build from. A
-          themed component registry, design tokens with a contrast gate, and
-          rules that keep every screen inside what the kit ships. For mobile and
-          web, on one brand.
-        </p>
-        <CopyPrompt className="w-full max-w-2xl text-left" />
+      {/* The lit dot grid (components/halftone) behind the hero: the halftone idea, in the drifting colour. */}
+      <div className="relative isolate overflow-hidden">
+        <HeroField />
+        <section className="mx-auto flex w-full max-w-3xl flex-col items-center gap-6 px-4 pb-12 pt-14 text-center md:px-6 md:pt-20">
+          <Link
+            href="/themes"
+            className="border-border bg-card hover:bg-accent focus-visible:ring-ring inline-flex items-center gap-2 rounded-full border px-3 py-1 text-sm font-medium focus-visible:outline-none focus-visible:ring-2"
+          >
+            New: the typeset is part of the theme{" "}
+            <ArrowRightIcon className="size-3.5" aria-hidden />
+          </Link>
+          <h1 className="text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
+            Hand an agent a brief. Get a prototype that looks designed.
+          </h1>
+          <p className="text-muted-foreground max-w-2xl text-lg leading-8 text-balance">
+            {kit.name} is a set of prototype kits that coding agents build from.
+            A themed component registry, design tokens with a contrast gate, and
+            rules that keep every screen inside what the kit ships. For mobile
+            and web, on one brand.
+          </p>
+          <CopyPrompt className="w-full max-w-2xl text-left" />
+        </section>
         {/* The copy button above is the one primary action; these two follow it. The theme bar steps aside on phones. */}
-        <div data-theme-bar-avoid className="flex flex-wrap justify-center gap-3">
-          <Link
+        <div
+          data-theme-bar-avoid
+          className="border-border divide-border mx-auto mb-14 grid w-[calc(100%-2rem)] max-w-5xl divide-y overflow-hidden rounded-xl border sm:grid-cols-2 sm:divide-x sm:divide-y-0 md:mb-20"
+        >
+          <MarkCard
             href="/components"
-            className="border-border bg-card hover:bg-accent focus-visible:ring-ring inline-flex h-10 items-center gap-2 rounded-full border px-5 text-sm font-medium focus-visible:outline-none focus-visible:ring-2"
+            title={`Browse ${CATALOGUE.length} components`}
           >
-            Browse {CATALOGUE.length} components{" "}
-            <ArrowRightIcon className="size-4" aria-hidden />
-          </Link>
-          <Link
-            href="/docs"
-            className="hover:bg-accent focus-visible:ring-ring inline-flex h-10 items-center gap-2 rounded-full px-5 text-sm font-medium focus-visible:outline-none focus-visible:ring-2"
-          >
-            How it works
-          </Link>
+            Every one is the kit running live, in your theme.
+          </MarkCard>
+          <MarkCard href="/docs" title="How it works">
+            Brief in, prototype out, inside what the kit ships.
+          </MarkCard>
         </div>
-      </section>
+      </div>
 
       {/* The kits, live: every card below is a real registry component, themed by the bar at the bottom. */}
       <section
@@ -180,17 +185,19 @@ export default function HomePage() {
               Everything a screen needs, and nothing else
             </h2>
             <p className="text-muted-foreground leading-7">
-              {CATALOGUE.length} components, live and themed, each marked Native,
-              Web or both: list rows, sheets, a camera and Face ID in the native
-              kit; app shells, data tables, pricing and AI chat with tool calls
-              and approvals on the web.
+              {CATALOGUE.length} components, live and themed, each marked
+              Native, Web or both: list rows, sheets, a camera and Face ID in
+              the native kit; app shells, data tables, pricing and AI chat with
+              tool calls and approvals on the web.
             </p>
           </div>
           <ul className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
             {GROUPS.map((g) => {
               const entries = entriesIn(g.id);
               if (!entries.length) return null;
-              const sides = SIDES.filter((side) => entries.some((e) => e.sides.includes(side)));
+              const sides = SIDES.filter((side) =>
+                entries.some((e) => e.sides.includes(side)),
+              );
               return (
                 <li key={g.id}>
                   <Link
@@ -199,17 +206,25 @@ export default function HomePage() {
                   >
                     <span className="flex items-start justify-between gap-4">
                       <span className="font-medium">{g.label}</span>
-                      <span className="bg-muted rounded-full px-2.5 py-0.5 text-sm tabular-nums">{entries.length}</span>
+                      <span className="bg-muted rounded-full px-2.5 py-0.5 text-sm tabular-nums">
+                        {entries.length}
+                      </span>
                     </span>
-                    <span className="text-muted-foreground text-sm">{g.blurb}</span>
+                    <span className="text-muted-foreground text-sm">
+                      {g.blurb}
+                    </span>
                     <KitBadges sides={sides} />
                   </Link>
                 </li>
               );
             })}
           </ul>
-          <Link href="/components" className="text-primary inline-flex items-center gap-1 self-start text-sm font-medium">
-            All {CATALOGUE.length} components <ArrowRightIcon className="size-4" aria-hidden />
+          <Link
+            href="/components"
+            className="text-primary inline-flex items-center gap-1 self-start text-sm font-medium"
+          >
+            All {CATALOGUE.length} components{" "}
+            <ArrowRightIcon className="size-4" aria-hidden />
           </Link>
         </section>
 
