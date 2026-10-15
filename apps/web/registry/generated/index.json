@@ -702,7 +702,7 @@
         "desktop",
         "file menu"
       ],
-      "install": "menubar"
+      "install": "@halftone-web/menubar"
     },
     {
       "id": "stepper",
@@ -1540,7 +1540,7 @@
         "more",
         "kebab"
       ],
-      "install": "dropdown-menu"
+      "install": "@halftone-web/dropdown-menu"
     },
     {
       "id": "tooltip",
@@ -1579,7 +1579,7 @@
         "right click",
         "long press"
       ],
-      "install": "context-menu"
+      "install": "@halftone-web/context-menu"
     },
     {
       "id": "hover-card",

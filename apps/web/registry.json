@@ -697,6 +697,42 @@
       }
     },
     {
+      "name": "menubar",
+      "type": "registry:ui",
+      "title": "Menubar",
+      "description": "desktop-app menus (File · Edit · View) across the top of an editor",
+      "dependencies": [
+        "cn@^0.4.0",
+        "lucide-react@^1.52.0",
+        "radix-ui@^1.7.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/ui/menubar.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/menubar.tsx"
+        }
+      ],
+      "categories": [
+        "navigation"
+      ],
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "Menubar",
+          "MenubarMenu",
+          "MenubarTrigger",
+          "MenubarContent",
+          "MenubarItem",
+          "MenubarSeparator",
+          "MenubarShortcut",
+          "MenubarCheckboxItem"
+        ],
+        "api": "<Menubar><MenubarMenu><MenubarTrigger /><MenubarContent><MenubarItem /></MenubarContent></MenubarMenu></Menubar>"
+      }
+    },
+    {
       "name": "stepper",
       "type": "registry:component",
       "title": "Stepper",
@@ -1433,6 +1469,73 @@
           "Footnote"
         ],
         "api": "<Footnote action?={{label,href|onClick}}>{copy}</Footnote>"
+      }
+    },
+    {
+      "name": "dropdown-menu",
+      "type": "registry:ui",
+      "title": "Dropdown menu",
+      "description": "actions on a thing (row menu, account menu) · `variant=\"destructive\"` items last",
+      "dependencies": [
+        "cn@^0.4.0",
+        "lucide-react@^1.52.0",
+        "radix-ui@^1.7.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/ui/dropdown-menu.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/dropdown-menu.tsx"
+        }
+      ],
+      "categories": [
+        "overlays"
+      ],
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "DropdownMenu",
+          "DropdownMenuTrigger",
+          "DropdownMenuContent",
+          "DropdownMenuItem",
+          "DropdownMenuLabel",
+          "DropdownMenuSeparator"
+        ]
+      }
+    },
+    {
+      "name": "context-menu",
+      "type": "registry:ui",
+      "title": "Context menu",
+      "description": "right-click menu on a thing",
+      "dependencies": [
+        "cn@^0.4.0",
+        "lucide-react@^1.52.0",
+        "radix-ui@^1.7.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/ui/context-menu.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/context-menu.tsx"
+        }
+      ],
+      "categories": [
+        "overlays"
+      ],
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "ContextMenu",
+          "ContextMenuTrigger",
+          "ContextMenuContent",
+          "ContextMenuItem",
+          "ContextMenuSeparator",
+          "ContextMenuShortcut"
+        ],
+        "api": "<ContextMenu><ContextMenuTrigger /><ContextMenuContent><ContextMenuItem /></ContextMenuContent></ContextMenu>"
       }
     },
     {

@@ -82,7 +82,10 @@ export function ChatComposer({ onSend, busy, onStop, placeholder = 'Ask anything
               send();
             }
           }}
-          className={cn('text-foreground max-h-40 min-h-10 flex-1 px-2 py-2.5 text-base', Platform.select({ web: 'field-sizing-content resize-none outline-none' }))}
+          className={cn('text-foreground max-h-40 min-h-10 flex-1 px-2 py-2.5 text-base', Platform.select({
+            // placeholder-shown: the CSS reset colours an empty field gray-400 (2.5:1); match the placeholder (see Input).
+            web: 'placeholder:text-muted-foreground placeholder-shown:text-muted-foreground field-sizing-content resize-none outline-none',
+          }))}
           style={font}
         />
         {busy ? (

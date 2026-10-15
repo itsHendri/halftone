@@ -20,7 +20,7 @@ function TabBarDemo() {
     { label: "Settings", icon: SettingsIcon },
   ];
   return (
-    <View className="bg-background border-border w-full flex-row overflow-hidden rounded-lg border">
+    <View role="tablist" aria-label="Sections" className="bg-background border-border w-full flex-row overflow-hidden rounded-lg border">
       {tabs.map((t, i) => {
         const focused = i === active;
         const color = focused ? c.primary : c.mutedForeground;

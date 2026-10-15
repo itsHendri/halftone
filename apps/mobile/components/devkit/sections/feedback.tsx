@@ -56,7 +56,7 @@ function ProgressDemo() {
   const [value, setValue] = React.useState(20);
   return (
     <View className="w-full gap-3">
-      <Progress value={value} />
+      <Progress value={value} aria-label="Profile completion" />
       <View className="flex-row gap-2">
         <Button size="sm" variant="outline" onPress={() => setValue((v) => Math.max(0, v - 20))}>
           <Text>−20</Text>
