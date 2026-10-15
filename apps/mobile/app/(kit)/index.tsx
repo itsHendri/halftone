@@ -26,7 +26,7 @@ export default function KitHome() {
         <Link href="/(kit)/foundations" asChild>
           <ListRow leading={<Icon as={SwatchBookIcon} size={22} className="text-primary" />} title="Foundations" subtitle="Colour, spacing, radius, type, motion" chevron onPress={() => {}} />
         </Link>
-        <Link href="/(kit)/kitchen-sink" asChild>
+        <Link href="/(kit)/components" asChild>
           <ListRow leading={<Icon as={BlocksIcon} size={22} className="text-primary" />} title="Components" subtitle={`${SECTIONS.length} previews in ${CATEGORIES.length} categories`} chevron onPress={() => {}} />
         </Link>
       </ListGroup>

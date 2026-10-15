@@ -1,11 +1,11 @@
 ---
 name: add-component
-description: Add a component to the prototype kit the right way — either install a react-native-reusables component or build/port one into components/kit — and register it in the Kitchen Sink and DESIGN_SYSTEM.md in the same change. Use when asked to "add a component", "we need a <thing>", "port <Component> from another kit", or when a screen needs something the registry lacks.
+description: Add a component to the prototype kit the right way — either install a react-native-reusables component or build/port one into components/kit — and register it on the Components page and in DESIGN_SYSTEM.md in the same change. Use when asked to "add a component", "we need a <thing>", "port <Component> from another kit", or when a screen needs something the registry lacks.
 ---
 
 # Add a component
 
-The kit's rule: **nothing exists until it is in the Kitchen Sink registry and DESIGN_SYSTEM.md.**
+The kit's rule: **nothing exists until it is in the registry, with a demo on the Components page, and in DESIGN_SYSTEM.md.**
 A component that is only a file is invisible to designers and to the transcript-to-prototype
 skill, which builds from the registry alone.
 

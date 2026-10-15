@@ -18,7 +18,7 @@ the same app own their whole chrome; the only kit affordance over them is a floa
   demo copy removed everywhere (sheets, success screen, amount fields keep a currency symbol only).
 - **Components hub**: one screen, search on top, categories as disclosures, all collapsed by
   default, one open at a time, count in a badge, leading icon never tints. No nested category
-  screens. Deep links: `/kitchen-sink?open=<category>`.
+  screens. Deep links: `/components?open=<category>`.
 - **Previews show the component, not code.** The API line lives in the registry data and
   DESIGN_SYSTEM.md.
 - **Tab order**: Kit, Foundations, Components, Settings. Active tab: colour + dot under the label.

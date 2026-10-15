@@ -1,7 +1,7 @@
 import type { ComponentMeta } from './types';
 
 /**
- * Every component the kit ships, in Kitchen Sink display order. The single source for the Kitchen
+ * Every component the kit ships, in Components page display order. The single source for the Components
  * Sink metadata, the registry tables in DESIGN_SYSTEM.md, llms.txt, the shadcn registry and the docs.
  * Demos live in components/devkit/sections/*.tsx, keyed by `id`. After editing, run
  * `npm run registry:build`.
@@ -344,7 +344,7 @@ export const COMPONENTS: ComponentMeta[] = [
     exports: ['KitChip'],
     category: 'navigation',
     files: ['components/kit/kit-chip.tsx'],
-    notes: 'scaffolding, not a product component: the way back to the kit from a sample. Not in the Kitchen Sink; delete it with the kit shell',
+    notes: 'scaffolding, not a product component: the way back to the kit from a sample. Not on the Components page; delete it with the kit shell',
     preview: false,
     publish: false,
   },

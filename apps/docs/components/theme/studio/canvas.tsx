@@ -28,8 +28,8 @@ export type View = (typeof VIEWS)[number]["id"];
 const PHONE_SCREENS = [
   { path: "/shop", label: "Shop" },
   { path: "/habits", label: "Habits" },
-  { path: "/kitchen-sink?open=actions", label: "Buttons" },
-  { path: "/kitchen-sink?open=inputs", label: "Inputs" },
+  { path: "/components?open=actions", label: "Buttons" },
+  { path: "/components?open=inputs", label: "Inputs" },
   { path: "/foundations?open=type", label: "Type" },
 ];
 const WEB_SCREENS = [
@@ -196,7 +196,7 @@ function MobileView() {
           width={320}
         />
         <PhoneFrame
-          path="/kitchen-sink?open=inputs"
+          path="/components?open=inputs"
           title="Native kit inputs, live"
           width={320}
           className="max-xl:hidden"
@@ -246,7 +246,7 @@ function TypesetView() {
           className="min-w-0 max-w-5xl flex-1"
         />
         <PhoneFrame
-          path="/kitchen-sink?section=prose"
+          path="/components?section=prose"
           title="Prose in the native kit, live"
           width={280}
           className="max-2xl:hidden"

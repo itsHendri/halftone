@@ -221,7 +221,7 @@ function HoverCardDemo() {
   );
 }
 
-/** Kitchen Sink demos, keyed by the component id in registry/components.ts. */
+/** Components page demos, keyed by the component id in registry/components.ts. */
 export const OVERLAYS_DEMOS: Record<string, ComponentType> = {
   'dialog': DialogDemo,
   'alert-dialog': AlertDialogDemo,

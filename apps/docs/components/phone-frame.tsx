@@ -6,7 +6,7 @@ import { useKitFrame } from '@/lib/frames';
 const VIEWPORT = PHONE_VIEWPORT;
 
 type Props = {
-  /** A native kit route with its query, e.g. `/kitchen-sink?section=list-row` or `/shop`. */
+  /** A native kit route with its query, e.g. `/components?section=list-row` or `/shop`. */
   path: string;
   /** Accessible name for the iframe ("List row preview"). */
   title: string;

@@ -689,7 +689,7 @@
       "files": [
         "components/kit/kit-chip.tsx"
       ],
-      "notes": "scaffolding, not a product component: the way back to the kit from a sample. Not in the Kitchen Sink; delete it with the kit shell",
+      "notes": "scaffolding, not a product component: the way back to the kit from a sample. Not on the Components page; delete it with the kit shell",
       "preview": false,
       "publish": false,
       "install": null

@@ -105,7 +105,7 @@ function MenubarDemo() {
   );
 }
 
-/** Kitchen Sink demos, keyed by the component id in registry/components.ts. */
+/** Components page demos, keyed by the component id in registry/components.ts. */
 export const NAVIGATION_DEMOS: Record<string, ComponentType> = {
   'tabs': TabsDemo,
   'menubar': MenubarDemo,

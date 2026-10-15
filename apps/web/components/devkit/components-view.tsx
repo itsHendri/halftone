@@ -1,8 +1,8 @@
 'use client';
 import { useEmbedded } from '@/lib/embed';
-import { KitchenSink } from './kitchen-sink';
+import { ComponentList } from './component-list';
 
 /** The page is static; whether it is embedded is only known in the browser. */
-export function KitchenSinkPage() {
-  return <KitchenSink embedded={useEmbedded()} />;
+export function ComponentsView() {
+  return <ComponentList embedded={useEmbedded()} />;
 }

@@ -1,7 +1,7 @@
 import type { ComponentMeta } from './types';
 
 /**
- * Every component the web kit ships, in Kitchen Sink display order. The single source for the Kitchen
+ * Every component the web kit ships, in Components page display order. The single source for the Components
  * Sink, the registry tables in DESIGN_SYSTEM.md, llms.txt, the shadcn registry and the docs site.
  * Demos live in components/devkit/demos.tsx, keyed by `id`. After editing, run `npm run registry:build`.
  */

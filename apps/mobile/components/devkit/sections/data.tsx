@@ -115,7 +115,7 @@ function SeparatorDemo() {
   );
 }
 
-/** Kitchen Sink demos, keyed by the component id in registry/components.ts. */
+/** Components page demos, keyed by the component id in registry/components.ts. */
 export const DATA_DEMOS: Record<string, ComponentType> = {
   'avatar': AvatarDemo,
   'badge': BadgeDemo,

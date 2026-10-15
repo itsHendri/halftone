@@ -20,7 +20,7 @@ hallucination guard. This file covers engineering, workflows and gotchas.
 
 ```
 app/layout.tsx          providers (theme, tooltips, toasts) + the embed boot script
-app/(kit)/              the kit shell: Home (/) · Components (/components, the Kitchen Sink) · Foundations
+app/(kit)/              the kit shell: Home (/) · Components (/components) · Foundations
 app/<slug>/             a prototype: its own folder with its own layout.tsx (AppShell, a marketing layout…)
 app/dashboard/, app/landing/, app/assistant/   Northwind, three ways (worked examples)
 app/shop/, app/habits/  the web halves of the native kit's Shop and Habits samples (same data, web layouts).
@@ -36,7 +36,7 @@ components/kit/         ours: AppShell, PageHeader, StatTile, DataTable, EmptySt
                         the native kit's own (same ids): ListRow, ListGroup, SegmentedControl, FilterChip, Rating,
                         OtpInput, AmountInput, Timeline, ValueHeader, Stepper, PromoCard, Placeholder, Spot…
                         (registry/components.ts has them all)
-components/devkit/      the Kitchen Sink: demos.tsx keyed by registry id
+components/devkit/      the Components page: demos.tsx keyed by registry id
 components/site/        the kit shell's own chrome (header, theme toggle, providers) and KitChip, a
                         prototype's way back to the kit
 registry/               components.ts: what the kit ships → DESIGN_SYSTEM.md tables, llms.txt, registry.json

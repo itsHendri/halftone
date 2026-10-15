@@ -164,7 +164,7 @@ function RangeSelectorDemo() {
   );
 }
 
-/** Kitchen Sink demos, keyed by the component id in registry/components.ts. */
+/** Components page demos, keyed by the component id in registry/components.ts. */
 function RatingDemo() {
   const [stars, setStars] = React.useState(0);
   return (

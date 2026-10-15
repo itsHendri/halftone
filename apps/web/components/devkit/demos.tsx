@@ -1,6 +1,6 @@
 'use client';
 /**
- * Kitchen Sink demos, keyed by the component id in registry/components.ts. Each one is self-contained
+ * Components page demos, keyed by the component id in registry/components.ts. Each one is self-contained
  * (owns its state) and shows the variants and states that matter.
  */
 import {

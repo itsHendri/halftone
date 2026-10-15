@@ -40,7 +40,7 @@ need them:
 
 ## Tooling
 - **An axe sweep of the whole kit in CI.** The docs site's a11y gate only checks the frames it embeds. A sweep of
-  every Kitchen Sink category, Foundations and the three samples, light and dark, was clean on 2026-10-15 (run by
+  every Components page category, Foundations and the three samples, light and dark, was clean on 2026-10-15 (run by
   hand against the docs build's `/m`); making it a CI step would keep it that way.
 
 ## Known rough edges
@@ -51,14 +51,14 @@ need them:
 - Haptics/blur only verified on the simulator; feel on a physical device still to confirm.
 - Web `Select`/`DropdownMenu` positioning relies on rn-primitives portals; check on narrow viewports.
 - Dev builds and Expo Go draw a draggable "Tools" gear at the top right whose touch area (gear + 10pt) covers the
-  `SearchField` clear button and part of the header theme toggle on the Kitchen Sink. Dev tooling only, not in
+  `SearchField` clear button and part of the header theme toggle on the Components page. Dev tooling only, not in
   production; drag the gear away when testing those controls.
-- One iOS session (2026-10-06) had the top two-thirds of the Kitchen Sink search field ignore taps until a Fast
+- One iOS session (2026-10-06) had the top two-thirds of the Components page search field ignore taps until a Fast
   Refresh cleared it. Not reproduced after cold launch, simulator reboot or `expo start -c`. If it comes back, log
   `onTouchStart` on the root view to see whether the tap reaches React Native at all.
 
 ## Fixed (2026-10-15), kept so nobody re-reports them
-- TabBar items without a `tablist` parent (the Kitchen Sink demo), the Progress bar without a name, the chat
+- TabBar items without a `tablist` parent (the Components page demo), the Progress bar without a name, the chat
   composer's placeholder at 2.5:1 on web, PagerDots' label on a role-less div, scroll rows with nothing focusable.
 - A destructive menu item on its red focus tint (4.14:1): destructive items now take the neutral `accent` highlight,
   in both kits' dropdown, context and menubar menus.

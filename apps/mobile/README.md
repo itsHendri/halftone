@@ -8,7 +8,7 @@ that already looks and feels coherent.
 - **Expo SDK 57** · Expo Router · React Native 0.86 · TypeScript
 - **react-native-reusables** (shadcn for React Native) + our own kit components, styled with **NativeWind**
 - **Design tokens** in one JSON file → CSS variables + TypeScript, light and dark
-- **Kitchen Sink** and **Foundations** screens, searchable, tap-to-copy
+- **Components** and **Foundations** screens, searchable, tap-to-copy
 - Ships to phones with a **development build + EAS Update**, and to a **web URL** with EAS Hosting
 
 ## Quick start
@@ -50,7 +50,7 @@ API (Enterprise seat); otherwise import the JSON through the Figma MCP (`use_fig
 - [`AGENTS.md`](./AGENTS.md) — engineering conventions, workflows, gotchas (also what Claude Code reads).
 - [`BACKLOG.md`](./BACKLOG.md) — deferred work.
 - [`DESIGN.md`](./DESIGN.md) and [`llms.txt`](./llms.txt) — generated summaries for agents (tokens and the component list).
-- [`registry/components.ts`](./registry/components.ts) — what the kit ships. Feeds the Kitchen Sink, the registry
+- [`registry/components.ts`](./registry/components.ts) — what the kit ships. Feeds the Components page, the registry
   tables in `DESIGN_SYSTEM.md`, `llms.txt`, and `registry.json`, the shadcn registry that lets another Expo +
   react-native-reusables app install kit components (`npm run registry:dist` builds it into `dist/r/native`).
 - `.claude/skills/` — `add-component`, `qc-pass`, `transcript-to-prototype`.

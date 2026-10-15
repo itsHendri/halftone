@@ -229,7 +229,7 @@ function ValueHeaderDemo() {
   );
 }
 
-/** Kitchen Sink demos, keyed by the component id in registry/components.ts. */
+/** Components page demos, keyed by the component id in registry/components.ts. */
 function TimelineDemo() {
   return (
     <Card className="w-full px-4 py-4">

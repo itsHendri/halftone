@@ -97,7 +97,7 @@ function TooltipDemo() {
   );
 }
 
-/** Kitchen Sink demos, keyed by the component id in registry/components.ts. */
+/** Components page demos, keyed by the component id in registry/components.ts. */
 export const FEEDBACK_DEMOS: Record<string, ComponentType> = {
   'alert': AlertDemo,
   'progress': ProgressDemo,

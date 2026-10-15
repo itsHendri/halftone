@@ -32,4 +32,4 @@ Built as six stacked PRs (#24–#28).
 ## Deferred
 
 - Shadcn's "Get code" variants per framework; a separate typeset export (`.typeset` CSS) outside the kits.
-- A chromeless mobile showcase (phones show sample screens and the Kitchen Sink instead).
+- A chromeless mobile showcase (phones show sample screens and the Components page instead).

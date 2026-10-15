@@ -16,7 +16,7 @@ export type CategoryDef<Id extends string> = {
 };
 
 /**
- * One entry in the kitchen-sink registry. `Demo` is self-contained (owns its own
+ * One entry in the Components page registry. `Demo` is self-contained (owns its own
  * preview state) so sections can render in any order on any page.
  */
 export type Section<Cat extends string = string> = {

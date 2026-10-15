@@ -173,7 +173,7 @@ function NotifyDemo() {
   );
 }
 
-/** Kitchen Sink demos, keyed by the component id in registry/components.ts. */
+/** Components page demos, keyed by the component id in registry/components.ts. */
 export const KIT_NATIVE_DEMOS: Record<string, ComponentType> = {
   'photo-capture': PhotoCaptureDemo,
   'code-scanner': CodeScannerDemo,
