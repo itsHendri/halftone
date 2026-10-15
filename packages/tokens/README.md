@@ -50,6 +50,16 @@ npx halftone-tokens figma      # mirror the tokens into Figma Variables
 - **Contrast gate.** Every `X` / `X-foreground` pairing, body and muted text on every surface, each status
   colour used as text, and each status icon on its own tint must clear WCAG AA in both themes, or the build
   fails, names the pairing, prints the ratio, and writes nothing.
+- **APCA, for reading only.** `apcaContrast(text, background)` (from `@halftone-ds/tokens/theme` or
+  `@halftone-ds/tokens/lib/apca`) gives the APCA Lc of a pair, and `contrastReport(theme.resolved)` lists every
+  pairing the gate checks, in both themes, with its WCAG ratio, `pass`, and Lc. Lc is advisory: WCAG AA stays
+  the gate, and nothing fails on APCA.
+- **Colour vision, as a warning.** `cvdWarnings(theme.resolved)` (from `@halftone-ds/tokens/theme` or
+  `@halftone-ds/tokens/lib/cvd`) simulates protanopia, deuteranopia and tritanopia (Machado 2009,
+  `simulateCvd`) and lists the status pairs (success / destructive and the rest) and adjacent chart colours
+  that end up closer than OKLab ΔE 0.05 under any of them, or under normal sight. `theme apply` prints them.
+  Nothing fails on it: the kit pairs every status with an icon or a label, and the warning says where colour
+  alone stops doing the work.
 - **Text on tints.** A status colour as text on its own tint (`text-success` on `bg-success/15`) loses
   contrast fast: 4.09:1 with a typical green. The build works out, per colour, the strongest tint that
   still clears AA in both themes, and writes it into `DESIGN.md` and the `llms` section

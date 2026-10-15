@@ -3,8 +3,10 @@ import { SlidersHorizontalIcon } from "lucide-react";
 import * as React from "react";
 import { BrowserFrame } from "@/components/browser-frame";
 import { PhoneFrame } from "@/components/phone-frame";
+import { ContrastTable } from "@/components/theme/studio/contrast-table";
 import { fontLabel } from "@/components/theme/studio/parts";
 import { useInvertedScheme } from "@/components/theme/studio/rail";
+import { ColourVision } from "@/components/theme/studio/vision";
 import {
   FontFaces,
   IconGrid,
@@ -22,6 +24,7 @@ export const VIEWS = [
   { id: "mobile", label: "Mobile" },
   { id: "web", label: "Web" },
   { id: "typeset", label: "Typeset" },
+  { id: "contrast", label: "Contrast" },
 ] as const;
 export type View = (typeof VIEWS)[number]["id"];
 
@@ -132,6 +135,9 @@ function Overview() {
       </Panel>
       <Panel title="Colour">
         <PaletteSpecimen />
+      </Panel>
+      <Panel title="Colour vision">
+        <ColourVision />
       </Panel>
       <Panel title="Faces">
         <FontFaces />
@@ -259,7 +265,16 @@ function TypesetView() {
   );
 }
 
-/** The floating 01–04 page switcher, in the rail's (inverted) scheme. */
+/** Every pairing the build's contrast gate checks, for the live theme, light and dark side by side. */
+function ContrastView() {
+  return (
+    <Panel title="Contrast" className="mx-auto max-w-4xl">
+      <ContrastTable />
+    </Panel>
+  );
+}
+
+/** The floating 01–05 page switcher, in the rail's (inverted) scheme. */
 export function ViewSwitcher({
   view,
   onChange,
@@ -301,7 +316,8 @@ export function ViewSwitcher({
         }`}
       >
         <SlidersHorizontalIcon className="size-3.5" aria-hidden />
-        Theme
+        {/* Icon only on a phone: five previews and the button have to fit 375px. */}
+        <span className="max-sm:sr-only">Theme</span>
       </button>
       <div
         role="tablist"
@@ -318,7 +334,7 @@ export function ViewSwitcher({
             aria-selected={view === v.id}
             tabIndex={view === v.id ? 0 : -1}
             onClick={() => onChange(v.id)}
-            className={`focus-visible:ring-ring flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium focus-visible:outline-none focus-visible:ring-2 ${
+            className={`focus-visible:ring-ring flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-xs font-medium max-sm:px-2 focus-visible:outline-none focus-visible:ring-2 ${
               view === v.id
                 ? "bg-accent text-accent-foreground"
                 : "text-muted-foreground hover:text-foreground"
@@ -342,8 +358,10 @@ export function Canvas({ view }: { view: View }) {
         <MobileView />
       ) : view === "web" ? (
         <WebView />
-      ) : (
+      ) : view === "typeset" ? (
         <TypesetView />
+      ) : (
+        <ContrastView />
       )}
     </div>
   );
