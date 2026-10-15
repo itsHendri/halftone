@@ -16,7 +16,7 @@
     "check:a11y": "node scripts/check-a11y.mjs"
   },
   "dependencies": {
-    "@halftone-ds/tokens": "^1.0.0",
+    "@halftone-ds/tokens": "^1.1.0",
     "fumadocs-core": "16.16.2",
     "fumadocs-mdx": "15.4.6",
     "fumadocs-ui": "16.16.2",
