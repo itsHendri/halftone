@@ -14,11 +14,13 @@ import { useLiveTheme } from '@/lib/theme/store';
 
 type Vision = CvdType | 'none';
 
-const VISIONS: { id: Vision; label: string; hint: string }[] = [
-  { id: 'none', label: 'Normal', hint: 'Typical colour vision.' },
-  { id: 'protanopia', label: 'Protanopia', hint: 'No working red cones: reds darken and fall toward green.' },
-  { id: 'deuteranopia', label: 'Deuteranopia', hint: 'No working green cones: the most common, red and green meet in olive.' },
-  { id: 'tritanopia', label: 'Tritanopia', hint: 'No working blue cones (rare): blue meets green, yellow meets pink.' },
+// `short` is the picker's label: four full names don't fit one row in a narrow panel. The full name is
+// the button's accessible name and starts the hint below it.
+const VISIONS: { id: Vision; label: string; short: string; hint: string }[] = [
+  { id: 'none', label: 'Normal', short: 'Normal', hint: 'Typical colour vision.' },
+  { id: 'protanopia', label: 'Protanopia', short: 'Protan', hint: 'Protanopia: no working red cones. Reds darken and fall toward green.' },
+  { id: 'deuteranopia', label: 'Deuteranopia', short: 'Deutan', hint: 'Deuteranopia: no working green cones, the most common. Red and green meet in olive.' },
+  { id: 'tritanopia', label: 'Tritanopia', short: 'Tritan', hint: 'Tritanopia: no working blue cones (rare). Blue meets green, yellow meets pink.' },
 ];
 const visionLabel = (v: Vision) => VISIONS.find((x) => x.id === v)?.label ?? v;
 
@@ -55,7 +57,7 @@ export function ColourVision() {
           role="radiogroup"
           aria-label="Colour vision"
           onKeyDown={(e) => rovingKeyDown(e, { select: true })}
-          className="bg-card border-border inline-flex flex-wrap gap-0.5 self-start rounded-full border p-0.5">
+          className="bg-card border-border grid grid-cols-4 gap-0.5 rounded-full border p-0.5">
           {VISIONS.map((v, i) => (
             <button
               key={v.id}
@@ -66,11 +68,12 @@ export function ColourVision() {
                 i,
                 VISIONS.findIndex((x) => x.id === vision)
               )}
+              aria-label={v.label}
               onClick={() => setVision(v.id)}
-              className={`focus-visible:ring-ring rounded-full px-3 py-1 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 ${
+              className={`focus-visible:ring-ring rounded-full px-2 py-1 text-xs font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 ${
                 vision === v.id ? 'bg-foreground text-background' : 'text-muted-foreground hover:text-foreground'
               }`}>
-              {v.label}
+              {v.short}
             </button>
           ))}
         </div>
@@ -79,20 +82,22 @@ export function ColourVision() {
         </p>
       </div>
 
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+      <div className="grid grid-cols-2 gap-2">
         {STATUS.map((name) => (
           <div
             key={name}
-            className="border-border relative flex h-16 flex-col justify-between rounded-lg border p-2.5"
+            className="border-border flex h-16 min-w-0 flex-col justify-between rounded-lg border p-2.5"
             style={{ background: sim(name), color: sim(`${name}-foreground`) }}>
-            <span className="text-xs font-medium">{name}</span>
+            <span className="flex items-center justify-between gap-1 text-xs font-medium">
+              <span className="truncate">{name}</span>
+              {close.has(name) ? (
+                <>
+                  <TriangleAlertIcon className="size-3.5 shrink-0" aria-hidden />
+                  <span className="sr-only">, too close to another tone</span>
+                </>
+              ) : null}
+            </span>
             <span className="font-mono text-[11px] uppercase">{sim(name)}</span>
-            {close.has(name) ? (
-              <>
-                <TriangleAlertIcon className="absolute right-2 top-2 size-3.5" aria-hidden />
-                <span className="sr-only">, too close to another tone</span>
-              </>
-            ) : null}
           </div>
         ))}
       </div>
