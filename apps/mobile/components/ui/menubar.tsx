@@ -216,10 +216,11 @@ function MenubarItem({
           Platform.select({
             web: cn(
               'focus:bg-accent focus:text-accent-foreground cursor-default outline-none data-[disabled]:pointer-events-none',
-              variant === 'destructive' && 'focus:bg-destructive/10 dark:focus:bg-destructive/20'
+              variant === 'destructive' && 'focus:bg-accent'
             ),
           }),
-          variant === 'destructive' && 'active:bg-destructive/10 dark:active:bg-destructive/20',
+          // Neutral, like every item: red text on a red tint is 4.14:1, on accent it clears AA.
+          variant === 'destructive' && 'active:bg-accent',
           props.disabled && 'opacity-50',
           inset && 'pl-8',
           className
