@@ -1,4 +1,5 @@
 'use client';
+import { RippleLayer } from '@/components/halftone/ripple-layer';
 import SearchDialog from '@/components/search';
 import { ThemePill } from '@/components/theme/theme-pill';
 import { ThemeRuntime } from '@/components/theme/theme-runtime';
@@ -11,6 +12,7 @@ export function Provider({ children }: { children: ReactNode }) {
       <ThemeRuntime />
       {children}
       <ThemePill />
+      <RippleLayer />
     </RootProvider>
   );
 }

@@ -4,7 +4,8 @@
  * embedded kit frame. Where it starts, in order:
  *   1. `?t=<code>` in the URL (a shared link), which is then dropped from the address bar
  *   2. the visitor's last theme (localStorage)
- *   3. the theme committed in tokens.json (`$extensions`)
+ *   3. the theme committed in tokens.json (`$extensions`), *ambient*: until the visitor picks anything, the
+ *      colours drift along a gradient (lib/theme/ambient.ts) over that theme
  * Nothing here reaches the repo: committing goes through the export panel (a code, a CLI command, a
  * prompt or a tokens.json download).
  */
@@ -33,16 +34,18 @@ const status = themeStatus(base);
 export const committed: Recipe = normalizeRecipe(status.applied ? status.recipe : {});
 
 
-type State = { recipe: Recipe; history: Recipe[]; future: Recipe[] };
+/** `ambient`: nothing picked yet (no stored theme, no shared code), so the colours drift. */
+type State = { recipe: Recipe; history: Recipe[]; future: Recipe[]; ambient: boolean };
 /** What the server rendered with; hydration uses it too, then the client's own state takes over. */
-const serverState: State = { recipe: committed, history: [], future: [] };
+const serverState: State = { recipe: committed, history: [], future: [], ambient: true };
 let state: State = serverState;
 const listeners = new Set<() => void>();
 const emit = () => listeners.forEach((l) => l());
 
-function persist(recipe: Recipe) {
+/** A stored recipe is a pick, even the committed one; ambient stores nothing. */
+function persist(recipe: Recipe, ambient = false) {
   try {
-    if (sameRecipe(recipe, committed)) localStorage.removeItem(STORAGE_KEY);
+    if (ambient) localStorage.removeItem(STORAGE_KEY);
     else localStorage.setItem(STORAGE_KEY, JSON.stringify(recipe));
   } catch {
     /* storage unavailable: the theme lasts for this page */
@@ -71,11 +74,14 @@ export function startTheme() {
       const saved = localStorage.getItem(STORAGE_KEY);
       if (saved) recipe = normalizeRecipe(JSON.parse(saved));
     } catch {
-      /* unreadable: fall back to the committed theme */
+      /* unreadable: forget it, and fall back to the committed theme (ambient) */
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch {}
     }
   }
   if (recipe) {
-    state = { ...state, recipe };
+    state = { ...state, recipe, ambient: false };
     persist(recipe);
   }
 }
@@ -122,13 +128,14 @@ let lastEdit = { key: '', at: 0 };
 export function setRecipe(next: RecipeInput | ((current: Recipe) => RecipeInput), { coalesce }: { coalesce?: string } = {}) {
   const input = typeof next === 'function' ? next(state.recipe) : next;
   const recipe = normalizeRecipe({ ...state.recipe, ...input, font: { ...state.recipe.font, ...input.font } });
-  if (JSON.stringify(recipe) === JSON.stringify(state.recipe)) return;
+  // Picking what is already shown still ends the ambient drift: it is a choice.
+  if (JSON.stringify(recipe) === JSON.stringify(state.recipe) && !state.ambient) return;
   const now = Date.now();
   const merge = !!coalesce && lastEdit.key === coalesce && now - lastEdit.at < 1000 && state.history.length > 0;
   lastEdit = { key: coalesce ?? '', at: now };
   const history = merge ? state.history : [...state.history, state.recipe].slice(-50);
   preview = null;
-  state = { recipe, history, future: [] };
+  state = { recipe, history, future: [], ambient: false };
   persist(recipe);
   emit();
 }
@@ -136,7 +143,7 @@ export function setRecipe(next: RecipeInput | ((current: Recipe) => RecipeInput)
 export function undo() {
   const prev = state.history.at(-1);
   if (!prev) return;
-  state = { recipe: prev, history: state.history.slice(0, -1), future: [state.recipe, ...state.future] };
+  state = { recipe: prev, history: state.history.slice(0, -1), future: [state.recipe, ...state.future], ambient: false };
   persist(prev);
   emit();
 }
@@ -144,7 +151,7 @@ export function undo() {
 export function redo() {
   const [next, ...future] = state.future;
   if (!next) return;
-  state = { recipe: next, history: [...state.history, state.recipe], future };
+  state = { recipe: next, history: [...state.history, state.recipe], future, ambient: false };
   persist(next);
   emit();
 }
@@ -223,8 +230,20 @@ export function shuffle() {
   setRecipe(next);
 }
 
-/** Back to the theme in tokens.json. */
+/** Back to the theme in tokens.json, picked (the studio's reset). */
 export const reset = () => setRecipe({ ...committed, preset: committed.preset });
+
+/** Back to the start: the committed theme with the ambient drift over it, and nothing stored. */
+export function resumeAmbient() {
+  if (state.ambient) return;
+  preview = null;
+  state = { recipe: committed, history: [...state.history, state.recipe].slice(-50), future: [], ambient: true };
+  persist(committed, true);
+  emit();
+}
+
+/** Whether the colours are drifting (nothing picked yet). Read outside React by lib/theme/ambient.ts. */
+export const isAmbient = () => state.ambient;
 
 const getSnapshot = () => state;
 const getServerSnapshot = () => serverState;
@@ -247,7 +266,7 @@ export function themeFor(recipe: Recipe): Theme {
 }
 
 /** The current theme, generated. */
-export function useLiveTheme(): { recipe: Recipe; theme: Theme; isCommitted: boolean; canUndo: boolean; canRedo: boolean } {
+export function useLiveTheme(): { recipe: Recipe; theme: Theme; isCommitted: boolean; ambient: boolean; canUndo: boolean; canRedo: boolean } {
   const s = useThemeState();
   // `recipe` is what is picked (the controls show it); `theme` is what is on screen (a hover preview).
   const shown = preview ?? s.recipe;
@@ -255,6 +274,7 @@ export function useLiveTheme(): { recipe: Recipe; theme: Theme; isCommitted: boo
     recipe: s.recipe,
     theme: themeFor(shown),
     isCommitted: sameRecipe(shown, committed),
+    ambient: s.ambient && !preview,
     canUndo: s.history.length > 0,
     canRedo: s.future.length > 0,
   };

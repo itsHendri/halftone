@@ -111,11 +111,14 @@ function Panel({
   );
 }
 
-/** Rendered by this site, so it changes the moment a control does (no frame to reload). */
+/**
+ * Rendered by this site, so it changes the moment a control does (no frame to reload). `kit-scope`: the
+ * specimens take the whole theme (fonts, radius, depth…) while the page around them keeps its own.
+ */
 function Overview() {
   const { recipe, theme } = useLiveTheme();
   return (
-    <div className="columns-1 gap-4 md:columns-2 2xl:columns-3 [&>*]:mb-4 [&>*]:break-inside-avoid">
+    <div className="kit-scope columns-1 gap-4 md:columns-2 2xl:columns-3 [&>*]:mb-4 [&>*]:break-inside-avoid">
       <Panel>
         <p className="font-heading text-3xl font-semibold tracking-tight">
           {presetLabel(recipe)} · {fontLabel(recipe.font.heading)}

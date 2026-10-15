@@ -1,5 +1,5 @@
 'use client';
-import { decodeRecipe, FONTS, OPTIONS, PRESETS, sameRecipe, themeVars, type Recipe, type RecipeInput, type Theme } from '@halftone-ds/tokens/theme';
+import { decodeRecipe, FONTS, OPTIONS, PRESETS, sameRecipe, type Recipe, type RecipeInput } from '@halftone-ds/tokens/theme';
 import { Popover, PopoverContent, PopoverTrigger } from 'fumadocs-ui/components/ui/popover';
 import { CheckIcon, CopyIcon, LockIcon, LockOpenIcon, MoonIcon, Redo2Icon, RotateCcwIcon, ShieldCheckIcon, ShuffleIcon, SunIcon, Undo2Icon } from 'lucide-react';
 import { useTheme } from 'next-themes';
@@ -7,6 +7,7 @@ import * as React from 'react';
 import { ExportPanel } from '@/components/theme/export-panel';
 import { fontFamily, fontLabel, LABELS, ORDER, PresetCard } from '@/components/theme/studio/parts';
 import { AdjustmentList, presetLabel, visibleAdjustments } from '@/components/theme/theme-pill';
+import { splitVars } from '@/lib/theme/payload';
 import { SWATCHES } from '@/lib/theme/swatches';
 import { rovingKeyDown, rovingTabIndex } from '@/lib/roving';
 import { previewRecipe, redo, reset, setRecipe, shuffle, toggleLock, undo, useLiveTheme, useLocks, type LockKey } from '@/lib/theme/store';
@@ -494,16 +495,10 @@ export function Rail({ className, id }: { className?: string; id?: string }) {
 export function InvertedSchemeStyle() {
   const { theme } = useLiveTheme();
   const css = React.useMemo(() => {
-    const { light, dark } = invertVars(theme);
+    // The rail is site chrome: colours only (shape stays the site's own).
+    const { light, dark } = splitVars(theme).colour;
     const block = (sel: string, vars: Record<string, string>) => `${sel}{${Object.entries(vars).map(([k, v]) => `${k}:${v};`).join('')}}`;
     return block(':root:root .kit-light', light) + block(':root:root .kit-dark', dark);
   }, [theme]);
   return <style>{css}</style>;
 }
-
-const invertVars = (theme: Theme) => {
-  const vars = themeVars(theme, 'oklch');
-  // Shape and type variables live on :root already; only the colours (and shadows) differ per scheme.
-  const colours = (map: Record<string, string>) => Object.fromEntries(Object.entries(map).filter(([k]) => !/^--(radius|border-width|icon-stroke|density|control-|type-|leading-|typeset-)/.test(k)));
-  return { light: colours(vars.light), dark: colours(vars.dark) };
-};

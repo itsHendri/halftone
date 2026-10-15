@@ -13,8 +13,59 @@
   --container-site: 72rem;
 }
 
+/*
+ * The site's own shape: pinned, so neither a picked theme nor a rebrand of the kit (tokens.json) moves the
+ * page. The site takes a theme's colour only (lib/theme/payload.ts siteCss). Components rendered here sit in
+ * `.kit-scope`, which takes the rest (kitScopeCss): fonts, radius, border, stroke, density, typeset, depth.
+ * The site's fonts are the system stacks in app/tokens.css: nothing sets --kit-font-* outside .kit-scope.
+ */
+:root {
+  --radius: 0.625rem;
+  --radius-control: 9999px;
+  --border-width: 1px;
+  --icon-stroke: 2;
+  --shadow-1: 0px 1px 2px 0px rgba(0, 0, 0, 0.051);
+  --shadow-2: 0px 4px 12px -2px rgba(0, 0, 0, 0.078);
+  --shadow-3: 0px 12px 24px -6px rgba(0, 0, 0, 0.122);
+}
+.dark {
+  --shadow-1: 0px 1px 2px 0px rgba(0, 0, 0, 0.302);
+  --shadow-2: 0px 4px 12px -2px rgba(0, 0, 0, 0.4);
+  --shadow-3: 0px 12px 24px -6px rgba(0, 0, 0, 0.502);
+}
+
+/* Text inherits the font computed on <html>, so the scope sets its own; headings, font-* utilities and icons
+   read their variables per element and follow on their own. */
+.kit-scope {
+  font-family: var(--kit-font-body, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif);
+}
+
 html {
   scrollbar-gutter: stable;
+}
+
+/*
+ * The halftone texture: a fine dot grid in the brand colour at the window's edges, behind everything (the
+ * body's background is the canvas's, so z-index -1 sits above it). Not on the studio, not in print.
+ */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(circle, color-mix(in oklch, var(--primary) 42%, transparent) 1.1px, transparent 1.6px);
+  background-size: 12px 12px;
+  -webkit-mask-image: linear-gradient(90deg, #000, transparent 16%, transparent 84%, #000);
+  mask-image: linear-gradient(90deg, #000, transparent 16%, transparent 84%, #000);
+}
+body:has([data-studio])::before {
+  display: none;
+}
+@media print {
+  body::before {
+    display: none;
+  }
 }
 
 /* Room for the theme bar (components/theme/theme-pill.tsx) at the end of every page. */

@@ -1,14 +1,16 @@
 'use client';
 import * as React from 'react';
-import { fontsHref, kitPayloads, siteCss } from '@/lib/theme/payload';
+import { fontsHref, kitPayloads, kitScopeCss, siteCss } from '@/lib/theme/payload';
 import { CSS_KEY, EMBED_KEY, FONTS_ID, FONTS_KEY, STYLE_ID } from '@/lib/theme/keys';
-import { committed, currentRecipe, isPreviewing, startTheme, subscribeTheme, themeFor } from '@/lib/theme/store';
+import { startAmbient } from '@/lib/theme/ambient';
+import { committed, currentRecipe, isAmbient, isPreviewing, startTheme, subscribeTheme, themeFor } from '@/lib/theme/store';
 import { sameRecipe } from '@halftone-ds/tokens/theme';
 
 /**
- * Puts the live theme on the site: a stylesheet over app/tokens.css (the chrome), a cached copy for the
- * next page load (the pre-paint script in app/layout.tsx), and the kits' payloads in sessionStorage so an
- * embedded kit paints the theme on its first frame. Renders nothing.
+ * Puts the live theme on the site: a stylesheet over app/tokens.css (the chrome's colours, and the
+ * components' shape under .kit-scope), a cached copy for the next page load (the pre-paint script in
+ * app/layout.tsx), and the kits' payloads in sessionStorage so an embedded kit paints the theme on its first
+ * frame. Renders nothing.
  */
 export function ThemeRuntime() {
   React.useLayoutEffect(() => {
@@ -20,11 +22,13 @@ export function ThemeRuntime() {
       const keep = !isPreviewing();
       let style = document.getElementById(STYLE_ID);
       try {
-        if (keep) sessionStorage.setItem(EMBED_KEY, JSON.stringify(kitPayloads(theme, live)));
+        // While ambient, lib/theme/ambient.ts writes the frames' payload (the drifting theme).
+        if (keep && !isAmbient()) sessionStorage.setItem(EMBED_KEY, JSON.stringify(kitPayloads(theme, live)));
       } catch {
         /* storage unavailable: the frames still get the theme over postMessage */
       }
-      const href = live ? fontsHref(theme) : null;
+      // The theme's fonts, for .kit-scope and the frames (null for the system fonts).
+      const href = fontsHref(theme);
       let link = document.getElementById(FONTS_ID) as HTMLLinkElement | null;
       if (!href) link?.remove();
       else {
@@ -40,14 +44,9 @@ export function ThemeRuntime() {
         } else if (href) localStorage.setItem(FONTS_KEY, href);
         else localStorage.removeItem(FONTS_KEY);
       } catch {}
-      if (!live) {
-        style?.remove();
-        try {
-          if (keep) localStorage.removeItem(CSS_KEY);
-        } catch {}
-        return;
-      }
-      const css = siteCss(theme);
+      // The site's colours only when the theme differs from app/tokens.css; the components' shape always, so
+      // a .kit-scope specimen matches the kits even after a rebrand moved them away from the site's pins.
+      const css = (live ? siteCss(theme) : '') + kitScopeCss(theme);
       if (!style) {
         style = document.createElement('style');
         style.id = STYLE_ID;
@@ -60,7 +59,9 @@ export function ThemeRuntime() {
     };
     startTheme();
     apply();
-    return subscribeTheme(apply);
+    const stop = subscribeTheme(apply);
+    startAmbient();
+    return stop;
   }, []);
   return null;
 }
