@@ -12,6 +12,10 @@ export type Leading = 'normal' | 'tight' | 'relaxed';
 export type Flow = 'normal' | 'tight' | 'loose';
 export type Measure = '70' | '60' | '80' | '90';
 export type Mode = 'light' | 'dark';
+export type CvdType = 'protanopia' | 'deuteranopia' | 'tritanopia';
+/** A pair of tones as one vision sees them: `fg` and `bg` are the simulated hex of `a` and `b`. */
+export type PairDistance = { a: string; b: string; vision: CvdType | 'none'; fg: string; bg: string; deltaE: number };
+export type CvdWarning = PairDistance & { mode: Mode };
 
 export type Recipe = {
   v: number;
@@ -83,6 +87,9 @@ export const FONTS: Font[];
 export const PRESETS: Preset[];
 export const BRAND_RAMPS: Record<string, Record<string, string>>;
 export const THEME_EXTENSION: string;
+export const CVD_TYPES: CvdType[];
+export const DISTINCT_PAIRS: [string, string][];
+export const MIN_DELTA_E: number;
 
 export function normalizeRecipe(input?: RecipeInput): Recipe;
 export function sameRecipe(a: RecipeInput, b: RecipeInput): boolean;
@@ -100,3 +107,21 @@ export function themeHex(theme: Theme): Record<Mode, Record<string, string>>;
 export function themeCss(theme: Theme, options?: { format?: 'hsl' | 'oklch'; light?: string; dark?: string }): string;
 export function applyRecipe(tokens: TokensJson, recipe: RecipeInput): { tokens: TokensJson; theme: Theme };
 export function themeStatus(tokens: TokensJson): ThemeStatus;
+
+/** One pairing the contrast gate checks: `fg` on `bg` in one mode, its WCAG ratio and the threshold it must clear. */
+export type ContrastPair = { mode: Mode; label: string; fgName: string; bgName: string; fg: string; bg: string; threshold: number; ratio: number };
+/** A ContrastPair for a table: `pass` against its WCAG threshold, and `apca`, the advisory APCA Lc (signed). */
+export type ContrastRow = ContrastPair & { pass: boolean; apca: number };
+
+/** WCAG 2.1 AA for text (4.5) and for icons and other non-text (3). */
+export const AA: number;
+export const AA_NON_TEXT: number;
+export function contrastPairs(hex: Record<string, string>, mode: Mode, options?: { strict?: boolean; fg?: string }): ContrastPair[];
+/** Every pairing the build checks (strict by default), light then dark. `hex` is a theme's `resolved`. */
+export function contrastReport(hex: Partial<Record<Mode, Record<string, string>>>, options?: { strict?: boolean }): ContrastRow[];
+/** APCA Lc of `text` on `background` (APCA-W3 0.0.98G-4g). Advisory: it never fails the build. */
+export function apcaContrast(text: string, background: string): number;
+export function simulateCvd(hex: string, type: CvdType | 'none' | null | undefined): string;
+export function pairDistances(hex: Record<string, string>, type: CvdType | 'none', pairs?: [string, string][]): PairDistance[];
+export function cvdWarnings(resolved: Partial<Record<Mode, Record<string, string>>>, options?: { pairs?: [string, string][]; threshold?: number }): CvdWarning[];
+export function describeCvdWarnings(warnings: CvdWarning[]): string[];

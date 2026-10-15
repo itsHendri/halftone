@@ -12,6 +12,7 @@ import { spawnSync } from 'node:child_process';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
+import { cvdWarnings, describeCvdWarnings, MIN_DELTA_E } from './cvd.mjs';
 import { FONTS } from './theme/fonts.mjs';
 
 import {
@@ -132,6 +133,11 @@ export async function themeCommand({ positional, flags, root, sourcePath, config
     if (theme.adjustments.length) {
       console.log(`\nAdjusted for contrast (WCAG AA), hue kept:`);
       for (const a of theme.adjustments) console.log(`  ${a.mode.padEnd(5)} ${a.token.padEnd(28)} ${a.from} → ${a.to}`);
+    }
+    const cvd = cvdWarnings(theme.resolved);
+    if (cvd.length) {
+      console.log(`\nColour vision: ${cvd.length} pair(s) of tones closer than ΔE ${MIN_DELTA_E} (a warning; give them an icon or a label as well):`);
+      console.log(describeCvdWarnings(cvd).join('\n'));
     }
     if (flags['dry-run']) {
       console.log(`\n--dry-run: nothing written.${blocked && !flags.force ? `\nNote: ${blocked}` : ''}`);

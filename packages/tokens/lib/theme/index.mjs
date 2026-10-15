@@ -11,4 +11,7 @@ export { PRESETS, presetById } from './presets.mjs';
 export { themeVars, themeCss, themeHex, typeVars } from './vars.mjs';
 export { applyRecipe, themeStatus, THEME_EXTENSION } from './apply.mjs';
 export { BRAND_RAMPS } from './palettes.mjs';
+export { CVD_TYPES, cvdWarnings, describeCvdWarnings, DISTINCT_PAIRS, MIN_DELTA_E, pairDistances, simulateCvd } from '../cvd.mjs';
 
+export { AA, AA_NON_TEXT, contrastPairs, contrastReport } from '../contrast.mjs';
+export { apcaContrast } from '../apca.mjs';

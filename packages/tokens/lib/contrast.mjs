@@ -3,6 +3,7 @@
  * colour will happily fail WCAG without anyone noticing. Every pairing the kit actually renders is
  * checked here, and a failure stops the build.
  */
+import { apcaContrast } from './apca.mjs';
 import { blend, contrast } from './color.mjs';
 
 export const AA = 4.5; // WCAG 2.1 AA, normal text. Kit labels are 16px — not "large text".
@@ -58,6 +59,17 @@ export function contrastPairs(hex, mode, { strict = false, fg: only } = {}) {
     }
   }
   return out;
+}
+
+/**
+ * Every pairing the build checks (the strict set), in both modes, for a table people read: each row has
+ * `pass` against its WCAG threshold, and `apca`, the APCA Lc of the same pair. APCA is advisory and never
+ * decides `pass`. `hex` is { light: { name: '#rrggbb' }, dark: { … } }, as a generated theme's `resolved`.
+ */
+export function contrastReport(hex, { strict = true } = {}) {
+  return ['light', 'dark'].flatMap((mode) =>
+    contrastPairs(hex[mode] ?? {}, mode, { strict }).map((r) => ({ ...r, pass: r.ratio >= r.threshold, apca: apcaContrast(r.fg, r.bg) })),
+  );
 }
 
 /** The failing pairings as report lines. */
