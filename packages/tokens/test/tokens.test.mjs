@@ -119,13 +119,25 @@ test('the source scan flags tone text on a tint the palette cannot carry', () =>
   assert.match(problems[0], /bad\.tsx:1 {2}text-destructive on bg-destructive\/15 \(allowed: never\)/);
 });
 
-test('check fails on a flagged class string when the config asks for a scan', () => {
+/** An app whose config scans components/, with one class string the palette can't carry. */
+const flaggedScan = () => {
   const root = appRoot();
   const config = JSON.parse(readFileSync(join(root, 'tokens/tokens.config.json'), 'utf8'));
   writeFileSync(join(root, 'tokens/tokens.config.json'), JSON.stringify({ ...config, scan: ['components'] }));
   mkdirSync(join(root, 'components'), { recursive: true });
   writeFileSync(join(root, 'components/badge.tsx'), `export const S = () => <b className="bg-destructive/20 text-destructive">Late</b>;\n`);
-  const build = runCli(['build', '--root', root]);
+  return root;
+};
+
+test('the scan warns on a flagged class string by default', () => {
+  const build = runCli(['build', '--root', flaggedScan()], withoutStrict());
+  assert.equal(build.status, 0, build.stderr);
+  assert.match(build.stderr, /WARNING/);
+  assert.match(build.stderr, /components\/badge\.tsx:1/);
+});
+
+test('the scan fails on a flagged class string with --strict', () => {
+  const build = runCli(['build', '--root', flaggedScan(), '--strict'], withoutStrict());
   assert.equal(build.status, 1);
   assert.match(build.stderr, /components\/badge\.tsx:1/);
   assert.match(build.stderr, /This palette allows:/);
@@ -152,14 +164,59 @@ test('check fails when a generated file is stale', () => {
   assert.match(check.stderr, /global\.css/);
 });
 
-test('build refuses a palette below AA and writes nothing', () => {
+/** A palette whose primary-foreground fails on primary in light mode. */
+const belowAA = () => {
   const tokens = JSON.parse(readFileSync(fixture, 'utf8'));
   tokens.semantic.color['primary-foreground'].$value.light = '#93c5fd';
-  const root = appRoot(tokens);
-  const build = runCli(['build', '--root', root]);
+  return appRoot(tokens);
+};
+const withoutStrict = () => {
+  const env = { ...process.env };
+  delete env.HALFTONE_STRICT;
+  return { env };
+};
+
+test('build --strict refuses a palette below AA and writes nothing', () => {
+  const root = belowAA();
+  const build = runCli(['build', '--root', root, '--strict'], withoutStrict());
   assert.equal(build.status, 1);
+  assert.match(build.stderr, /FAILED/);
   assert.match(build.stderr, /primary-foreground on primary/);
   assert.ok(!existsSync(join(root, 'global.css')));
+});
+
+test('HALFTONE_STRICT=1 refuses a palette below AA, like --strict', () => {
+  const root = belowAA();
+  const build = runCli(['build', '--root', root], { env: { ...process.env, HALFTONE_STRICT: '1' } });
+  assert.equal(build.status, 1);
+  assert.ok(!existsSync(join(root, 'global.css')));
+});
+
+test('build warns on a palette below AA, writes every target and names the pairings', () => {
+  const root = belowAA();
+  const build = runCli(['build', '--root', root], withoutStrict());
+  assert.equal(build.status, 0, build.stderr);
+  assert.match(build.stderr, /WARNING/);
+  assert.match(build.stderr, /primary-foreground on primary/);
+  assert.match(build.stdout, /1 contrast warning\(s\), run with --strict to fail/);
+  assert.ok(existsSync(join(root, 'global.css')));
+  const design = readFileSync(join(root, 'DESIGN.md'), 'utf8');
+  assert.match(design, /1 pairing\(s\) in this palette fall below WCAG AA/);
+  assert.match(design, /primary-foreground on primary/);
+});
+
+test('check without --strict passes on a below-AA palette whose outputs are current', () => {
+  const root = belowAA();
+  runCli(['build', '--root', root], withoutStrict());
+  const check = runCli(['check', '--root', root], withoutStrict());
+  assert.equal(check.status, 0, check.stderr);
+  assert.match(check.stderr, /WARNING/);
+});
+
+test('an unknown flag is ignored', () => {
+  const root = appRoot();
+  const build = runCli(['build', '--root', root, '--no-such-flag'], withoutStrict());
+  assert.equal(build.status, 0, build.stderr);
 });
 
 test('runs through a symlinked bin, the way npm installs it', () => {

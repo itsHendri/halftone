@@ -46,6 +46,23 @@ function typography(prim, type) {
     .join('\n');
 }
 
+/**
+ * The contrast sentence. A passing palette keeps the wording published apps already have (their generated
+ * DESIGN.md must not change until a release rewords it); a failing one, which only builds without --strict,
+ * names its pairings.
+ */
+function contrastLine(ctx) {
+  const failures = ctx.contrastFailures ?? [];
+  if (!failures.length) {
+    return `Every \`X\` / \`X-foreground\` pairing, muted text on every surface, and every status tone used as text
+clears WCAG AA (4.5:1) in both themes; the build refuses a palette that does not.`;
+  }
+  return `${failures.length} pairing(s) in this palette fall below WCAG AA (4.5:1). Fix them before handing a prototype
+over (\`npm run tokens:build -- --strict\` fails on them):
+
+${failures.map((f) => `- ${f.trim()}`).join('\n')}`;
+}
+
 export default function designMd(ctx, options) {
   const name = options.name ?? 'Halftone';
   // Which radius buttons use: 'control' (the theme's pill setting, the mobile kit) or a scale step (web: 'md').
@@ -131,8 +148,7 @@ hex literal or a Tailwind palette colour in UI code. Keys ending in \`-dark\` ar
 - **Destructive, Success, Warning, Info:** status only, each with its own \`-foreground\`.
 - **Chart 1–5:** data series.
 
-Every \`X\` / \`X-foreground\` pairing, muted text on every surface, and every status tone used as text
-clears WCAG AA (4.5:1) in both themes; the build refuses a palette that does not.
+${contrastLine(ctx)}
 
 A tone's text on that tone's own tint (\`text-success\` on \`bg-success/15\`) is a weaker pairing. With
 this palette it clears AA only for:

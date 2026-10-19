@@ -21,7 +21,7 @@ export default function llms(ctx, options) {
 
 Colours are semantic names only, used as Tailwind classes (\`bg-primary\`, \`text-muted-foreground\`,
 \`border-border\`, \`bg-success/15\`). Never hex, never Tailwind palette colours. Both themes are
-required; every fill/foreground pairing clears WCAG AA (${AA}:1), enforced by \`npm run tokens:build\`.
+required; ${ctx.contrastFailures?.length ? `${ctx.contrastFailures.length} pairing(s) in this palette fall below WCAG AA (${AA}:1): fix them (\`npm run tokens:build\` names them).` : `every fill/foreground pairing clears WCAG AA (${AA}:1), enforced by \`npm run tokens:build\`.`}
 A tone's own text on its own tint (\`text-success\` on \`bg-success/15\`) clears AA only for these
 tints; on a stronger one, put \`text-foreground\` on the tint:
 ${describeTintLimits(textOnTintLimits(ctx.colors))}.
