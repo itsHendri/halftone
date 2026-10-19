@@ -1,6 +1,6 @@
 ---
 name: apply-theme
-description: Apply a theme from the Halftone docs theme picker (a `ht1-…` or `ht2-…` code, a preset name like `editorial`, or a recipe file) to this kit's tokens, then verify it. Use when the user pastes a theme code, says "apply this theme", "use the Editorial preset", "re-brand to <colour>", or hands over the prompt the docs' "Use theme" panel copies.
+description: Apply a theme from the Halftone docs theme picker (a `ht1-…` or `ht2-…` code, a preset name like `editorial`, a recipe file, or a shadcn/ui preset code like `b5owWMfJ8l`) to this kit's tokens, then verify it. Use when the user pastes a theme code, says "apply this theme", "use the Editorial preset", "re-brand to <colour>", or hands over the prompt the docs' "Use theme" panel copies.
 ---
 
 # Apply a theme
@@ -27,6 +27,13 @@ recipe under `$extensions["com.halftonedesignsystem.theme"]`; everything else in
   ```
 
 `halftone-tokens theme presets` lists the presets; `halftone-tokens theme show` says which theme is applied now.
+
+**A shadcn/ui preset code** (from ui.shadcn.com/create, e.g. `b5owWMfJ8l`) applies the same way: it becomes the
+nearest Halftone theme, and the command lists every value it approximated or dropped (fonts outside Halftone's
+list, other icon libraries, chart colours, shadcn's styles). Tell the user what it listed.
+`halftone-tokens theme decode <code>` shows the mapping without applying anything. A kit copied out before
+`@halftone-ds/tokens` supported shadcn codes says the code is not a theme code: open it in the studio at
+halftonedesignsystem.com/themes (**Open**), then apply the `ht` code **Use theme** gives.
 
 ## 2. When it refuses
 

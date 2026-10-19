@@ -5,6 +5,17 @@ description: What changed, newest first.
 
 ## October 2026
 
+### Themes travel to and from shadcn
+
+- **Open a shadcn preset code** (like `b5owWMfJ8l` from [ui.shadcn.com/create](https://ui.shadcn.com/create)) in the
+  studio, a `?t=` link or the brief wizard, or apply it from a kit with `halftone-tokens theme apply`. It becomes the
+  nearest Halftone theme, and the studio lists what didn't carry over exactly.
+- **Install a Halftone theme in any shadcn project.** Presets install from this site
+  (`npx shadcn@latest add https://halftonedesignsystem.com/r/theme/editorial.json`); any other theme downloads from
+  **Use theme**. Colours for light and dark, radius, shadows and fonts.
+- **New CLI commands:** `theme decode`, `theme resolve` and `theme shadcn`. They ship in the next release of
+  `@halftone-ds/tokens`. See [Themes](/docs/themes#from-and-to-shadcn).
+
 ### Start a prototype from a brief
 
 [Start a prototype](/brief) is a wizard for the brief an agent plans from. Answer eight short sections (product,

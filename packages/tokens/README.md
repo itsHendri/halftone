@@ -46,6 +46,31 @@ npx halftone-tokens figma      # mirror the tokens into Figma Variables
 | `llms` | a tokens section for `llms.txt` |
 | `figma` | the input `halftone-tokens figma` pushes to Figma Variables |
 
+## Themes
+
+A theme is a recipe (brand colour, neutral, radius, fonts, icon stroke, depth, density, border, typeset) that
+`theme apply` expands into `tokens.json`, recording it so `theme show` can tell when tokens were edited by hand.
+
+```bash
+npx halftone-tokens theme apply <theme> [--dry-run] [--force]   # write it into tokens.json and rebuild
+npx halftone-tokens theme show [--check]       # the applied theme, and any hand edits since
+npx halftone-tokens theme presets              # the presets and their codes
+npx halftone-tokens theme encode <theme>       # the Halftone code for a theme
+npx halftone-tokens theme decode <code> [--json]   # what a code holds
+npx halftone-tokens theme resolve [--json]     # the code for tokens.json as it is (exit 1 if none or edited)
+npx halftone-tokens theme shadcn <theme> [--out file] [--fonts-url url]   # a shadcn registry:theme item
+```
+
+`<theme>` is a Halftone code (`ht1-…`, `ht2-…`), a preset name, a recipe `.json`, or a
+[shadcn/ui](https://ui.shadcn.com/create) preset code (`b5owWMfJ8l`). A shadcn code becomes the nearest Halftone
+recipe, and what it approximates or drops (shadcn-only greys, radius steps, fonts outside the list, icon
+libraries, chart colours, menu options, styles) is listed on stderr. The other way, `theme shadcn` writes the
+theme as a `registry:theme` item for `npx shadcn add`: colours for light and dark, radius, shadows, and its fonts
+as `registry:font` dependencies (hosted at halftonedesignsystem.com/r/font, or `--fonts-url`).
+
+From code: `decodeShadcnPreset`, `recipeFromShadcn`, `shadcnTheme` and `shadcnFont` in
+`@halftone-ds/tokens/theme` (browser-safe). The preset codec is ported from shadcn/ui (MIT).
+
 ## Guarantees
 
 - **Contrast check.** Every `X` / `X-foreground` pairing, body and muted text on every surface, each status
