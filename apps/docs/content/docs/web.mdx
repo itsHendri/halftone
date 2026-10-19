@@ -86,5 +86,6 @@ See every one live under [Components](/components) (filter by Web).
 ## Checks
 
 `npm run typecheck`, `npm run lint`, `npm run tokens:check` and `npm run registry:build -- --check` are what
-CI runs. The `qc-pass` skill adds guards against hard-coded colours and stray UI libraries, then looks at the
-changed pages in a browser at 375px and 1280px, in light and dark.
+CI runs. Lint includes the kit's guardrails (`halftone/*` rules: raw colours, imports outside the registry,
+other UI libraries). The `qc-pass` skill runs them, then looks at the changed pages in a browser at 375px and
+1280px, in light and dark.

@@ -48,6 +48,8 @@ Rules:
   `usePalette().<name>` from `lib/palette-context.tsx` for SVG fills and native props (charts, StatusBar).
   Never read `THEME[scheme]` directly (lint rule): the palette follows a runtime theme override, THEME doesn't.
 - No Tailwind palette colours (`bg-blue-500`, `text-gray-400`). They don't follow the theme or the brand.
+- Lint enforces these in every screen and component outside `components/ui` and `components/kit`
+  (`halftone/no-raw-colour`): a raw colour is an error that names the semantic class to use instead.
 - Tint a surface with an alpha of a semantic colour: `bg-primary/15`, `bg-success/15`. Text on a tint stays
   `text-foreground`: a status colour as small text on its own tint measures under 4.5:1 (success on
   `success/15` 4.09, destructive 3.82). The status colour goes on the icon or a dot.
@@ -338,3 +340,7 @@ Before writing JSX, list the components you intend to use. Every name must appea
 above **exactly**. If you need something else: stop, describe the gap in one line, and use the
 `add-component` skill. Do not import from `react-native-paper`, `@expo/vector-icons`, `gluestack`
 or any UI library that is not in `package.json`.
+
+`npm run lint` enforces this: an import from `components/ui` or `components/kit` that the registry doesn't
+list, another UI library, or `Text` / `TextInput` / `Pressable` from react-native in a screen is an error
+(`halftone/*` rules). A real exception takes `// eslint-disable-next-line <rule> -- <reason>`.

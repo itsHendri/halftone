@@ -36,7 +36,8 @@ The shadcn vocabulary through Tailwind classes; each works as `bg-`, `text-`, `b
 
 Rules:
 - **No hex, `rgb()` or Tailwind palette colours (`bg-blue-500`, `text-white`) in `app/` or `components/`.**
-  The one exception is the modal scrim, `bg-black/50`, in the shadcn overlays.
+  The one exception is the modal scrim, `bg-black/50`, in the shadcn overlays. Lint enforces this outside
+  `components/ui` and `components/kit` (`halftone/no-raw-colour`), naming the semantic class to use.
 - Tint a surface with an alpha of a semantic colour: `bg-primary/10`, `bg-success/15`. Text on a tint stays
   `text-foreground`: a status colour as small text on its own tint measures under 4.5:1 (success 4.09,
   destructive 3.81). A status badge is an outline Badge with a coloured dot.
@@ -283,3 +284,7 @@ form, settings and a guarded delete), `/landing` and `/assistant`.
 Before writing JSX, list the components you intend to use. Every name must appear in the registry above
 **exactly**. If you need something else: stop, describe the gap in one line, and use the `add-component`
 skill. Do not import from UI libraries that are not in `package.json` (no MUI, Chakra, Mantine, Ant).
+
+`npm run lint` enforces this: an import from `components/ui` or `components/kit` that the registry doesn't
+list, another UI library, or `recharts` without `ChartContainer` is an error (`halftone/*` rules). A real
+exception takes `// eslint-disable-next-line <rule> -- <reason>`.

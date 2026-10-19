@@ -1,6 +1,6 @@
 ---
 name: qc-pass
-description: Quality gate for the prototype kit — typecheck, lint, token/hex/icon guards, then a real look at the affected screens on the iOS simulator (and web) in light and dark. Use after adding or changing components, screens, tokens, or before committing/publishing. Never report "done" without running this.
+description: Quality gate for the prototype kit — typecheck, lint (with the halftone/* guardrail rules), the token and registry checks, then a real look at the affected screens on the iOS simulator (and web) in light and dark. Use after adding or changing components, screens, tokens, or before committing/publishing. Never report "done" without running this.
 ---
 
 # QC pass
@@ -17,19 +17,21 @@ npm run tokens:check        # generated token files match tokens/tokens.json; an
 npm run registry:build -- --check   # every ui/kit file registered, exports real, generated docs current
 ```
 
-## 2. Guards (must print nothing)
+## 2. Guardrails (lint)
 
-```bash
-# no hard-coded colours in components or screens
-grep -rnE "#[0-9a-fA-F]{3,8}\b|rgba?\(" app components --include="*.tsx" --include="*.ts" | grep -v "lib/theme"
-# no other icon libraries (lucide icon refs are fine anywhere; they render through <Icon as>)
-grep -rln "@expo/vector-icons\|react-native-vector-icons" app components || true
-# react-native Text must not be used directly (use components/ui/text)
-grep -rnE "import \{[^}]*\bText\b[^}]*\} from 'react-native'" app components/kit
-```
+`npm run lint` in step 1 runs the design system's rules (`eslint/halftone.mjs`) on every screen and
+component outside `components/ui` and `components/kit`, as errors:
 
-Registration is checked by `registry:build -- --check` in step 1 (helpers it skips are listed in
-`HELPERS` in `scripts/registry-build.mjs`).
+- `halftone/no-raw-colour`: Tailwind palette classes (`bg-red-500`, `text-white`), colour arbitrary values
+  (`text-[#fff]`), and colour literals in style objects or colour props. Use semantic classes, or
+  `usePalette()` for SVG fills and native props.
+- `halftone/registry-imports`: `@/components/ui|kit` imports must be files the registry lists.
+- `halftone/no-foreign-ui`: no other UI or icon libraries (`@expo/vector-icons`, react-native-paper, …).
+- `halftone/no-raw-primitives`: no `Text`, `TextInput` or `Pressable` from react-native in screens.
+
+In the report, list every `halftone/` disable comment in the changed files with its reason (`-- reason` is
+required; `disable-needs-reason` enforces it). Registration is checked by `registry:build -- --check` in
+step 1 (helpers it skips are listed in `HELPERS` in `scripts/registry-build.mjs`).
 
 ## 3. On-device look
 

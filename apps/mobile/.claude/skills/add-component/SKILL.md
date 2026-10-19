@@ -52,7 +52,9 @@ Styling rules (enforced by `qc-pass`):
 
 ## 3. Verify
 
-Run the `qc-pass` skill (typecheck, lint, guards, and a look at the new section on the iOS
+The kit's own sources are outside the guardrail rules' scope, so check the new file for raw colours by hand:
+`npx eslint --rule '{"halftone/no-raw-colour":"error"}' components/kit/<file>.tsx` must print nothing. Then
+run the `qc-pass` skill (typecheck, lint, and a look at the new section on the iOS
 simulator in both themes). Fix anything it flags before calling the component done.
 
 ## 4. Commit
