@@ -1,4 +1,5 @@
 'use client';
+import { Logo } from '@/components/kit/logo';
 import { HistoryIcon, SquarePenIcon } from 'lucide-react';
 import Link from 'next/link';
 import * as React from 'react';
@@ -59,8 +60,7 @@ export function AssistantView() {
     <div className="flex h-dvh flex-col">
       <header className="border-border flex h-14 shrink-0 items-center gap-3 border-b px-4 sm:px-6">
         <Link href="/assistant" className="flex items-center gap-2 font-semibold">
-          <span aria-hidden className="bg-primary size-5 rounded-md" />
-          Northwind <span className="text-muted-foreground hidden font-normal sm:inline">Assistant</span>
+          <Logo name="Northwind" /> <span className="text-muted-foreground hidden font-normal sm:inline">Assistant</span>
         </Link>
         <div className="ml-auto flex items-center gap-1">
           <KitChip />

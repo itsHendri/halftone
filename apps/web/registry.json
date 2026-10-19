@@ -100,6 +100,37 @@
       }
     },
     {
+      "name": "lib-brand-context",
+      "type": "registry:lib",
+      "title": "lib/brand-context.tsx",
+      "dependencies": [],
+      "registryDependencies": [
+        "@halftone-web/lib-brand",
+        "@halftone-web/lib-embed"
+      ],
+      "files": [
+        {
+          "path": "lib/brand-context.tsx",
+          "type": "registry:lib",
+          "target": "lib/brand-context.tsx"
+        }
+      ]
+    },
+    {
+      "name": "lib-brand",
+      "type": "registry:lib",
+      "title": "lib/brand.ts",
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "lib/brand.ts",
+          "type": "registry:lib",
+          "target": "lib/brand.ts"
+        }
+      ]
+    },
+    {
       "name": "lib-embed-boot",
       "type": "registry:lib",
       "title": "lib/embed-boot.ts",
@@ -1536,6 +1567,47 @@
           "ContextMenuShortcut"
         ],
         "api": "<ContextMenu><ContextMenuTrigger /><ContextMenuContent><ContextMenuItem /></ContextMenuContent></ContextMenu>"
+      }
+    },
+    {
+      "name": "logo",
+      "type": "registry:component",
+      "title": "Logo",
+      "description": "the brand from lib/brand.ts (theme studio › Brand) · one-colour logos take the text colour · placeholder + name without one",
+      "dependencies": [
+        "cn@^0.4.0"
+      ],
+      "registryDependencies": [
+        "@halftone-web/lib-brand",
+        "@halftone-web/lib-brand-context",
+        "@halftone-web/lib-embed"
+      ],
+      "files": [
+        {
+          "path": "components/kit/logo.tsx",
+          "type": "registry:component",
+          "target": "components/kit/logo.tsx"
+        },
+        {
+          "path": "lib/brand.ts",
+          "type": "registry:component",
+          "target": "lib/brand.ts"
+        },
+        {
+          "path": "lib/brand-context.tsx",
+          "type": "registry:component",
+          "target": "lib/brand-context.tsx"
+        }
+      ],
+      "categories": [
+        "media"
+      ],
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "Logo"
+        ],
+        "api": "<Logo variant?=\"full|mark\" size? name? />"
       }
     },
     {

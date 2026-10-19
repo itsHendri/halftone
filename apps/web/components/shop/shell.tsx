@@ -1,4 +1,5 @@
 'use client';
+import { Logo } from '@/components/kit/logo';
 import { ShoppingCartIcon } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -26,8 +27,7 @@ export function ShopShell({ children }: { children: React.ReactNode }) {
       <header className="border-border bg-background/90 sticky top-0 z-40 border-b backdrop-blur">
         <div className="mx-auto flex min-h-14 w-full max-w-6xl flex-wrap items-center gap-x-4 px-4 sm:flex-nowrap sm:gap-6 sm:px-6">
           <Link href="/shop" className="flex h-14 items-center gap-2 font-semibold">
-            <span aria-hidden className="bg-primary size-5 rounded-md" />
-            Shop
+            <Logo name="Shop" />
           </Link>
           {/* Under the brand on a phone, beside it from sm up. */}
           <nav aria-label="Shop" className="order-last -mx-2.5 flex w-full items-center gap-1 pb-2 text-sm sm:order-none sm:mx-0 sm:w-auto sm:pb-0">
