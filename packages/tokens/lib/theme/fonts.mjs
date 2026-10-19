@@ -13,6 +13,8 @@
  *   system      the platform's own font for its role: nothing to load
  *   weights     the static weights we load (400–700); a class asking for another snaps to the nearest
  *   expoPrefix  the export prefix of the @expo-google-fonts package (Inter_600SemiBold → 'Inter')
+ *   fontsource  'static' when only @fontsource/<id> exists; every other family has @fontsource-variable/<id>
+ *               (for a shadcn project: lib/theme/shadcn.mjs shadcnFont)
  */
 export const FONTS = [
   { id: 'system', family: 'System', category: 'sans', weights: [400, 500, 600, 700, 800], system: true },
@@ -35,7 +37,7 @@ export const FONTS = [
   { id: 'system-mono', family: 'Menlo', category: 'mono', weights: [400, 500, 600, 700], system: true },
   { id: 'jetbrains-mono', family: 'JetBrains Mono', category: 'mono', weights: [400, 500, 600, 700], expoPrefix: 'JetBrainsMono' },
   { id: 'geist-mono', family: 'Geist Mono', category: 'mono', weights: [400, 500, 600, 700], expoPrefix: 'GeistMono' },
-  { id: 'ibm-plex-mono', family: 'IBM Plex Mono', category: 'mono', weights: [400, 500, 600, 700], expoPrefix: 'IBMPlexMono' },
+  { id: 'ibm-plex-mono', family: 'IBM Plex Mono', category: 'mono', weights: [400, 500, 600, 700], expoPrefix: 'IBMPlexMono', fontsource: 'static' },
   { id: 'roboto-mono', family: 'Roboto Mono', category: 'mono', weights: [400, 500, 600, 700], expoPrefix: 'RobotoMono' },
   { id: 'fira-code', family: 'Fira Code', category: 'mono', weights: [400, 500, 600, 700], expoPrefix: 'FiraCode' },
   { id: 'source-code-pro', family: 'Source Code Pro', category: 'mono', weights: [400, 500, 600, 700], expoPrefix: 'SourceCodePro' },

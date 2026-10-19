@@ -125,3 +125,38 @@ export function simulateCvd(hex: string, type: CvdType | 'none' | null | undefin
 export function pairDistances(hex: Record<string, string>, type: CvdType | 'none', pairs?: [string, string][]): PairDistance[];
 export function cvdWarnings(resolved: Partial<Record<Mode, Record<string, string>>>, options?: { pairs?: [string, string][]; threshold?: number }): CvdWarning[];
 export function describeCvdWarnings(warnings: CvdWarning[]): string[];
+
+/** A decoded shadcn/ui preset code (ui.shadcn.com/create). */
+export type ShadcnPreset = {
+  version: 'a' | 'b';
+  style: string;
+  baseColor: string;
+  theme: string;
+  chartColor: string;
+  iconLibrary: string;
+  font: string;
+  fontHeading: string;
+  radius: string;
+  menuAccent: string;
+  menuColor: string;
+};
+/** A shadcn registry item (registry:theme or registry:font), as JSON. */
+export type ShadcnRegistryItem = {
+  $schema: string;
+  name: string;
+  title?: string;
+  description?: string;
+  type: 'registry:theme' | 'registry:font';
+  registryDependencies?: string[];
+  cssVars?: { theme?: Record<string, string>; light?: Record<string, string>; dark?: Record<string, string> };
+  font?: { family: string; provider: 'google'; import: string; variable: string; subsets?: string[]; weight?: string[]; dependency?: string };
+};
+export function isShadcnPresetCode(s: unknown): s is string;
+export function decodeShadcnPreset(code: string): ShadcnPreset | null;
+export function encodeShadcnPreset(preset: Partial<ShadcnPreset>): string;
+/** The nearest Halftone recipe for a shadcn preset, and a note for each value it approximated or dropped. */
+export function recipeFromShadcn(preset: ShadcnPreset): { recipe: Recipe; notes: string[] };
+export const SHADCN_FONTS_URL: string;
+export function shadcnTheme(theme: Theme, options?: { name?: string; title?: string; description?: string; fontsUrl?: string }): ShadcnRegistryItem;
+export function shadcnFont(id: string, role?: 'body' | 'heading' | 'mono'): ShadcnRegistryItem | null;
+export function shadcnFontPath(id: string, role: 'body' | 'heading' | 'mono'): string;
