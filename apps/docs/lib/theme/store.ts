@@ -11,7 +11,6 @@
  */
 import {
   BRAND_RAMPS,
-  decodeRecipe,
   FONTS,
   OPTIONS,
   generateTheme,
@@ -25,6 +24,7 @@ import {
 } from '@halftone-ds/tokens/theme';
 import * as React from 'react';
 import { STORAGE_KEY } from './keys';
+import { readThemeCode } from './read-code';
 import tokensJson from '../../../mobile/tokens/tokens.json';
 
 export const base = tokensJson as unknown as TokensJson;
@@ -62,7 +62,8 @@ export function startTheme() {
   const code = url.searchParams.get('t');
   if (code) {
     try {
-      recipe = decodeRecipe(code);
+      // A Halftone code or a shadcn preset code (its notes only show where the code is pasted).
+      recipe = readThemeCode(code).recipe;
     } catch {
       /* a bad code: ignore it */
     }

@@ -4,7 +4,7 @@
  * a BRIEF.md and one prompt to your agent. Everything stays in this browser (lib/brief/store.ts) unless you
  * copy a share link. The questions and the markdown live in lib/brief/model.ts.
  */
-import { decodeRecipe, isThemeCode } from '@halftone-ds/tokens/theme';
+import { encodeRecipe } from '@halftone-ds/tokens/theme';
 import { CheckIcon, CopyIcon, DownloadIcon, LinkIcon, RotateCcwIcon } from 'lucide-react';
 import Link from 'next/link';
 import * as React from 'react';
@@ -24,6 +24,7 @@ import {
 } from '@/lib/brief/model';
 import { resetBrief, setAnswer, startBrief, updateBrief, useBrief, useBriefOrigin } from '@/lib/brief/store';
 import { rovingKeyDown, rovingTabIndex } from '@/lib/roving';
+import { readThemeCode } from '@/lib/theme/read-code';
 import { useLiveTheme } from '@/lib/theme/store';
 
 type Step = { id: string; title: string; section?: Section };
@@ -144,22 +145,24 @@ function ThemeChoice({ brief }: { brief: Brief }) {
   const picked = !ambient && !isCommitted ? theme.code : null;
   const [draft, setDraft] = React.useState('');
   const [error, setError] = React.useState<string | null>(null);
+  const [notes, setNotes] = React.useState<string[]>([]);
   const mode = !brief.theme ? 'default' : brief.theme === picked ? 'site' : 'code';
   const options = [
     { id: 'default' as const, title: 'Kit default', body: 'Apply a theme later, any time.' },
     ...(picked ? [{ id: 'site' as const, title: 'My theme', body: `The one you picked on this site: ${picked}` }] : []),
-    { id: 'code' as const, title: 'A theme code', body: brief.theme && mode === 'code' ? brief.theme : 'Paste a ht1- or ht2- code.' },
+    { id: 'code' as const, title: 'A theme code', body: brief.theme && mode === 'code' ? brief.theme : 'A Halftone code, or a shadcn preset code.' },
   ];
   const apply = (code: string) => {
-    const c = code.trim();
-    if (!isThemeCode(c)) return setError('That is not a theme code. It starts with ht1- or ht2-.');
     try {
-      decodeRecipe(c);
-    } catch {
-      return setError('That code does not decode. Copy it again from the theme studio.');
+      // A shadcn preset code becomes the nearest Halftone theme: the brief carries that theme's code.
+      const read = readThemeCode(code);
+      setError(null);
+      setNotes(read.notes);
+      updateBrief({ theme: encodeRecipe(read.recipe) });
+    } catch (err) {
+      setNotes([]);
+      setError(err instanceof Error ? err.message : 'Not a theme code.');
     }
-    setError(null);
-    updateBrief({ theme: c });
   };
   return (
     <div className="flex flex-col gap-3">
@@ -187,7 +190,7 @@ function ThemeChoice({ brief }: { brief: Brief }) {
             id="brief-theme-code"
             className={`${field} font-mono`}
             value={draft}
-            placeholder="ht2-…"
+            placeholder="ht2-… or b5owWMfJ8l"
             aria-invalid={!!error}
             aria-describedby={error ? 'brief-theme-error' : undefined}
             onChange={(e) => setDraft(e.target.value)}
@@ -200,6 +203,16 @@ function ThemeChoice({ brief }: { brief: Brief }) {
           <p id="brief-theme-error" role="alert" className="text-destructive text-xs">
             {error}
           </p>
+        ) : null}
+        {notes.length ? (
+          <div role="status" className="text-muted-foreground text-xs leading-5">
+            <p className="text-foreground font-medium">From a shadcn preset, as {brief.theme}. Not carried over exactly:</p>
+            <ul className="list-disc pl-4">
+              {notes.map((n) => (
+                <li key={n}>{n}</li>
+              ))}
+            </ul>
+          </div>
         ) : null}
         <p className="text-muted-foreground text-xs">
           No code yet? Pick one in the{' '}

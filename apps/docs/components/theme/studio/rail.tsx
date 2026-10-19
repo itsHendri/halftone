@@ -1,5 +1,5 @@
 'use client';
-import { decodeRecipe, FONTS, OPTIONS, PRESETS, sameRecipe, type Recipe, type RecipeInput } from '@halftone-ds/tokens/theme';
+import { FONTS, OPTIONS, PRESETS, sameRecipe, type Recipe, type RecipeInput } from '@halftone-ds/tokens/theme';
 import { Popover, PopoverContent, PopoverTrigger } from 'fumadocs-ui/components/ui/popover';
 import { CheckIcon, CopyIcon, LockIcon, LockOpenIcon, MoonIcon, Redo2Icon, RotateCcwIcon, ShieldCheckIcon, ShuffleIcon, SunIcon, Undo2Icon } from 'lucide-react';
 import { useTheme } from 'next-themes';
@@ -8,6 +8,7 @@ import { ExportPanel } from '@/components/theme/export-panel';
 import { fontFamily, fontLabel, LABELS, ORDER, PresetCard } from '@/components/theme/studio/parts';
 import { AdjustmentList, presetLabel, visibleAdjustments } from '@/components/theme/theme-pill';
 import { splitVars } from '@/lib/theme/payload';
+import { readThemeCode } from '@/lib/theme/read-code';
 import { SWATCHES } from '@/lib/theme/swatches';
 import { rovingKeyDown, rovingTabIndex } from '@/lib/roving';
 import { previewRecipe, redo, reset, setRecipe, shuffle, toggleLock, undo, useLiveTheme, useLocks, type LockKey } from '@/lib/theme/store';
@@ -236,13 +237,20 @@ function OpenCode() {
   const [open, setOpen] = React.useState(false);
   const [value, setValue] = React.useState('');
   const [error, setError] = React.useState<string | null>(null);
+  // A shadcn code opens as the nearest Halftone theme; what didn't carry over stays listed until the next code.
+  const [notes, setNotes] = React.useState<{ code: string; lines: string[] } | null>(null);
   const apply = (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      setRecipe({ ...decodeRecipe(value), preset: undefined });
-      setOpen(false);
-      setValue('');
+      const read = readThemeCode(value);
+      setRecipe({ ...read.recipe, preset: undefined });
       setError(null);
+      setValue('');
+      if (read.from === 'shadcn' && read.notes.length) setNotes({ code: value.trim(), lines: read.notes });
+      else {
+        setNotes(null);
+        setOpen(false);
+      }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Not a theme code');
     }
@@ -252,16 +260,20 @@ function OpenCode() {
       <PopoverTrigger aria-label="Open a theme code" title="Open a theme code" className="border-border hover:bg-accent focus-visible:ring-ring inline-flex h-8 items-center justify-center rounded-md border px-2.5 text-xs font-medium focus-visible:outline-none focus-visible:ring-2">
         Open
       </PopoverTrigger>
-      <PopoverContent side="right" align="end" sideOffset={12} className={`${scheme} bg-popover text-popover-foreground border-border w-72 p-3 shadow-xl backdrop-blur-none`}>
+      <PopoverContent side="right" align="end" sideOffset={12} className={`${scheme} bg-popover text-popover-foreground border-border w-80 p-3 shadow-xl backdrop-blur-none`}>
         <form onSubmit={apply} className="flex flex-col gap-2">
           <label htmlFor="studio-open-code" className="text-sm font-medium">
             Paste a theme code
           </label>
+          <p id="studio-open-code-hint" className="text-muted-foreground -mt-1 text-xs">
+            A Halftone code, or a shadcn preset code from ui.shadcn.com/create.
+          </p>
           <input
             id="studio-open-code"
+            aria-describedby="studio-open-code-hint"
             value={value}
             onChange={(e) => setValue(e.target.value)}
-            placeholder="ht1-… or ht2-…"
+            placeholder="ht2-… or b5owWMfJ8l"
             spellCheck={false}
             className="border-border bg-background focus-visible:ring-ring h-9 rounded-lg border px-3 font-mono text-sm focus-visible:outline-none focus-visible:ring-2"
           />
@@ -273,6 +285,16 @@ function OpenCode() {
           <button type="submit" className="bg-primary text-primary-foreground focus-visible:ring-ring h-8 rounded-md text-sm font-medium focus-visible:outline-none focus-visible:ring-2">
             Open
           </button>
+          {notes ? (
+            <div role="status" className="border-border mt-1 flex flex-col gap-1.5 border-t pt-2.5">
+              <p className="text-xs font-medium">Opened shadcn preset {notes.code}. Not carried over exactly:</p>
+              <ul className="text-muted-foreground flex list-disc flex-col gap-1 pl-4 text-xs leading-5">
+                {notes.lines.map((n) => (
+                  <li key={n}>{n}</li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
         </form>
       </PopoverContent>
     </Popover>
