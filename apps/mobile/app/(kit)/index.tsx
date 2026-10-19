@@ -3,18 +3,23 @@ import { SECTIONS } from '@/components/devkit/registry';
 import { Footnote } from '@/components/kit/footnote';
 import { ListGroup } from '@/components/kit/list-group';
 import { ListRow } from '@/components/kit/list-row';
+import { Logo } from '@/components/kit/logo';
 import { ScreenHeader } from '@/components/kit/screen-header';
 import { SectionHeader } from '@/components/kit/section-header';
 import { Card } from '@/components/ui/card';
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
+import { useBrand } from '@/lib/brand-context';
 import { Link } from 'expo-router';
 import { BlocksIcon, ReceiptTextIcon, ShoppingBagIcon, SwatchBookIcon, TargetIcon } from 'lucide-react-native';
 import { ScrollView, View } from 'react-native';
 
 export default function KitHome() {
+  // Once a brand is applied (lib/brand.ts), its logo leads the kit home.
+  const brand = useBrand();
   return (
     <ScrollView className="bg-background flex-1" contentContainerClassName="gap-6 p-5 pb-16" contentInsetAdjustmentBehavior="automatic">
+      {brand.logo ? <Logo size={32} /> : null}
       <ScreenHeader
         title="Halftone"
         size="large"

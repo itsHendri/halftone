@@ -148,6 +148,37 @@
       }
     },
     {
+      "name": "lib-brand-context",
+      "type": "registry:lib",
+      "title": "lib/brand-context.tsx",
+      "dependencies": [],
+      "registryDependencies": [
+        "@halftone-native/lib-brand",
+        "@halftone-native/lib-embed"
+      ],
+      "files": [
+        {
+          "path": "lib/brand-context.tsx",
+          "type": "registry:lib",
+          "target": "lib/brand-context.tsx"
+        }
+      ]
+    },
+    {
+      "name": "lib-brand",
+      "type": "registry:lib",
+      "title": "lib/brand.ts",
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "lib/brand.ts",
+          "type": "registry:lib",
+          "target": "lib/brand.ts"
+        }
+      ]
+    },
+    {
       "name": "lib-embed-theme",
       "type": "registry:lib",
       "title": "lib/embed-theme.ts",
@@ -2630,6 +2661,52 @@
           "Icon"
         ],
         "api": "<Icon as={LucideIcon} size? className=\"text-…\" />"
+      }
+    },
+    {
+      "name": "logo",
+      "type": "registry:component",
+      "title": "Logo",
+      "description": "the brand from lib/brand.ts (theme studio › Brand) · one-colour logos follow the theme · placeholder + name without one",
+      "dependencies": [
+        "react-native-svg@15.15.4"
+      ],
+      "registryDependencies": [
+        "@halftone-native/lib-brand",
+        "@halftone-native/lib-brand-context",
+        "@halftone-native/lib-embed",
+        "@halftone-native/lib-palette-context",
+        "@halftone-native/lib-theme",
+        "@halftone-native/lib-theme-context",
+        "@halftone-native/lib-utils",
+        "@halftone-native/text"
+      ],
+      "files": [
+        {
+          "path": "components/kit/logo.tsx",
+          "type": "registry:component",
+          "target": "components/kit/logo.tsx"
+        },
+        {
+          "path": "lib/brand.ts",
+          "type": "registry:component",
+          "target": "lib/brand.ts"
+        },
+        {
+          "path": "lib/brand-context.tsx",
+          "type": "registry:component",
+          "target": "lib/brand-context.tsx"
+        }
+      ],
+      "categories": [
+        "media"
+      ],
+      "docs": "Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.",
+      "meta": {
+        "exports": [
+          "Logo"
+        ],
+        "api": "<Logo variant?=\"full|mark\" size? name? tone? />"
       }
     },
     {

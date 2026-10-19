@@ -239,6 +239,7 @@ App tabs and stacks are Expo Router: `app/(kit)/_layout.tsx` shows the pattern; 
 | Component | Path | Notes |
 |---|---|---|
 | Icon | `components/ui/icon.tsx` | lucide wrapper |
+| Logo | `components/kit/logo.tsx` | the brand from lib/brand.ts (theme studio › Brand) · one-colour logos follow the theme · placeholder + name without one |
 | ImageTile | `components/kit/image-tile.tsx` | rounded image · `seed` draws generated art when there is no `source` |
 | AspectRatio | `components/ui/aspect-ratio.tsx` | |
 | Placeholder | `components/kit/placeholder.tsx` | deterministic abstract SVG art from a `seed` · the kit ships no raster imagery |

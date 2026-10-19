@@ -1,3 +1,4 @@
+import { Logo } from '@/components/kit/logo';
 import { TabBar, tabIcon } from '@/components/kit/tab-bar';
 import { Tabs } from 'expo-router';
 import { FileTextIcon, LayoutDashboardIcon, SettingsIcon } from 'lucide-react-native';
@@ -5,7 +6,7 @@ import { FileTextIcon, LayoutDashboardIcon, SettingsIcon } from 'lucide-react-na
 export default function NorthwindTabs() {
   return (
     <Tabs tabBar={(props) => <TabBar {...props} />}>
-      <Tabs.Screen name="index" options={{ title: 'Overview', tabBarIcon: tabIcon(LayoutDashboardIcon) }} />
+      <Tabs.Screen name="index" options={{ title: 'Overview', headerTitle: () => <Logo name="Northwind" size={22} />, tabBarIcon: tabIcon(LayoutDashboardIcon) }} />
       <Tabs.Screen name="invoices" options={{ title: 'Invoices', tabBarIcon: tabIcon(FileTextIcon) }} />
       <Tabs.Screen name="settings" options={{ title: 'Settings', tabBarIcon: tabIcon(SettingsIcon) }} />
     </Tabs>
