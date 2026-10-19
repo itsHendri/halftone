@@ -9,8 +9,9 @@ const repoPath = kit.repo.replace('https://github.com/', '');
 export function GET() {
   const md = `# Install ${kit.name}
 
-${kit.name} is a prototype kit for coding agents: a themed component registry, design tokens with a WCAG AA
-gate, and rules that keep a prototype inside what the kit ships. There are two kits on one set of tokens:
+${kit.name} is two prototype kits on one brand: an Expo kit for the phone and a Next.js kit for the web,
+sharing one set of design tokens. Build only from the components they ship; \`npm run lint\` rejects raw
+colours, imports outside the registry and other UI libraries. The two kits:
 
 - **Mobile** (\`apps/mobile\`): Expo, React Native, NativeWind, react-native-reusables. Phone prototypes.
 - **Web** (\`apps/web\`): Next.js, Tailwind 4, shadcn/ui. Dashboards, marketing pages, AI product interfaces.

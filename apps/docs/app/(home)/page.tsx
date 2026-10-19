@@ -21,8 +21,8 @@ const STEPS = [
     body: `${CATALOGUE.length} registered components across the native and web kits, each with an API, usage notes and a live demo. If something is missing, the agent says so instead of inventing it.`,
   },
   {
-    title: "You get a themed prototype",
-    body: "Light and dark, on your brand, on a phone or in a browser in minutes. Every screen uses the same tokens, spacing and patterns, so it looks designed, not generated.",
+    title: "You get both, on one brand",
+    body: "Light and dark, on your brand, on a phone and in a browser. Both kits read the same tokens, so a colour or radius changed once changes everywhere, and lint keeps every screen on them.",
   },
 ];
 
@@ -40,8 +40,8 @@ const GUARDRAILS = [
     "DESIGN_SYSTEM.md, llms.txt and a shadcn registry are generated from one list, so the docs, the agent and the code never disagree.",
   ],
   [
-    "A quality gate",
-    "The qc-pass skill runs typecheck, lint, the token and registry checks, then looks at the screens on a simulator or in a browser, in both themes.",
+    "Rules in lint",
+    "Raw colours, imports outside the registry and stray UI libraries are ESLint errors in every screen, so an agent hears about them while it writes, not in review. qc-pass then looks at the screens in both themes.",
   ],
 ];
 
@@ -61,13 +61,14 @@ export default function HomePage() {
             <ArrowRightIcon className="size-3.5" aria-hidden />
           </Link>
           <h1 className="text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
-            Hand an agent a brief. Get a prototype that looks designed.
+            One brand. Phone and web. Built by your agent.
           </h1>
           <p className="text-muted-foreground max-w-2xl text-lg leading-8 text-balance">
-            {kit.name} is a set of prototype kits that coding agents build from.
-            A themed component registry, design tokens with a contrast gate, and
-            rules that keep every screen inside what the kit ships. For mobile
-            and web, on one brand.
+            {kit.name} is two kits on one set of design tokens: Expo for the
+            phone, Next.js for the web. Your agent builds from the components
+            they ship, in your theme, light and dark, and lint stops it the
+            moment it reaches for a raw colour or a component that isn&apos;t
+            there.
           </p>
           <CopyPrompt className="w-full max-w-2xl text-left" />
         </section>

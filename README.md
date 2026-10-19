@@ -1,8 +1,11 @@
 # Halftone Design System
 
-Prototype kits for mobile and web that coding agents build from. Hand an agent a brief or a meeting
-transcript and get a working, themed prototype composed only from the components in the kit: no invented
-components, no stray colours, light and dark from day one.
+One brand on phone and web, built by your agent. Halftone is two prototype kits, Expo and Next.js, on one set
+of design tokens. Hand an agent a brief or a meeting transcript and it builds a working, themed prototype for
+either, composed only from the components the kits ship: no invented components, no stray colours (lint stops
+both), light and dark from day one.
+
+Where it's going: [ROADMAP.md](./ROADMAP.md).
 
 **Docs, live components and the install guide:** https://halftonedesignsystem.com
 
