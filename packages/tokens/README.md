@@ -2,12 +2,13 @@
 
 The token build behind [Halftone](https://github.com/itsHendri/halftone). One `tokens.json` in the
 [W3C design-token format](https://www.designtokens.org/tr/2025.10/format/) becomes everything an app reads,
-and the build refuses any palette that falls below WCAG AA.
+and every build checks the palette against WCAG AA.
 
 ```bash
 npm install -D @halftone-ds/tokens
 npx halftone-tokens build      # write every output in tokens/tokens.config.json
 npx halftone-tokens check      # write nothing; exit 1 if an output is stale (CI)
+npx halftone-tokens build --strict   # fail on contrast instead of warning (or HALFTONE_STRICT=1)
 npx halftone-tokens figma      # mirror the tokens into Figma Variables
 ```
 
@@ -47,9 +48,11 @@ npx halftone-tokens figma      # mirror the tokens into Figma Variables
 
 ## Guarantees
 
-- **Contrast gate.** Every `X` / `X-foreground` pairing, body and muted text on every surface, each status
-  colour used as text, and each status icon on its own tint must clear WCAG AA in both themes, or the build
-  fails, names the pairing, prints the ratio, and writes nothing.
+- **Contrast check.** Every `X` / `X-foreground` pairing, body and muted text on every surface, each status
+  colour used as text, and each status icon on its own tint is checked against WCAG AA in both themes. A
+  pairing that falls short is named with its ratio, and the generated DESIGN.md lists it. By default that is a
+  warning and the build carries on; with `--strict` (or `HALFTONE_STRICT=1`) the build fails and writes
+  nothing. The same goes for a tone's text on a tint the palette can't carry, when the config has `scan`.
 - **APCA, for reading only.** `apcaContrast(text, background)` (from `@halftone-ds/tokens/theme` or
   `@halftone-ds/tokens/lib/apca`) gives the APCA Lc of a pair, and `contrastReport(theme.resolved)` lists every
   pairing the gate checks, in both themes, with its WCAG ratio, `pass`, and Lc. Lc is advisory: WCAG AA stays

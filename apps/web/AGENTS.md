@@ -54,7 +54,7 @@ Inside the Halftone monorepo, install once at the repo root and run these from `
 npm run dev               # http://localhost:3100
 npm run build && npm start
 npm run typecheck && npm run lint
-npm run tokens:build      # after editing tokens/tokens.json (fails below WCAG AA)
+npm run tokens:build      # after editing tokens/tokens.json (names any pairing below WCAG AA; --strict fails)
 npm run registry:build    # after editing registry/components.ts
 npm run tokens:check && npm run registry:build -- --check   # what CI checks
 npm run registry:drift    # after `shadcn add`: which components/ui files differ from shadcn (network)

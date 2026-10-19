@@ -32,8 +32,8 @@ const GUARDRAILS = [
     `tokens.json (W3C format) builds the CSS variables, TypeScript theme, Figma variables and DESIGN.md. ${colorNames.length} semantic colours, no hex in screens.`,
   ],
   [
-    "Contrast that cannot regress",
-    "The token build refuses any palette where text on its surface, or a status colour used as text, falls below WCAG AA, in either theme.",
+    "Contrast, checked on every build",
+    "The token build checks every pairing where text sits on its surface, or a status colour is used as text, against WCAG AA in both themes, and names any that fall short. Halftone's own kits build strict, so they never ship below AA.",
   ],
   [
     "A registry agents can read",

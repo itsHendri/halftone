@@ -8,7 +8,7 @@ transcript and get a first prototype that already looks and feels coherent.
 - **Next.js 16** (App Router) · React 19 · TypeScript · Tailwind 4
 - **shadcn/ui** (owned source) plus kit components for app shells, KPIs, tables, heroes, pricing, and AI
   chat with streaming, tool calls and approvals
-- **Design tokens** in one JSON file → CSS variables + TypeScript, light and dark, WCAG AA enforced
+- **Design tokens** in one JSON file → CSS variables + TypeScript, light and dark, WCAG AA checked
 - **Components** and **Foundations** pages, searchable
 - **Three sample apps** for one made-up product: a SaaS dashboard (`/dashboard`), a landing page
   (`/landing`) and an AI assistant (`/assistant`), each built only from the registry

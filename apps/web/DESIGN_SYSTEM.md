@@ -14,8 +14,9 @@ regenerates `app/tokens.css` (Tailwind 4 / shadcn variables, oklch), `lib/theme.
 `tokens/generated/`. Never edit the generated files. In the Halftone monorepo the brand is edited in
 `apps/mobile/tokens/tokens.json` and copied here with `npm run tokens:sync`.
 
-**The build enforces contrast.** Every `X` / `X-foreground` pairing, muted text on every surface, and each
-status colour used as text must clear WCAG AA (4.5:1) in both themes, or `tokens:build` fails.
+**The build checks contrast.** Every `X` / `X-foreground` pairing, muted text on every surface, and each
+status colour used as text must clear WCAG AA (4.5:1) in both themes; `tokens:build` names any that falls
+short, and `--strict` (how Halftone's own kits build) fails on it.
 
 ### Colour — semantic names only
 

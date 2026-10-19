@@ -46,7 +46,7 @@ npm run dev:client     # expo start -c (development build)
 npm run ios            # expo start --ios --go (simulator)
 npm run web            # expo start --web
 npm run typecheck && npm run lint -- --max-warnings 0   # CI runs these plus tokens:build and export:web
-npm run tokens:build   # after editing tokens/tokens.json (fails if any pairing drops below WCAG AA)
+npm run tokens:build   # after editing tokens/tokens.json (names any pairing below WCAG AA; --strict fails on it)
 npm run registry:build # after editing registry/components.ts: DESIGN_SYSTEM.md tables, llms.txt, index
 npm run tokens:check && npm run registry:build -- --check   # what CI checks (plus the halftone-tokens tests in the monorepo)
 npm run eject-samples  # delete the shop, habits and Northwind samples, their stores and every reference
@@ -95,7 +95,8 @@ npx expo run:ios       # build + install the dev client on the simulator (needs 
   skill: `npx halftone-tokens theme apply <theme-code|preset>` (in the monorepo, `npm run theme:apply -- <code>` at the
   root). It rewrites only the theme's paths in `tokens/tokens.json` (colours, radius, fonts, depth, density, border,
   icon stroke, typeset), fixes contrast itself and records the recipe (`halftone-tokens theme show`). Editing tokens.json by hand
-  still works: `tokens:build` refuses any pairing below 4.5:1 and prints the ratio. Then set `name`/`slug`/`scheme`
+  still works: `tokens:build` names any pairing below 4.5:1 with its ratio (treat that as a bug unless the person
+  chose the colour knowingly; `--strict` makes it an error). Then set `name`/`slug`/`scheme`
   in `app.json` and `APP_ID` in `.env.local`, and replace `assets/images/*`.
 
 ## Agent tooling

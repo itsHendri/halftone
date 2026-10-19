@@ -13,7 +13,8 @@ components, no stray colours, light and dark from day one.
 | [`apps/docs`](./apps/docs) | **Docs site**: how it works, setup, every component live in a phone or browser frame. Static, on Cloudflare. |
 
 One token file drives every kit. `tokens.json` (W3C design-token format) builds the CSS variables and
-TypeScript theme each app reads, and the build refuses any palette that falls below WCAG AA.
+TypeScript theme each app reads, and the build checks every colour pairing against WCAG AA: it names any that
+falls short, and `--strict` (how Halftone's own kits build) makes that an error.
 
 ## Three ways in
 

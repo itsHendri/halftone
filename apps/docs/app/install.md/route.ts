@@ -89,9 +89,10 @@ at 375px and 1280px. In an AI interface, ask with an \`ApprovalCard\` before any
 
 ## 4. Re-brand
 
-Edit \`tokens/tokens.json\` (brand ramp, semantic colours, radius) and run \`npm run tokens:build\`. The build
-refuses any palette where a fill and its text, or muted text on a surface, falls below 4.5:1, and names the
-pairing.
+Edit \`tokens/tokens.json\` (brand ramp, semantic colours, radius) and run \`npm run tokens:build\`. It names
+any pairing where a fill and its text, or muted text on a surface, falls below 4.5:1: treat that as a bug unless
+the person chose the colour knowingly. Or apply a theme code (\`npx halftone-tokens theme apply <code>\`), which
+fixes contrast itself.
 `;
   return new Response(md, { headers: { 'Content-Type': 'text/markdown; charset=utf-8' } });
 }
