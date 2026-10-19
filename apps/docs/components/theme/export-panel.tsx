@@ -19,7 +19,7 @@ export function themeCommands(code: string, origin: string) {
   };
 }
 
-function CopyRow({ label, value, mono = true }: { label: string; value: string; mono?: boolean }) {
+export function CopyRow({ label, value, mono = true }: { label: string; value: string; mono?: boolean }) {
   const [copied, setCopied] = React.useState(false);
   React.useEffect(() => {
     if (!copied) return;

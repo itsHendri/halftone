@@ -14,7 +14,7 @@ import { colorNames, kit } from "@/lib/kit";
 const STEPS = [
   {
     title: "Give an agent a brief",
-    body: "A meeting transcript, a few notes or a feature list. The transcript-to-prototype skill turns it into a short brief and a screen list before any code.",
+    body: "A meeting transcript, a few notes, or the brief wizard on this site. Your agent turns it into a brief and a screen list, then waits for your go-ahead before any code.",
   },
   {
     title: "It builds from the registry only",
@@ -71,6 +71,15 @@ export default function HomePage() {
             there.
           </p>
           <CopyPrompt className="w-full max-w-2xl text-left" />
+          <p className="text-muted-foreground text-sm">
+            Have a brief or a transcript?{" "}
+            <Link
+              href="/brief"
+              className="text-foreground focus-visible:ring-ring rounded-sm font-medium underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2"
+            >
+              Start a prototype from it
+            </Link>
+          </p>
         </section>
         {/* The copy button above is the one primary action; these two follow it. The theme bar steps aside on phones. */}
         <div
