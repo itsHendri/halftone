@@ -1,3 +1,4 @@
+import { Logo } from '@/components/kit/logo';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { FAQ, FEATURES, PLANS, STUDIOS } from '@/components/landing/data';
@@ -24,8 +25,7 @@ export default function Landing() {
       <header className="border-border bg-background/90 sticky top-0 z-40 border-b backdrop-blur">
         <div className="mx-auto flex h-14 max-w-6xl items-center gap-6 px-4 sm:px-6">
           <Link href="/landing" className="flex items-center gap-2 font-semibold">
-            <span aria-hidden className="bg-primary size-5 rounded-md" />
-            Northwind
+            <Logo name="Northwind" />
           </Link>
           <nav aria-label="Page" className="hidden items-center gap-5 text-sm md:flex">
             {NAV.map((l) => (

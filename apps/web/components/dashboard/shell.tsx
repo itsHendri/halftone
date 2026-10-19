@@ -1,4 +1,5 @@
 'use client';
+import { Logo } from '@/components/kit/logo';
 import { FileTextIcon, LayoutDashboardIcon, SettingsIcon } from 'lucide-react';
 import type * as React from 'react';
 import { AppShell } from '@/components/kit/app-shell';
@@ -25,12 +26,7 @@ const NAV = [
 export function DashboardShell({ children }: { children: React.ReactNode }) {
   return (
     <AppShell
-      brand={
-        <span className="flex items-center gap-2">
-          <span aria-hidden className="bg-primary size-5 rounded-md" />
-          Northwind
-        </span>
-      }
+      brand={<Logo name="Northwind" />}
       nav={NAV}
       footer={
         <div className="flex flex-col gap-1 px-2 text-sm">

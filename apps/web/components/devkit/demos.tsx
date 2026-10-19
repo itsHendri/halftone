@@ -3,6 +3,7 @@
  * Components page demos, keyed by the component id in registry/components.ts. Each one is self-contained
  * (owns its state) and shows the variants and states that matter.
  */
+import { Logo } from '@/components/kit/logo';
 import {
   BarChart3Icon,
   BoldIcon,
@@ -277,6 +278,19 @@ function ThreadListDemo() {
 
 export const DEMOS: Record<string, ComponentType> = {
   ...TWIN_DEMOS,
+  logo: () => (
+    <div className="flex flex-col gap-4">
+      <Logo size={28} />
+      <Row>
+        <Logo variant="mark" size={40} />
+        <Logo variant="mark" size={24} />
+        <Logo name="Northwind" />
+      </Row>
+      <div className="bg-primary text-primary-foreground rounded-xl p-4">
+        <Logo size={24} />
+      </div>
+    </div>
+  ),
   button: () => (
     <Row>
       <Button>Primary</Button>

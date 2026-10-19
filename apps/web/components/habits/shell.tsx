@@ -1,4 +1,5 @@
 'use client';
+import { Logo } from '@/components/kit/logo';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type * as React from 'react';
@@ -21,8 +22,7 @@ export function HabitsShell({ children }: { children: React.ReactNode }) {
       <header className="border-border bg-background/90 sticky top-0 z-40 border-b backdrop-blur">
         <div className="mx-auto flex min-h-14 w-full max-w-4xl flex-wrap items-center gap-x-6 px-4 sm:flex-nowrap sm:px-6">
           <Link href="/habits" className="flex h-14 items-center gap-2 font-semibold">
-            <span aria-hidden className="bg-primary size-5 rounded-full" />
-            Habits
+            <Logo name="Habits" />
           </Link>
           {/* Under the brand on a phone, beside it from sm up. */}
           <nav aria-label="Habits" className="order-last -mx-2.5 flex w-full items-center gap-1 overflow-x-auto pb-2 text-sm sm:order-none sm:mx-0 sm:w-auto sm:pb-0">
