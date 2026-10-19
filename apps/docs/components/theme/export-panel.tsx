@@ -1,5 +1,5 @@
 'use client';
-import { applyRecipe, type Theme } from '@halftone-ds/tokens/theme';
+import { applyRecipe, presetById, sameRecipe, shadcnTheme, type Theme } from '@halftone-ds/tokens/theme';
 import { CheckIcon, CopyIcon, DownloadIcon } from 'lucide-react';
 import * as React from 'react';
 import kitJson from '../../../../kit.json';
@@ -17,6 +17,20 @@ export function themeCommands(code: string, origin: string) {
     // The trailing slash matches the static export, so the link needs no redirect that could drop ?t=.
     url: `${origin}/themes/?t=${code}`,
   };
+}
+
+/** The shadcn file name for a theme that isn't an unchanged preset (the studio downloads it). */
+export const SHADCN_FILE = 'halftone-theme.json';
+
+/**
+ * How a theme reaches a shadcn project: an unchanged preset installs from the site (`/r/theme/<preset>.json`,
+ * built by scripts/build-docs.mjs); any other theme from the file the studio downloads.
+ */
+export function shadcnCommand(theme: Theme) {
+  const preset = theme.recipe.preset ? presetById(theme.recipe.preset) : undefined;
+  const site = (kitJson.siteUrl ?? 'https://halftonedesignsystem.com').replace(/\/$/, '');
+  if (preset && sameRecipe(theme.recipe, preset.recipe)) return { preset: preset.id, command: `npx shadcn@latest add ${site}/r/theme/${preset.id}.json` };
+  return { preset: null, command: `npx shadcn@latest add ./${SHADCN_FILE}` };
 }
 
 export function CopyRow({ label, value, mono = true }: { label: string; value: string; mono?: boolean }) {
@@ -70,6 +84,40 @@ export function ExportPanel({ theme }: { theme: Theme }) {
         <DownloadIcon className="size-4" aria-hidden />
         Download tokens.json
       </button>
+      <ShadcnExport theme={theme} />
     </div>
+  );
+}
+
+/** The theme for any shadcn project: colours (light and dark), radius, shadows and fonts. Web only. */
+function ShadcnExport({ theme }: { theme: Theme }) {
+  const { preset, command } = shadcnCommand(theme);
+  const download = () => {
+    const item = shadcnTheme(theme);
+    const url = URL.createObjectURL(new Blob([JSON.stringify(item, null, 2) + '\n'], { type: 'application/json' }));
+    Object.assign(document.createElement('a'), { href: url, download: SHADCN_FILE }).click();
+    URL.revokeObjectURL(url);
+  };
+  return (
+    <section aria-labelledby="export-shadcn" className="border-border flex flex-col gap-3 border-t pt-4">
+      <div className="flex flex-col gap-1">
+        <h3 id="export-shadcn" className="text-sm font-medium">
+          For any shadcn project
+        </h3>
+        <p className="text-muted-foreground text-xs leading-5">
+          Colours for light and dark, radius, shadows and fonts, as a shadcn theme. Web only: phone apps take the theme code.
+        </p>
+      </div>
+      {preset ? null : (
+        <button
+          type="button"
+          onClick={download}
+          className="border-border hover:bg-accent focus-visible:ring-ring inline-flex h-9 items-center justify-center gap-2 rounded-full border px-4 text-sm font-medium focus-visible:outline-none focus-visible:ring-2">
+          <DownloadIcon className="size-4" aria-hidden />
+          Download {SHADCN_FILE}
+        </button>
+      )}
+      <CopyRow label={preset ? 'Install it' : 'Then, in the project'} value={command} />
+    </section>
   );
 }

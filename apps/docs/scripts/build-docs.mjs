@@ -5,12 +5,13 @@
  *   1. tokens.css from the kit's tokens.json (halftone-tokens) and the generated MDX pages
  *   2. the mobile kit's web export, under the sub-path /m (embed mode for the phone frames)
  *   3. the web kit's static export, under /w (the browser frames)
- *   4. the shadcn registries: Expo apps at /r/native/*.json, Next.js apps at /r/web/*.json
+ *   4. the shadcn registries: Expo apps at /r/native/*.json, Next.js apps at /r/web/*.json, and Halftone themes
+ *      for any shadcn project: the presets at /r/theme/<preset>.json, the fonts they use at /r/font/*.json
  *   5. _redirects (SPA fallback for the mobile kit's routes only) and _headers (content types, CORS)
  *   6. next build (static export) and a check that everything above landed in out/
  */
 import { execFileSync } from 'node:child_process';
-import { cpSync, existsSync, readdirSync, rmSync, statSync, writeFileSync } from 'node:fs';
+import { cpSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -18,6 +19,7 @@ const docs = join(dirname(fileURLToPath(import.meta.url)), '..');
 const mobile = join(docs, '../mobile');
 const web = join(docs, '../web');
 const pub = join(docs, 'public');
+const kit = JSON.parse(readFileSync(join(docs, '../../kit.json'), 'utf8'));
 const KIT_PATH = '/m';
 const WEB_PATH = '/w';
 
@@ -50,6 +52,31 @@ cpSync(join(web, 'out'), join(pub, WEB_PATH.slice(1)), { recursive: true });
 step('shadcn registry → public/r/web');
 run('npm', ['run', 'registry:dist'], web);
 cpSync(join(web, 'dist/r/web'), join(pub, 'r/web'), { recursive: true });
+
+// Halftone themes for any shadcn project (lib/theme/shadcn.mjs): each preset as a registry:theme item, and the
+// registry:font items every theme depends on (a fixed set: Halftone's Google fonts, in each role).
+step('shadcn themes and fonts → public/r/theme, public/r/font');
+{
+  const { FONTS, PRESETS, applyRecipe, shadcnFont, shadcnFontPath, shadcnTheme } = await import('@halftone-ds/tokens/theme');
+  const base = JSON.parse(readFileSync(join(mobile, 'tokens/tokens.json'), 'utf8'));
+  const fontsUrl = `${(kit.siteUrl ?? 'https://halftonedesignsystem.com').replace(/\/$/, '')}/r`;
+  const write = (path, item) => {
+    mkdirSync(dirname(join(pub, 'r', path)), { recursive: true });
+    writeFileSync(join(pub, 'r', path), JSON.stringify(item, null, 2) + '\n');
+  };
+  for (const p of PRESETS) {
+    const { theme } = applyRecipe(base, { ...p.recipe, preset: p.id });
+    write(`theme/${p.id}.json`, shadcnTheme(theme, { name: `halftone-${p.id}`, title: `Halftone ${p.name} theme`, fontsUrl }));
+  }
+  let fonts = 0;
+  for (const f of FONTS.filter((f) => !f.system)) {
+    for (const role of f.category === 'mono' ? ['body', 'heading', 'mono'] : ['body', 'heading']) {
+      write(shadcnFontPath(f.id, role), shadcnFont(f.id, role));
+      fonts++;
+    }
+  }
+  console.log(`  ${PRESETS.length} themes, ${fonts} font items`);
+}
 
 step('_redirects and _headers');
 /**
@@ -133,6 +160,11 @@ const expected = [
   'w/assistant/index.html',
   'r/web/registry.json',
   'r/web/data-table.json',
+  'r/theme/default.json',
+  'r/theme/editorial.json',
+  'r/font/inter.json',
+  'r/font/heading-fraunces.json',
+  'r/font/mono-jetbrains-mono.json',
   '_redirects',
   '_headers',
 ];
