@@ -26,7 +26,7 @@ const run = (cmd, args, cwd, env = {}) =>
 const step = (label) => console.log(`\n▸ ${label}`);
 
 step('tokens and generated content');
-run('npx', ['halftone-tokens', 'build'], docs);
+run('npx', ['halftone-tokens', 'build', '--strict'], docs);
 run('node', ['scripts/prepare-content.mjs'], docs);
 
 step(`mobile kit web export → public${KIT_PATH}`);

@@ -12,6 +12,11 @@ concurrency:
 permissions:
   contents: read
 
+# halftone-tokens warns on contrast by default; Halftone's own kits build strict, so a pairing below WCAG AA
+# (or a tone's text on a tint the palette can't carry) fails every job here. The published 1.1.0 ignores it.
+env:
+  HALFTONE_STRICT: '1'
+
 jobs:
   mobile:
     runs-on: ubuntu-latest
@@ -41,9 +46,9 @@ jobs:
       - name: Lint
         run: npm run lint -- --max-warnings 0
 
-      # Fails if any colour pairing drops below WCAG AA, or if tokens.json changed without the
-      # generated files (global.css, lib/theme.ts, web.css, DESIGN.md, …) being rebuilt and committed.
-      - name: Tokens are built and pass the contrast gate
+      # Fails if any colour pairing drops below WCAG AA (strict, see env above), or if tokens.json changed
+      # without the generated files (global.css, lib/theme.ts, web.css, DESIGN.md, …) being rebuilt and committed.
+      - name: Tokens are built and pass the contrast check
         run: npm run tokens:check
 
       # Every ui/kit file is registered and exports what registry/components.ts says, and the
@@ -79,7 +84,7 @@ jobs:
         run: npm run tokens:sync -- --check
         working-directory: .
 
-      - name: Tokens are built and pass the contrast gate
+      - name: Tokens are built and pass the contrast check
         run: npm run tokens:check
 
       - name: Registry is consistent and generated docs are current
@@ -118,20 +123,31 @@ jobs:
         run: npm pack -w packages/tokens --dry-run
 
   # Each app must work when copied out on its own (npx giget gh:itsHendri/halftone/apps/<app>): no root
-  # lockfile, no root overrides, no workspace links. The tokens package comes from a packed tarball,
-  # standing in for the published version.
+  # lockfile, no root overrides, no workspace links. The tokens package comes from a packed tarball of this
+  # commit (`pack`), and again from npm (`published`): what someone copying the app out today installs. The
+  # published leg fails if an app starts to need tokens-package code that hasn't been released.
   extract:
-    name: extract (${{ matrix.app }})
+    name: extract (${{ matrix.app }}${{ matrix.tokens == 'published' && ', published tokens' || '' }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         include:
           - app: mobile
+            tokens: pack
             checks: npm run tokens:check && npm run registry:build -- --check && npm run typecheck && npm run lint -- --max-warnings 0 && npm run export:web
             after-eject: npm run typecheck && npm run lint -- --max-warnings 0
           - app: web
+            tokens: pack
             checks: npm run tokens:check && npm run registry:build -- --check && npm run typecheck && npm run lint && npm run build
+            after-eject: npm run typecheck && npm run lint
+          - app: mobile
+            tokens: published
+            checks: npm run tokens:check && npm run typecheck && npm run lint -- --max-warnings 0
+            after-eject: npm run typecheck && npm run lint -- --max-warnings 0
+          - app: web
+            tokens: published
+            checks: npm run tokens:check && npm run typecheck && npm run lint
             after-eject: npm run typecheck && npm run lint
     steps:
       - uses: actions/checkout@v7
@@ -144,9 +160,11 @@ jobs:
         run: |
           mkdir -p "$RUNNER_TEMP/app"
           git archive HEAD:apps/${{ matrix.app }} | tar -x -C "$RUNNER_TEMP/app"
-          npm pack -w packages/tokens --pack-destination "$RUNNER_TEMP"
-          cd "$RUNNER_TEMP/app"
-          npm pkg set "devDependencies.@halftone-ds/tokens=file:$(ls "$RUNNER_TEMP"/halftone-ds-tokens-*.tgz)"
+          if [ "${{ matrix.tokens }}" = pack ]; then
+            npm pack -w packages/tokens --pack-destination "$RUNNER_TEMP"
+            cd "$RUNNER_TEMP/app"
+            npm pkg set "devDependencies.@halftone-ds/tokens=file:$(ls "$RUNNER_TEMP"/halftone-ds-tokens-*.tgz)"
+          fi
 
       - name: Install the standalone app
         working-directory: ${{ runner.temp }}/app
