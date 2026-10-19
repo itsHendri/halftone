@@ -6,7 +6,7 @@ Halftone's ground: **one brand on phone and web, from one design-token file**, w
 colours (radius, fonts, depth, density, border, icon stroke, typeset), contrast checked on every build, and
 agents that build only from what the kits ship. Free, open, and run by your own agent.
 
-## Now: trust and pitch
+## Done, in review: trust and pitch
 
 - **Guardrails in lint.** `halftone/*` ESLint rules in both kits (raw colours, imports outside the registry,
   other UI libraries, platform primitives in screens) and a Claude Code hook that lints each edited file.
@@ -14,7 +14,7 @@ agents that build only from what the kits ship. Free, open, and run by your own 
   `--strict` / `HALFTONE_STRICT=1` fails. Halftone's own CI is strict.
 - **The pitch:** "One brand. Phone and web. Built by your agent."
 
-## Next: a brief wizard on the site
+## Now: a brief wizard on the site
 
 A `/brief` page that turns a guided brief, or a pasted transcript, into a planning session.
 

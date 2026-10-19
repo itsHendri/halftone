@@ -20,6 +20,9 @@ export const AMBIENT_CSS_KEY = 'halftone.ambient.css';
 export const AMBIENT_ID = 'halftone-ambient';
 export const AMBIENT_PAUSE_KEY = 'halftone.ambient.paused';
 
+/** The brief wizard's answers (lib/brief/store.ts): kept in this browser only. */
+export const BRIEF_KEY = 'halftone.brief';
+
 /** The components filter (All | Native | Web), as <html data-kit-filter>. */
 export const FILTER_KEY = 'halftone.kits';
 

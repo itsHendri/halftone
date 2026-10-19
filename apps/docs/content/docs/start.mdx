@@ -1,0 +1,38 @@
+---
+title: Start a prototype
+description: A guided brief or a transcript in, one prompt out. Your agent plans first and waits for your go-ahead.
+---
+
+The [brief wizard](/brief) turns what you know about a product into a brief an agent can plan from. Nothing
+leaves your browser until you copy it.
+
+## Two ways in
+
+- **Guided brief.** Eight short sections: product, users and jobs, screens and navigation, key flows, data,
+  voice and tone, proof and constraints, and what waits for later. Mark anything that doesn't fit as **Does
+  not apply**, so the agent knows you didn't skip it by accident. Leave a question empty and the agent picks the
+  most conventional answer for the platform and lists it under Open questions.
+- **A transcript.** Paste a meeting transcript or your notes. The agent extracts the brief and quotes the
+  transcript for any decision that could be argued.
+
+Either way, choose **phone, web or both** and, if you have one, a **theme code** from the
+[theme studio](/themes).
+
+## What you take away
+
+- **One prompt** that carries the whole brief. Paste it into Claude Code, Cursor or any coding agent.
+- **BRIEF.md**, the same brief as a file. Save it in an empty folder and run
+  `claude "Read BRIEF.md and follow its 'How to use this brief' section."`
+- **A share link** with your answers, for a teammate or a client to check before you start.
+
+## What the agent does with it
+
+1. **Sets up the kit** from [install.md](/install.md): the mobile kit, the web kit, or both on one brand.
+2. **Applies your theme** with the apply-theme skill, if you chose one.
+3. **Plans, then stops.** The transcript-to-prototype skill writes the kit's BRIEF.md from your answers, lists
+   every screen or page with the registry components it will use, and the open questions. Then it **waits for
+   your approval** before writing any code. Change anything here: it's cheaper than changing screens.
+4. **Builds after you approve,** only from registry components, then runs qc-pass and hands over.
+
+The agent never invents proof: no made-up numbers, customers or quotes. Give it the real ones under **Proof &
+constraints**, or leave that out.

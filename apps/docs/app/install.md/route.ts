@@ -18,6 +18,9 @@ colours, imports outside the registry and other UI libraries. The two kits:
 
 If the person did not say which, ask: "a phone app, a web app, or both?"
 
+If the person gave you a **BRIEF.md** from the brief wizard (\`${site('/brief/')}\`), its "How to use this brief"
+section says which path to take and what to do after: plan first, and wait for approval before writing code.
+
 ## 1. Pick the path
 
 **A. New mobile prototype**
@@ -77,7 +80,8 @@ In the kit you are working in:
 - Style with semantic classes only (\`bg-card\`, \`text-muted-foreground\`, \`bg-primary/15\`). No hex, no
   Tailwind palette colours, no inline colour styles.
 - One primary action per screen. Content is flat; shadows only on what you can press or what floats.
-- Mock data lives beside the prototype (\`components/<slug>/data.ts\`). Never call real APIs.
+- Mock data lives beside the prototype (mobile: \`components/<slug>/data.ts\`; web: \`app/<slug>/data.ts\`). Never
+  call real APIs.
 - Check every screen in light and dark. Run the \`qc-pass\` skill before saying "done".
 
 **Mobile only:** text through \`<Text variant>\`, icons through \`<Icon as={…} />\` (lucide). Buttons hold
