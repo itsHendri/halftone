@@ -854,6 +854,17 @@ export const COMPONENTS: ComponentMeta[] = [
     aliases: ['lucide', 'glyph', 'symbol'],
   },
   {
+    id: 'logo',
+    title: 'Logo',
+    exports: ['Logo'],
+    category: 'media',
+    files: ['components/kit/logo.tsx', 'lib/brand.ts', 'lib/brand-context.tsx'],
+    notes: 'the brand from lib/brand.ts (theme studio › Brand) · one-colour logos follow the theme · placeholder + name without one',
+    api: '<Logo variant?="full|mark" size? name? tone? />',
+    caption: "Your logo, in the scheme on screen. Without one it's a placeholder square and the name, so screens look right before a brand is applied.",
+    aliases: ['brand', 'wordmark', 'mark', 'logotype', 'app icon'],
+  },
+  {
     id: 'image-tile',
     title: 'Image tile',
     exports: ['ImageTile'],

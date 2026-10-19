@@ -2,6 +2,7 @@ import '@/global.css';
 
 import { NotifyProvider } from '@/components/kit/notify';
 import { ToastProvider } from '@/components/kit/toast';
+import { BrandProvider } from '@/lib/brand-context';
 import { NativeModeProvider } from '@/lib/native-context';
 import { PaletteProvider, useNavTheme } from '@/lib/palette-context';
 import { KitThemeProvider, useKitTheme } from '@/lib/theme-context';
@@ -41,9 +42,11 @@ export default function RootLayout() {
     <GestureHandlerRootView style={{ flex: 1 }}>
       <KitThemeProvider>
         <PaletteProvider>
-          <NativeModeProvider>
-            <AppShell />
-          </NativeModeProvider>
+          <BrandProvider>
+            <NativeModeProvider>
+              <AppShell />
+            </NativeModeProvider>
+          </BrandProvider>
         </PaletteProvider>
       </KitThemeProvider>
     </GestureHandlerRootView>

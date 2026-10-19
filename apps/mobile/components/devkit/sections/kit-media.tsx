@@ -1,3 +1,4 @@
+import { Logo } from '@/components/kit/logo';
 import { Placeholder } from '@/components/kit/placeholder';
 import { Spot } from '@/components/kit/spot';
 import { Button } from '@/components/ui/button';
@@ -54,8 +55,26 @@ function SpotDemo() {
   );
 }
 
+/** The brand's logo in its places: full, the mark, and on a primary fill. */
+function LogoDemo() {
+  return (
+    <View className="w-full gap-4">
+      <Logo size={28} />
+      <View className="flex-row items-center gap-4">
+        <Logo variant="mark" size={40} />
+        <Logo variant="mark" size={24} />
+        <Logo name="Northwind" size={20} />
+      </View>
+      <View className="bg-primary flex-row items-center rounded-xl p-4">
+        <Logo size={24} tone="primaryForeground" />
+      </View>
+    </View>
+  );
+}
+
 /** Components page demos, keyed by the component id in registry/components.ts. */
 export const KIT_MEDIA_DEMOS: Record<string, ComponentType> = {
+  'logo': LogoDemo,
   'placeholder': PlaceholderDemo,
   'spot': SpotDemo,
 };
