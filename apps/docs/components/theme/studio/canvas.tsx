@@ -160,7 +160,8 @@ function Overview() {
       </Panel>
       <Panel title="Controls">
         <div className="flex flex-wrap gap-2">
-          <span className="bg-primary text-primary-foreground inline-flex h-9 items-center rounded-md px-4 text-sm font-medium shadow-sm">
+          {/* The theme's button style (solid, soft, outline, raised), as both kits draw it. */}
+          <span className="bg-button text-button-foreground border-button-edge inline-flex h-9 items-center rounded-md border-(length:--button-border-w) border-b-(length:--button-edge-w) px-4 text-sm font-medium shadow-sm">
             Primary
           </span>
           <span className="bg-secondary text-secondary-foreground inline-flex h-9 items-center rounded-md px-4 text-sm font-medium">
@@ -172,7 +173,7 @@ function Overview() {
         </div>
         <div className="flex flex-wrap gap-2">
           <span
-            className={`bg-primary text-primary-foreground inline-flex h-10 items-center px-5 text-sm font-medium ${recipe.controls === "pill" ? "rounded-full" : "rounded-md"}`}
+            className={`bg-button text-button-foreground border-button-edge inline-flex h-10 items-center border-(length:--button-border-w) border-b-(length:--button-edge-w) px-5 text-sm font-medium ${recipe.controls === "pill" ? "rounded-full" : "rounded-md"}`}
           >
             Mobile button
           </span>
@@ -183,7 +184,8 @@ function Overview() {
             Overdue
           </span>
         </div>
-        <div className="border-border bg-background text-muted-foreground flex h-9 items-center rounded-md border px-3 text-sm">
+        {/* The theme's field style (outline, filled, underline). */}
+        <div className="bg-field border-field-edge text-muted-foreground flex h-9 items-center rounded-t-field rounded-b-field-b border-(length:--field-border-w) border-b-(length:--field-edge-w) px-field-x text-sm shadow-(--field-shadow)">
           billing@northwind.co
         </div>
       </Panel>

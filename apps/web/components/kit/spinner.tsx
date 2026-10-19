@@ -4,8 +4,8 @@ import { LoaderCircleIcon } from 'lucide-react';
 type Props = {
   /** `small` 20px (inside buttons and rows) · `large` 36px (loading a page or card). */
   size?: 'small' | 'large';
-  /** `primary-foreground` is the one to use inside a filled Button. */
-  tone?: 'primary' | 'primary-foreground' | 'foreground' | 'muted';
+  /** `button-foreground` is the one to use inside the primary Button (it follows the theme's button style). */
+  tone?: 'primary' | 'primary-foreground' | 'button-foreground' | 'foreground' | 'muted';
   /** What is loading. Default "Loading". */
   'aria-label'?: string;
   className?: string;
@@ -14,6 +14,7 @@ type Props = {
 const TONE = {
   primary: 'text-primary',
   'primary-foreground': 'text-primary-foreground',
+  'button-foreground': 'text-button-foreground',
   foreground: 'text-foreground',
   muted: 'text-muted-foreground',
 } as const;

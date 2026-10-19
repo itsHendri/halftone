@@ -2,8 +2,8 @@ import { usePalette } from '@/lib/palette-context';
 import { ActivityIndicator, type ActivityIndicatorProps } from 'react-native';
 
 type Props = Omit<ActivityIndicatorProps, 'color'> & {
-  /** `primary-foreground` is the one to use inside a filled Button. */
-  tone?: 'primary' | 'primary-foreground' | 'foreground' | 'muted';
+  /** `button-foreground` is the one to use inside the primary Button (it follows the theme's button style). */
+  tone?: 'primary' | 'primary-foreground' | 'button-foreground' | 'foreground' | 'muted';
 };
 
 /**
@@ -17,8 +17,10 @@ export function Spinner({ tone = 'primary', size = 'small', accessibilityLabel =
       ? colors.primary
       : tone === 'primary-foreground'
         ? colors.primaryForeground
-        : tone === 'foreground'
-          ? colors.foreground
-          : colors.mutedForeground;
+        : tone === 'button-foreground'
+          ? colors.buttonForeground
+          : tone === 'foreground'
+            ? colors.foreground
+            : colors.mutedForeground;
   return <ActivityIndicator size={size} color={color} aria-label={accessibilityLabel} {...props} />;
 }

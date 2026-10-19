@@ -11,6 +11,8 @@ export type Size = '16' | '14' | '15' | '18';
 export type Leading = 'normal' | 'tight' | 'relaxed';
 export type Flow = 'normal' | 'tight' | 'loose';
 export type Measure = '70' | '60' | '80' | '90';
+export type ButtonStyle = 'solid' | 'soft' | 'outline' | 'raised';
+export type FieldStyle = 'outline' | 'filled' | 'underline';
 export type Mode = 'light' | 'dark';
 export type CvdType = 'protanopia' | 'deuteranopia' | 'tritanopia';
 /** A pair of tones as one vision sees them: `fg` and `bg` are the simulated hex of `a` and `b`. */
@@ -32,6 +34,10 @@ export type Recipe = {
   leading: Leading;
   flow: Flow;
   measure: Measure;
+  /** The primary button's style. */
+  button: ButtonStyle;
+  /** Text fields' style (inputs, text areas, select triggers). */
+  field: FieldStyle;
   preset?: string;
 };
 export type RecipeInput = Partial<Omit<Recipe, 'font'>> & { font?: Partial<Recipe['font']> };
@@ -56,6 +62,10 @@ export type Theme = {
   borderWidth: number;
   stroke: number;
   density: { sm: number; md: number; lg: number; x: number; scale: number };
+  /** The button style's numbers: fill opacity, border and bottom edge (px). */
+  button: { alpha: number; border: number; edge: number };
+  /** The field style's numbers: fill opacity per mode, border and bottom edge (px), radii (px), inset (0 or 1). */
+  field: { alpha: Record<Mode, number>; border: number; edge: number; inset: number; radius: number; radiusBottom: number };
   [key: string]: unknown;
 };
 
@@ -79,8 +89,11 @@ export const OPTIONS: {
   leading: Leading[];
   flow: Flow[];
   measure: Measure[];
+  button: ButtonStyle[];
+  field: FieldStyle[];
 };
 export const TYPESET_KEYS: ['size', 'leading', 'flow', 'measure'];
+export const STYLE_KEYS: ['button', 'field'];
 export const LEADING: Record<Leading, number>;
 export const FLOW: Record<Flow, number>;
 export const FONTS: Font[];
@@ -101,7 +114,9 @@ export function fontById(id: string): Font | undefined;
 export function googleFontsHref(ids: string[]): string | null;
 export function presetById(id: string): Preset | undefined;
 export function defaultTypeset(recipe: Recipe): boolean;
+export function defaultStyles(recipe: Recipe): boolean;
 export function typeVars(type: TypeScale): Record<string, string>;
+export function styleVars(styles: Pick<Theme, 'button' | 'field'>, format: 'hsl' | 'oklch'): Record<Mode, Record<string, string>>;
 export function themeVars(theme: Theme, format: 'hsl' | 'oklch'): Record<Mode, Record<string, string>>;
 export function themeHex(theme: Theme): Record<Mode, Record<string, string>>;
 export function themeCss(theme: Theme, options?: { format?: 'hsl' | 'oklch'; light?: string; dark?: string }): string;

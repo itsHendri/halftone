@@ -161,7 +161,7 @@ export function redo() {
  * What shuffle may change, one key per control row in the studio: a locked row keeps its value. Fonts lock
  * one role at a time; the rest are recipe axes.
  */
-export const LOCK_KEYS = ['brand', 'neutral', 'heading', 'body', 'mono', 'size', 'leading', 'flow', 'measure', 'radius', 'controls', 'border', 'depth', 'stroke', 'density'] as const;
+export const LOCK_KEYS = ['brand', 'neutral', 'heading', 'body', 'mono', 'size', 'leading', 'flow', 'measure', 'radius', 'controls', 'button', 'field', 'border', 'depth', 'stroke', 'density'] as const;
 export type LockKey = (typeof LOCK_KEYS)[number];
 let locks = new Set<LockKey>();
 const lockListeners = new Set<() => void>();
@@ -225,7 +225,7 @@ export function shuffle() {
     ...(free('body') ? { body: fonts.body } : {}),
     ...(free('mono') ? { mono: fonts.mono } : {}),
   } as Recipe['font'];
-  for (const key of ['size', 'leading', 'flow', 'measure', 'radius', 'controls', 'border', 'depth', 'stroke', 'density'] as const) {
+  for (const key of ['size', 'leading', 'flow', 'measure', 'radius', 'controls', 'button', 'field', 'border', 'depth', 'stroke', 'density'] as const) {
     if (free(key)) Object.assign(next, { [key]: pick(OPTIONS[key] as readonly string[]) });
   }
   setRecipe(next);

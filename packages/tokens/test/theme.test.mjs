@@ -6,7 +6,7 @@ import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
 import { hexToOklchParts, inGamut } from '../lib/color.mjs';
-import { contrastFailures } from '../lib/contrast.mjs';
+import { contrastFailures, contrastPairs } from '../lib/contrast.mjs';
 import { loadTokens } from '../lib/resolve.mjs';
 import { resolveTree } from '../lib/theme/refs.mjs';
 import {
@@ -24,7 +24,7 @@ import {
   themeStatus,
   themeVars,
 } from '../lib/theme/index.mjs';
-import { normalizeRecipe } from '../lib/theme/recipe.mjs';
+import { normalizeRecipe, STYLE_KEYS } from '../lib/theme/recipe.mjs';
 import { brandRamp, curatedRamp } from '../lib/theme/ramp.mjs';
 import nativewind3 from '../targets/nativewind3.mjs';
 import shadcnWeb from '../targets/shadcn-web.mjs';
@@ -76,11 +76,12 @@ const pick = (rand, list) => list[Math.floor(rand() * list.length)];
 const randomHex = (rand) => '#' + Math.floor(rand() * 0x1000000).toString(16).padStart(6, '0');
 const TEXT_FONTS = FONTS.filter((f) => f.id !== 'system-mono');
 const MONO_FONTS = FONTS.filter((f) => f.category === 'mono');
-function randomRecipe(rand, { typeset = true } = {}) {
+function randomRecipe(rand, { typeset = true, styles = typeset } = {}) {
   const r = { brand: randomHex(rand), font: { heading: pick(rand, TEXT_FONTS).id, body: pick(rand, TEXT_FONTS).id } };
   for (const [key, list] of Object.entries(OPTIONS)) r[key] = pick(rand, list);
   if (typeset) r.font.mono = pick(rand, MONO_FONTS).id;
   else for (const key of TYPESET_KEYS) r[key] = DEFAULT_RECIPE[key];
+  if (!styles) for (const key of STYLE_KEYS) r[key] = DEFAULT_RECIPE[key];
   return r;
 }
 
@@ -117,28 +118,75 @@ test('every preset and 500 random recipes pass the strict contrast gate after au
 test("the default recipe, before fixes, is exactly the kit's original semantic map", () => {
   const theme = generateTheme(DEFAULT_RECIPE, base, { fix: false });
   const original = Object.fromEntries(Object.entries(base.semantic.color).map(([k, v]) => [k, v.$value]));
-  assert.deepEqual(theme.semantic.color, original);
+  const { button, 'button-foreground': buttonFg, 'button-edge': buttonEdge, field, 'field-edge': fieldEdge, ...rest } = theme.semantic.color;
+  assert.deepEqual(rest, original);
   assert.deepEqual(Object.keys(semanticColors()), Object.keys(original), 'same tokens, same order');
+  // The default styles draw what the components always drew: a primary button, an input-coloured field.
+  assert.deepEqual([button, buttonFg, buttonEdge], [original.primary, original['primary-foreground'], original.primary]);
+  assert.deepEqual([field, fieldEdge], [original.input, original.input]);
   assert.equal(theme.semantic.radius.base, base.semantic.radius.base.$value);
 });
 
 test('theme codes round-trip and catch typos', () => {
   const rand = rng(3);
   for (let i = 0; i < 400; i++) {
-    // Half keep the default typeset: those must stay ht1 codes, readable by any version of halftone-tokens.
-    const recipe = randomRecipe(rand, { typeset: i % 2 === 0 });
+    // A third keep the default typeset and styles: those must stay ht1 codes, readable by any version of
+    // halftone-tokens; a third keep the default styles (ht2 at most); the rest may be ht3.
+    const recipe = randomRecipe(rand, { typeset: i % 3 !== 0, styles: i % 3 === 2 });
     const code = encodeRecipe(recipe);
-    assert.match(code, /^(ht1-[0-9A-HJKMNP-TV-Z]{12}|ht2-[0-9A-HJKMNP-TV-Z]{16})$/);
+    assert.match(code, i % 3 === 2 ? /^ht[123]-/ : /^ht[12]-/);
+    assert.match(code, /^(ht1-[0-9A-HJKMNP-TV-Z]{12}|ht2-[0-9A-HJKMNP-TV-Z]{16}|ht3-[0-9A-HJKMNP-TV-Z]{18})$/);
     assert.deepEqual(decodeRecipe(code), decodeRecipe(code.toLowerCase()));
     assert.equal(encodeRecipe(decodeRecipe(code)), code);
     assert.deepEqual(decodeRecipe(code), normalizeRecipe(recipe));
   }
-  for (const code of [encodeRecipe(DEFAULT_RECIPE), encodeRecipe({ ...DEFAULT_RECIPE, size: '18' })]) {
+  for (const code of [encodeRecipe(DEFAULT_RECIPE), encodeRecipe({ ...DEFAULT_RECIPE, size: '18' }), encodeRecipe({ ...DEFAULT_RECIPE, button: 'raised' })]) {
     const typo = code.slice(0, -1) + (code.at(-1) === '0' ? '1' : '0');
     assert.throws(() => decodeRecipe(typo), /typo/);
   }
   assert.throws(() => decodeRecipe('ht1-short'), /not a theme code/);
-  assert.throws(() => decodeRecipe('ht3-0000000000000000'), /newer theme code/);
+  assert.throws(() => decodeRecipe('ht4-0000000000000000'), /newer theme code/);
+});
+
+test('styles are ht3; default styles keep the ht1 and ht2 codes', () => {
+  assert.equal(encodeRecipe({ ...DEFAULT_RECIPE, button: 'solid', field: 'outline' }), 'ht1-29B3XC60003T');
+  for (const button of OPTIONS.button) {
+    for (const field of OPTIONS.field) {
+      const code = encodeRecipe({ ...DEFAULT_RECIPE, button, field });
+      assert.match(code, button === 'solid' && field === 'outline' ? /^ht1-/ : /^ht3-[0-9A-Z]{18}$/);
+      assert.deepEqual([decodeRecipe(code).button, decodeRecipe(code).field], [button, field]);
+    }
+  }
+  // Reserved bits set: a code from a newer halftone-tokens with styles this one doesn't know.
+  const code = encodeRecipe({ ...DEFAULT_RECIPE, button: 'soft' });
+  const ALPHABET = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
+  let bits = 0n;
+  for (const ch of code.slice(4)) bits = (bits << 5n) | BigInt(ALPHABET.indexOf(ch));
+  let payload = (bits >> 7n) | (1n << 0n);
+  payload = (payload << 7n) | (payload % 127n);
+  let forged = '';
+  for (let i = 0; i < 18; i++) {
+    forged = ALPHABET[Number(payload & 31n)] + forged;
+    payload >>= 5n;
+  }
+  assert.throws(() => decodeRecipe(`ht3-${forged}`), /newer theme code/);
+});
+
+test('each style draws its own button and field, and every style passes the gate', () => {
+  const look = (recipe) => generateTheme({ ...DEFAULT_RECIPE, ...recipe }, base);
+  const outline = look({ button: 'outline' });
+  assert.equal(outline.button.alpha, 0);
+  assert.equal(outline.resolved.light['button-foreground'], outline.resolved.light.primary);
+  assert.notEqual(look({ button: 'raised' }).resolved.light['button-edge'], look({ button: 'raised' }).resolved.light.primary);
+  assert.equal(look({ button: 'raised' }).button.edge, 3);
+  const underline = look({ field: 'underline', border: 'hairline' });
+  assert.deepEqual([underline.field.border, underline.field.edge, underline.field.radius, underline.field.inset], [0, 1, 0, 0]);
+  const filled = look({ field: 'filled' });
+  assert.ok(filled.field.radius > 0 && filled.field.radiusBottom === 0);
+  for (const mode of ['light', 'dark']) {
+    const pairs = contrastPairs(filled.resolved[mode], mode, { strict: true }).filter((p) => p.fgName === 'field-edge');
+    assert.ok(pairs.length >= 3 && pairs.every((p) => p.ratio >= 3), `filled field line in ${mode}`);
+  }
 });
 
 test('the default typeset keeps ht1 codes; anything else is ht2', () => {
@@ -200,6 +248,22 @@ test('applyRecipe writes only what a theme owns, records it, and is idempotent',
   assert.equal(tokens.$extensions['com.halftonedesignsystem.theme'].code, theme.code);
   assert.deepEqual(applyRecipe(tokens, recipe).tokens, tokens);
   assert.deepEqual(base, JSON.parse(readFileSync(sources.kit, 'utf8')), 'the input is not mutated');
+});
+
+test('every semantic token a theme writes has its own CSS name', () => {
+  // cssName (resolve.mjs) drops `color` and `base`: semantic.color.button-edge and a semantic.button.edge would
+  // both be --button-edge.
+  const { tokens } = applyRecipe(base, { ...DEFAULT_RECIPE, button: 'raised', field: 'filled' });
+  const names = [];
+  const walk = (node, path) => {
+    if (node && typeof node === 'object' && '$value' in node) {
+      const parts = path.slice(1).filter((p) => p !== 'color');
+      if (parts.at(-1) === 'base') parts.pop();
+      names.push(parts.join('-'));
+    } else if (node && typeof node === 'object') for (const [k, v] of Object.entries(node)) if (!k.startsWith('$')) walk(v, [...path, k]);
+  };
+  walk(tokens.semantic, ['semantic']);
+  assert.deepEqual(names.filter((n, i) => names.indexOf(n) !== i), []);
 });
 
 test('themeStatus reports the applied theme and hand edits as drift', () => {

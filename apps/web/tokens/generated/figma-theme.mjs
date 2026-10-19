@@ -151,6 +151,26 @@ export const COLORS = {
   "chart-5": {
     "light": "#0ea5e9",
     "dark": "#38bdf8"
+  },
+  "button": {
+    "light": "#2563eb",
+    "dark": "#448bff"
+  },
+  "button-foreground": {
+    "light": "#ffffff",
+    "dark": "#09090b"
+  },
+  "button-edge": {
+    "light": "#2563eb",
+    "dark": "#448bff"
+  },
+  "field": {
+    "light": "#e4e4e7",
+    "dark": "#27272a"
+  },
+  "field-edge": {
+    "light": "#e4e4e7",
+    "dark": "#27272a"
   }
 };
 export const NUMBERS = {

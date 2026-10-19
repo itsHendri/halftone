@@ -34,8 +34,10 @@ export function contrastPairs(hex, mode, { strict = false, fg: only } = {}) {
     if (!only || fgName === only) out.push({ mode, label, fgName, bgName, fg, bg, threshold, ratio: contrast(fg, bg) });
   };
 
-  for (const name of ['primary', 'secondary', 'destructive', 'success', 'warning', 'info', 'accent', 'card', 'popover', 'muted', 'sidebar', 'sidebar-primary', 'sidebar-accent']) {
+  for (const name of ['primary', 'button', 'secondary', 'destructive', 'success', 'warning', 'info', 'accent', 'card', 'popover', 'muted', 'sidebar', 'sidebar-primary', 'sidebar-accent']) {
     const fg = `${name}-foreground`;
+    // A solid button is the primary pairing again: counted once.
+    if (name === 'button' && hex.button === hex.primary && hex[fg] === hex['primary-foreground']) continue;
     if (hex[name] && hex[fg]) add(`${fg} on ${name}`, fg, name, hex[fg], hex[name], AA);
   }
   for (const surface of ['background', 'card', 'muted']) {
@@ -48,6 +50,14 @@ export function contrastPairs(hex, mode, { strict = false, fg: only } = {}) {
     if (!hex[tone]) continue;
     for (const surface of strict ? ['background', 'card', 'muted', 'accent'] : ['background', 'card']) {
       if (hex[surface]) add(`text-${tone} on ${surface}`, tone, surface, hex[tone], hex[surface], AA);
+    }
+  }
+
+  // A field whose line is its only boundary (filled, underline: field-edge isn't the input colour) needs that
+  // line at 3:1 (WCAG 1.4.11) on the field and on the surfaces it sits on.
+  if (hex['field-edge'] && hex.input && hex['field-edge'] !== hex.input) {
+    for (const surface of ['field', 'background', 'card']) {
+      if (hex[surface]) add(`field-edge on ${surface}`, 'field-edge', surface, hex['field-edge'], hex[surface], AA_NON_TEXT);
     }
   }
 

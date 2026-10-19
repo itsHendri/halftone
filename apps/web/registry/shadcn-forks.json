@@ -80,7 +80,7 @@
     },
     "input": {
       "upstream": true,
-      "forked": false
+      "forked": true
     },
     "label": {
       "upstream": true,
@@ -116,7 +116,7 @@
     },
     "select": {
       "upstream": true,
-      "forked": false
+      "forked": true
     },
     "separator": {
       "upstream": true,
@@ -152,7 +152,7 @@
     },
     "textarea": {
       "upstream": true,
-      "forked": false
+      "forked": true
     },
     "toggle-group": {
       "upstream": true,

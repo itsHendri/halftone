@@ -12,7 +12,7 @@
  *   theme shadcn <theme> [--out file] [--fonts-url url]
  *                          the theme as a shadcn registry:theme item (stdout, or a file), for `npx shadcn add`
  *
- * <theme> is a Halftone code (ht1-…, ht2-…), a preset name, a recipe .json, or a shadcn/ui preset code
+ * <theme> is a Halftone code (ht1-…, ht2-…, ht3-…), a preset name, a recipe .json, or a shadcn/ui preset code
  * (ui.shadcn.com/create, e.g. b5owWMfJ8l), which becomes the nearest Halftone recipe: what it approximates
  * or drops is listed on stderr.
  */
@@ -52,7 +52,7 @@ function printNotes(code, notes) {
 }
 
 function readRecipe(arg, root) {
-  if (!arg) fail('say which theme: a code (ht1-… or ht2-…), a preset name, a recipe .json or a shadcn preset code', 2);
+  if (!arg) fail('say which theme: a code (ht1-…, ht2-… or ht3-…), a preset name, a recipe .json or a shadcn preset code', 2);
   if (isThemeCode(arg)) {
     try {
       return decodeRecipe(arg);
@@ -75,7 +75,7 @@ function readRecipe(arg, root) {
 }
 
 const describe = (input) => {
-  // A recipe recorded by an older halftone-tokens has no typeset: it gets the defaults.
+  // A recipe recorded by an older halftone-tokens has no typeset or styles: it gets the defaults.
   const recipe = normalizeRecipe(input);
   const font = (id) => {
     const f = fontById(id);
@@ -85,6 +85,7 @@ const describe = (input) => {
     `brand ${recipe.brand} · neutral ${recipe.neutral} · radius ${recipe.radius} · controls ${recipe.controls}`,
     `type ${font(recipe.font.heading)} / ${font(recipe.font.body)} · stroke ${recipe.stroke} · depth ${recipe.depth} · density ${recipe.density} · border ${recipe.border}`,
     `typeset ${recipe.size}px · leading ${recipe.leading} · flow ${recipe.flow} · measure ${recipe.measure}ch · mono ${font(recipe.font.mono)}`,
+    `styles: ${recipe.button} buttons · ${recipe.field} fields`,
   ].join('\n  ');
 };
 
@@ -128,7 +129,7 @@ export async function themeCommand({ positional, flags, root, sourcePath, config
   }
 
   if (sub === 'decode') {
-    if (!arg) fail('say which code to decode: ht1-…, ht2-… or a shadcn preset code', 2);
+    if (!arg) fail('say which code to decode: ht1-…, ht2-…, ht3-… or a shadcn preset code', 2);
     // A preset name first, as for apply: `bold` is Halftone's preset, not a shadcn code.
     const preset = presetById(arg.toLowerCase());
     if (preset) {

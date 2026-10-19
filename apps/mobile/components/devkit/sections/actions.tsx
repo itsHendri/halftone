@@ -29,12 +29,12 @@ function ButtonDemo() {
         <Text>Destructive</Text>
       </Button>
       <Button>
-        <Icon as={MailIcon} className="text-primary-foreground" />
+        <Icon as={MailIcon} />
         <Text>With icon</Text>
       </Button>
       {/* Busy, not disabled: full colour, and the Spinner matches the label. */}
       <Button>
-        <Spinner tone="primary-foreground" />
+        <Spinner tone="button-foreground" />
         <Text>Loading</Text>
       </Button>
       <View className="flex-row items-center gap-2">

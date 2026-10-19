@@ -196,7 +196,7 @@
         "text field",
         "form field"
       ],
-      "install": "input"
+      "install": "@halftone-web/input"
     },
     {
       "id": "label",
@@ -224,7 +224,7 @@
       ],
       "notes": "multi-line text, grows with content",
       "api": "<Textarea id placeholder rows? />",
-      "install": "textarea"
+      "install": "@halftone-web/textarea"
     },
     {
       "id": "checkbox",
@@ -290,7 +290,7 @@
         "dropdown",
         "picker"
       ],
-      "install": "select"
+      "install": "@halftone-web/select"
     },
     {
       "id": "date-picker",

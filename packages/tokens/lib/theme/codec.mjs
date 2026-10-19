@@ -3,23 +3,26 @@
  * read out, paste into a terminal or a URL.
  *
  *   ht1-  12 characters, 60 bits: a theme with the default typeset (every code made before the typeset)
- *   ht2-  16 characters, 80 bits: any theme
+ *   ht2-  16 characters, 80 bits: a theme with the default styles (solid buttons, outline fields)
+ *   ht3-  18 characters, 90 bits: any theme
  *
- *   bits  field                                   ht1   ht2
- *          recipe version (RECIPE_VERSION)          4     4
- *          brand hex                               24    24
- *          neutral, radius, controls            3+3+1 3+3+1   (option indexes, recipe.mjs)
- *          heading, body (, mono)                 5+5 6+6+6   (indexes into FONTS, fonts.mjs)
- *          stroke, depth, density, border     2+2+2+2 2+2+2+2
- *          size, leading, flow, measure             –  3+3+3+3
- *          checksum (payload mod 127)               7     7   a typo is caught instead of making another theme
+ *   bits  field                                   ht1   ht2   ht3
+ *          recipe version (RECIPE_VERSION)          4     4     4
+ *          brand hex                               24    24    24
+ *          neutral, radius, controls            3+3+1 3+3+1 3+3+1   (option indexes, recipe.mjs)
+ *          heading, body (, mono)                 5+5 6+6+6 6+6+6   (indexes into FONTS, fonts.mjs)
+ *          stroke, depth, density, border     2+2+2+2 2+2+2+2 2+2+2+2
+ *          size, leading, flow, measure             –  3+3+3+3 3+3+3+3
+ *          button, field                            –     –   2+2
+ *          reserved (zero: room for more styles)    –     –     6
+ *          checksum (payload mod 127)               7     7     7   a typo is caught instead of making another theme
  *
- * encodeRecipe writes ht1 whenever it can, so a theme that doesn't touch the typeset keeps the code it
- * always had (and older halftone-tokens can read it). The preset name is not in the code: a code is the theme,
+ * encodeRecipe writes the shortest code that holds the theme (ht1, then ht2, then ht3), so a theme keeps the
+ * code it always had and older halftone-tokens can read it. The preset name is not in the code: a code is the theme,
  * whichever preset it started from.
  */
 import { FONTS } from './fonts.mjs';
-import { defaultTypeset, normalizeRecipe, OPTIONS, RECIPE_VERSION } from './recipe.mjs';
+import { defaultStyles, defaultTypeset, normalizeRecipe, OPTIONS, RECIPE_VERSION } from './recipe.mjs';
 
 const ALPHABET = '0123456789ABCDEFGHJKMNPQRSTVWXYZ';
 const LAYOUT = [
@@ -39,18 +42,24 @@ const TYPESET = [
   ['flow', 3],
   ['measure', 3],
 ];
+const STYLES = [
+  ['button', 2],
+  ['field', 2],
+];
+const RESERVED = 6;
 /** Per format: prefix, characters, font width, whether the typeset is in it. */
 const FORMATS = {
-  ht1: { prefix: 'ht1-', chars: 12, font: 5, typeset: false },
-  ht2: { prefix: 'ht2-', chars: 16, font: 6, typeset: true },
+  ht1: { prefix: 'ht1-', chars: 12, font: 5, typeset: false, styles: false },
+  ht2: { prefix: 'ht2-', chars: 16, font: 6, typeset: true, styles: false },
+  ht3: { prefix: 'ht3-', chars: 18, font: 6, typeset: true, styles: true },
 };
 
 const fontIndex = (id) => FONTS.findIndex((f) => f.id === id);
 
 export function encodeRecipe(input) {
   const r = normalizeRecipe(input);
-  const ht1 = defaultTypeset(r) && fontIndex(r.font.heading) < 32 && fontIndex(r.font.body) < 32;
-  const format = ht1 ? FORMATS.ht1 : FORMATS.ht2;
+  const ht1 = defaultStyles(r) && defaultTypeset(r) && fontIndex(r.font.heading) < 32 && fontIndex(r.font.body) < 32;
+  const format = ht1 ? FORMATS.ht1 : defaultStyles(r) ? FORMATS.ht2 : FORMATS.ht3;
   let bits = BigInt(r.v);
   const push = (value, width) => {
     if (value < 0 || value >= 2 ** width) throw new Error(`encodeRecipe: ${value} does not fit in ${width} bits`);
@@ -63,6 +72,10 @@ export function encodeRecipe(input) {
   if (format.typeset) push(fontIndex(r.font.mono), format.font);
   for (const [key, width] of TAIL) push(OPTIONS[key].indexOf(r[key]), width);
   if (format.typeset) for (const [key, width] of TYPESET) push(OPTIONS[key].indexOf(r[key]), width);
+  if (format.styles) {
+    for (const [key, width] of STYLES) push(OPTIONS[key].indexOf(r[key]), width);
+    push(0, RESERVED);
+  }
   bits = (bits << 7n) | (bits % 127n);
 
   let out = '';
@@ -76,13 +89,13 @@ export function encodeRecipe(input) {
 /** Code → recipe. Throws on a malformed code, a bad checksum or an unknown version. */
 export function decodeRecipe(code) {
   const clean = String(code).trim().toUpperCase();
-  const format = /^HT2/.test(clean) ? FORMATS.ht2 : FORMATS.ht1;
-  const raw = clean.replace(/^HT[12]-?/, '').replace(/[IL]/g, '1').replace(/O/g, '0').replace(/-/g, '');
-  if (!/^HT[12]/.test(clean) && /^HT\d/.test(clean)) {
+  const format = /^HT3/.test(clean) ? FORMATS.ht3 : /^HT2/.test(clean) ? FORMATS.ht2 : FORMATS.ht1;
+  const raw = clean.replace(/^HT[123]-?/, '').replace(/[IL]/g, '1').replace(/O/g, '0').replace(/-/g, '');
+  if (!/^HT[123]/.test(clean) && /^HT\d/.test(clean)) {
     throw new Error(`"${code}" is a newer theme code than this halftone-tokens reads. Update @halftone-ds/tokens.`);
   }
   if (!new RegExp(`^[0-9A-HJKMNP-TV-Z]{${format.chars}}$`).test(raw)) {
-    throw new Error(`"${code}" is not a theme code (expected ht1- and 12 characters, or ht2- and 16)`);
+    throw new Error(`"${code}" is not a theme code (expected ht1- and 12 characters, ht2- and 16, or ht3- and 18)`);
   }
   let bits = 0n;
   for (const ch of raw) bits = (bits << 5n) | BigInt(ALPHABET.indexOf(ch));
@@ -106,7 +119,9 @@ export function decodeRecipe(code) {
     return f.id;
   };
   const fields = (list) => Object.fromEntries([...list].reverse().map(([key, width]) => [key, opt(key, width)]));
-  // Read back to front.
+  // Read back to front. Reserved bits set means a newer halftone-tokens wrote styles this one doesn't know.
+  if (format.styles && pull(RESERVED) !== 0) throw new Error(`"${code}" is a newer theme code than this halftone-tokens reads. Update @halftone-ds/tokens.`);
+  const styles = format.styles ? fields(STYLES) : {};
   const typeset = format.typeset ? fields(TYPESET) : {};
   const tail = fields(TAIL);
   const mono = format.typeset ? font(format.font) : undefined;
@@ -116,7 +131,7 @@ export function decodeRecipe(code) {
   const brand = '#' + pull(24).toString(16).padStart(6, '0');
   const v = Number(bits);
   if (v !== RECIPE_VERSION) throw new Error(`"${code}" is a version ${v} theme; this halftone-tokens reads version ${RECIPE_VERSION}. Update @halftone-ds/tokens.`);
-  return normalizeRecipe({ v, brand, ...head, font: { heading, body, ...(mono ? { mono } : {}) }, ...tail, ...typeset });
+  return normalizeRecipe({ v, brand, ...head, font: { heading, body, ...(mono ? { mono } : {}) }, ...tail, ...typeset, ...styles });
 }
 
-export const isThemeCode = (value) => /^(ht1-?[0-9a-z]{12}|ht2-?[0-9a-z]{16})$/i.test(String(value).trim());
+export const isThemeCode = (value) => /^(ht1-?[0-9a-z]{12}|ht2-?[0-9a-z]{16}|ht3-?[0-9a-z]{18})$/i.test(String(value).trim());

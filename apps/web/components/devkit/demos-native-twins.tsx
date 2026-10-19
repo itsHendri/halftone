@@ -446,7 +446,7 @@ export const TWIN_DEMOS: Record<string, ComponentType> = {
       <Spinner size="large" aria-label="Loading invoices" />
       <Spinner tone="muted" />
       <Button disabled>
-        <Spinner tone="primary-foreground" aria-label="Saving" />
+        <Spinner tone="button-foreground" aria-label="Saving" />
         Saving…
       </Button>
     </Row>

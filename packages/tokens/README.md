@@ -61,7 +61,7 @@ npx halftone-tokens theme resolve [--json]     # the code for tokens.json as it 
 npx halftone-tokens theme shadcn <theme> [--out file] [--fonts-url url]   # a shadcn registry:theme item
 ```
 
-`<theme>` is a Halftone code (`ht1-…`, `ht2-…`), a preset name, a recipe `.json`, or a
+`<theme>` is a Halftone code (`ht1-…`, `ht2-…`, `ht3-…`), a preset name, a recipe `.json`, or a
 [shadcn/ui](https://ui.shadcn.com/create) preset code (`b5owWMfJ8l`). A shadcn code becomes the nearest Halftone
 recipe, and what it approximates or drops (shadcn-only greys, radius steps, fonts outside the list, icon
 libraries, chart colours, menu options, styles) is listed on stderr. The other way, `theme shadcn` writes the

@@ -32,12 +32,14 @@ export const EMBED_THEME_KEY = 'kit.embed.tokens';
 
 /** The typeset's variables (halftone-tokens' typeVars); TYPE_RULES points the text classes at them. */
 const TYPE_VARS = ['--type-scale', '--leading-factor', '--typeset-leading', '--typeset-flow', '--typeset-measure'];
+/** The button and field styles' numbers (their colours are THEME keys). */
+const STYLE_VARS = ['--button-alpha', '--button-border-w', '--button-edge-w', '--field-alpha', '--field-border-w', '--field-edge-w', '--field-radius', '--field-radius-b', '--field-x'];
 /** A theme code: ht1- and 12 characters (the default typeset), or ht2- and 16. */
-const THEME_CODE = /^(ht1-[0-9A-Z]{12}|ht2-[0-9A-Z]{16})$/i;
+const THEME_CODE = /^(ht1-[0-9A-Z]{12}|ht2-[0-9A-Z]{16}|ht3-[0-9A-Z]{18})$/i;
 
 const kebab = (s: string) => s.replace(/([A-Z])/g, '-$1').replace(/([a-z])(\d)/g, '$1-$2').toLowerCase();
-const ALLOWED_VARS = new Set([...Object.keys(THEME.light).map((k) => `--${kebab(k)}`), '--radius', '--radius-control', '--border-width', '--icon-stroke', '--shadow-1', '--shadow-2', '--shadow-3', '--control-sm', '--control-md', '--control-lg', '--control-x', ...TYPE_VARS]);
-const SAFE_VALUE = /^[\w.%\s(),#/-]{1,80}$/;
+const ALLOWED_VARS = new Set([...Object.keys(THEME.light).map((k) => `--${kebab(k)}`), '--radius', '--radius-control', '--border-width', '--icon-stroke', '--shadow-1', '--shadow-2', '--shadow-3', '--control-sm', '--control-md', '--control-lg', '--control-x', ...TYPE_VARS, ...STYLE_VARS]);
+const SAFE_VALUE = /^[\w.%\s(),#/*-]{1,80}$/;
 const HEX = /^#[0-9a-f]{6}$/i;
 
 function cleanVars(map: unknown): Record<string, string> {

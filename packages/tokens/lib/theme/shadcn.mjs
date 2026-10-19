@@ -232,7 +232,8 @@ export function shadcnFont(id, role = 'body') {
  */
 export function shadcnTheme(theme, { name, title: label, description, fontsUrl = SHADCN_FONTS_URL } = {}) {
   const vars = themeVars(theme, 'oklch');
-  const colours = Object.keys(theme.resolved.light);
+  // The button and field styles are Halftone's own (shadcn's components don't read them): they stay behind.
+  const colours = Object.keys(theme.resolved.light).filter((c) => !/^(button|field)(-|$)/.test(c));
   const mode = (m) => ({
     ...(m === 'light' ? { radius: vars.light['--radius'] } : {}),
     ...Object.fromEntries(colours.map((c) => [c, vars[m][`--${c}`]])),

@@ -79,6 +79,16 @@ colors:
   chart-4-dark: "#f87171"
   chart-5: "#0ea5e9"
   chart-5-dark: "#38bdf8"
+  button: "#2563eb"
+  button-dark: "#448bff"
+  button-foreground: "#ffffff"
+  button-foreground-dark: "#09090b"
+  button-edge: "#2563eb"
+  button-edge-dark: "#448bff"
+  field: "#e4e4e7"
+  field-dark: "#27272a"
+  field-edge: "#e4e4e7"
+  field-edge-dark: "#27272a"
 typography:
   h1:
     fontFamily: "system-ui"
@@ -241,7 +251,7 @@ Buttons are pills. Inputs 8px, cards 10px, larger surfaces 16px, sheet tops
 ## Components
 
 Only components listed in the registry in `DESIGN_SYSTEM.md` exist. Controls are 48px tall (small
-40, large 56). Selected chips and segments are neutral (inverted foreground), never the brand colour.
+40, large 56). The primary button is a solid brand fill. Text fields are outlined boxes. Selected chips and segments are neutral (inverted foreground), never the brand colour.
 Motion: 150ms for micro-feedback, 200ms for most transitions, 300ms for sheets, and
 nothing moves when the OS asks for reduced motion.
 

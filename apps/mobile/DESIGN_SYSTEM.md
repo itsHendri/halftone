@@ -37,6 +37,8 @@ Use the shadcn vocabulary through Tailwind classes. Each name works as `bg-`, `t
 | `destructive` / `-foreground` | delete, errors |
 | `success`, `warning`, `info` (+ `-foreground`) | status |
 | `border`, `input`, `ring` | hairlines, field borders, focus |
+| `button` / `button-foreground` / `button-edge` | the primary Button, in the theme's button style (Button uses them) |
+| `field` / `field-edge` | text fields, in the theme's field style (Input, Textarea, Select use them) |
 | `chart-1` … `chart-5` | data series |
 
 Sizing: controls follow the theme's density: `h-control` (48 by default) for inputs, selects and default
@@ -55,6 +57,11 @@ Rules:
   `success/15` 4.09, destructive 3.82). The status colour goes on the icon or a dot.
 - Selected / active states in chips and segments are **neutral** (inverted foreground), not the brand colour.
   The brand colour is for the primary action and focus.
+- **Styles are the theme's, not the screen's.** The theme picks the primary button (solid, soft, outline,
+  raised) and the text fields (outline, filled, underline); `Button`, `Input`, `Textarea` and `Select` already
+  draw them with `bg-button` / `bg-field` and their edge classes. Never restyle a primary button or a field
+  in a screen (no `bg-primary` on a `Button`, no `border-b` field): change the theme instead. Inside the
+  primary `Button`, a `Spinner` takes `tone="button-foreground"`; an `Icon` needs no colour.
 - Light and dark are both required. Every component is checked in both on the Components page.
 
 ### Spacing — the 4-pt grid

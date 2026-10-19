@@ -1,6 +1,6 @@
 ---
 name: apply-theme
-description: Apply a theme from the Halftone docs theme picker (a `ht1-…` or `ht2-…` code, a preset name like `editorial`, a recipe file, or a shadcn/ui preset code like `b5owWMfJ8l`) to this kit's tokens, then verify it. Use when the user pastes a theme code, says "apply this theme", "use the Editorial preset", "re-brand to <colour>", or hands over the prompt the docs' "Use theme" panel copies. Also for a brand zip (`brand-mobile.zip`, `brand-web.zip`, `brand.zip`) from the studio's Brand assets: a logo, app icon or favicon.
+description: Apply a theme from the Halftone docs theme picker (a `ht1-…`, `ht2-…` or `ht3-…` code, a preset name like `editorial`, a recipe file, or a shadcn/ui preset code like `b5owWMfJ8l`) to this kit's tokens, then verify it. Use when the user pastes a theme code, says "apply this theme", "use the Editorial preset", "re-brand to <colour>", or hands over the prompt the docs' "Use theme" panel copies. Also for a brand zip (`brand-mobile.zip`, `brand-web.zip`, `brand.zip`) from the studio's Brand assets: a logo, app icon or favicon.
 ---
 
 # Apply a theme
@@ -34,6 +34,11 @@ list, other icon libraries, chart colours, shadcn's styles). Tell the user what 
 `halftone-tokens theme decode <code>` shows the mapping without applying anything. A kit copied out before
 `@halftone-ds/tokens` supported shadcn codes says the code is not a theme code: open it in the studio at
 halftonedesignsystem.com/themes (**Open**), then apply the `ht` code **Use theme** gives.
+
+**An `ht3-…` code** carries button and field styles (soft or raised buttons, filled or underline fields). It needs
+`@halftone-ds/tokens` 1.2 or later; an older one says it's a newer theme code: update it
+(`npm i -D @halftone-ds/tokens@^1.2.0`) and apply again. The styles show on every `Button`, `Input`, `Textarea`
+and `Select` with no code change; check the Components page's Actions and Inputs in both themes.
 
 ## 2. When it refuses
 

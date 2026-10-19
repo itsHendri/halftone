@@ -31,6 +31,8 @@ The shadcn vocabulary through Tailwind classes; each works as `bg-`, `text-`, `b
 | `secondary`, `muted`, `accent` (+ `-foreground`) | quieter fills, helper text, hover fills |
 | `destructive`, `success`, `warning`, `info` (+ `-foreground`) | status |
 | `border`, `input`, `ring` | hairlines, field borders, focus |
+| `button` / `button-foreground` / `button-edge` | the primary Button, in the theme's button style (Button uses them) |
+| `field` / `field-edge` | text fields, in the theme's field style (Input, Textarea, Select use them) |
 | `sidebar*` | the app shell's sidebar surface, its active item and border |
 | `chart-1` … `chart-5` | data series (through a ChartConfig) |
 
@@ -42,6 +44,11 @@ Rules:
   `text-foreground`: a status colour as small text on its own tint measures under 4.5:1 (success 4.09,
   destructive 3.81). A status badge is an outline Badge with a coloured dot.
 - Selected / active states (tabs, segmented controls, nav items) are **neutral**, not the brand colour.
+- **Styles are the theme's, not the screen's.** The theme picks the primary button (solid, soft, outline,
+  raised) and the text fields (outline, filled, underline); `Button`, `Input`, `Textarea` and `Select` already
+  draw them with `bg-button` / `bg-field` and their edge classes. Never restyle a primary button or a field
+  in a screen (no `bg-primary` on a `Button`, no `border-b` field): change the theme instead. Inside the
+  primary `Button`, a `Spinner` takes `tone="button-foreground"`; an `Icon` needs no colour.
 - Light and dark are both required.
 
 ### Spacing

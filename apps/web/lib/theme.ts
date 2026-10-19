@@ -45,6 +45,11 @@ export const THEME = {
     chart3: '#f59e0b',
     chart4: '#ef4444',
     chart5: '#0ea5e9',
+    button: '#2563eb',
+    buttonForeground: '#ffffff',
+    buttonEdge: '#2563eb',
+    field: '#e4e4e7',
+    fieldEdge: '#e4e4e7',
   },
   dark: {
     background: '#09090b',
@@ -85,6 +90,11 @@ export const THEME = {
     chart3: '#fbbf24',
     chart4: '#f87171',
     chart5: '#38bdf8',
+    button: '#448bff',
+    buttonForeground: '#09090b',
+    buttonEdge: '#448bff',
+    field: '#27272a',
+    fieldEdge: '#27272a',
   },
 } as const;
 
@@ -120,6 +130,11 @@ export const TOKENS = {
   iconStroke: 2,
   /** Width of `border` in px. */
   borderWidth: 1,
+  /** The theme's styles (button: solid · soft · outline · raised; field: outline · filled · underline) and their
+   *  numbers (px): bg-button / bg-field, border-button-w, rounded-field… already follow them. */
+  styles: {"button":"solid","field":"outline"},
+  button: {"alpha":1,"border":0,"edge":0},
+  field: {"alpha":{"light":0,"dark":0.3},"border":1,"edge":1,"inset":1,"radius":8,"radiusBottom":8},
   /** Control heights and padding (px) for the theme's density: h-control-sm, h-control, h-control-lg, px-control-x. */
   density: {"sm":40,"md":48,"lg":56,"x":20},
   /** The type scale at 16px; the theme's typeset multiplies it (text-* classes are already scaled). */
@@ -179,6 +194,8 @@ export const THEME_INFO: ThemeInfo | null = {
     "leading": "normal",
     "flow": "normal",
     "measure": "70",
+    "button": "solid",
+    "field": "outline",
     "preset": "default"
   }
 };
@@ -202,6 +219,8 @@ export type ThemeInfo = {
     leading: string;
     flow: string;
     measure: string;
+    button?: string;
+    field?: string;
     preset?: string;
   };
 };

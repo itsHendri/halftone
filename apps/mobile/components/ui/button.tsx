@@ -13,9 +13,10 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
+        // The theme's button style (solid, soft, outline, raised): fill, label, border and bottom edge.
         default: cn(
-          'bg-primary active:bg-primary/90 shadow-sm',
-          Platform.select({ web: 'hover:bg-primary/90' })
+          'bg-button border-button-edge border-button-w border-b-button-edge-w active:opacity-90 shadow-sm',
+          Platform.select({ web: 'hover:opacity-90' })
         ),
         destructive: cn(
           'bg-destructive active:bg-destructive/90 shadow-sm',
@@ -61,7 +62,7 @@ const buttonTextVariants = cva(
   {
     variants: {
       variant: {
-        default: 'text-primary-foreground',
+        default: 'text-button-foreground',
         destructive: 'text-destructive-foreground',
         outline: cn(
           'group-active:text-accent-foreground',

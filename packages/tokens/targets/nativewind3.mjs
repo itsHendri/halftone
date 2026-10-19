@@ -6,26 +6,33 @@
 import { hexToHslTriplet } from '../lib/color.mjs';
 import { cssName, group, isColor, radiusCalc } from '../lib/resolve.mjs';
 import { TEXT_LINE_HEIGHT } from '../lib/theme/recipe.mjs';
+import { styleVars } from '../lib/theme/vars.mjs';
 
 const rem = (px) => (px >= 9999 ? '9999px' : `${Number((px / 16).toFixed(4))}rem`);
 
 /** Shape variables come from ctx.shape, which has defaults for a token file from before themes. */
 const SHAPE = new Set(['radius-control', 'border-width', 'icon-stroke']);
 
-function cssBlock(selector, tokens, shape) {
+function cssBlock(selector, tokens, shape, mode, colors) {
   const lines = tokens
-    // Shadows are literal in tailwind.theme.js: a var() box-shadow drops the view on native.
+    // Shadows are literal in tailwind.theme.js: a var() box-shadow drops the view on native. The styles'
+    // numbers come from shape (with their units), below.
     .filter((t) => t.$type !== 'shadow' && !SHAPE.has(cssName(t)) && !/^(density|type)-/.test(cssName(t)))
+    .filter((t) => isColor(t) || !/^(button|field)-/.test(cssName(t)))
     .map((t) => {
       const name = cssName(t);
       if (isColor(t)) return `    --${name}: ${hexToHslTriplet(t.$value)};`;
       if (name === 'radius') return `    --${name}: ${rem(t.$value)};`;
       return `    --${name}: ${t.$value};`;
     });
-  if (shape) {
+  if (shape.control !== undefined) {
     lines.push(`    --radius-control: ${rem(shape.control)};`, `    --border-width: ${shape.borderWidth}px;`, `    --icon-stroke: ${shape.stroke};`);
     for (const size of ['sm', 'md', 'lg', 'x']) lines.push(`    --control-${size}: ${shape.density[size]}px;`);
   }
+  // Style colours a token file from before the styles doesn't have (resolve.mjs adds them), then the styles' numbers.
+  const present = new Set(tokens.filter(isColor).map(cssName));
+  for (const c of colors) if (!present.has(c.name)) lines.push(`    --${c.name}: ${hexToHslTriplet(c[mode])};`);
+  for (const [name, value] of Object.entries(styleVars(shape.styleShape, 'hsl')[mode])) lines.push(`    ${name}: ${value};`);
   return `  ${selector} {\n${lines.join('\n')}\n  }`;
 }
 
@@ -36,15 +43,23 @@ export default function nativewind3(ctx, options) {
 @tailwind utilities;
 
 @layer base {
-${cssBlock(':root', ctx.semLight, ctx.shape)}
+${cssBlock(':root', ctx.semLight, { ...ctx.shape, styleShape: ctx.shape }, 'light', ctx.colors)}
 
-${cssBlock('.dark:root', ctx.semDark)}
+${cssBlock('.dark:root', ctx.semDark, { styleShape: ctx.shape }, 'dark', ctx.colors)}
 }
 `;
   const colors = Object.fromEntries(ctx.colors.map((c) => [c.name, `hsl(var(--${c.name}))`]));
+  // The styles' fills carry their own opacity (an outline button, a transparent field). No /90 modifiers on these.
+  colors.button = 'hsl(var(--button) / var(--button-alpha))';
+  colors.field = 'hsl(var(--field) / var(--field-alpha))';
   const borderRadius = Object.fromEntries(ctx.radius.steps.map((s) => [s.name, radiusCalc(s.scale)]));
   borderRadius.control = 'var(--radius-control)';
-  const borderWidth = { DEFAULT: 'var(--border-width)' };
+  // Field style: rounded-field (top) and rounded-b-field-b (bottom).
+  borderRadius.field = 'var(--field-radius)';
+  borderRadius['field-b'] = 'var(--field-radius-b)';
+  // The styles' widths: border-button-w / border-b-button-edge-w, border-field-w / border-b-field-edge-w (named
+  // apart from the colours, or border-button would set both).
+  const borderWidth = { DEFAULT: 'var(--border-width)', 'button-w': 'var(--button-border-w)', 'button-edge-w': 'var(--button-edge-w)', 'field-w': 'var(--field-border-w)', 'field-edge-w': 'var(--field-edge-w)' };
   // The theme's depth takes over Tailwind's shadow scale: 1 = xs/sm/shadow, 2 = md, 3 = lg/xl/2xl. Light
   // values: native can't switch a box-shadow per scheme.
   const s = ctx.shape.shadows.light;
@@ -60,7 +75,7 @@ ${cssBlock('.dark:root', ctx.semDark)}
       .map(({ key, value }) => [key, [rem(value * scale), { lineHeight: rem(TEXT_LINE_HEIGHT[key] * scale * leadingFactor) }]])
   );
   const lineHeight = { prose: rem(size * leading) };
-  const spacing = { 'control-x': 'var(--control-x)', flow: rem(size * flow) };
+  const spacing = { 'control-x': 'var(--control-x)', 'field-x': 'var(--field-x)', flow: rem(size * flow) };
   const maxWidth = { measure: rem(measure * size * 0.5) };
   const tailwind = `// ${ctx.header}\nmodule.exports = ${JSON.stringify({ colors, borderRadius, borderWidth, boxShadow, height, minHeight: height, width: height, spacing, fontSize, lineHeight, maxWidth }, null, 2)};\n`;
   return [

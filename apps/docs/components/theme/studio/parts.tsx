@@ -42,6 +42,10 @@ export const LABELS: Record<string, string> = {
   '70': '70ch',
   '80': '80ch',
   '90': '90ch',
+  solid: 'Solid',
+  outline: 'Outline',
+  filled: 'Filled',
+  underline: 'Underline',
 };
 
 /** Display order of each option list (the codec's order is append-only, not the order to show). */
@@ -57,6 +61,8 @@ export const ORDER: { [K in keyof typeof OPTIONS]: (typeof OPTIONS)[K] } = {
   leading: ['tight', 'normal', 'relaxed'],
   flow: ['tight', 'normal', 'loose'],
   measure: ['60', '70', '80', '90'],
+  button: ['solid', 'soft', 'outline', 'raised'],
+  field: ['outline', 'filled', 'underline'],
 };
 
 /** A font id as a CSS font-family, so a picker can show each font in its own face. */
