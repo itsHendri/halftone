@@ -17,6 +17,7 @@
     "start": "next start --port 3100",
     "typecheck": "next typegen && tsc --noEmit",
     "lint": "eslint .",
+    "lint:rules": "node --test eslint/*.test.mjs",
     "tokens:build": "halftone-tokens build",
     "tokens:check": "halftone-tokens check",
     "theme": "halftone-tokens theme",

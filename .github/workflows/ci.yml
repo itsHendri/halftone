@@ -46,6 +46,10 @@ jobs:
       - name: Lint
         run: npm run lint -- --max-warnings 0
 
+      # The halftone/* guardrail rules (eslint/halftone.mjs) and which files the config points them at.
+      - name: Lint rules
+        run: npm run lint:rules
+
       # Fails if any colour pairing drops below WCAG AA (strict, see env above), or if tokens.json changed
       # without the generated files (global.css, lib/theme.ts, web.css, DESIGN.md, …) being rebuilt and committed.
       - name: Tokens are built and pass the contrast check
@@ -84,6 +88,11 @@ jobs:
         run: npm run tokens:sync -- --check
         working-directory: .
 
+      # One set of guardrails: the halftone/* rules and the lint-on-edit hook are copies of apps/mobile's.
+      - name: Lint rules in step with the mobile kit
+        run: npm run lint:sync -- --check
+        working-directory: .
+
       - name: Tokens are built and pass the contrast check
         run: npm run tokens:check
 
@@ -95,6 +104,9 @@ jobs:
 
       - name: Lint
         run: npm run lint
+
+      - name: Lint rules
+        run: npm run lint:rules
 
       - name: Build
         run: npm run build
@@ -135,19 +147,19 @@ jobs:
         include:
           - app: mobile
             tokens: pack
-            checks: npm run tokens:check && npm run registry:build -- --check && npm run typecheck && npm run lint -- --max-warnings 0 && npm run export:web
+            checks: npm run tokens:check && npm run registry:build -- --check && npm run typecheck && npm run lint -- --max-warnings 0 && npm run lint:rules && npm run export:web
             after-eject: npm run typecheck && npm run lint -- --max-warnings 0
           - app: web
             tokens: pack
-            checks: npm run tokens:check && npm run registry:build -- --check && npm run typecheck && npm run lint && npm run build
+            checks: npm run tokens:check && npm run registry:build -- --check && npm run typecheck && npm run lint && npm run lint:rules && npm run build
             after-eject: npm run typecheck && npm run lint
           - app: mobile
             tokens: published
-            checks: npm run tokens:check && npm run typecheck && npm run lint -- --max-warnings 0
+            checks: npm run tokens:check && npm run typecheck && npm run lint -- --max-warnings 0 && npm run lint:rules
             after-eject: npm run typecheck && npm run lint -- --max-warnings 0
           - app: web
             tokens: published
-            checks: npm run tokens:check && npm run typecheck && npm run lint
+            checks: npm run tokens:check && npm run typecheck && npm run lint && npm run lint:rules
             after-eject: npm run typecheck && npm run lint
     steps:
       - uses: actions/checkout@v7
