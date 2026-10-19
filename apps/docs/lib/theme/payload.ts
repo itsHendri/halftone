@@ -33,8 +33,11 @@ const MONO = 'ui-monospace, SFMono-Regular, Menlo, monospace';
 /** Google Fonts for a theme's heading, body and mono, or null for the system fonts. */
 export const fontsHref = (theme: Theme) => googleFontsHref(Object.values(theme.recipe.font));
 
-/** Variables that shape components (radius, border, stroke, density, type, depth): never the site's. */
-const SHAPE = /^--(radius|border-width|icon-stroke|density|control-|type-|leading-|typeset-|shadow-)/;
+/**
+ * Variables that shape components (radius, border, stroke, density, type, depth, and the button and field
+ * styles' numbers): never the site's. The styles' colours (--button, --field-edge…) are colours like any other.
+ */
+const SHAPE = /^--(radius|border-width|icon-stroke|density|control-|type-|leading-|typeset-|shadow-|button-(alpha|border-w|edge-w)$|field-(alpha|border-w|edge-w|radius|radius-b|x|shadow)$)/;
 type Modes = Record<'light' | 'dark', Record<string, string>>;
 const pick = (vars: Modes, keep: (k: string) => boolean): Modes => ({
   light: Object.fromEntries(Object.entries(vars.light).filter(([k]) => keep(k))),

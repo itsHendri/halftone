@@ -3,6 +3,8 @@
  * references per mode. With a curated seed this is exactly the kit's original map; a generated seed
  * moves the brand steps to wherever the seed landed (its anchor).
  */
+import { STEPS } from './palettes.mjs';
+
 const n = (step) => `{primitive.color.neutral.${step}}`;
 const b = (step) => `{primitive.color.brand.${step}}`;
 const p = (ramp, step) => `{primitive.color.${ramp}.${step}}`;
@@ -55,6 +57,29 @@ export function semanticColors(anchor = '600') {
     'chart-4': { light: p('danger', 500), dark: p('danger', 400) },
     'chart-5': { light: p('info', 500), dark: p('info', 400) },
   };
+}
+
+const shift = (step, by) => STEPS[Math.min(STEPS.length - 1, Math.max(0, STEPS.indexOf(step) + by))];
+
+/**
+ * The colours a recipe's styles add (button, field), from the base colours after their contrast fix, so a moved
+ * primary moves the button with it. Field edges that are the field's only boundary (filled, underline) are a
+ * mid neutral, which the gate holds to 3:1 (contrast.mjs).
+ */
+export function styleColors({ button, field }, anchor, colors) {
+  const dark = darkStep(anchor);
+  const buttons = {
+    solid: { button: colors.primary, 'button-foreground': colors['primary-foreground'], 'button-edge': colors.primary },
+    soft: { button: { light: b(100), dark: b(900) }, 'button-foreground': { light: b(700), dark: b(200) }, 'button-edge': { light: b(100), dark: b(900) } },
+    outline: { button: colors.background, 'button-foreground': colors.primary, 'button-edge': colors.primary },
+    raised: { button: colors.primary, 'button-foreground': colors['primary-foreground'], 'button-edge': { light: b(shift(anchor, 2)), dark: b(shift(dark, 2)) } },
+  };
+  const fields = {
+    outline: { field: colors.input, 'field-edge': colors.input },
+    filled: { field: colors.muted, 'field-edge': { light: n(500), dark: n(400) } },
+    underline: { field: colors.background, 'field-edge': { light: n(500), dark: n(500) } },
+  };
+  return { ...buttons[button], ...fields[field] };
 }
 
 /** Tokens that share the brand step; when the fixer moves `primary`, these move with it. */

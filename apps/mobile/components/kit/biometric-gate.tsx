@@ -110,7 +110,7 @@ export function BiometricGate({
       </Text>
       <Text className="text-muted-foreground max-w-xs text-center">{subtitle}</Text>
       <Button onPress={unlock} disabled={busy} className="mt-4 w-full max-w-xs">
-        {busy ? <Spinner tone="primary-foreground" /> : <Text>Unlock</Text>}
+        {busy ? <Spinner tone="button-foreground" /> : <Text>Unlock</Text>}
       </Button>
       <Pressable onPress={skip} accessibilityRole="button" className="mt-1 min-h-11 justify-center">
         <Text className="text-muted-foreground text-sm font-semibold">{fallbackLabel}</Text>

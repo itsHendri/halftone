@@ -35,18 +35,21 @@ A `/brief` page that turns a guided brief, or a pasted transcript, into a planni
   at `/r/theme/<preset>.json`, and later any theme code by URL.
 - `theme decode` and `theme resolve` in the CLI.
 
-## Now: brand assets
+## Done: brand assets
 
 A logo in the studio, beside the theme (a code has no room for it): a `Logo` component in both kits, used by
 the kit shell and every sample; the favicon and apple icon on the web; the **app icon and splash screen** on
 mobile. A one-colour SVG follows the theme's text colour; others can have a dark version. The studio draws
 every size and downloads them as a zip laid out like each kit (`brand-mobile.zip`, `brand-web.zip`, `brand.zip`),
-which the `apply-theme` skill unzips. Next: brand assets in the CLI, iOS tinted and dark icons, OG images.
+which the `apply-theme` skill unzips. Still to come: brand assets in the CLI, iOS tinted and dark icons, OG images.
 
-## Later: looks beyond tokens
+## Now: looks beyond tokens
 
-Component styles in the recipe, for both kits: button style (solid, soft, outline-heavy, raised) and input style
-(outline, filled, underline), and more named presets with a mood each. Needs a new theme-code version.
+Component styles in the recipe, for both kits: **buttons** (solid, soft, outline, raised) and **inputs**
+(outline, filled, underline), as theme tokens every Button, Input, Textarea and Select draws; two new presets with
+a mood each (Tactile, Studio) and three presets that use the styles. Themes with styles are `ht3-` codes (18
+characters, with room for more styles). Ships with `@halftone-ds/tokens` 1.2. Still to come: more styles (cards,
+chips, tabs) in the reserved bits.
 
 ## Later: agent reach
 

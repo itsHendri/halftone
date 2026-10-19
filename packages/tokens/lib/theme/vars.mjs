@@ -20,6 +20,30 @@ export const typeVars = (type) => ({
   '--typeset-measure': `${type.measure}ch`,
 });
 
+/**
+ * The button and field styles' variables (both formats), from a theme's or a token file's { button, field }
+ * (generate.mjs, resolve.mjs). Widths and radii are numbers on the light block; the field's fill opacity is
+ * per mode. A field's inner padding is the kit's own: 1rem on mobile (hsl), px-3 on the web (oklch).
+ */
+export function styleVars({ button, field }, format) {
+  return {
+    light: {
+      '--button-alpha': String(button.alpha),
+      '--button-border-w': `${button.border}px`,
+      '--button-edge-w': `${button.edge}px`,
+      '--field-alpha': String(field.alpha.light),
+      '--field-border-w': `${field.border}px`,
+      '--field-edge-w': `${field.edge}px`,
+      '--field-radius': rem(field.radius),
+      '--field-radius-b': rem(field.radiusBottom),
+      '--field-x': field.inset ? (format === 'hsl' ? '1rem' : 'calc(var(--spacing) * 3)') : '0px',
+      // Web: a boxed field keeps shadcn's shadow-xs; a filled or underline field has none.
+      ...(format === 'hsl' ? {} : { '--field-shadow': field.border ? 'var(--shadow-1)' : '0 0 #0000' }),
+    },
+    dark: { '--field-alpha': String(field.alpha.dark) },
+  };
+}
+
 /** { light: { '--primary': '…', '--radius': '0.625rem' }, dark: { … } } */
 export function themeVars(theme, format) {
   const convert = format === 'hsl' ? hexToHslTriplet : hexToOklch;
@@ -34,6 +58,7 @@ export function themeVars(theme, format) {
       for (const size of ['sm', 'md', 'lg', 'x']) vars[`--control-${size}`] = `${theme.density[size]}px`;
       Object.assign(vars, typeVars(theme.type));
     }
+    Object.assign(vars, styleVars(theme, format)[m]);
     for (const [level, value] of Object.entries(theme.semantic.shadow)) vars[`--shadow-${level}`] = shadowCss(value[m]);
     return vars;
   };

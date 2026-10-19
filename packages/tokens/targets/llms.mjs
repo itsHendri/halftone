@@ -34,6 +34,7 @@ ${rows}
 - Radius (\`rounded-*\`): ${ctx.radius.steps.map((s) => `${s.name} ${Math.round(ctx.radius.base * s.scale * 10) / 10}px`).join(' · ')} (multiples of \`--radius\` = ${ctx.radius.base}px)${options.controlRadius === false ? '; buttons use \`rounded-md\`' : `; \`rounded-control\` (buttons, chips) ${ctx.shape.control >= 9999 ? 'pill' : `${ctx.shape.control}px`}`}
 - Depth: \`shadow-sm\` (controls, cards), \`shadow-md\` (raised, popovers), \`shadow-lg\` (menus, dialogs) are the theme's three elevation levels; no shadow colour modifiers on surfaces (thumbs and floating elements may add \`shadow-black/20\`)
 - Border \`border\` ${ctx.shape.borderWidth}px · icon stroke ${ctx.shape.stroke} (an Icon's \`strokeWidth\` is relative to 2)
+- Styles: ${ctx.styles.button} buttons, ${ctx.styles.field} fields. Button and the text fields already draw them (\`bg-button\`, \`bg-field\`); never restyle a primary button or a field by hand
 - Fonts: headings ${fonts.heading?.family ?? 'system'}, body ${fonts.body?.family ?? 'system'}, mono ${fonts.mono?.family ?? 'system'} (applied by Text; \`font-heading\` makes any Text a heading, \`font-mono\` code and figures)
 - Typeset: body ${ctx.type.size}px, leading ${ctx.type.leading}; every \`text-*\` size below scales by ${ctx.type.scale}${theme.applied ? `\n- Theme: \`${theme.code}\` (\`npx halftone-tokens theme show\`)` : ''}
 - Font sizes (\`text-*\`): ${steps(['font', 'size'])}

@@ -30,10 +30,12 @@ function ownedValues(theme) {
   out['primitive.font.family.body'] = theme.fonts.body;
   out['primitive.font.family.mono'] = theme.fonts.mono;
   for (const [key, value] of Object.entries(theme.semantic.type)) out[`semantic.type.${key}`] = value;
+  for (const [key, value] of Object.entries(theme.semantic.button)) out[`semantic.button.${key}`] = value;
+  for (const [key, value] of Object.entries(theme.semantic.field)) out[`semantic.field.${key}`] = value;
   return out;
 }
 
-const TYPES = { radius: 'number', border: 'number', icon: 'number', density: 'number', type: 'number', shadow: 'shadow', font: 'fontFamily', color: 'color' };
+const TYPES = { radius: 'number', border: 'number', icon: 'number', density: 'number', type: 'number', button: 'number', field: 'number', shadow: 'shadow', font: 'fontFamily', color: 'color' };
 const DESCRIPTIONS = {
   'semantic.radius.control': 'Corner radius of mobile buttons and chips: rounded-control. 9999 = pills; otherwise the base radius.',
   'semantic.border.width': 'Width of `border` (px). border-2 and border-hairline stay explicit.',
@@ -53,6 +55,20 @@ const DESCRIPTIONS = {
   'semantic.type.leading': "Typeset: line height of running text (× size); the text sizes' line heights scale by leading / 1.75.",
   'semantic.type.flow': 'Typeset: space between blocks of long-form text (Prose), em.',
   'semantic.type.measure': 'Typeset: the longest line of long-form text (Prose), characters.',
+  'semantic.color.button': 'The primary button: bg-button (its alpha is button.alpha). Follows the theme\'s button style.',
+  'semantic.color.button-foreground': 'Text and icons on the primary button: text-button-foreground.',
+  'semantic.color.button-edge': 'The primary button\'s border and bottom edge: border-button-edge.',
+  'semantic.color.field': 'Text fields: bg-field (its alpha is field.alpha). Follows the theme\'s field style.',
+  'semantic.color.field-edge': 'Text fields\' border or bottom line: border-field-edge.',
+  'semantic.button.alpha': 'Opacity of the primary button\'s fill (0 = an outline button).',
+  'semantic.button.border-width': 'Primary button border, every side (px).',
+  'semantic.button.edge-width': 'Primary button bottom edge (px); raised buttons have a thicker, darker one.',
+  'semantic.field.alpha': 'Opacity of a text field\'s fill, per mode.',
+  'semantic.field.border-width': 'Text field border, top and sides (px).',
+  'semantic.field.edge-width': 'Text field bottom border (px).',
+  'semantic.field.round': '1 = text fields take the md radius on top, 0 = square.',
+  'semantic.field.round-bottom': '1 = text fields take the md radius at the bottom, 0 = square.',
+  'semantic.field.inset': '1 = text fields have inner padding, 0 = flush (underline fields).',
 };
 
 function typeOf(path) {

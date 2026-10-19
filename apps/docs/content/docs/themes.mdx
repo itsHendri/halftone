@@ -24,6 +24,8 @@ code (`ht1-…`, or `ht2-…` once you change the typeset) that reproduces the t
 | **Depth** | Flat, soft, raised or hard (offset) shadows on cards, sheets and menus |
 | **Density** | Compact, comfortable or spacious: control heights and padding in the native kit, the whole spacing scale on the web |
 | **Border** | Hairline, regular or heavy outlines |
+| **Buttons** | The primary button: solid, soft (a brand tint with brand text), outline, or raised (a darker bottom edge) |
+| **Inputs** | Text fields, text areas and selects: outlined boxes, filled (a tinted field with a line), or underline (just a line) |
 
 Status colours (success, warning, destructive, info) stay as they are.
 
@@ -91,7 +93,9 @@ and shows you the logo in both themes. The logo stays in this browser until you 
 ## Codes
 
 A code is the whole recipe, packed into twelve characters with a checksum, so a typo is caught rather than
-quietly giving you a different theme. The same code produces the same theme in every version of
+quietly giving you a different theme. A theme that changes the typeset is an `ht2-` code (16 characters); one with
+button or input styles is `ht3-` (18 characters, and `@halftone-ds/tokens` 1.2 or later). A theme keeps the
+shortest code that holds it, so codes made before a format existed never change. The same code produces the same theme in every version of
 `@halftone-ds/tokens` that reads it; a generator change that would alter a theme comes with a new code
 version.
 

@@ -18,7 +18,7 @@ export type Brief = {
   v: 1;
   mode: Mode;
   platform: Platform | null;
-  /** A theme code (ht1-…, ht2-…), or '' for the kit's default theme. */
+  /** A theme code (ht1-…, ht2-…, ht3-…), or '' for the kit's default theme. */
   theme: string;
   transcript: string;
   answers: Record<string, Answer>;

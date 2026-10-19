@@ -72,6 +72,11 @@ ${primitiveGroup(ctx.prim, ['radius'])}
   iconStroke: ${ctx.shape.stroke},
   /** Width of \`border\` in px. */
   borderWidth: ${ctx.shape.borderWidth},
+  /** The theme's styles (button: solid · soft · outline · raised; field: outline · filled · underline) and their
+   *  numbers (px): bg-button / bg-field, border-button-w, rounded-field… already follow them. */
+  styles: ${JSON.stringify(ctx.styles)},
+  button: ${JSON.stringify(ctx.shape.button)},
+  field: ${JSON.stringify(ctx.shape.field)},
   /** Control heights and padding (px) for the theme's density: h-control-sm, h-control, h-control-lg, px-control-x. */
   density: ${JSON.stringify({ sm: ctx.shape.density.sm, md: ctx.shape.density.md, lg: ctx.shape.density.lg, x: ctx.shape.density.x })},
   /** The type scale at 16px; the theme's typeset multiplies it (text-* classes are already scaled). */
@@ -115,6 +120,8 @@ export type ThemeInfo = {
     leading: string;
     flow: string;
     measure: string;
+    button?: string;
+    field?: string;
     preset?: string;
   };
 };

@@ -43,6 +43,11 @@
     --chart-3: 37.7 92.1% 50.2%;
     --chart-4: 0 84.2% 60.2%;
     --chart-5: 198.6 88.7% 48.4%;
+    --button: 221.2 83.2% 53.3%;
+    --button-foreground: 0 0% 100%;
+    --button-edge: 221.2 83.2% 53.3%;
+    --field: 240 5.9% 90%;
+    --field-edge: 240 5.9% 90%;
     --radius: 0.625rem;
     --radius-control: 9999px;
     --border-width: 1px;
@@ -51,6 +56,15 @@
     --control-md: 48px;
     --control-lg: 56px;
     --control-x: 20px;
+    --button-alpha: 1;
+    --button-border-w: 0px;
+    --button-edge-w: 0px;
+    --field-alpha: 0;
+    --field-border-w: 1px;
+    --field-edge-w: 1px;
+    --field-radius: 0.5rem;
+    --field-radius-b: 0.5rem;
+    --field-x: 1rem;
   }
 
   .dark:root {
@@ -92,6 +106,12 @@
     --chart-3: 43.3 96.4% 56.3%;
     --chart-4: 0 90.6% 70.8%;
     --chart-5: 198.4 93.2% 59.6%;
+    --button: 217.2 100% 63.3%;
+    --button-foreground: 240 10% 3.9%;
+    --button-edge: 217.2 100% 63.3%;
+    --field: 240 3.7% 15.9%;
+    --field-edge: 240 3.7% 15.9%;
     --radius: 0.625rem;
+    --field-alpha: 0.3;
   }
 }

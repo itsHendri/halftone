@@ -108,7 +108,7 @@ function ShadcnExport({ theme }: { theme: Theme }) {
           For any shadcn project
         </h3>
         <p className="text-muted-foreground text-xs leading-5">
-          Colours for light and dark, radius, shadows and fonts, as a shadcn theme. Web only: phone apps take the theme code.
+          Colours for light and dark, radius, shadows and fonts, as a shadcn theme. Web only: phone apps take the theme code. Button and input styles are Halftone's own and stay behind.
         </p>
       </div>
       {preset ? null : (

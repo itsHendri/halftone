@@ -115,8 +115,10 @@ test('a registry:theme item carries every colour, the radius, shadows and its fo
   const item = shadcnTheme(theme, { fontsUrl: 'https://example.com/r/' });
   assert.equal(item.type, 'registry:theme');
   assert.equal(item.name, `halftone-${theme.code}`);
-  const colours = Object.keys(theme.resolved.light);
+  // Every shadcn colour; the button and field styles are Halftone's own and stay behind.
+  const colours = Object.keys(theme.resolved.light).filter((c) => !/^(button|field)(-|$)/.test(c));
   assert.ok(colours.length >= 37);
+  assert.equal(item.cssVars.light.button, undefined);
   for (const c of colours) {
     assert.match(item.cssVars.light[c], /^oklch\(/, c);
     assert.match(item.cssVars.dark[c], /^oklch\(/, c);

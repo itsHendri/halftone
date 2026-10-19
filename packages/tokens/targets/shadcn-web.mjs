@@ -10,7 +10,7 @@
 import { hexToOklch } from '../lib/color.mjs';
 import { group, radiusCalc } from '../lib/resolve.mjs';
 import { TEXT_LINE_HEIGHT } from '../lib/theme/recipe.mjs';
-import { typeVars } from '../lib/theme/vars.mjs';
+import { styleVars, typeVars } from '../lib/theme/vars.mjs';
 
 const rem = (px) => (px >= 9999 ? '9999px' : `${px / 16}rem`);
 const SYSTEM_SANS = "ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif";
@@ -29,6 +29,10 @@ function textScale(ctx) {
 
 export default function shadcnWeb(ctx, options) {
   const vars = (mode) => ctx.colors.map((c) => `  --${c.name}: ${hexToOklch(c[mode])};`).join('\n');
+  const styles = (mode) => Object.entries(styleVars(ctx.shape, 'oklch')[mode]).map(([k, v]) => `  ${k}: ${v};`).join('\n');
+  // The styles' fills carry their own opacity (an outline button, a transparent field).
+  const color = (name) =>
+    name === 'button' || name === 'field' ? `color-mix(in oklab, var(--${name}) calc(var(--${name}-alpha) * 100%), transparent)` : `var(--${name})`;
   const shadows = (mode) => Object.entries(ctx.shape.shadows[mode]).map(([level, css]) => `  --shadow-${level}: ${css};`).join('\n');
   const contents = `/* ${ctx.header} */
 @custom-variant dark (&:is(.dark *));
@@ -40,11 +44,13 @@ export default function shadcnWeb(ctx, options) {
   --icon-stroke: ${ctx.shape.stroke};${options.density === false ? '' : `\n  --density: ${ctx.shape.density.scale};`}${
     options.typeset === false ? '' : '\n' + Object.entries(typeVars(ctx.type)).map(([k, v]) => `  ${k}: ${v};`).join('\n')
   }
+${styles('light')}
 ${shadows('light')}
 ${vars('light')}
 }
 
 .dark {
+${styles('dark')}
 ${shadows('dark')}
 ${vars('dark')}
 }
@@ -52,6 +58,10 @@ ${vars('dark')}
 @theme inline {
 ${ctx.radius.steps.map((s) => `  --radius-${s.name}: ${radiusCalc(s.scale)};`).join('\n')}
   --radius-control: var(--radius-control);
+  /* The field style: rounded-field, rounded-b-field-b, px-field-x. Widths are border-(length:--field-border-w) etc. */
+  --radius-field: var(--field-radius);
+  --radius-field-b: var(--field-radius-b);
+  --spacing-field-x: var(--field-x);
   --default-border-width: var(--border-width);${options.density === false ? '' : `\n  /* The theme's density scales the whole spacing scale (p-4, gap-2, h-9…). */\n  --spacing: calc(0.25rem * var(--density));`}
   --shadow-2xs: var(--shadow-1);
   --shadow-xs: var(--shadow-1);
@@ -65,7 +75,7 @@ ${ctx.radius.steps.map((s) => `  --radius-${s.name}: ${radiusCalc(s.scale)};`).j
   --font-mono: var(--kit-font-mono, ${SYSTEM_MONO});${
     options.typeset === false ? '' : `\n  /* The theme's typeset scales every text size and its line height (text-sm, text-base…). */\n${textScale(ctx)}`
   }
-${ctx.colors.map((c) => `  --color-${c.name}: var(--${c.name});`).join('\n')}
+${ctx.colors.map((c) => `  --color-${c.name}: ${color(c.name)};`).join('\n')}
 }
 
 @layer base {

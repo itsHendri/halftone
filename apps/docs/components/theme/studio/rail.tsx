@@ -145,6 +145,8 @@ const HINTS: Record<string, string> = {
   measure: 'How wide a column of text grows before it wraps.',
   radius: 'The corners of cards, inputs and buttons.',
   controls: 'The native kit’s buttons and chips: always round, or the radius above.',
+  button: 'The primary button in both kits: a solid fill, a soft tint, an outline, or raised with a darker edge.',
+  field: 'Text fields, text areas and selects: a box, a tinted field with a line, or just a line.',
   border: 'How heavy every border and divider is.',
   depth: 'Shadows: none, soft, raised, or a hard offset.',
   stroke: 'The line weight of every icon.',
@@ -462,6 +464,8 @@ export function Rail({ className, id }: { className?: string; id?: string }) {
         <Group title="Shape">
           {options('radius', 'Radius')}
           {options('controls', 'Mobile buttons')}
+          {options('button', 'Buttons')}
+          {options('field', 'Inputs')}
           {options('border', 'Border')}
         </Group>
 

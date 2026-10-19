@@ -10,10 +10,10 @@
 import { fixContrast } from './fix.mjs';
 import { encodeRecipe } from './codec.mjs';
 import { fontById } from './fonts.mjs';
-import { BORDER, DENSITY, DEPTH, FLOW, LEADING, normalizeRecipe, RADIUS, STROKE, typeScale } from './recipe.mjs';
+import { BORDER, BUTTON, DENSITY, DEPTH, FIELD, fieldWidth, FLOW, LEADING, normalizeRecipe, RADIUS, STROKE, typeScale } from './recipe.mjs';
 import { anchorStep, brandRamp, neutralRamp } from './ramp.mjs';
 import { resolvedMap } from './refs.mjs';
-import { semanticColors } from './semantic.mjs';
+import { semanticColors, styleColors } from './semantic.mjs';
 
 
 const ramp = (values) => Object.fromEntries(Object.entries(values).map(([step, $value]) => [step, { $type: 'color', $value }]));
@@ -34,9 +34,17 @@ export function generateTheme(input, base, { fix = true } = {}) {
     return hex;
   };
 
-  let colors = semanticColors(anchorStep(recipe.brand));
+  const anchor = anchorStep(recipe.brand);
+  let colors = semanticColors(anchor);
   let adjustments = [];
   if (fix) ({ semantic: colors, adjustments } = fixContrast(colors, lookup));
+  // The styles' colours build on the fixed ones, then get their own check (a soft button's ink, a field's line).
+  colors = { ...colors, ...styleColors(recipe, anchor, colors) };
+  if (fix) {
+    const styled = fixContrast(colors, lookup);
+    colors = styled.semantic;
+    adjustments = [...adjustments, ...styled.adjustments];
+  }
 
   const radiusRef = RADIUS[recipe.radius];
   const radiusValue = typeof radiusRef === 'string' ? `{primitive.radius.${radiusRef}}` : radiusRef;
@@ -57,6 +65,17 @@ export function generateTheme(input, base, { fix = true } = {}) {
     measure: Number(recipe.measure),
   };
 
+  const borderWidth = BORDER[recipe.border];
+  const btn = BUTTON[recipe.button];
+  const fld = FIELD[recipe.field];
+  const button = { alpha: btn.alpha, border: btn.border, edge: btn.edge };
+  const field = { alpha: fld.alpha, border: fieldWidth(fld.border, borderWidth), edge: fieldWidth(fld.edge, borderWidth), inset: fld.inset };
+  // As tokens: widths named apart from the colours (semantic.color.button-edge is a colour).
+  const buttonTokens = { alpha: button.alpha, 'border-width': button.border, 'edge-width': button.edge };
+  const fieldTokens = { alpha: field.alpha, 'border-width': field.border, 'edge-width': field.edge, round: fld.round, 'round-bottom': fld.roundBottom, inset: field.inset };
+  // rounded-md is the radius × md / lg (resolve.mjs); a field's radius is that or square.
+  const md = lookup('{primitive.radius.md}') / lookup('{primitive.radius.lg}');
+
   return {
     recipe,
     code: encodeRecipe(recipe),
@@ -70,13 +89,17 @@ export function generateTheme(input, base, { fix = true } = {}) {
       shadow: DEPTH[recipe.depth],
       density: { scale: density.scale, control: { sm: density.sm, md: density.md, lg: density.lg, x: density.x } },
       type,
+      button: buttonTokens,
+      field: fieldTokens,
     },
     density,
     type: typeScale(type),
     resolved,
     radius,
     radiusControl: lookup(controlRadius),
-    borderWidth: BORDER[recipe.border],
+    borderWidth,
+    button,
+    field: { ...field, radius: lookup(radiusValue) * md * fld.round, radiusBottom: lookup(radiusValue) * md * fld.roundBottom },
     stroke: STROKE[recipe.stroke],
     adjustments,
   };

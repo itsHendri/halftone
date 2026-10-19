@@ -8,7 +8,9 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/90",
+        // The button style of the theme (solid, soft, outline, raised): fill, label, border and bottom edge.
+        default:
+          "border-(length:--button-border-w) border-b-(length:--button-edge-w) border-button-edge bg-button text-button-foreground hover:opacity-90",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40",
         outline:

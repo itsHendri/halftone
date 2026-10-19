@@ -5,7 +5,7 @@
  */
 import StyleDictionary from 'style-dictionary';
 import { readFileSync } from 'node:fs';
-import { DENSITY, DEPTH, shadowCss, TYPE, typeScale } from './theme/recipe.mjs';
+import { BUTTON, DEFAULT_RECIPE, DENSITY, DEPTH, FIELD, fieldWidth, shadowCss, TYPE, typeScale } from './theme/recipe.mjs';
 
 export const MODES = ['light', 'dark'];
 
@@ -68,6 +68,9 @@ export function radiusCalc(scale) {
  *                        (a token file from before themes gets the kit's defaults)
  *   type                 { size, scale, leading, leadingFactor, flow, measure } (semantic.type; defaults
  *                          for a token file from before the typeset)
+ *   shape.button/.field  the styles' numbers (semantic.button / .field), radii in px; a token file from
+ *                          before the styles gets solid buttons and outline fields, and colours to match
+ *   styles               { button, field }: the style names, from the recorded theme (or the defaults)
  */
 export async function loadTokens(sourcePath) {
   const source = JSON.parse(readFileSync(sourcePath, 'utf8'));
@@ -84,11 +87,34 @@ export async function loadTokens(sourcePath) {
     steps: radiusScales(prim),
   };
   const find = (list, name) => list.find((t) => cssName(t) === name)?.$value;
+  // Style colours a token file from before the styles doesn't have: what the components drew before.
+  const byName = Object.fromEntries(colors.map((c) => [c.name, c]));
+  const STYLE_FALLBACK = { button: 'primary', 'button-foreground': 'primary-foreground', 'button-edge': 'primary', field: 'input', 'field-edge': 'input' };
+  for (const [name, from] of Object.entries(STYLE_FALLBACK)) if (!byName[name] && byName[from]) colors.push({ ...byName[from], name });
   const shadows = (list, mode) =>
     Object.fromEntries(['1', '2', '3'].map((level) => [level, shadowCss(find(list, `shadow-${level}`) ?? DEPTH.soft[level][mode])]));
+  const borderWidth = find(semLight, 'border-width') ?? 1;
+  const md = radius.steps.find((s) => s.name === 'md')?.scale ?? 0.8;
+  const solid = BUTTON.solid;
+  const outline = FIELD.outline;
+  const fieldRound = find(semLight, 'field-round') ?? outline.round;
+  const fieldRoundBottom = find(semLight, 'field-round-bottom') ?? outline.roundBottom;
   const shape = {
     control: find(semLight, 'radius-control') ?? 9999,
-    borderWidth: find(semLight, 'border-width') ?? 1,
+    borderWidth,
+    button: {
+      alpha: find(semLight, 'button-alpha') ?? solid.alpha,
+      border: find(semLight, 'button-border-width') ?? solid.border,
+      edge: find(semLight, 'button-edge-width') ?? solid.edge,
+    },
+    field: {
+      alpha: { light: find(semLight, 'field-alpha') ?? outline.alpha.light, dark: find(semDark, 'field-alpha') ?? outline.alpha.dark },
+      border: find(semLight, 'field-border-width') ?? fieldWidth(outline.border, borderWidth),
+      edge: find(semLight, 'field-edge-width') ?? fieldWidth(outline.edge, borderWidth),
+      inset: find(semLight, 'field-inset') ?? outline.inset,
+      radius: Number((radius.base * md * fieldRound).toFixed(4)),
+      radiusBottom: Number((radius.base * md * fieldRoundBottom).toFixed(4)),
+    },
     stroke: find(semLight, 'icon-stroke') ?? 2,
     shadows: { light: shadows(semLight, 'light'), dark: shadows(semDark, 'dark') },
     density: {
@@ -97,7 +123,9 @@ export async function loadTokens(sourcePath) {
     },
   };
   const type = typeScale(Object.fromEntries(Object.entries(TYPE).map(([key, value]) => [key, find(semLight, `type-${key}`) ?? value])));
-  return { source, semLight, semDark, prim, colors, radius, shape, type };
+  const recorded = source.$extensions?.['com.halftonedesignsystem.theme']?.recipe ?? {};
+  const styles = { button: recorded.button ?? DEFAULT_RECIPE.button, field: recorded.field ?? DEFAULT_RECIPE.field };
+  return { source, semLight, semDark, prim, colors, radius, shape, type, styles };
 }
 
 /** Primitive tokens under a path prefix, e.g. group(prim, ['font', 'size']) → [{ key: 'xs', value: 12 }, …]. */

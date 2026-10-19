@@ -6,6 +6,8 @@
  *
  * The typeset (font.mono, size, leading, flow, measure) came later. A recipe without it gets the defaults,
  * which are what the kits always had, and a theme with the default typeset still encodes as a ht1 code.
+ * So did the styles (button, field): their defaults are the kits' original look, and a theme that keeps them
+ * encodes as ht1 or ht2 as before.
  */
 import { FONTS } from './fonts.mjs';
 
@@ -34,16 +36,46 @@ export const OPTIONS = {
   flow: ['normal', 'tight', 'loose'],
   /** Typeset: the longest line of long-form text (Prose), in characters. */
   measure: ['70', '60', '80', '90'],
+  /** Style: the primary button. Solid fill, a brand tint, a brand outline, or solid with a darker bottom edge. */
+  button: ['solid', 'soft', 'outline', 'raised'],
+  /** Style: text fields (inputs, text areas, select triggers). A box, a tinted field with a line, or a line. */
+  field: ['outline', 'filled', 'underline'],
 };
 
 /** The recipe keys that make up the typeset, besides font.mono. */
 export const TYPESET_KEYS = ['size', 'leading', 'flow', 'measure'];
+/** The recipe keys that are component styles (ht3 codes). */
+export const STYLE_KEYS = ['button', 'field'];
 
 /** Base radius per option: a primitive radius step (a reference) or 0. */
 export const RADIUS = { none: 0, sm: 'sm', md: 'md', lg: 'lg', xl: 'xl', '2xl': '2xl' };
 export const STROKE = { thin: 1.5, regular: 2, bold: 2.5 };
 /** px; hairline renders as one device pixel on a 2x screen. */
 export const BORDER = { hairline: 0.5, regular: 1, heavy: 2 };
+/**
+ * Button styles as numbers (px), on top of the colours in semantic.mjs (styleColors). `alpha` is the fill's
+ * opacity: an outline button has no fill. `border` is every side, `edge` the bottom (raised: a thicker,
+ * darker bottom edge).
+ */
+export const BUTTON = {
+  solid: { alpha: 1, border: 0, edge: 0 },
+  soft: { alpha: 1, border: 0, edge: 0 },
+  outline: { alpha: 0, border: 2, edge: 2 },
+  raised: { alpha: 1, border: 0, edge: 3 },
+};
+/**
+ * Field styles. `alpha` per mode (outline: transparent, with a faint tint in dark, as the kits always had).
+ * `border` / `edge`: 'border' = the theme's border width, 'line' = at least 1px (it's the field's only edge).
+ * `round` / `roundBottom`: 1 = the md radius, 0 = square. `inset`: 1 = the usual inner padding, 0 = flush.
+ */
+export const FIELD = {
+  outline: { alpha: { light: 0, dark: 0.3 }, border: 'border', edge: 'border', round: 1, roundBottom: 1, inset: 1 },
+  filled: { alpha: { light: 1, dark: 1 }, border: 0, edge: 'line', round: 1, roundBottom: 0, inset: 1 },
+  underline: { alpha: { light: 0, dark: 0 }, border: 0, edge: 'line', round: 0, roundBottom: 0, inset: 0 },
+};
+/** A field width in px for a border width. */
+export const fieldWidth = (value, borderWidth) => (value === 'border' ? borderWidth : value === 'line' ? Math.max(1, borderWidth) : value);
+
 /** Line height of running text (× size). 1.75 = leading-7 at 16px, what the kits' paragraphs always had. */
 export const LEADING = { tight: 1.6, normal: 1.75, relaxed: 1.9 };
 /** Space between blocks of long-form text, in em. */
@@ -136,12 +168,17 @@ export const DEFAULT_RECIPE = Object.freeze({
   leading: 'normal',
   flow: 'normal',
   measure: '70',
+  button: 'solid',
+  field: 'outline',
 });
 
 const HEX = /^#[0-9a-f]{6}$/;
 
 /** Does the recipe use the default typeset (what every ht1 code means)? */
 export const defaultTypeset = (r) => r.font.mono === DEFAULT_RECIPE.font.mono && TYPESET_KEYS.every((k) => r[k] === DEFAULT_RECIPE[k]);
+
+/** Does the recipe keep the default styles (solid buttons, outline fields: every ht1 and ht2 code)? */
+export const defaultStyles = (r) => STYLE_KEYS.every((k) => r[k] === DEFAULT_RECIPE[k]);
 
 /** Fill in defaults, normalise, and throw on anything invalid. Returns a new, plain recipe. */
 export function normalizeRecipe(input = {}) {
@@ -175,6 +212,8 @@ export function normalizeRecipe(input = {}) {
     leading: r.leading,
     flow: r.flow,
     measure: r.measure,
+    button: r.button,
+    field: r.field,
   };
   if (input.preset) out.preset = String(input.preset);
   return out;

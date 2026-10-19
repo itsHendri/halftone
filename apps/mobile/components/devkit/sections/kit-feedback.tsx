@@ -37,7 +37,7 @@ function SpinnerDemo() {
       <Spinner tone="muted" />
       {/* Busy, not disabled: full colour, spinner in the label's colour. */}
       <Button>
-        <Spinner tone="primary-foreground" />
+        <Spinner tone="button-foreground" />
         <Text>Loading</Text>
       </Button>
     </View>

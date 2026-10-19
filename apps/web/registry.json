@@ -55,7 +55,12 @@
           "chart-2": "oklch(0.7227 0.192 149.58)",
           "chart-3": "oklch(0.7686 0.1647 70.08)",
           "chart-4": "oklch(0.6368 0.2078 25.33)",
-          "chart-5": "oklch(0.6847 0.1479 237.32)"
+          "chart-5": "oklch(0.6847 0.1479 237.32)",
+          "button": "oklch(0.5461 0.2152 262.88)",
+          "button-foreground": "oklch(1 0 0)",
+          "button-edge": "oklch(0.5461 0.2152 262.88)",
+          "field": "oklch(0.9197 0.004 286.32)",
+          "field-edge": "oklch(0.9197 0.004 286.32)"
         },
         "dark": {
           "background": "oklch(0.1408 0.0044 285.82)",
@@ -95,7 +100,12 @@
           "chart-2": "oklch(0.8003 0.1821 151.71)",
           "chart-3": "oklch(0.8369 0.1644 84.43)",
           "chart-4": "oklch(0.7106 0.1661 22.22)",
-          "chart-5": "oklch(0.7535 0.139 232.66)"
+          "chart-5": "oklch(0.7535 0.139 232.66)",
+          "button": "oklch(0.6507 0.1869 259.77)",
+          "button-foreground": "oklch(0.1408 0.0044 285.82)",
+          "button-edge": "oklch(0.6507 0.1869 259.77)",
+          "field": "oklch(0.2739 0.0055 286.03)",
+          "field-edge": "oklch(0.2739 0.0055 286.03)"
         }
       }
     },
@@ -321,6 +331,93 @@
       }
     },
     {
+      "name": "input",
+      "type": "registry:ui",
+      "title": "Input",
+      "description": "always with a `Label` · `aria-invalid` for errors",
+      "dependencies": [
+        "cn@^0.4.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/ui/input.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/input.tsx"
+        }
+      ],
+      "categories": [
+        "inputs"
+      ],
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "Input"
+        ],
+        "api": "<Label htmlFor=\"email\">Email</Label><Input id=\"email\" type=\"email\" />"
+      }
+    },
+    {
+      "name": "textarea",
+      "type": "registry:ui",
+      "title": "Textarea",
+      "description": "multi-line text, grows with content",
+      "dependencies": [
+        "cn@^0.4.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/ui/textarea.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/textarea.tsx"
+        }
+      ],
+      "categories": [
+        "inputs"
+      ],
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "Textarea"
+        ],
+        "api": "<Textarea id placeholder rows? />"
+      }
+    },
+    {
+      "name": "select",
+      "type": "registry:ui",
+      "title": "Select",
+      "description": "one of 5–15 options in a form; fewer → RadioGroup, more → Command",
+      "dependencies": [
+        "cn@^0.4.0",
+        "lucide-react@^1.52.0",
+        "radix-ui@^1.7.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/ui/select.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/select.tsx"
+        }
+      ],
+      "categories": [
+        "inputs"
+      ],
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "Select",
+          "SelectTrigger",
+          "SelectValue",
+          "SelectContent",
+          "SelectItem"
+        ],
+        "api": "<Select value onValueChange><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectItem value /></SelectContent></Select>"
+      }
+    },
+    {
       "name": "date-picker",
       "type": "registry:component",
       "title": "Date picker",
@@ -480,7 +577,7 @@
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
-        "input"
+        "@halftone-web/input"
       ],
       "files": [
         {
@@ -621,7 +718,7 @@
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
-        "input"
+        "@halftone-web/input"
       ],
       "files": [
         {
@@ -1824,7 +1921,7 @@
       "registryDependencies": [
         "@halftone-web/attachment-chip",
         "@halftone-web/button",
-        "textarea"
+        "@halftone-web/textarea"
       ],
       "files": [
         {

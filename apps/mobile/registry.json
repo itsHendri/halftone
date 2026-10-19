@@ -48,7 +48,12 @@
           "chart-2": "142.1 70.6% 45.3%",
           "chart-3": "37.7 92.1% 50.2%",
           "chart-4": "0 84.2% 60.2%",
-          "chart-5": "198.6 88.7% 48.4%"
+          "chart-5": "198.6 88.7% 48.4%",
+          "button": "221.2 83.2% 53.3%",
+          "button-foreground": "0 0% 100%",
+          "button-edge": "221.2 83.2% 53.3%",
+          "field": "240 5.9% 90%",
+          "field-edge": "240 5.9% 90%"
         },
         "dark": {
           "background": "240 10% 3.9%",
@@ -88,7 +93,12 @@
           "chart-2": "141.9 69.2% 58%",
           "chart-3": "43.3 96.4% 56.3%",
           "chart-4": "0 90.6% 70.8%",
-          "chart-5": "198.4 93.2% 59.6%"
+          "chart-5": "198.4 93.2% 59.6%",
+          "button": "217.2 100% 63.3%",
+          "button-foreground": "240 10% 3.9%",
+          "button-edge": "217.2 100% 63.3%",
+          "field": "240 3.7% 15.9%",
+          "field-edge": "240 3.7% 15.9%"
         }
       },
       "tailwind": {
@@ -133,7 +143,12 @@
                 "chart-2": "hsl(var(--chart-2))",
                 "chart-3": "hsl(var(--chart-3))",
                 "chart-4": "hsl(var(--chart-4))",
-                "chart-5": "hsl(var(--chart-5))"
+                "chart-5": "hsl(var(--chart-5))",
+                "button": "hsl(var(--button))",
+                "button-foreground": "hsl(var(--button-foreground))",
+                "button-edge": "hsl(var(--button-edge))",
+                "field": "hsl(var(--field))",
+                "field-edge": "hsl(var(--field-edge))"
               },
               "borderRadius": {
                 "sm": "calc(var(--radius) * 0.6)",

@@ -269,7 +269,7 @@ test('theme resolve prints the recorded code, and fails once tokens.json is edit
   assert.equal(applied.status, 0, applied.stderr);
   const r = runCli(['theme', 'resolve', '--root', root]);
   assert.equal(r.status, 0, r.stderr);
-  assert.match(r.stdout.trim(), /^ht[12]-[0-9A-Z]+$/);
+  assert.match(r.stdout.trim(), /^ht[123]-[0-9A-Z]+$/);
   const tokens = JSON.parse(readFileSync(join(root, 'tokens/tokens.json'), 'utf8'));
   tokens.semantic.color.primary.$value.light = '#000000';
   writeFileSync(join(root, 'tokens/tokens.json'), JSON.stringify(tokens));

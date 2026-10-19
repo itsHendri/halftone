@@ -38,7 +38,12 @@ module.exports = {
     "chart-2": "hsl(var(--chart-2))",
     "chart-3": "hsl(var(--chart-3))",
     "chart-4": "hsl(var(--chart-4))",
-    "chart-5": "hsl(var(--chart-5))"
+    "chart-5": "hsl(var(--chart-5))",
+    "button": "hsl(var(--button) / var(--button-alpha))",
+    "button-foreground": "hsl(var(--button-foreground))",
+    "button-edge": "hsl(var(--button-edge))",
+    "field": "hsl(var(--field) / var(--field-alpha))",
+    "field-edge": "hsl(var(--field-edge))"
   },
   "borderRadius": {
     "sm": "calc(var(--radius) * 0.6)",
@@ -46,10 +51,16 @@ module.exports = {
     "lg": "var(--radius)",
     "xl": "calc(var(--radius) * 1.6)",
     "2xl": "calc(var(--radius) * 2)",
-    "control": "var(--radius-control)"
+    "control": "var(--radius-control)",
+    "field": "var(--field-radius)",
+    "field-b": "var(--field-radius-b)"
   },
   "borderWidth": {
-    "DEFAULT": "var(--border-width)"
+    "DEFAULT": "var(--border-width)",
+    "button-w": "var(--button-border-w)",
+    "button-edge-w": "var(--button-edge-w)",
+    "field-w": "var(--field-border-w)",
+    "field-edge-w": "var(--field-edge-w)"
   },
   "boxShadow": {
     "xs": "0px 1px 2px 0px rgba(0, 0, 0, 0.051)",
@@ -77,6 +88,7 @@ module.exports = {
   },
   "spacing": {
     "control-x": "var(--control-x)",
+    "field-x": "var(--field-x)",
     "flow": "1.25rem"
   },
   "fontSize": {

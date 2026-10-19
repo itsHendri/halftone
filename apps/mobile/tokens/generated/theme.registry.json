@@ -40,7 +40,12 @@
         "chart-2": "142.1 70.6% 45.3%",
         "chart-3": "37.7 92.1% 50.2%",
         "chart-4": "0 84.2% 60.2%",
-        "chart-5": "198.6 88.7% 48.4%"
+        "chart-5": "198.6 88.7% 48.4%",
+        "button": "221.2 83.2% 53.3%",
+        "button-foreground": "0 0% 100%",
+        "button-edge": "221.2 83.2% 53.3%",
+        "field": "240 5.9% 90%",
+        "field-edge": "240 5.9% 90%"
       },
       "dark": {
         "background": "240 10% 3.9%",
@@ -80,7 +85,12 @@
         "chart-2": "141.9 69.2% 58%",
         "chart-3": "43.3 96.4% 56.3%",
         "chart-4": "0 90.6% 70.8%",
-        "chart-5": "198.4 93.2% 59.6%"
+        "chart-5": "198.4 93.2% 59.6%",
+        "button": "217.2 100% 63.3%",
+        "button-foreground": "240 10% 3.9%",
+        "button-edge": "217.2 100% 63.3%",
+        "field": "240 3.7% 15.9%",
+        "field-edge": "240 3.7% 15.9%"
       }
     },
     "tailwind": {
@@ -125,7 +135,12 @@
               "chart-2": "hsl(var(--chart-2))",
               "chart-3": "hsl(var(--chart-3))",
               "chart-4": "hsl(var(--chart-4))",
-              "chart-5": "hsl(var(--chart-5))"
+              "chart-5": "hsl(var(--chart-5))",
+              "button": "hsl(var(--button))",
+              "button-foreground": "hsl(var(--button-foreground))",
+              "button-edge": "hsl(var(--button-edge))",
+              "field": "hsl(var(--field))",
+              "field-edge": "hsl(var(--field-edge))"
             },
             "borderRadius": {
               "sm": "calc(var(--radius) * 0.6)",
@@ -187,7 +202,12 @@
         "chart-2": "oklch(0.7227 0.192 149.58)",
         "chart-3": "oklch(0.7686 0.1647 70.08)",
         "chart-4": "oklch(0.6368 0.2078 25.33)",
-        "chart-5": "oklch(0.6847 0.1479 237.32)"
+        "chart-5": "oklch(0.6847 0.1479 237.32)",
+        "button": "oklch(0.5461 0.2152 262.88)",
+        "button-foreground": "oklch(1 0 0)",
+        "button-edge": "oklch(0.5461 0.2152 262.88)",
+        "field": "oklch(0.9197 0.004 286.32)",
+        "field-edge": "oklch(0.9197 0.004 286.32)"
       },
       "dark": {
         "background": "oklch(0.1408 0.0044 285.82)",
@@ -227,7 +247,12 @@
         "chart-2": "oklch(0.8003 0.1821 151.71)",
         "chart-3": "oklch(0.8369 0.1644 84.43)",
         "chart-4": "oklch(0.7106 0.1661 22.22)",
-        "chart-5": "oklch(0.7535 0.139 232.66)"
+        "chart-5": "oklch(0.7535 0.139 232.66)",
+        "button": "oklch(0.6507 0.1869 259.77)",
+        "button-foreground": "oklch(0.1408 0.0044 285.82)",
+        "button-edge": "oklch(0.6507 0.1869 259.77)",
+        "field": "oklch(0.2739 0.0055 286.03)",
+        "field-edge": "oklch(0.2739 0.0055 286.03)"
       }
     }
   }

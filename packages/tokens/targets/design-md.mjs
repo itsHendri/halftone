@@ -63,6 +63,21 @@ over (\`npm run tokens:build -- --strict\` fails on them):
 ${failures.map((f) => `- ${f.trim()}`).join('\n')}`;
 }
 
+/** How the theme's styles read in DESIGN.md. */
+const STYLE_TEXT = {
+  button: {
+    solid: 'The primary button is a solid brand fill.',
+    soft: 'The primary button is a soft brand tint with brand text.',
+    outline: 'The primary button is a brand outline with brand text, no fill.',
+    raised: 'The primary button is a solid brand fill with a darker bottom edge.',
+  },
+  field: {
+    outline: 'Text fields are outlined boxes.',
+    filled: 'Text fields are tinted, with a line along the bottom.',
+    underline: 'Text fields are a single line, no box.',
+  },
+};
+
 export default function designMd(ctx, options) {
   const name = options.name ?? 'Halftone';
   // Which radius buttons use: 'control' (the theme's pill setting, the mobile kit) or a scale step (web: 'md').
@@ -187,7 +202,7 @@ ${radius['2xl']}px; chips, avatars and dots are fully round.
 ## Components
 
 Only components listed in the registry in \`DESIGN_SYSTEM.md\` exist. Controls are 48px tall (small
-40, large 56). Selected chips and segments are neutral (inverted foreground), never the brand colour.
+40, large 56). ${STYLE_TEXT.button[ctx.styles.button]} ${STYLE_TEXT.field[ctx.styles.field]} Selected chips and segments are neutral (inverted foreground), never the brand colour.
 Motion: ${duration.fast}ms for micro-feedback, ${duration.base}ms for most transitions, ${duration.slow}ms for sheets, and
 nothing moves when the OS asks for reduced motion.
 

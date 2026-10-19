@@ -14,7 +14,7 @@ function Textarea({
   return (
     <TextInput
       className={cn(
-        'text-foreground border-input dark:bg-input/30 flex min-h-24 w-full flex-row rounded-md border bg-transparent px-3 py-2 text-base md:text-sm',
+        'text-foreground bg-field border-field-edge border-field-w border-b-field-edge-w rounded-t-field rounded-b-field-b px-field-x flex min-h-24 w-full flex-row py-2 text-base md:text-sm',
         Platform.select({
           web: 'placeholder:text-muted-foreground placeholder-shown:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive field-sizing-content resize-y outline-none transition-[color,box-shadow] focus-visible:ring-[3px] disabled:cursor-not-allowed',
         }),
