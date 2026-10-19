@@ -226,3 +226,65 @@ test('runs through a symlinked bin, the way npm installs it', () => {
   const version = JSON.parse(readFileSync(join(pkg, 'package.json'), 'utf8')).version;
   assert.equal(execFileSync(process.execPath, [join(dir, 'halftone-tokens'), '--version'], { encoding: 'utf8' }).trim(), version);
 });
+
+// ---- theme commands: shadcn codes, decode, resolve, shadcn ------------------------------------------------
+
+test('theme decode explains a shadcn preset code and the Halftone theme it maps to', () => {
+  const root = appRoot();
+  const r = runCli(['theme', 'decode', 'b5owWMfJ8l', '--json', '--root', root]);
+  assert.equal(r.status, 0, r.stderr);
+  const out = JSON.parse(r.stdout);
+  assert.equal(out.kind, 'shadcn');
+  assert.equal(out.shadcn.theme, 'mauve');
+  assert.match(out.code, /^ht[12]-/);
+  assert.ok(out.notes.some((n) => /Oxanium/.test(n)));
+});
+
+test('theme apply takes a shadcn code and lists what it approximated', () => {
+  const root = appRoot();
+  const r = runCli(['theme', 'apply', 'b5owWMfJ8l', '--dry-run', '--root', root]);
+  assert.equal(r.status, 0, r.stderr);
+  assert.match(r.stderr, /From shadcn preset b5owWMfJ8l/);
+  assert.match(r.stdout, /--dry-run: nothing written/);
+});
+
+test('a preset name that looks like a shadcn code stays the Halftone preset', () => {
+  const root = appRoot();
+  const r = runCli(['theme', 'decode', 'bold', '--json', '--root', root]);
+  assert.equal(r.status, 0, r.stderr);
+  assert.equal(JSON.parse(r.stdout).preset, 'bold');
+  const enc = runCli(['theme', 'encode', 'bold', '--root', root]);
+  assert.equal(enc.status, 0, enc.stderr);
+  assert.equal(enc.stderr, '');
+});
+
+test('theme resolve prints the recorded code, and fails once tokens.json is edited by hand', () => {
+  const unrecorded = JSON.parse(readFileSync(fixture, 'utf8'));
+  delete unrecorded.$extensions;
+  const root = appRoot(unrecorded);
+  const none = runCli(['theme', 'resolve', '--root', root]);
+  assert.equal(none.status, 1);
+  assert.match(none.stderr, /no theme recorded/);
+  const applied = runCli(['theme', 'apply', 'editorial', '--force', '--root', root], { env: { ...process.env, HALFTONE_STRICT: '' } });
+  assert.equal(applied.status, 0, applied.stderr);
+  const r = runCli(['theme', 'resolve', '--root', root]);
+  assert.equal(r.status, 0, r.stderr);
+  assert.match(r.stdout.trim(), /^ht[12]-[0-9A-Z]+$/);
+  const tokens = JSON.parse(readFileSync(join(root, 'tokens/tokens.json'), 'utf8'));
+  tokens.semantic.color.primary.$value.light = '#000000';
+  writeFileSync(join(root, 'tokens/tokens.json'), JSON.stringify(tokens));
+  const drifted = runCli(['theme', 'resolve', '--root', root]);
+  assert.equal(drifted.status, 1);
+  assert.match(drifted.stderr, /edited by hand/);
+});
+
+test('theme shadcn writes a registry:theme item for a preset', () => {
+  const root = appRoot();
+  const r = runCli(['theme', 'shadcn', 'editorial', '--out', 'halftone-theme.json', '--fonts-url', 'https://example.com/r', '--root', root]);
+  assert.equal(r.status, 0, r.stderr);
+  const item = JSON.parse(readFileSync(join(root, 'halftone-theme.json'), 'utf8'));
+  assert.equal(item.type, 'registry:theme');
+  assert.equal(item.name, 'halftone-editorial');
+  assert.ok(item.registryDependencies.every((d) => d.startsWith('https://example.com/r/font/')));
+  assert.match(item.cssVars.light.primary, /^oklch\(/);
+});

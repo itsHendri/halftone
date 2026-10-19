@@ -1,12 +1,20 @@
 /**
  * `halftone-tokens theme …` — commit a theme from the docs picker into tokens.json.
  *
- *   theme apply <code|preset|recipe.json> [--dry-run] [--force]
+ *   theme apply <theme> [--dry-run] [--force]
  *        write the theme into tokens.json (only the paths a theme owns) and rebuild
  *   theme show [--check]   the applied theme, its code and any hand edits since (drift)
  *                          --check: exit 1 if the recorded theme no longer reproduces (CI)
  *   theme presets          list the presets and their codes
- *   theme encode <recipe.json>   print the code for a recipe file
+ *   theme encode <theme>   print the Halftone code for a theme
+ *   theme decode <code> [--json]   what a code holds (a Halftone code, or a shadcn preset and what it maps to)
+ *   theme resolve [--json] the code for tokens.json as it is; exit 1 if none is recorded or it was edited
+ *   theme shadcn <theme> [--out file] [--fonts-url url]
+ *                          the theme as a shadcn registry:theme item (stdout, or a file), for `npx shadcn add`
+ *
+ * <theme> is a Halftone code (ht1-…, ht2-…), a preset name, a recipe .json, or a shadcn/ui preset code
+ * (ui.shadcn.com/create, e.g. b5owWMfJ8l), which becomes the nearest Halftone recipe: what it approximates
+ * or drops is listed on stderr.
  */
 import { spawnSync } from 'node:child_process';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
@@ -24,6 +32,11 @@ import {
   normalizeRecipe,
   presetById,
   PRESETS,
+  decodeShadcnPreset,
+  isShadcnPresetCode,
+  recipeFromShadcn,
+  SHADCN_FONTS_URL,
+  shadcnTheme,
   themeStatus,
 } from './theme/index.mjs';
 
@@ -32,8 +45,14 @@ const fail = (message, code = 1) => {
   process.exit(code);
 };
 
+/** A shadcn code's mapping notes, on stderr so stdout stays a code or JSON. */
+function printNotes(code, notes) {
+  if (!notes.length) return;
+  console.error(`From shadcn preset ${code}, approximated or not carried:\n${notes.map((n) => `  - ${n}`).join('\n')}`);
+}
+
 function readRecipe(arg, root) {
-  if (!arg) fail('say which theme: a code (ht1-… or ht2-…), a preset name or a recipe .json', 2);
+  if (!arg) fail('say which theme: a code (ht1-… or ht2-…), a preset name, a recipe .json or a shadcn preset code', 2);
   if (isThemeCode(arg)) {
     try {
       return decodeRecipe(arg);
@@ -45,7 +64,14 @@ function readRecipe(arg, root) {
   if (preset) return normalizeRecipe({ ...preset.recipe, preset: preset.id });
   const file = join(root, arg);
   if (arg.endsWith('.json') && existsSync(file)) return normalizeRecipe(JSON.parse(readFileSync(file, 'utf8')));
-  fail(`"${arg}" is not a theme code, a preset (${PRESETS.map((p) => p.id).join(', ')}) or a recipe file`, 2);
+  // Last, so a preset name that happens to look like one (bold, brutalist) stays Halftone's preset.
+  const shadcn = isShadcnPresetCode(arg) ? decodeShadcnPreset(arg) : null;
+  if (shadcn) {
+    const { recipe, notes } = recipeFromShadcn(shadcn);
+    printNotes(arg, notes);
+    return recipe;
+  }
+  fail(`"${arg}" is not a theme code, a preset (${PRESETS.map((p) => p.id).join(', ')}), a recipe file or a shadcn preset code`, 2);
 }
 
 const describe = (input) => {
@@ -101,6 +127,65 @@ export async function themeCommand({ positional, flags, root, sourcePath, config
     return;
   }
 
+  if (sub === 'decode') {
+    if (!arg) fail('say which code to decode: ht1-…, ht2-… or a shadcn preset code', 2);
+    // A preset name first, as for apply: `bold` is Halftone's preset, not a shadcn code.
+    const preset = presetById(arg.toLowerCase());
+    if (preset) {
+      const recipe = normalizeRecipe({ ...preset.recipe, preset: preset.id });
+      if (flags.json) console.log(JSON.stringify({ kind: 'halftone', preset: preset.id, code: encodeRecipe(recipe), recipe }, null, 2));
+      else console.log(`Halftone preset ${preset.name}: ${encodeRecipe(recipe)}\n  ${describe(recipe)}`);
+      return;
+    }
+    if (isThemeCode(arg)) {
+      let recipe;
+      try {
+        recipe = decodeRecipe(arg);
+      } catch (error) {
+        fail(error.message);
+      }
+      if (flags.json) console.log(JSON.stringify({ kind: 'halftone', code: encodeRecipe(recipe), recipe }, null, 2));
+      else console.log(`Halftone theme ${encodeRecipe(recipe)}\n  ${describe(recipe)}`);
+      return;
+    }
+    const shadcn = isShadcnPresetCode(arg) ? decodeShadcnPreset(arg) : null;
+    if (!shadcn) fail(`"${arg}" is not a Halftone theme code or a shadcn preset code`, 2);
+    const { recipe, notes } = recipeFromShadcn(shadcn);
+    const code = encodeRecipe(recipe);
+    if (flags.json) {
+      console.log(JSON.stringify({ kind: 'shadcn', shadcn, code, recipe, notes }, null, 2));
+      return;
+    }
+    const fields = Object.entries(shadcn).map(([k, v]) => `${k} ${v}`).join(' · ');
+    console.log(`shadcn preset ${arg}\n  ${fields}\n\nAs a Halftone theme: ${code}\n  ${describe(recipe)}`);
+    if (notes.length) console.log(`\nApproximated or not carried:\n${notes.map((n) => `  - ${n}`).join('\n')}`);
+    return;
+  }
+
+  if (sub === 'resolve') {
+    const status = themeStatus(tokens());
+    if (!status.applied) fail('no theme recorded in tokens.json, so there is no code for it. Apply one with `halftone-tokens theme apply <theme>`.');
+    if (status.drift.length) fail(`tokens.json was edited by hand since ${status.code} was applied (${status.drift.length} token(s)); no code reproduces it. \`theme show\` lists them.`);
+    if (flags.json) console.log(JSON.stringify({ code: status.code, recipe: status.recipe }, null, 2));
+    else console.log(status.code);
+    return;
+  }
+
+  if (sub === 'shadcn') {
+    const recipe = readRecipe(arg, root);
+    const { theme } = applyRecipe(tokens(), recipe);
+    const item = shadcnTheme(theme, {
+      ...(recipe.preset ? { name: `halftone-${recipe.preset}`, title: `Halftone ${presetById(recipe.preset)?.name} theme` } : {}),
+      fontsUrl: typeof flags['fonts-url'] === 'string' ? flags['fonts-url'] : SHADCN_FONTS_URL,
+    });
+    const json = JSON.stringify(item, null, 2) + '\n';
+    if (typeof flags.out === 'string') {
+      writeFileSync(join(root, flags.out), json);
+      console.error(`Wrote ${flags.out}: install it in a shadcn project with \`npx shadcn@latest add ./${flags.out.split('/').pop()}\`.`);
+    } else process.stdout.write(json);
+    return;
+  }
+
   if (sub === 'show') {
     const status = themeStatus(tokens());
     if (!status.applied) {
@@ -150,5 +235,5 @@ export async function themeCommand({ positional, flags, root, sourcePath, config
     return;
   }
 
-  fail(`unknown command "theme ${sub}". Use apply, show, presets or encode.`, 2);
+  fail(`unknown command "theme ${sub}". Use apply, show, presets, encode, decode, resolve or shadcn.`, 2);
 }
