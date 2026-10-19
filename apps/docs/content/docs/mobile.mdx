@@ -41,8 +41,8 @@ npx halftone-tokens theme apply ht1-XXXXXXXXXXXX
 ```
 
 It rewrites the theme's part of `tokens/tokens.json`, installs its fonts and rebuilds. See [Themes](/docs/themes).
-To edit `tokens/tokens.json` by hand instead, run `npm run tokens:build` after: it refuses any palette that
-falls below WCAG AA and names the pairing that failed.
+To edit `tokens/tokens.json` by hand instead, run `npm run tokens:build` after: it names any pairing that
+falls below WCAG AA, with its ratio (`--strict` fails on it).
 
 </Step>
 <Step>

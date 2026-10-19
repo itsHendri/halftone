@@ -73,7 +73,7 @@ export function ContrastTable() {
               : `All ${lines.length} pairings pass WCAG AA in light and dark`}
           </p>
           <p className="text-muted-foreground text-xs leading-5">
-            Text needs {AA}:1, icons {AA_NON_TEXT}:1. The build checks exactly these pairings and fails on any below.
+            Text needs {AA}:1, icons {AA_NON_TEXT}:1. The build checks exactly these pairings and warns on any below (fails with --strict).
             {theme.adjustments.length ? ' A shield marks a colour the build moved to get there.' : ''}
           </p>
         </div>

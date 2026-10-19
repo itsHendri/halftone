@@ -16,9 +16,9 @@ web theme `tokens/generated/web.css` (Tailwind 4 / shadcn, oklch) and `DESIGN.md
 Never edit the generated files. To re-brand a project, apply a theme (`npx halftone-tokens theme apply <code>`, see
 the `apply-theme` skill), or change `tokens.json` and rebuild.
 
-**The build enforces contrast.** Every `X` / `X-foreground` pairing, and muted text on every
-surface it sits on, must clear WCAG AA (4.5:1) in both themes or `tokens:build` fails and names
-the ratio. A brightened accent needs dark text on it, not white — that is why the dark
+**The build checks contrast.** Every `X` / `X-foreground` pairing, and muted text on every
+surface it sits on, must clear WCAG AA (4.5:1) in both themes; `tokens:build` names any that falls
+short with its ratio, and `--strict` (how Halftone's own kits build) fails on it. A brightened accent needs dark text on it, not white — that is why the dark
 `*-foreground` tokens are `neutral.950` while the light ones are `neutral.0`.
 
 ### Colour — semantic names only

@@ -13,7 +13,7 @@ for failures.
 ```bash
 npm run typecheck
 npm run lint
-npm run tokens:check                  # generated token files match tokens.json, contrast gate passes
+npm run tokens:check                  # generated token files match tokens.json; any contrast WARNING fails qc-pass
 npm run registry:build -- --check     # every ui/kit file registered, exports real, generated docs current
 ```
 
