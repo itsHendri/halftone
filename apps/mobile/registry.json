@@ -2667,7 +2667,7 @@
       "name": "logo",
       "type": "registry:component",
       "title": "Logo",
-      "description": "the brand from lib/brand.ts (theme studio › Brand) · one-colour logos follow the theme · placeholder + name without one",
+      "description": "the brand from lib/brand.ts (theme studio › Use theme › Brand assets) · one-colour logos follow the theme · placeholder + name without one",
       "dependencies": [
         "react-native-svg@15.15.4"
       ],

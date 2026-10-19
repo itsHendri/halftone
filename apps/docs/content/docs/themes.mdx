@@ -68,6 +68,26 @@ npx halftone-tokens theme show        # the applied theme
 npx halftone-tokens theme apply calm --dry-run
 ```
 
+## Brand assets
+
+A theme code carries no logo, so the studio keeps yours apart: add it under **Logo** at the top of the
+[studio](/themes) (an SVG is best; a PNG works). A one-colour SVG is recoloured to follow the theme's text
+colour, light and dark; a coloured logo or a PNG can have a dark version. Add a square **mark** for the app
+icon, or the logo is fitted into the square. The Overview shows the logo on light and dark, the app icon as
+iOS and Android draw it, the splash screens and the favicon, and the live kits show it in their headers.
+
+**Use theme › Brand assets** downloads it as a zip laid out like the kit, every image drawn in your browser at
+the sizes each platform needs:
+
+| Zip | Unzip at | Contains |
+| --- | --- | --- |
+| `brand-mobile.zip` | the native kit | `lib/brand.ts` for `<Logo>`, the app icon, Android's adaptive icon, light and dark splash screens, the web favicon, and `assets/brand/brand.json` (icon background, splash colours) |
+| `brand-web.zip` | the web kit | `lib/brand.ts`, `app/icon.png` and `app/apple-icon.png` |
+| `brand.zip` | the Halftone repo | both, under `apps/mobile` and `apps/web` |
+
+Copy the prompt beside the buttons for your coding agent: the kits' `apply-theme` skill unzips it, checks it
+and shows you the logo in both themes. The logo stays in this browser until you remove it; nothing is uploaded.
+
 ## Codes
 
 A code is the whole recipe, packed into twelve characters with a checksum, so a typo is caught rather than

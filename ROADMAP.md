@@ -27,7 +27,7 @@ A `/brief` page that turns a guided brief, or a pasted transcript, into a planni
   before writing code.
 - transcript-to-prototype gains a brief template (the same fields) and that approval stop, in both kits.
 
-## Now: themes that travel
+## Done: themes that travel
 
 - **Read shadcn preset codes** into a Halftone recipe (`halftone-tokens theme apply <shadcn code>`, and a paste
   box in the studio), with contrast fixed on the way in.
@@ -35,10 +35,13 @@ A `/brief` page that turns a guided brief, or a pasted transcript, into a planni
   at `/r/theme/<preset>.json`, and later any theme code by URL.
 - `theme decode` and `theme resolve` in the CLI.
 
-## Then: brand assets
+## Now: brand assets
 
-A logo in the studio, carried with the theme: a `Logo` component in both kits, the favicon on the web, and the
-**app icon and splash screen** on mobile.
+A logo in the studio, beside the theme (a code has no room for it): a `Logo` component in both kits, used by
+the kit shell and every sample; the favicon and apple icon on the web; the **app icon and splash screen** on
+mobile. A one-colour SVG follows the theme's text colour; others can have a dark version. The studio draws
+every size and downloads them as a zip laid out like each kit (`brand-mobile.zip`, `brand-web.zip`, `brand.zip`),
+which the `apply-theme` skill unzips. Next: brand assets in the CLI, iOS tinted and dark icons, OG images.
 
 ## Later: looks beyond tokens
 

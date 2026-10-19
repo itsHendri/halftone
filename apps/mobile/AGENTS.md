@@ -102,7 +102,8 @@ npx expo run:ios       # build + install the dev client on the simulator (needs 
   icon stroke, typeset), fixes contrast itself and records the recipe (`halftone-tokens theme show`). Editing tokens.json by hand
   still works: `tokens:build` names any pairing below 4.5:1 with its ratio (treat that as a bug unless the person
   chose the colour knowingly; `--strict` makes it an error). Then set `name`/`slug`/`scheme`
-  in `app.json` and `APP_ID` in `.env.local`, and replace `assets/images/*`.
+  in `app.json` and `APP_ID` in `.env.local`. The logo, app icon and splash come from the studio too (**Use theme ›
+  Brand assets**, a zip): the `apply-theme` skill's "Brand assets" steps unzip it; don't hand-edit `assets/images/*`.
 
 ## Agent tooling
 
