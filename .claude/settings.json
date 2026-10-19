@@ -1,0 +1,14 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit",
+        "hooks": [
+          { "type": "command", "command": "node \"$CLAUDE_PROJECT_DIR/apps/mobile/.claude/hooks/lint-edited.mjs\"", "timeout": 60 },
+          { "type": "command", "command": "node \"$CLAUDE_PROJECT_DIR/apps/web/.claude/hooks/lint-edited.mjs\"", "timeout": 60 }
+        ]
+      }
+    ]
+  }
+}

@@ -8,6 +8,7 @@ import { Text } from '@/components/ui/text';
 import { useRouter } from 'expo-router';
 import { SearchXIcon, StarIcon } from 'lucide-react-native';
 import * as React from 'react';
+// eslint-disable-next-line halftone/no-raw-primitives -- the whole product card (image, name, price) is one tap target
 import { Pressable, ScrollView, View } from 'react-native';
 
 export default function ShopHome() {

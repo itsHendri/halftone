@@ -18,6 +18,7 @@
     "web": "expo start --web",
     "typecheck": "tsc --noEmit",
     "lint": "expo lint",
+    "lint:rules": "node --test eslint/*.test.mjs",
     "clean": "rm -rf .expo node_modules",
     "tokens:build": "halftone-tokens build",
     "eject-samples": "node scripts/eject-samples.mjs",

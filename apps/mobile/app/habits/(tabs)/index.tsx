@@ -4,13 +4,14 @@ import { ProgressRing } from '@/components/kit/progress-ring';
 import { SectionHeader } from '@/components/kit/section-header';
 import { StatTile } from '@/components/kit/stat-tile';
 import { habits, isDone, useHabits } from '@/components/habits/store';
+import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Text } from '@/components/ui/text';
 import { useRouter } from 'expo-router';
 import { Icon } from '@/components/ui/icon';
 import { ChevronRightIcon, PlusIcon } from 'lucide-react-native';
-import { Pressable, ScrollView, View } from 'react-native';
+import { ScrollView, View } from 'react-native';
 
 export default function Today() {
   const router = useRouter();
@@ -47,9 +48,9 @@ export default function Today() {
                 title={h.name}
                 subtitle={h.goal > 1 ? `${h.today} / ${h.goal} ${h.unit}` : h.streak ? `${h.streak}-day streak` : 'Start your streak'}
                 trailing={
-                  <Pressable accessibilityRole="button" accessibilityLabel={`Open ${h.name}`} onPress={() => router.push({ pathname: '/habits/habit/[id]', params: { id: h.id } })} className="size-11 items-center justify-center rounded-full active:bg-accent">
+                  <Button variant="ghost" size="icon" className="rounded-full" accessibilityLabel={`Open ${h.name}`} onPress={() => router.push({ pathname: '/habits/habit/[id]', params: { id: h.id } })}>
                     <Icon as={ChevronRightIcon} size={18} className="text-muted-foreground" />
-                  </Pressable>
+                  </Button>
                 }
                 last={i === list.length - 1}
               />
