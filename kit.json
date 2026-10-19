@@ -2,7 +2,7 @@
   "$description": "The kit's name and addresses, in one place. Generators (docs site, llms.txt, registry) read it; rename the kit here.",
   "name": "Halftone",
   "fullName": "Halftone Design System",
-  "tagline": "Prototype kits for mobile and web that coding agents build from.",
+  "tagline": "One brand on phone and web: Expo and Next.js kits your coding agent builds from.",
   "repo": "https://github.com/itsHendri/halftone",
   "siteUrl": "https://halftonedesignsystem.com",
   "npmScope": "@halftone-ds",

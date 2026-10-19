@@ -1,9 +1,9 @@
 # Halftone (native)
 
-A brand-agnostic, themeable **Expo** starter for mobile prototypes. Every component the kit ships is
-previewed live inside the app, so a designer can browse what exists, copy the exact token names, and
-build screens only from those parts. Feed it a brief or a client transcript and get a first prototype
-that already looks and feels coherent.
+The phone half of Halftone: a brand-agnostic, themeable **Expo** starter your agent builds prototypes from.
+It shares one set of design tokens with the web kit, so a prototype on a phone and one in a browser are the
+same brand. Every component the kit ships is previewed live inside the app, and lint keeps screens to those
+parts. Feed it a brief or a client transcript and get a first prototype in your theme, light and dark.
 
 - **Expo SDK 57** · Expo Router · React Native 0.86 · TypeScript
 - **react-native-reusables** (shadcn for React Native) + our own kit components, styled with **NativeWind**

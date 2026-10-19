@@ -5,6 +5,20 @@ description: What changed, newest first.
 
 ## October 2026
 
+### Guardrails in lint, contrast that warns
+
+- **Lint keeps agents on the kit.** Each kit's ESLint now has the design system's rules (`halftone/*`): a raw
+  colour (`bg-red-500`, `text-white`, `text-[#fff]`, a hex in a style), an import the registry doesn't list,
+  another UI library, or a platform primitive a screen should get from the kit is an error that names what to
+  use instead. In Claude Code a hook lints every file an agent edits and hands the errors back, so it fixes them
+  while it writes. A real exception takes a disable comment with a reason. `qc-pass` runs the rules instead of
+  grep guards.
+- **Contrast warns, and Halftone's own kits stay strict.** `tokens:build` names every pairing below WCAG AA with
+  its ratio and carries on; `--strict` (or `HALFTONE_STRICT=1`) fails on it, which is how Halftone's own CI
+  builds. Themes from the picker always pass. This ships in the next release of `@halftone-ds/tokens`.
+- **One brand. Phone and web. Built by your agent.** The home page and the READMEs say what Halftone is for in
+  one line, and the [roadmap](https://github.com/itsHendri/halftone/blob/main/ROADMAP.md) says where it's going.
+
 ### One top bar
 
 The site has one navigation now: a top bar that never moves, with Docs, Components, Screens and Themes,

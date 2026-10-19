@@ -1,9 +1,9 @@
 # Halftone (web)
 
-A brand-agnostic, themeable **Next.js** starter for web prototypes: dashboards, marketing pages and AI
-product interfaces. Every component the kit ships is previewed live at `/components`, so a designer can
-browse what exists and an agent can build pages only from those parts. Feed it a brief or a client
-transcript and get a first prototype that already looks and feels coherent.
+The web half of Halftone: a brand-agnostic, themeable **Next.js** starter for dashboards, marketing pages
+and AI product interfaces, on the same design tokens as the mobile kit. Every component the kit ships is
+previewed live at `/components`, and lint keeps pages to those parts. Feed it a brief or a client transcript
+and get a first prototype in your theme, light and dark.
 
 - **Next.js 16** (App Router) · React 19 · TypeScript · Tailwind 4
 - **shadcn/ui** (owned source) plus kit components for app shells, KPIs, tables, heroes, pricing, and AI
