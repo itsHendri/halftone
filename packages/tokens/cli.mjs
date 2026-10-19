@@ -29,7 +29,7 @@ import { loadTokens } from './lib/resolve.mjs';
 const here = dirname(fileURLToPath(import.meta.url));
 
 /** Flags that take a value; every other --flag is a boolean. */
-const VALUE_FLAGS = new Set(['root', 'config']);
+const VALUE_FLAGS = new Set(['root', 'config', 'out', 'fonts-url']);
 
 function parseArgs(argv) {
   const [command = 'build', ...rest] = argv;
