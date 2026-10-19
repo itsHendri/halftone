@@ -1,5 +1,5 @@
 'use client';
-import { applyRecipe, presetById, sameRecipe, shadcnTheme, type Theme } from '@halftone-ds/tokens/theme';
+import { applyRecipe, presetById, PRESETS, sameRecipe, shadcnTheme, type Theme } from '@halftone-ds/tokens/theme';
 import { CheckIcon, CopyIcon, DownloadIcon } from 'lucide-react';
 import * as React from 'react';
 import kitJson from '../../../../kit.json';
@@ -27,7 +27,8 @@ export const SHADCN_FILE = 'halftone-theme.json';
  * built by scripts/build-docs.mjs); any other theme from the file the studio downloads.
  */
 export function shadcnCommand(theme: Theme) {
-  const preset = theme.recipe.preset ? presetById(theme.recipe.preset) : undefined;
+  // A shared code carries no preset name, so a recipe that is exactly a preset counts as that preset.
+  const preset = (theme.recipe.preset ? presetById(theme.recipe.preset) : undefined) ?? PRESETS.find((p) => sameRecipe(theme.recipe, p.recipe));
   const site = (kitJson.siteUrl ?? 'https://halftonedesignsystem.com').replace(/\/$/, '');
   if (preset && sameRecipe(theme.recipe, preset.recipe)) return { preset: preset.id, command: `npx shadcn@latest add ${site}/r/theme/${preset.id}.json` };
   return { preset: null, command: `npx shadcn@latest add ./${SHADCN_FILE}` };

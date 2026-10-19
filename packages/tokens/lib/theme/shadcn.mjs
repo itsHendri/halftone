@@ -195,6 +195,7 @@ const RADIUS_STEPS = { sm: 0.6, md: 0.8, lg: 1, xl: 1.6, '2xl': 2 };
 const SHADOW_STEPS = { '2xs': 1, xs: 1, sm: 1, md: 2, lg: 3, xl: 3, '2xl': 3 };
 const FONT_VARIABLE = { body: '--font-sans', heading: '--font-heading', mono: '--font-mono' };
 const FALLBACK = { sans: 'sans-serif', display: 'sans-serif', serif: 'serif', mono: 'monospace' };
+const SELECTOR = { heading: 'h1, h2, h3, h4, h5, h6', mono: 'code, kbd, pre, samp' };
 
 /** The registry item path (under the fonts URL) for a font in a role. */
 const fontPath = (id, role) => `font/${role === 'body' ? '' : `${role}-`}${id}.json`;
@@ -216,6 +217,9 @@ export function shadcnFont(id, role = 'body') {
       variable: FONT_VARIABLE[role],
       subsets: ['latin'],
       ...(variable ? {} : { weight: f.weights.map(String) }),
+      // shadcn applies a font's utility to `html` by default: the body font does go there, but the heading font
+      // belongs on headings (as in Halftone's kits) and the mono font on code.
+      ...(role === 'body' ? {} : { selector: SELECTOR[role] }),
       dependency: `@fontsource${variable ? '-variable' : ''}/${id}`,
     },
   };

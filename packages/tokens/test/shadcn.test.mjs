@@ -150,4 +150,8 @@ test('font items name their fontsource package and variable', () => {
   assert.equal(shadcnFont('source-serif-4', 'heading').font.import, 'Source_Serif_4');
   assert.equal(shadcnFont('source-serif-4', 'heading').font.variable, '--font-heading');
   assert.equal(shadcnFont('ibm-plex-mono', 'mono').font.dependency, '@fontsource/ibm-plex-mono');
+  // On code only: shadcn applies a font to html unless it has a selector.
+  assert.equal(shadcnFont('ibm-plex-mono', 'mono').font.selector, 'code, kbd, pre, samp');
+  assert.equal(shadcnFont('inter').font.selector, undefined);
+  assert.equal(shadcnFont('fraunces', 'heading').font.selector, 'h1, h2, h3, h4, h5, h6');
 });
