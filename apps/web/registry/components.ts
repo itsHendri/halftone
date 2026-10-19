@@ -836,7 +836,7 @@ export const COMPONENTS: ComponentMeta[] = [
     exports: ['Logo'],
     category: 'media',
     files: ['components/kit/logo.tsx', 'lib/brand.ts', 'lib/brand-context.tsx'],
-    notes: 'the brand from lib/brand.ts (theme studio › Brand) · one-colour logos take the text colour · placeholder + name without one',
+    notes: 'the brand from lib/brand.ts (theme studio › Use theme › Brand assets) · one-colour logos take the text colour · placeholder + name without one',
     api: '<Logo variant?="full|mark" size? name? />',
     caption: "Your logo, in light and dark. A one-colour logo follows the text colour (text-* classes); without a logo it's a placeholder square and the name.",
     aliases: ['brand', 'wordmark', 'mark', 'logotype', 'favicon'],

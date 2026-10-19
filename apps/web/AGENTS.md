@@ -100,7 +100,9 @@ npm run eject-samples     # delete the dashboard, landing, assistant, shop and h
 - **Re-brand:** pick a theme on the docs site (theme bar or `/themes`) and apply its code with the `apply-theme`
   skill: `npx halftone-tokens theme apply <theme-code|preset>` (in the monorepo, `npm run theme:apply -- <code>` at the
   root, so both kits stay one brand). Editing tokens.json by hand still works (in the monorepo:
-  `apps/mobile/tokens/tokens.json`, then `npm run tokens:sync`), then `npm run tokens:build`.
+  `apps/mobile/tokens/tokens.json`, then `npm run tokens:sync`), then `npm run tokens:build`. The logo and
+  favicons come from the studio too (**Use theme › Brand assets**, a zip): the `apply-theme` skill's "Brand assets"
+  steps unzip it.
 
 ## Gotchas
 

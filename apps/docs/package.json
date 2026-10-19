@@ -13,10 +13,12 @@
     "typecheck": "next typegen && tsc --noEmit",
     "check": "halftone-tokens check --strict",
     "check:links": "node scripts/check-links.mjs",
-    "check:a11y": "node scripts/check-a11y.mjs"
+    "check:a11y": "node scripts/check-a11y.mjs",
+    "test": "node --test lib/brand/*.test.ts"
   },
   "dependencies": {
     "@halftone-ds/tokens": "^1.1.0",
+    "fflate": "0.8.2",
     "fumadocs-core": "16.16.2",
     "fumadocs-mdx": "15.4.6",
     "fumadocs-ui": "16.16.2",

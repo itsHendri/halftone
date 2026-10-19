@@ -1,6 +1,6 @@
 ---
 name: apply-theme
-description: Apply a theme from the Halftone docs theme picker (a `ht1-…` or `ht2-…` code, a preset name like `editorial`, a recipe file, or a shadcn/ui preset code like `b5owWMfJ8l`) to this kit's tokens, then verify it. Use when the user pastes a theme code, says "apply this theme", "use the Editorial preset", "re-brand to <colour>", or hands over the prompt the docs' "Use theme" panel copies.
+description: Apply a theme from the Halftone docs theme picker (a `ht1-…` or `ht2-…` code, a preset name like `editorial`, a recipe file, or a shadcn/ui preset code like `b5owWMfJ8l`) to this kit's tokens, then verify it. Use when the user pastes a theme code, says "apply this theme", "use the Editorial preset", "re-brand to <colour>", or hands over the prompt the docs' "Use theme" panel copies. Also for a brand zip (`brand-mobile.zip`, `brand-web.zip`, `brand.zip`) from the studio's Brand assets: a logo, app icon or favicon.
 ---
 
 # Apply a theme
@@ -56,3 +56,26 @@ halftonedesignsystem.com/themes (**Open**), then apply the `ht` code **Use theme
 
 Never hand-edit the generated files to "tweak" a theme; change the theme (in the docs studio, or another
 code) and apply again.
+
+## 4. Brand assets (a logo, app icon and splash)
+
+A theme code carries no logo. The theme studio's **Use theme › Brand assets** downloads one as a zip laid out
+like the kit, drawn in the theme's colours:
+
+| Zip | Unzip at | It writes |
+| --- | --- | --- |
+| `brand-mobile.zip` | this kit's root | `lib/brand.ts` (the logo `<Logo>` shows), `assets/images/{icon,adaptive-icon,splash,splash-dark,favicon}.png`, `assets/brand/brand.json` |
+| `brand.zip` | the Halftone monorepo's root | the same under `apps/mobile`, and the web kit's under `apps/web` |
+
+1. `unzip -o <zip>` at that root, then `git diff --stat` to show the person what it replaced.
+2. Leave `app.json` alone: `app.config.ts` reads `assets/brand/brand.json` for the Android icon background and
+   the splash colours, light and dark.
+3. `npm run typecheck`. The logo shows wherever `<Logo>` is (the kit home, every sample's header) as soon as
+   Expo reloads. The app icon and splash only change in a build: `LANG=en_US.UTF-8 npx expo prebuild -p ios
+   --clean`, then `npx expo run:ios` (or an EAS build). Expo Go keeps its own icon.
+4. Run the **qc-pass** skill: the logo in light and dark (a one-colour logo takes the text colour; a coloured
+   one switches to its dark version when it has one), and the icon and splash on the dev client.
+
+Never redraw the icons by hand: change the logo in the studio and download again. Without the zip, `<Logo>` draws a
+placeholder square and the name. To go back: `git checkout -- lib/brand.ts assets/images`, then delete
+`assets/brand/` and `assets/images/splash-dark.png`.

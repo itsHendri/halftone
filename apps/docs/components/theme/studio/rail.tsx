@@ -12,6 +12,7 @@ import { readThemeCode } from '@/lib/theme/read-code';
 import { SWATCHES } from '@/lib/theme/swatches';
 import { rovingKeyDown, rovingTabIndex } from '@/lib/roving';
 import { previewRecipe, redo, reset, setRecipe, shuffle, toggleLock, undo, useLiveTheme, useLocks, type LockKey } from '@/lib/theme/store';
+import { BrandGroup } from './brand-rows';
 
 /**
  * The studio's control rail, like ui.shadcn.com/create: one compact row per choice ("Label / value"), each
@@ -45,7 +46,7 @@ function LockButton({ k, label }: { k: LockKey; label: string }) {
 }
 
 /** One row: the label, the current value, a picker in a popover, and the lock. */
-function Row({
+export function Row({
   label,
   value,
   valueStyle,
@@ -177,7 +178,7 @@ function fontItems(role: 'heading' | 'body' | 'mono', recipe: Recipe) {
   }));
 }
 
-function Group({ title, children }: { title?: string; children: React.ReactNode }) {
+export function Group({ title, children }: { title?: string; children: React.ReactNode }) {
   return (
     <section aria-label={title ? undefined : 'Preset'} className="flex flex-col border-t px-1.5 py-1 first:border-t-0">
       {title ? <h2 className="text-muted-foreground px-2.5 pt-0.5 text-[11px] font-semibold uppercase leading-4 tracking-wider">{title}</h2> : null}
@@ -420,6 +421,8 @@ export function Rail({ className, id }: { className?: string; id?: string }) {
             )}
           </Row>
         </Group>
+
+        <BrandGroup />
 
         <Group title="Colour">
           <Row

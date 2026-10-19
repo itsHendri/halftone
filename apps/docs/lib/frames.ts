@@ -2,6 +2,7 @@
 import { useTheme } from 'next-themes';
 import * as React from 'react';
 import { useAmbientStep } from '@/lib/theme/ambient';
+import { kitBrand, useBrand } from '@/lib/theme/brand';
 import { kitPayloads } from '@/lib/theme/payload';
 import { useLiveTheme } from '@/lib/theme/store';
 
@@ -21,6 +22,7 @@ export const frameBase = {
  * changes go over postMessage (`kit:theme`) once the kit has said `kit:ready`, so toggling never reloads
  * it. The live theme from the picker goes the same way (`kit:tokens`, in the kit's own format); on this
  * site's origin the kit has already painted it from sessionStorage (see components/theme/theme-runtime).
+ * The studio's logo goes on its own (`kit:brand`, null for none), so the ambient drift never re-sends it.
  * Both kits speak the same protocol.
  */
 export function useKitFrame(kind: 'mobile' | 'web', path: string) {
@@ -28,6 +30,7 @@ export function useKitFrame(kind: 'mobile' | 'web', path: string) {
   const { theme: liveTheme, isCommitted } = useLiveTheme();
   // While the site's colours drift, the kits follow in steps of a few seconds (lib/theme/ambient.ts).
   const ambientStep = useAmbientStep();
+  const brand = useBrand();
   const { resolvedTheme } = useTheme();
   const theme = resolvedTheme === 'dark' ? 'dark' : 'light';
   const ref = React.useRef<HTMLIFrameElement>(null);
@@ -61,6 +64,12 @@ export function useKitFrame(kind: 'mobile' | 'web', path: string) {
     const payload = ambientStep ? kitPayloads(ambientStep, true)[kind] : kitPayloads(liveTheme, !isCommitted)[kind];
     target.postMessage({ type: 'kit:tokens', v: 1, ...payload }, new URL(base, window.location.href).origin);
   }, [base, kind, ready, liveTheme, isCommitted, ambientStep]);
+
+  React.useEffect(() => {
+    const target = ref.current?.contentWindow;
+    if (!ready || !target) return;
+    target.postMessage({ type: 'kit:brand', v: 1, brand: kitBrand(brand) }, new URL(base, window.location.href).origin);
+  }, [base, ready, brand]);
 
   return { ref, src };
 }

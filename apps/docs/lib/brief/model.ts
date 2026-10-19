@@ -153,8 +153,13 @@ function answerMd(q: Question, a: Answer) {
     .join('\n');
 }
 
-/** The brief as markdown: the answers, then what the agent does with them. */
-export function briefMarkdown(brief: Brief, origin: string) {
+const BRAND_ZIP = { phone: 'brand-mobile.zip', web: 'brand-web.zip', both: 'brand.zip' } as const;
+
+/**
+ * The brief as markdown: the answers, then what the agent does with them. `brand` is the product name when the
+ * person has a logo in the theme studio (it travels as a zip, not in the brief).
+ */
+export function briefMarkdown(brief: Brief, origin: string, brand?: string | null) {
   const name = brief.answers.name?.text?.trim() || 'Untitled prototype';
   const platform = brief.platform ?? 'phone';
   const lines: string[] = [
@@ -164,6 +169,7 @@ export function briefMarkdown(brief: Brief, origin: string) {
     '',
     `- **Platform:** ${brief.platform ? PLATFORM_LABEL[brief.platform] : '_Not chosen: ask before setting anything up._'}`,
     `- **Theme:** ${brief.theme ? `\`${brief.theme}\` (apply it before building)` : 'the kit default'}`,
+    ...(brand ? [`- **Brand assets:** the ${brand} logo, app icon and favicons, as \`${BRAND_ZIP[platform]}\` from the theme studio`] : []),
     '',
   ];
   if (brief.mode === 'transcript') {
@@ -196,8 +202,14 @@ export function briefMarkdown(brief: Brief, origin: string) {
     '',
     `1. **Set up.** Read ${origin}/install.md and take path ${INSTALL_PATH[platform]}${platform === 'both' ? ' (both kits, one brand)' : ''}. Then read AGENTS.md and DESIGN_SYSTEM.md.`,
     brief.theme
-      ? `2. **Theme.** Apply \`${brief.theme}\` with the apply-theme skill: \`npx halftone-tokens theme apply ${brief.theme}\`${platform === 'both' ? ` (in the monorepo: \`npm run theme:apply -- ${brief.theme}\` at the root, which themes both kits)` : ''}.`
-      : '2. **Theme.** Keep the kit default; the person can apply a theme code later.',
+      ? `2. **Theme.** Apply \`${brief.theme}\` with the apply-theme skill: \`npx halftone-tokens theme apply ${brief.theme}\`${platform === 'both' ? ` (in the monorepo: \`npm run theme:apply -- ${brief.theme}\` at the root, which themes both kits)` : ''}.` +
+        (brand
+          ? ` Then unzip \`${BRAND_ZIP[platform]}\` at the ${platform === 'both' ? 'monorepo' : 'kit'} root and follow the skill's "Brand assets" steps (ask the person for the zip if it isn't here).`
+          : '')
+      : '2. **Theme.** Keep the kit default; the person can apply a theme code later.' +
+        (brand
+          ? ` Then unzip \`${BRAND_ZIP[platform]}\` at the ${platform === 'both' ? 'monorepo' : 'kit'} root and follow the apply-theme skill's "Brand assets" steps (ask the person for the zip if it isn't here).`
+          : ''),
     `3. **Plan, then stop.** Run the transcript-to-prototype skill ${kits} with this brief. Write the kit's BRIEF.md from its template, keeping these answers in the person's words. "Does not apply" means leave it out; never invent proof, numbers or quotes. List every screen or page with the registry components it uses, and the open questions. **Then stop and wait for approval before writing any code.**`,
     '4. **Build after approval,** only from registry components, then run the qc-pass skill and hand over as the skill says.',
     ''
@@ -206,8 +218,8 @@ export function briefMarkdown(brief: Brief, origin: string) {
 }
 
 /** The prompt to paste into an agent: the brief itself, with its instructions. */
-export const briefPrompt = (brief: Brief, origin: string) =>
-  `I'm starting a prototype with ${kitJson.name}. Here is my brief. Follow its "How to use this brief" section: plan first, and wait for my approval before writing code.\n\n${briefMarkdown(brief, origin)}`;
+export const briefPrompt = (brief: Brief, origin: string, brand?: string | null) =>
+  `I'm starting a prototype with ${kitJson.name}. Here is my brief. Follow its "How to use this brief" section: plan first, and wait for my approval before writing code.\n\n${briefMarkdown(brief, origin, brand)}`;
 
 /** For a terminal: the brief saved as BRIEF.md in an empty folder. */
 export const briefCommand = `claude "Read BRIEF.md and follow its 'How to use this brief' section. Plan first and wait for my approval before writing code."`;

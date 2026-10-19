@@ -224,3 +224,6 @@ jobs:
 
       - name: Typecheck
         run: npm run typecheck
+
+      - name: Brand asset tests
+        run: npm test

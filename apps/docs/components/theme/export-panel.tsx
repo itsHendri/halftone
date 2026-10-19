@@ -3,6 +3,7 @@ import { applyRecipe, presetById, PRESETS, sameRecipe, shadcnTheme, type Theme }
 import { CheckIcon, CopyIcon, DownloadIcon } from 'lucide-react';
 import * as React from 'react';
 import kitJson from '../../../../kit.json';
+import { kitBrand, useBrand } from '@/lib/theme/brand';
 import { base } from '@/lib/theme/store';
 
 /** How a theme picked here reaches a project: a code, a command, a prompt, a link or the file itself. */
@@ -85,6 +86,7 @@ export function ExportPanel({ theme }: { theme: Theme }) {
         <DownloadIcon className="size-4" aria-hidden />
         Download tokens.json
       </button>
+      <BrandExport theme={theme} />
       <ShadcnExport theme={theme} />
     </div>
   );
@@ -119,6 +121,83 @@ function ShadcnExport({ theme }: { theme: Theme }) {
         </button>
       )}
       <CopyRow label={preset ? 'Install it' : 'Then, in the project'} value={command} />
+    </section>
+  );
+}
+
+const BRAND_ZIPS = [
+  { target: 'mobile', label: 'Mobile kit', file: 'brand-mobile.zip' },
+  { target: 'web', label: 'Web kit', file: 'brand-web.zip' },
+  { target: 'repo', label: 'Halftone repo', file: 'brand.zip' },
+] as const;
+
+/** The prompt for the brand download (unzipped already, or about to be). */
+export function brandPrompt(file: string) {
+  return (
+    `Unzip ${file} at the root of this project (it adds lib/brand.ts and the icon, splash and favicon images; ` +
+    'app.json stays as it is). Then follow the apply-theme skill\'s "Brand assets" steps and run the qc-pass ' +
+    'skill: show me the logo in light and dark, and the app icon.'
+  );
+}
+
+/** The logo, app icon, splash and favicons as files laid out like each kit (lib/brand/zip.ts). */
+function BrandExport({ theme }: { theme: Theme }) {
+  const state = useBrand();
+  const brand = kitBrand(state);
+  const [busy, setBusy] = React.useState<string | null>(null);
+  const [error, setError] = React.useState<string | null>(null);
+  const download = async (target: (typeof BRAND_ZIPS)[number]['target'], file: string) => {
+    if (!brand) return;
+    setBusy(file);
+    setError(null);
+    try {
+      // fflate and the canvas drawing load only when someone downloads.
+      const { brandZip } = await import('@/lib/brand/zip');
+      const bytes = await brandZip(target, brand, theme, state.iconBackground);
+      const url = URL.createObjectURL(new Blob([bytes as BlobPart], { type: 'application/zip' }));
+      Object.assign(document.createElement('a'), { href: url, download: file }).click();
+      setTimeout(() => URL.revokeObjectURL(url), 1000);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'The download could not be made.');
+    } finally {
+      setBusy(null);
+    }
+  };
+  return (
+    <section aria-labelledby="export-brand" className="border-border flex flex-col gap-3 border-t pt-4">
+      <div className="flex flex-col gap-1">
+        <h3 id="export-brand" className="text-sm font-medium">
+          Brand assets
+        </h3>
+        <p className="text-muted-foreground text-xs leading-5">
+          {brand
+            ? 'Your logo for <Logo>, the app icon, splash screens and favicons, laid out like the kit. Unzip it at the kit’s root.'
+            : 'Add a logo in the studio (Logo, at the top) to download it with an app icon, splash screens and favicons.'}
+        </p>
+      </div>
+      {brand ? (
+        <>
+          <div className="flex flex-wrap gap-2">
+            {BRAND_ZIPS.map((z) => (
+              <button
+                key={z.target}
+                type="button"
+                disabled={busy !== null}
+                onClick={() => void download(z.target, z.file)}
+                className="border-border hover:bg-accent focus-visible:ring-ring inline-flex h-9 items-center justify-center gap-2 rounded-full border px-4 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 disabled:opacity-60">
+                <DownloadIcon className="size-4" aria-hidden />
+                {busy === z.file ? 'Drawing…' : z.label}
+              </button>
+            ))}
+          </div>
+          {error ? (
+            <p role="alert" className="text-destructive text-xs leading-5">
+              {error}
+            </p>
+          ) : null}
+          <CopyRow label="Then ask your coding agent" value={brandPrompt('the brand zip')} mono={false} />
+        </>
+      ) : null}
     </section>
   );
 }

@@ -5,6 +5,7 @@ import { BrowserFrame } from "@/components/browser-frame";
 import { PhoneFrame } from "@/components/phone-frame";
 import { ContrastTable } from "@/components/theme/studio/contrast-table";
 import { fontLabel } from "@/components/theme/studio/parts";
+import { BrandSpecimen } from "@/components/brand/brand-specimen";
 import { useInvertedScheme } from "@/components/theme/studio/rail";
 import { ColourVision } from "@/components/theme/studio/vision";
 import {
@@ -132,6 +133,9 @@ function Overview() {
           you set here.
         </p>
         <p className="text-muted-foreground font-mono text-xs">{theme.code}</p>
+      </Panel>
+      <Panel title="Logo">
+        <BrandSpecimen />
       </Panel>
       <Panel title="Colour">
         <PaletteSpecimen />

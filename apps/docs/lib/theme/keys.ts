@@ -20,6 +20,11 @@ export const AMBIENT_CSS_KEY = 'halftone.ambient.css';
 export const AMBIENT_ID = 'halftone-ambient';
 export const AMBIENT_PAUSE_KEY = 'halftone.ambient.paused';
 
+/** The studio's brand (lib/theme/brand.ts): name, logo, mark, icon background. This browser only; the kits get
+ * it as a download. The embedded kits read the live one from sessionStorage under EMBED_BRAND_KEY. */
+export const BRAND_KEY = 'halftone.brand';
+export const EMBED_BRAND_KEY = 'kit.embed.brand';
+
 /** The brief wizard's answers (lib/brief/store.ts): kept in this browser only. */
 export const BRIEF_KEY = 'halftone.brief';
 

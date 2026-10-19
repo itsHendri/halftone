@@ -1,6 +1,6 @@
 ---
 name: apply-theme
-description: Apply a theme from the Halftone docs theme picker (a `ht1-…` or `ht2-…` code, a preset name like `editorial`, a recipe file, or a shadcn/ui preset code like `b5owWMfJ8l`) to this kit's tokens, then verify it. Use when the user pastes a theme code, says "apply this theme", "use the Editorial preset", "re-brand to <colour>", or hands over the prompt the docs' "Use theme" panel copies.
+description: Apply a theme from the Halftone docs theme picker (a `ht1-…` or `ht2-…` code, a preset name like `editorial`, a recipe file, or a shadcn/ui preset code like `b5owWMfJ8l`) to this kit's tokens, then verify it. Use when the user pastes a theme code, says "apply this theme", "use the Editorial preset", "re-brand to <colour>", or hands over the prompt the docs' "Use theme" panel copies. Also for a brand zip (`brand-mobile.zip`, `brand-web.zip`, `brand.zip`) from the studio's Brand assets: a logo, app icon or favicon.
 ---
 
 # Apply a theme
@@ -56,3 +56,24 @@ halftonedesignsystem.com/themes (**Open**), then apply the `ht` code **Use theme
 
 Never hand-edit the generated files to "tweak" a theme; change the theme (in the docs studio, or another
 code) and apply again.
+
+## 4. Brand assets (a logo and favicons)
+
+A theme code carries no logo. The theme studio's **Use theme › Brand assets** downloads one as a zip laid out
+like the kit, drawn in the theme's colours:
+
+| Zip | Unzip at | It writes |
+| --- | --- | --- |
+| `brand-web.zip` | this kit's root | `lib/brand.ts` (the logo `<Logo>` shows), `app/icon.png` (the favicon), `app/apple-icon.png` |
+| `brand.zip` | the Halftone monorepo's root | the same under `apps/web`, and the mobile kit's under `apps/mobile` |
+
+1. `unzip -o <zip>` at that root, then `git diff --stat` to show the person what it replaced.
+2. `npm run typecheck`. Next picks up `app/icon.png` and `app/apple-icon.png` by their names (no metadata to
+   write); reload the dev server's page. The logo shows wherever `<Logo>` is: the kit header and every
+   sample's shell.
+3. Run the **qc-pass** skill: the logo in light and dark (a one-colour logo takes the text colour; a coloured
+   one switches to its dark version when it has one), and the favicon in the tab.
+
+Never redraw the icons by hand: change the logo in the studio and download again. Without the zip, `<Logo>` draws a
+placeholder square and the name. To go back: `git checkout -- lib/brand.ts`, then delete `app/icon.png` and
+`app/apple-icon.png`.

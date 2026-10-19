@@ -24,6 +24,7 @@ import {
 } from '@/lib/brief/model';
 import { resetBrief, setAnswer, startBrief, updateBrief, useBrief, useBriefOrigin } from '@/lib/brief/store';
 import { rovingKeyDown, rovingTabIndex } from '@/lib/roving';
+import { kitBrand, useBrand } from '@/lib/theme/brand';
 import { readThemeCode } from '@/lib/theme/read-code';
 import { useLiveTheme } from '@/lib/theme/store';
 
@@ -333,7 +334,9 @@ function ActionButton({ label, done, icon: Icon, onClick, primary }: { label: st
 
 function ReviewStep({ brief, goTo }: { brief: Brief; goTo: (id: string) => void }) {
   const origin = useOrigin();
-  const markdown = briefMarkdown(brief, origin);
+  // A logo in the theme studio (this browser): the brief tells the agent to expect the brand zip.
+  const brand = kitBrand(useBrand())?.name ?? null;
+  const markdown = briefMarkdown(brief, origin, brand);
   const gaps =
     brief.mode === 'guided'
       ? SECTIONS.map((s) => ({ s, p: progress(s, brief) })).filter(({ p }) => p.done < p.of)
@@ -385,7 +388,7 @@ function ReviewStep({ brief, goTo }: { brief: Brief; goTo: (id: string) => void 
           components it will use, and <strong className="text-foreground font-medium">stops for your approval before writing code</strong>.
         </p>
         <div data-theme-bar-avoid className="flex flex-wrap gap-2">
-          <ActionButton primary label="Copy prompt" done="Prompt copied" icon={CopyIcon} onClick={() => navigator.clipboard.writeText(briefPrompt(brief, origin))} />
+          <ActionButton primary label="Copy prompt" done="Prompt copied" icon={CopyIcon} onClick={() => navigator.clipboard.writeText(briefPrompt(brief, origin, brand))} />
           <ActionButton
             label="Download BRIEF.md"
             done="Downloaded"
