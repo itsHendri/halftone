@@ -6,7 +6,7 @@ Halftone's ground: **one brand on phone and web, from one design-token file**, w
 colours (radius, fonts, depth, density, border, icon stroke, typeset), contrast checked on every build, and
 agents that build only from what the kits ship. Free, open, and run by your own agent.
 
-## Done, in review: trust and pitch
+## Done: trust and pitch
 
 - **Guardrails in lint.** `halftone/*` ESLint rules in both kits (raw colours, imports outside the registry,
   other UI libraries, platform primitives in screens) and a Claude Code hook that lints each edited file.
@@ -14,7 +14,7 @@ agents that build only from what the kits ship. Free, open, and run by your own 
   `--strict` / `HALFTONE_STRICT=1` fails. Halftone's own CI is strict.
 - **The pitch:** "One brand. Phone and web. Built by your agent."
 
-## Now: a brief wizard on the site
+## Done: a brief wizard on the site
 
 A `/brief` page that turns a guided brief, or a pasted transcript, into a planning session.
 
@@ -27,7 +27,7 @@ A `/brief` page that turns a guided brief, or a pasted transcript, into a planni
   before writing code.
 - transcript-to-prototype gains a brief template (the same fields) and that approval stop, in both kits.
 
-## Then: themes that travel
+## Now: themes that travel
 
 - **Read shadcn preset codes** into a Halftone recipe (`halftone-tokens theme apply <shadcn code>`, and a paste
   box in the studio), with contrast fixed on the way in.

@@ -74,3 +74,42 @@ A code is the whole recipe, packed into twelve characters with a checksum, so a 
 quietly giving you a different theme. The same code produces the same theme in every version of
 `@halftone-ds/tokens` that reads it; a generator change that would alter a theme comes with a new code
 version.
+
+## From and to shadcn
+
+Halftone reads [shadcn/ui](https://ui.shadcn.com/create) preset codes, and writes its themes as shadcn theme
+items, so a theme travels both ways.
+
+**A shadcn code in.** Paste one (like `b5owWMfJ8l`) into the studio's **Open** box, or apply it from a kit:
+
+```bash
+npx halftone-tokens theme decode b5owWMfJ8l   # what it holds, and the Halftone theme it becomes
+npx halftone-tokens theme apply b5owWMfJ8l --dry-run
+```
+
+It becomes the nearest Halftone theme, and every value that doesn't carry over exactly is listed:
+
+| shadcn | Halftone |
+|---|---|
+| Base colour neutral, stone, zinc, gray | the same neutral |
+| Base colour mauve, olive, mist, taupe | the nearest grey (zinc, stone, slate, stone) |
+| A coloured theme (blue, rose, …) | that colour's 600 as the brand |
+| A grey theme | a monochrome brand, that grey's 900 |
+| Radius small, large | Halftone's nearest steps, sm and xl |
+| A font Halftone doesn't list | the nearest of the same kind (Oxanium → Space Grotesk) |
+| Icon library, chart colour, menu options, style | not carried: Halftone's kits use Lucide, charts follow the brand, and density, depth and border come from Halftone |
+
+Contrast is fixed on the way in, as for any theme.
+
+**A Halftone theme out.** **Use theme** has a block for any shadcn project. A preset installs from this site:
+
+```bash
+npx shadcn@latest add https://halftonedesignsystem.com/r/theme/editorial.json
+```
+
+Any other theme downloads as `halftone-theme.json`; put it in the project and run
+`npx shadcn@latest add ./halftone-theme.json`. Or from a kit: `npx halftone-tokens theme shadcn <code> --out
+halftone-theme.json`. It sets the colours for light and dark, the radius, the shadows and the fonts. It's a web
+theme: density, border, icon stroke and the typeset stay Halftone's, and phone apps take the theme code.
+
+`halftone-tokens theme resolve` prints the code for a kit's tokens as they are, for scripts.
