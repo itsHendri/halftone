@@ -1,6 +1,6 @@
 ---
 name: qc-pass
-description: Quality gate for the web prototype kit — typecheck, lint, token and registry checks, colour and import guards, then a real look at the affected pages in the browser at 375px and 1280px in light and dark. Use after adding or changing components, pages or tokens, and before committing or sharing. Never report "done" without running this.
+description: Quality gate for the web prototype kit — typecheck, lint (with the halftone/* guardrail rules), token and registry checks, then a real look at the affected pages in the browser at 375px and 1280px in light and dark. Use after adding or changing components, pages or tokens, and before committing or sharing. Never report "done" without running this.
 ---
 
 # QC pass (web)
@@ -17,16 +17,19 @@ npm run tokens:check                  # generated token files match tokens.json;
 npm run registry:build -- --check     # every ui/kit file registered, exports real, generated docs current
 ```
 
-## 2. Guards (must print nothing)
+## 2. Guardrails (lint)
 
-```bash
-# no hard-coded colours (the modal scrim bg-black/50 and chart.tsx's attribute selectors are the exceptions)
-grep -rnE "#[0-9a-fA-F]{3,8}\b|rgba?\(|(text|bg|border|fill|stroke)-(white|black|(slate|gray|zinc|neutral|red|orange|amber|yellow|green|emerald|teal|sky|blue|indigo|violet|purple|pink|rose)-[0-9]{2,3})" app components --include="*.tsx" --include="*.ts" | grep -v "bg-black/50" | grep -v "components/ui/chart.tsx"
-# no other UI libraries
-grep -rlnE "@mui/|@chakra-ui/|@mantine/|antd" app components || true
-# kit files import each other through the alias
-grep -rn "from '\./" components/kit || true
-```
+`npm run lint` in step 1 runs the design system's rules (`eslint/halftone.mjs`) on every page and component
+outside `components/ui` and `components/kit`, as errors:
+
+- `halftone/no-raw-colour`: Tailwind palette classes (`bg-red-500`, `text-white`; the `bg-black/50` scrim is
+  allowed), colour arbitrary values (`text-[#fff]`), and colour literals in style objects or colour props.
+- `halftone/registry-imports`: `@/components/ui|kit` imports must be files the registry lists.
+- `halftone/no-foreign-ui`: no other UI or icon libraries (MUI, Chakra, Mantine, antd, react-icons, …).
+- `halftone/no-raw-primitives`: `recharts` only alongside `ChartContainer` from `@/components/ui/chart`.
+
+In the report, list every `halftone/` disable comment in the changed files with its reason (`-- reason` is
+required). Kit files importing each other through `./` is caught by `registry:build -- --check` in step 1.
 
 ## 3. In the browser
 

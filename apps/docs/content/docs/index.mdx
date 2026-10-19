@@ -24,7 +24,8 @@ Paste a meeting transcript, notes or a feature list. The `transcript-to-prototyp
 
 `DESIGN_SYSTEM.md` lists every component with its path and one-line rules, and `llms.txt` adds each API.
 The **hallucination guard** is a rule in that file: list the components you intend to use, and if one is
-not in the registry, stop and say so. The `add-component` skill adds it properly, with a demo on the Components page
+not in the registry, stop and say so. Lint enforces it: an import the registry doesn't list, a raw colour or
+another UI library is an error the agent sees as soon as it saves the file. The `add-component` skill adds it properly, with a demo on the Components page
 and a registry entry, in the same change.
 
 </Step>
@@ -32,8 +33,8 @@ and a registry entry, in the same change.
 
 ### A quality gate checks it
 
-The `qc-pass` skill runs typecheck and lint, the token and registry checks, guards against hard-coded
-colours and stray icon libraries, then looks at the affected screens (the iOS simulator for mobile, a browser at 375px and 1280px for web)
+The `qc-pass` skill runs typecheck and lint (with the kit's guardrail rules), the token and registry checks,
+then looks at the affected screens (the iOS simulator for mobile, a browser at 375px and 1280px for web)
 in light and dark.
 
 </Step>

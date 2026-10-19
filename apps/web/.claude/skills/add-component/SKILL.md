@@ -36,7 +36,9 @@ component (a variant or prop) before creating a sibling.
 
 ## 3. Verify
 
-Run the `qc-pass` skill. Look at `/components?section=<id>` in light and dark, at 375px and 1280px.
+The kit's own sources are outside the guardrail rules' scope, so check the new file for raw colours by hand:
+`npx eslint --rule '{"halftone/no-raw-colour":"error"}' components/kit/<file>.tsx` must print nothing. Then run
+the `qc-pass` skill. Look at `/components?section=<id>` in light and dark, at 375px and 1280px.
 
 ## 4. Commit
 
