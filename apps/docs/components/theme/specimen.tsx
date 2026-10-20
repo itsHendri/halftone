@@ -26,8 +26,8 @@ import {
   StarIcon,
   UserIcon,
 } from 'lucide-react';
-import { useTheme } from 'next-themes';
 import type * as React from 'react';
+import { useMode } from '@/lib/theme/mode';
 import { useLiveTheme } from '@/lib/theme/store';
 
 /**
@@ -162,8 +162,7 @@ const PALETTE = [
 /** The semantic colours as fills with their own foreground, and their hex in the current mode. */
 export function PaletteSpecimen() {
   const { theme } = useLiveTheme();
-  const { resolvedTheme } = useTheme();
-  const mode = resolvedTheme === 'dark' ? 'dark' : 'light';
+  const mode = useMode();
   // Fits the panel, not the window: in the two-column overview a five-wide row cut the values off at 1024px.
   return (
     <div className="grid grid-cols-[repeat(auto-fill,minmax(7.5rem,1fr))] gap-2">

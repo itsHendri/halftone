@@ -1,29 +1,35 @@
 'use client';
 import * as React from 'react';
 import { fontsHref, kitPayloads, kitScopeCss, siteCss } from '@/lib/theme/payload';
-import { CSS_KEY, EMBED_KEY, FONTS_ID, FONTS_KEY, STYLE_ID } from '@/lib/theme/keys';
+import { CSS_KEY, EMBED_BRAND_KEY, EMBED_KEY, FONTS_ID, FONTS_KEY, STYLE_ID } from '@/lib/theme/keys';
+import { kitBrand } from '@/lib/theme/brand';
 import { startAmbient } from '@/lib/theme/ambient';
-import { committed, currentRecipe, isAmbient, isPreviewing, startTheme, subscribeTheme, themeFor } from '@/lib/theme/store';
-import { sameRecipe } from '@halftone-ds/tokens/theme';
+import { currentSystem, currentTheme, isAmbient, isLive, isPreviewing, startTheme, subscribeTheme } from '@/lib/theme/store';
+import { systemsState } from '@/lib/studio/systems';
 
 /**
- * Puts the live theme on the site: a stylesheet over app/tokens.css (the chrome's colours, and the
- * components' shape under .kit-scope), a cached copy for the next page load (the pre-paint script in
- * app/layout.tsx), and the kits' payloads in sessionStorage so an embedded kit paints the theme on its first
- * frame. Renders nothing.
+ * Puts the active system on the site: a stylesheet over app/tokens.css (the chrome's colours, and the components'
+ * shape under .kit-scope), a cached copy for the next page load (the pre-paint script in app/layout.tsx), and the
+ * kits' payloads and brand in sessionStorage so an embedded kit paints them on its first frame. Renders nothing.
+ * Until the saved systems have loaded (IndexedDB is async) the boot stylesheet stays as it is, so nothing flashes.
  */
 export function ThemeRuntime() {
   React.useLayoutEffect(() => {
     const apply = () => {
-      const recipe = currentRecipe();
-      const theme = themeFor(recipe);
-      const live = !sameRecipe(recipe, committed);
-      // A hover preview changes the page, not what the next page load paints.
-      const keep = !isPreviewing();
+      const s = systemsState();
+      if (s.status === 'loading' && !s.ambient) return;
+      const doc = currentSystem();
+      const theme = currentTheme();
+      const live = isLive(doc);
+      // A hover preview or a shared link changes the page, not what the next page load paints.
+      const keep = !isPreviewing() && !s.shared;
       let style = document.getElementById(STYLE_ID);
       try {
         // While ambient, lib/theme/ambient.ts writes the frames' payload (the drifting theme).
-        if (keep && !isAmbient()) sessionStorage.setItem(EMBED_KEY, JSON.stringify(kitPayloads(theme, live)));
+        if (!isPreviewing() && !isAmbient()) sessionStorage.setItem(EMBED_KEY, JSON.stringify(kitPayloads(theme, live)));
+        const brand = kitBrand(s.doc.brand);
+        if (brand) sessionStorage.setItem(EMBED_BRAND_KEY, JSON.stringify(brand));
+        else sessionStorage.removeItem(EMBED_BRAND_KEY);
       } catch {
         /* storage unavailable: the frames still get the theme over postMessage */
       }

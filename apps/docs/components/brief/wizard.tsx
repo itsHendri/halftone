@@ -216,9 +216,9 @@ function ThemeChoice({ brief }: { brief: Brief }) {
           </div>
         ) : null}
         <p className="text-muted-foreground text-xs">
-          No code yet? Pick one in the{' '}
-          <Link href="/themes" className="text-foreground underline underline-offset-2">
-            theme studio
+          No code yet? Make a system in the{' '}
+          <Link href="/studio" className="text-foreground underline underline-offset-2">
+            Studio
           </Link>
           , then come back: it shows up here as My theme.
         </p>

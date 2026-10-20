@@ -1,9 +1,9 @@
 'use client';
 import { cvdWarnings, MIN_DELTA_E, pairDistances, simulateCvd, type CvdType, type CvdWarning } from '@halftone-ds/tokens/theme';
 import { CircleCheckIcon, TriangleAlertIcon } from 'lucide-react';
-import { useTheme } from 'next-themes';
 import * as React from 'react';
 import { rovingKeyDown, rovingTabIndex } from '@/lib/roving';
+import { useMode } from '@/lib/theme/mode';
 import { useLiveTheme } from '@/lib/theme/store';
 
 /**
@@ -39,8 +39,7 @@ function byPair(warnings: CvdWarning[]) {
 
 export function ColourVision() {
   const { theme } = useLiveTheme();
-  const { resolvedTheme } = useTheme();
-  const mode = resolvedTheme === 'dark' ? 'dark' : 'light';
+  const mode = useMode();
   const [vision, setVision] = React.useState<Vision>('none');
   const hex = theme.resolved[mode];
   const sim = (name: string) => simulateCvd(hex[name], vision);

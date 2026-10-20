@@ -1,42 +1,204 @@
 'use client';
+import { Popover, PopoverContent, PopoverTrigger } from 'fumadocs-ui/components/ui/popover';
+import { EllipsisIcon, LinkIcon, MoonIcon, Redo2Icon, ShuffleIcon, SparklesIcon, SunIcon, Undo2Icon, XIcon } from 'lucide-react';
+import { useTheme } from 'next-themes';
 import * as React from 'react';
-import { Canvas, VIEWS, ViewSwitcher, type View } from '@/components/theme/studio/canvas';
+import { ExportPanel } from '@/components/theme/export-panel';
+import { Canvas, TABS, type Tab } from '@/components/theme/studio/canvas';
+import { outlineButton, primaryButton } from '@/components/theme/studio/dialog';
 import { ALL_FONTS, PRESET_FONTS } from '@/components/theme/studio/parts';
-import { InvertedSchemeStyle, Rail } from '@/components/theme/studio/rail';
+import { SystemDialogs } from '@/components/theme/studio/system-dialogs';
+import { SystemsMenu, type StudioDialog } from '@/components/theme/studio/systems-menu';
+import { toast, Toaster } from '@/components/theme/studio/toast';
+import { dismissMigrated, discardShared, saveShared, useSystems } from '@/lib/studio/systems';
 import { holdAmbient } from '@/lib/theme/ambient';
-import { redo, undo } from '@/lib/theme/store';
+import { useMode } from '@/lib/theme/mode';
+import { redo, shuffle, undo, useLiveTheme } from '@/lib/theme/store';
+
+const iconButton =
+  'text-muted-foreground hover:bg-accent hover:text-foreground focus-visible:ring-ring inline-flex size-9 shrink-0 items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-40';
+const menuRow =
+  'hover:bg-accent focus-visible:ring-ring flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-sm focus-visible:outline-none focus-visible:ring-2 disabled:pointer-events-none disabled:opacity-40';
+
+function useScheme() {
+  const { setTheme } = useTheme();
+  const dark = useMode() === 'dark';
+  return { dark, toggle: () => setTheme(dark ? 'light' : 'dark') };
+}
+
+/** The tabs, with the number of contrast warnings on Accessibility. Arrow keys move between them. */
+function Tabs({ tab, onTab }: { tab: Tab; onTab: (t: Tab) => void }) {
+  const { theme } = useLiveTheme();
+  const warnings = theme.warnings.length;
+  const onKey = (e: React.KeyboardEvent<HTMLDivElement>) => {
+    const keys = ['ArrowRight', 'ArrowLeft', 'Home', 'End'];
+    if (!keys.includes(e.key)) return;
+    e.preventDefault();
+    const i = TABS.findIndex((t) => t.id === tab);
+    const n = e.key === 'Home' ? 0 : e.key === 'End' ? TABS.length - 1 : (i + (e.key === 'ArrowRight' ? 1 : TABS.length - 1)) % TABS.length;
+    onTab(TABS[n].id);
+    e.currentTarget.querySelector<HTMLElement>(`[data-tab="${TABS[n].id}"]`)?.focus();
+  };
+  return (
+    <div role="tablist" aria-label="Studio" onKeyDown={onKey} className="flex gap-0.5">
+      {TABS.map((t) => (
+        <button
+          key={t.id}
+          type="button"
+          role="tab"
+          id={`studio-tab-${t.id}`}
+          data-tab={t.id}
+          aria-selected={tab === t.id}
+          aria-controls="studio-panel"
+          tabIndex={tab === t.id ? 0 : -1}
+          onClick={() => onTab(t.id)}
+          className={`focus-visible:ring-ring inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 ${
+            tab === t.id ? 'bg-accent text-accent-foreground' : 'text-muted-foreground hover:text-foreground'
+          }`}>
+          {t.label}
+          {t.id === 'accessibility' && warnings ? (
+            <span className="bg-destructive text-destructive-foreground rounded-full px-1.5 text-xs tabular-nums" aria-label={`${warnings} warnings`}>
+              {warnings}
+            </span>
+          ) : null}
+        </button>
+      ))}
+    </div>
+  );
+}
+
+/** Undo, redo, shuffle, light/dark: in the bar from sm up, in the ⋯ menu on a phone. */
+function Actions() {
+  const { canUndo, canRedo } = useLiveTheme();
+  const { dark, toggle } = useScheme();
+  return (
+    <>
+      <div className="flex items-center max-sm:hidden">
+        <button type="button" className={iconButton} onClick={undo} disabled={!canUndo} aria-label="Undo" title="Undo (⌘Z)">
+          <Undo2Icon className="size-4" aria-hidden />
+        </button>
+        <button type="button" className={iconButton} onClick={redo} disabled={!canRedo} aria-label="Redo" title="Redo (⇧⌘Z)">
+          <Redo2Icon className="size-4" aria-hidden />
+        </button>
+        <button type="button" className={iconButton} onClick={shuffle} aria-label="Shuffle" title="Shuffle">
+          <ShuffleIcon className="size-4" aria-hidden />
+        </button>
+        <button type="button" className={iconButton} onClick={toggle} aria-label="Dark mode" aria-pressed={dark} title={dark ? 'Light mode' : 'Dark mode'}>
+          {dark ? <SunIcon className="size-4" aria-hidden /> : <MoonIcon className="size-4" aria-hidden />}
+        </button>
+      </div>
+      <Popover>
+        <PopoverTrigger className={`${iconButton} sm:hidden`} aria-label="More">
+          <EllipsisIcon className="size-4" aria-hidden />
+        </PopoverTrigger>
+        <PopoverContent align="end" className="flex w-52 flex-col p-1.5">
+          <button type="button" className={menuRow} onClick={undo} disabled={!canUndo}>
+            <Undo2Icon className="size-4" aria-hidden />
+            Undo
+          </button>
+          <button type="button" className={menuRow} onClick={redo} disabled={!canRedo}>
+            <Redo2Icon className="size-4" aria-hidden />
+            Redo
+          </button>
+          <button type="button" className={menuRow} onClick={shuffle}>
+            <ShuffleIcon className="size-4" aria-hidden />
+            Shuffle
+          </button>
+          <button type="button" className={menuRow} onClick={toggle}>
+            {dark ? <SunIcon className="size-4" aria-hidden /> : <MoonIcon className="size-4" aria-hidden />}
+            {dark ? 'Light mode' : 'Dark mode'}
+          </button>
+        </PopoverContent>
+      </Popover>
+    </>
+  );
+}
+
+function UseSystem() {
+  const { theme } = useLiveTheme();
+  return (
+    <Popover>
+      <PopoverTrigger className={`${primaryButton} max-sm:px-3`}>Use system</PopoverTrigger>
+      <PopoverContent align="end" sideOffset={8} className="max-h-[75vh] w-96 max-w-[calc(100vw-2rem)] overflow-y-auto p-4">
+        <ExportPanel theme={theme} />
+      </PopoverContent>
+    </Popover>
+  );
+}
+
+/** The first-run and shared-link notes, under the bar (wireframe 3). */
+function Banners({ onDialog }: { onDialog: (d: StudioDialog) => void }) {
+  const s = useSystems();
+  if (s.shared) {
+    return (
+      <div className="bg-muted text-foreground flex flex-wrap items-center gap-3 rounded-xl px-4 py-3 text-sm">
+        <LinkIcon className="size-4 shrink-0" aria-hidden />
+        <p className="min-w-0 flex-1">You’re viewing a shared system. Edits are kept only once you save it.</p>
+        <div className="flex gap-2">
+          <button type="button" className={outlineButton} onClick={discardShared}>
+            Discard
+          </button>
+          <button
+            type="button"
+            className={primaryButton}
+            onClick={() => {
+              const doc = saveShared();
+              if (doc) toast(`Saved “${doc.name}” in this browser.`);
+            }}>
+            Save as new system
+          </button>
+        </div>
+      </div>
+    );
+  }
+  if (s.migrated && s.migrated === s.activeId) {
+    return (
+      <div className="bg-accent text-accent-foreground flex flex-wrap items-center gap-3 rounded-xl px-4 py-3 text-sm">
+        <SparklesIcon className="size-4 shrink-0" aria-hidden />
+        <p className="min-w-0 flex-1">Your theme and logo moved in as “{s.doc.name}”. It saves in this browser.</p>
+        <button type="button" className="font-medium underline underline-offset-2" onClick={() => s.migrated && onDialog({ kind: 'rename', id: s.migrated })}>
+          Rename
+        </button>
+        <button type="button" onClick={dismissMigrated} aria-label="Dismiss" className={iconButton}>
+          <XIcon className="size-4" aria-hidden />
+        </button>
+      </div>
+    );
+  }
+  return null;
+}
 
 /**
- * The theme studio (/themes), laid out like ui.shadcn.com/create: a floating control rail in the opposite
- * scheme on the left, the preview filling the rest, and a 01–05 switcher between previews: an overview this
- * site renders (instant), the native kit, the web kit, the typeset beside components, and every contrast pairing. The view is kept
- * in `?view=`. Below lg the rail is a panel over the preview, opened from the switcher's Theme button.
+ * Studio (/studio): a design system manager (apps/docs/design/studio-wireframes.md). A bar with the system switcher,
+ * the Foundations / Components / Accessibility tabs, undo, redo, shuffle, light/dark and Use system; then the tab.
+ * The tab is kept in `?tab=`; an old `/themes/?view=contrast` link lands on Accessibility.
  */
-export function ThemeStudio() {
-  const [view, setView] = React.useState<View>('overview');
-  // Below lg the rail is a panel over the preview, opened from the switcher.
-  const [controls, setControls] = React.useState(false);
+export function Studio() {
+  const [tab, setTab] = React.useState<Tab>('foundations');
+  const [dialog, setDialog] = React.useState<StudioDialog>(null);
 
-  // The studio shows the theme being edited, so the ambient drift holds still here.
+  // The Studio shows the system being edited, so the ambient drift holds still here.
   React.useEffect(() => holdAmbient('studio'), []);
 
-  // ?view= in, and out on every change (the page is static: read it on the client).
+  // ?tab= in, and out on every change (the page is static: read it on the client).
   React.useEffect(() => {
-    const v = new URLSearchParams(window.location.search).get('view');
-    if (VIEWS.some((x) => x.id === v)) setView(v as View);
+    const params = new URLSearchParams(window.location.search);
+    const t = params.get('tab') ?? (params.get('view') === 'contrast' ? 'accessibility' : null);
+    if (TABS.some((x) => x.id === t)) setTab(t as Tab);
   }, []);
-  const changeView = (v: View) => {
-    setView(v);
+  const changeTab = (t: Tab) => {
+    setTab(t);
     const url = new URL(window.location.href);
-    if (v === 'overview') url.searchParams.delete('view');
-    else url.searchParams.set('view', v);
+    url.searchParams.delete('view');
+    if (t === 'foundations') url.searchParams.delete('tab');
+    else url.searchParams.set('tab', t);
     window.history.replaceState(window.history.state, '', url);
   };
 
   // Undo / redo from the keyboard (not while typing in a field).
   React.useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if ((e.target as HTMLElement).closest('input, textarea, select, [contenteditable]')) return;
+      if ((e.target as HTMLElement).closest('input, textarea, select, [contenteditable], dialog')) return;
       if (!(e.metaKey || e.ctrlKey) || e.key.toLowerCase() !== 'z') return;
       e.preventDefault();
       if (e.shiftKey) redo();
@@ -47,26 +209,33 @@ export function ThemeStudio() {
   }, []);
 
   return (
-    <div data-studio className="bg-muted/40 relative flex w-full flex-1 flex-col lg:block lg:h-[calc(100dvh-3.5rem)] lg:flex-none lg:overflow-hidden">
-      {/* The font pickers show every font in its face, and the preset cards theirs. */}
+    <div data-studio className="bg-muted/40 flex w-full flex-1 flex-col">
+      {/* The switcher shows each system's name in its own heading font, and the preset cards theirs. */}
       {ALL_FONTS ? <link rel="stylesheet" href={ALL_FONTS} /> : null}
       {PRESET_FONTS ? <link rel="stylesheet" href={PRESET_FONTS} /> : null}
-      <InvertedSchemeStyle />
-      <h1 className="sr-only">Theme studio</h1>
+      <h1 className="sr-only">Studio</h1>
 
-      {/* Focusable: it scrolls on its own from lg up, so the keyboard needs to reach it. */}
-      <div tabIndex={0} role="region" aria-label="Preview" className="focus-visible:ring-ring order-1 min-w-0 px-4 pb-24 pt-6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset sm:px-6 lg:h-full lg:overflow-y-auto lg:pl-[19rem] lg:pr-6">
-        <Canvas view={view} />
+      <div className="bg-background/90 border-border sticky top-12 z-30 border-b backdrop-blur-sm">
+        <div className="flex flex-wrap items-center gap-x-2 gap-y-2 px-4 py-2 md:px-6">
+          <SystemsMenu onDialog={setDialog} />
+          <div className="max-sm:order-last max-sm:w-full sm:ml-2">
+            <Tabs tab={tab} onTab={changeTab} />
+          </div>
+          <div className="flex-1" />
+          <Actions />
+          <UseSystem />
+        </div>
       </div>
 
-      <Rail
-        id="studio-controls"
-        className={`max-lg:fixed max-lg:inset-x-3 max-lg:bottom-20 max-lg:top-16 max-lg:z-40 lg:absolute lg:inset-y-4 lg:left-4 lg:w-64 ${controls ? '' : 'max-lg:hidden'}`}
-      />
-
-      <div className="fixed bottom-4 right-4 z-30 flex gap-2 max-lg:left-4 max-lg:justify-center">
-        <ViewSwitcher view={view} onChange={changeView} controls={controls} onControls={() => setControls((c) => !c)} />
+      <div className="flex flex-col gap-4 px-4 pb-24 pt-4 md:px-6">
+        <Banners onDialog={setDialog} />
+        <div id="studio-panel" role="tabpanel" aria-labelledby={`studio-tab-${tab}`}>
+          <Canvas tab={tab} />
+        </div>
       </div>
+
+      <SystemDialogs dialog={dialog} onClose={() => setDialog(null)} />
+      <Toaster />
     </div>
   );
 }

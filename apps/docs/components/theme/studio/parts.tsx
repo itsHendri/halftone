@@ -1,6 +1,6 @@
 'use client';
 import { FONTS, googleFontsHref, normalizeRecipe, OPTIONS, PRESETS, type RecipeInput } from '@halftone-ds/tokens/theme';
-import { setRecipe, themeFor } from '@/lib/theme/store';
+import { themeFor } from '@/lib/theme/store';
 
 /** Display names for option values (the codec's values are short ids). */
 export const LABELS: Record<string, string> = {
@@ -83,21 +83,20 @@ export const fontLabel = (id: string) => {
 export const ALL_FONTS = googleFontsHref(FONTS.map((f) => f.id));
 export const PRESET_FONTS = googleFontsHref(PRESETS.flatMap((p) => Object.values(p.recipe.font ?? {})));
 
-/** A preset as a small card: its heading font and its primary on its own muted surface. */
-export function PresetCard({ id, name, recipe: input, selected, onPick }: { id: string; name: string; recipe: RecipeInput; selected: boolean; onPick?: () => void }) {
+/** A preset as a small card: its heading font and its primary on its own muted surface. A radio in a group. */
+export function PresetCard({ name, recipe: input, selected, tabIndex, onPick }: { name: string; recipe: RecipeInput; selected: boolean; tabIndex?: number; onPick: () => void }) {
   const recipe = normalizeRecipe(input);
   const t = themeFor(recipe);
   const radius = Math.min(t.radius, 14);
   return (
     <button
       type="button"
-      onClick={() => {
-        setRecipe({ ...input, preset: id });
-        onPick?.();
-      }}
-      aria-pressed={selected}
+      role="radio"
+      aria-checked={selected}
+      tabIndex={tabIndex}
+      onClick={onPick}
       className={`focus-visible:ring-ring flex flex-col gap-2 rounded-xl border p-1.5 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 ${
-        selected ? 'border-foreground' : 'border-border hover:border-foreground/40'
+        selected ? 'border-foreground ring-foreground ring-1' : 'border-border hover:border-foreground/40'
       }`}>
       <span className="flex h-12 items-end justify-between rounded-lg p-2" style={{ background: t.resolved.light.muted }} aria-hidden>
         <span className="text-xl leading-none" style={{ fontFamily: fontFamily(recipe.font.heading), color: t.resolved.light.foreground, fontWeight: 600 }}>

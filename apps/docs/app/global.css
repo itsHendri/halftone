@@ -73,11 +73,9 @@ body {
   padding-bottom: 5rem;
 }
 
-/* The theme studio has no theme bar and fills the window from lg up. */
-@media (min-width: 64rem) {
-  body:has([data-studio]) {
-    padding-bottom: 0;
-  }
+/* Studio has no theme bar. */
+body:has([data-studio]) {
+  padding-bottom: 0;
 }
 
 html > body[data-scroll-locked] {
@@ -99,29 +97,6 @@ html > body[data-scroll-locked] {
  */
 a[data-active='true'][href] {
   color: var(--color-fd-foreground);
-}
-
-/*
- * The theme studio's rail takes the opposite scheme to the page (components/theme/studio/rail.tsx). Fumadocs
- * resolves its --color-fd-* on :root and .dark only, so re-point them inside the rail and its pickers.
- */
-.kit-light,
-.kit-dark {
-  --color-fd-background: var(--background);
-  --color-fd-foreground: var(--foreground);
-  --color-fd-muted: var(--muted);
-  --color-fd-muted-foreground: var(--muted-foreground);
-  --color-fd-popover: var(--popover);
-  --color-fd-popover-foreground: var(--popover-foreground);
-  --color-fd-card: var(--card);
-  --color-fd-card-foreground: var(--card-foreground);
-  --color-fd-border: var(--border);
-  --color-fd-primary: var(--primary);
-  --color-fd-primary-foreground: var(--primary-foreground);
-  --color-fd-accent: var(--accent);
-  --color-fd-accent-foreground: var(--accent-foreground);
-  --color-fd-ring: var(--ring);
-  color: var(--foreground);
 }
 
 /*

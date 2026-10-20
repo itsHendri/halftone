@@ -40,10 +40,9 @@ const PAGES = [
   '/docs/patterns/',
   '/docs/foundations/',
   '/docs/themes/',
-  '/themes/',
-  '/themes/?view=mobile',
-  '/themes/?view=web',
-  '/themes/?view=typeset',
+  '/studio/',
+  '/studio/?tab=components',
+  '/studio/?tab=accessibility',
   '/w/',
   '/w/components/',
   '/w/dashboard/',
@@ -93,7 +92,7 @@ for (const scheme of SCHEMES) {
   const context = await browser.newContext({ colorScheme: scheme, viewport: { width: 1280, height: 900 } });
   for (const path of PAGES) {
     const page = await context.newPage();
-    // networkidle can take a while on a page with several kit frames and Google Fonts (the theme studio);
+    // networkidle can take a while on a page with several kit frames and Google Fonts (Studio);
     // past 60s, check the page as it is rather than fail on a slow CDN.
     await page.goto(`${BASE}${path}`, { waitUntil: 'networkidle', timeout: 60_000 }).catch(async (error) => {
       if (error.name !== 'TimeoutError') throw error;

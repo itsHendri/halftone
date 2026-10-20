@@ -3,6 +3,6 @@ export const SECTIONS = [
   { text: 'Docs', url: '/docs' },
   { text: 'Components', url: '/components' },
   { text: 'Screens', url: '/screens' },
-  { text: 'Themes', url: '/themes' },
+  { text: 'Studio', url: '/studio' },
   { text: 'Brief', url: '/brief' },
 ] as const;

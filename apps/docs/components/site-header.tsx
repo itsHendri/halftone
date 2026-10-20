@@ -3,7 +3,7 @@ import { Popover, PopoverContent, PopoverTrigger } from 'fumadocs-ui/components/
 import { useNotebookLayout } from 'fumadocs-ui/layouts/notebook';
 import { FullSearchTrigger, SearchTrigger } from 'fumadocs-ui/layouts/shared/slots/search-trigger';
 import { ThemeSwitch } from 'fumadocs-ui/layouts/shared/slots/theme-switch';
-import { MenuIcon } from 'lucide-react';
+import { ArrowLeftIcon, MenuIcon } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import kitJson from '../../../kit.json';
@@ -13,8 +13,10 @@ import { SECTIONS } from '@/lib/sections';
  * The one top bar every page shares (apps/docs/design/navigation-wireframes.md): the four sections, search,
  * Get started, the theme switch and GitHub, always in the same place. Both Fumadocs layouts render it in place
  * of their own header (`nav.component`), so moving between sections never moves the navigation.
- *   variant 'home'  the home layout (Home, Screens, Themes): a menu of sections on phones
+ *   variant 'home'  the home layout (Home, Screens, Studio): a menu of sections on phones
  *   variant 'docs'  the notebook layout (Docs, Components): sits in its grid; the phone button opens the sidebar
+ * On /studio it shrinks to a slim bar (the logo, back to the docs, search): the Studio is a tool, and its own bar sits
+ * right under this one (design/studio-wireframes.md). The logo stays where it is on every other page.
  */
 
 const isCurrent = (pathname: string, url: string) => pathname === url || pathname.startsWith(`${url}/`);
@@ -73,8 +75,33 @@ function DocsMenu() {
   );
 }
 
+/** The slim bar on /studio. */
+function StudioHeader() {
+  return (
+    <header className="bg-fd-background/80 sticky top-0 z-40 border-b backdrop-blur-sm">
+      <div className="flex h-12 items-center gap-4 px-4 md:px-6">
+        <Link href="/" className="inline-flex shrink-0 items-center gap-2 font-semibold">
+          <span aria-hidden className="bg-primary size-5 rounded-md" />
+          {kitJson.name}
+        </Link>
+        <Link
+          href="/docs"
+          className="text-muted-foreground hover:text-foreground focus-visible:ring-ring inline-flex items-center gap-1.5 rounded-md px-1.5 py-1 text-sm font-medium focus-visible:outline-none focus-visible:ring-2">
+          <ArrowLeftIcon className="size-3.5" aria-hidden />
+          Docs
+        </Link>
+        <div className="flex flex-1 items-center justify-end">
+          <FullSearchTrigger hideIfDisabled className="w-full max-w-[240px] rounded-full ps-2.5 max-md:hidden" />
+          <SearchTrigger hideIfDisabled className="p-2 md:hidden" />
+        </div>
+      </div>
+    </header>
+  );
+}
+
 export function SiteHeader({ variant }: { variant: 'home' | 'docs' }) {
   const pathname = usePathname() ?? '/';
+  if (variant === 'home' && isCurrent(pathname, '/studio')) return <StudioHeader />;
   return (
     <header
       id={variant === 'docs' ? 'nd-subnav' : undefined}

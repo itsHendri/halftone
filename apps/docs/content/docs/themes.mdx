@@ -6,10 +6,11 @@ description: Pick a theme on this site, watch both kits change live, then commit
 Every page of this site has a **theme bar** at the bottom. Until you pick anything, the site's colour drifts
 through a few hues. Pick a preset or a brand colour and the whole site changes, along with every live phone and
 browser frame in it: those are the real kits, re-themed as you pick. **Drifting colours**, first in both of the
-bar's menus, sets it moving again. The [theme studio](/themes) has every control, next to a phone and a browser, with undo, and a
-**shuffle** that rolls new values for everything you haven't locked (lock the colour, shuffle the type).
+bar's menus, sets it moving again. [Studio](/studio) keeps your picks as **systems**, saved in this browser: several side
+by side (a portfolio and a client, say), each with its own theme, logo and name, with undo and a **shuffle** that rolls
+new values for the theme. The bar follows whichever system is active.
 
-Nothing you pick here touches a project until you **use the theme**: the bar and the studio hand you a short
+Nothing you pick here touches a project until you **use the system**: the bar and Studio hand you a short
 code (`ht1-…`, or `ht2-…` once you change the typeset) that reproduces the theme exactly, and one command writes it into `tokens/tokens.json`.
 
 ## What a theme sets
@@ -40,7 +41,7 @@ each one, before and after. A theme from the picker always passes, even in stric
 
 ## Use a theme
 
-**Use theme** gives you four ways to take it with you:
+**Use system** gives you these ways to take it with you:
 
 - **Ask your coding agent.** Copy the prompt; the kits' `apply-theme` skill applies the code, runs the checks
   and tells you what it adjusted.
@@ -56,7 +57,10 @@ each one, before and after. A theme from the picker always passes, even in stric
   npx halftone-tokens theme apply ht1-XXXXXXXXXXXX
   ```
 
-- **Share a link** (`/themes/?t=<code>`) to show someone the theme, or **download tokens.json** and drop it in.
+- **Share a link** (`/studio/?t=<code>`) to show someone the theme, or **download tokens.json** and drop it in. A
+  shared link opens read-only in Studio, with **Save as new system**; it never replaces your own.
+- **Download the `.halftone.json`** (Use system, or Export in Studio's system menu) and apply the file the same way:
+  `npx halftone-tokens theme apply ./my-system.halftone.json`.
 
 `apply` only rewrites what a theme owns: the brand and neutral ramps, the semantic colours, radius, fonts,
 shadows, borders, icon stroke, control sizes and the typeset. Spacing, the base type scale, motion and your
@@ -73,13 +77,13 @@ npx halftone-tokens theme apply calm --dry-run
 
 ## Brand assets
 
-A theme code carries no logo, so the studio keeps yours apart: add it under **Logo** at the top of the
-[studio](/themes) (an SVG is best; a PNG works). A one-colour SVG is recoloured to follow the theme's text
+A theme code carries no logo, so each system keeps its own: add it under **Brand** at the top of
+[Studio](/studio) (an SVG is best; a PNG works). A one-colour SVG is recoloured to follow the theme's text
 colour, light and dark; a coloured logo or a PNG can have a dark version. Add a square **mark** for the app
-icon, or the logo is fitted into the square. The Overview shows the logo on light and dark, the app icon as
+icon, or the logo is fitted into the square. Foundations shows the logo on light and dark, the app icon as
 iOS and Android draw it, the splash screens and the favicon, and the live kits show it in their headers.
 
-**Use theme › Brand assets** downloads it as a zip laid out like the kit, every image drawn in your browser at
+**Use system › Brand assets** downloads it as a zip laid out like the kit, every image drawn in your browser at
 the sizes each platform needs:
 
 | Zip | Unzip at | Contains |
@@ -126,7 +130,7 @@ It becomes the nearest Halftone theme, and every value that doesn't carry over e
 
 Contrast is fixed on the way in, as for any theme.
 
-**A Halftone theme out.** **Use theme** has a block for any shadcn project. A preset installs from this site:
+**A Halftone theme out.** **Use system** has a block for any shadcn project. A preset installs from this site:
 
 ```bash
 npx shadcn@latest add https://halftonedesignsystem.com/r/theme/editorial.json

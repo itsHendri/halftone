@@ -1,10 +1,12 @@
 'use client';
-import { applyRecipe, presetById, PRESETS, sameRecipe, shadcnTheme, type Theme } from '@halftone-ds/tokens/theme';
+import { applySystem, systemCode } from '@halftone-ds/tokens/system';
+import { presetById, PRESETS, sameRecipe, shadcnTheme, type Theme } from '@halftone-ds/tokens/theme';
 import { CheckIcon, CopyIcon, DownloadIcon } from 'lucide-react';
 import * as React from 'react';
 import kitJson from '../../../../kit.json';
+import { downloadSystem, shareLink, systemFileName } from '@/lib/studio/systems';
 import { kitBrand, useBrand } from '@/lib/theme/brand';
-import { base } from '@/lib/theme/store';
+import { base, useLiveTheme } from '@/lib/theme/store';
 
 /** How a theme picked here reaches a project: a code, a command, a prompt, a link or the file itself. */
 export function themeCommands(code: string, origin: string) {
@@ -16,7 +18,7 @@ export function themeCommands(code: string, origin: string) {
       `\`npx halftone-tokens theme apply ${code}\` (or \`npm run theme:apply -- ${code}\` at the root of the ${kitJson.name} monorepo), ` +
       'then the qc-pass skill. Tell me which colours it adjusted for contrast and show me the Foundations screen.',
     // The trailing slash matches the static export, so the link needs no redirect that could drop ?t=.
-    url: `${origin}/themes/?t=${code}`,
+    url: `${origin}/studio/?t=${code}`,
   };
 }
 
@@ -59,13 +61,29 @@ export function CopyRow({ label, value, mono = true }: { label: string; value: s
   );
 }
 
+/**
+ * How the active system reaches a project. A system a theme code holds whole gets the code, its commands and a `?t=`
+ * link; one with hand edits a code can't carry gets its `.halftone.json` (the CLI applies it) and a `?s=` link.
+ */
 export function ExportPanel({ theme }: { theme: Theme }) {
+  const { system } = useLiveTheme();
   const [origin, setOrigin] = React.useState('');
   React.useEffect(() => setOrigin(window.location.origin), []);
-  const c = themeCommands(theme.code, origin || kitJson.siteUrl || 'https://<this site>');
+  const code = systemCode(system);
+  const file = systemFileName(system);
+  const [link, setLink] = React.useState<string | null>(null);
+  React.useEffect(() => {
+    if (!origin) return;
+    let live = true;
+    void shareLink(system, origin).then((url) => live && setLink(url));
+    return () => {
+      live = false;
+    };
+  }, [system, origin]);
+  const c = themeCommands(code ?? `./${file}`, origin || kitJson.siteUrl || 'https://<this site>');
 
   const download = () => {
-    const { tokens } = applyRecipe(base, theme.recipe);
+    const { tokens } = applySystem(base, system);
     const url = URL.createObjectURL(new Blob([JSON.stringify(tokens, null, 2) + '\n'], { type: 'application/json' }));
     const a = Object.assign(document.createElement('a'), { href: url, download: 'tokens.json' });
     a.click();
@@ -74,18 +92,33 @@ export function ExportPanel({ theme }: { theme: Theme }) {
 
   return (
     <div className="flex flex-col gap-4">
-      <CopyRow label="Theme code" value={theme.code} />
+      {code ? (
+        <CopyRow label="Theme code" value={code} />
+      ) : (
+        <p className="text-muted-foreground text-xs leading-5">
+          This system has edits a theme code can’t carry, so it travels as <span className="text-foreground font-mono">{file}</span>. Download it into the project, then:
+        </p>
+      )}
       <CopyRow label="Ask your coding agent" value={c.prompt} mono={false} />
       <CopyRow label="In the Halftone repo" value={c.monorepo} />
       <CopyRow label="In a kit you copied out" value={c.app} />
-      <CopyRow label="Share link" value={c.url} />
-      <button
-        type="button"
-        onClick={download}
-        className="border-border hover:bg-accent focus-visible:ring-ring inline-flex h-9 items-center justify-center gap-2 rounded-full border px-4 text-sm font-medium focus-visible:outline-none focus-visible:ring-2">
-        <DownloadIcon className="size-4" aria-hidden />
-        Download tokens.json
-      </button>
+      {link ? <CopyRow label={system.brand.logo ? 'Share link (without the logo)' : 'Share link'} value={link} /> : null}
+      <div className="flex flex-wrap gap-2">
+        <button
+          type="button"
+          onClick={() => downloadSystem(system)}
+          className="border-border hover:bg-accent focus-visible:ring-ring inline-flex h-9 flex-1 items-center justify-center gap-2 rounded-full border px-4 text-sm font-medium focus-visible:outline-none focus-visible:ring-2">
+          <DownloadIcon className="size-4" aria-hidden />
+          .halftone.json
+        </button>
+        <button
+          type="button"
+          onClick={download}
+          className="border-border hover:bg-accent focus-visible:ring-ring inline-flex h-9 flex-1 items-center justify-center gap-2 rounded-full border px-4 text-sm font-medium focus-visible:outline-none focus-visible:ring-2">
+          <DownloadIcon className="size-4" aria-hidden />
+          tokens.json
+        </button>
+      </div>
       <BrandExport theme={theme} />
       <ShadcnExport theme={theme} />
     </div>
@@ -172,7 +205,7 @@ function BrandExport({ theme }: { theme: Theme }) {
         <p className="text-muted-foreground text-xs leading-5">
           {brand
             ? 'Your logo for <Logo>, the app icon, splash screens and favicons, laid out like the kit. Unzip it at the kit’s root.'
-            : 'Add a logo in the studio (Logo, at the top) to download it with an app icon, splash screens and favicons.'}
+            : 'Add a logo to the system in Studio (Brand, at the top) to download it with an app icon, splash screens and favicons.'}
         </p>
       </div>
       {brand ? (
