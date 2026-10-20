@@ -15,7 +15,7 @@ type Props = {
 };
 
 /**
- * The brand's logo from lib/brand.ts (the theme studio's brand download). A one-colour logo is drawn in the
+ * The brand's logo from lib/brand.ts (Studio's brand download). A one-colour logo is drawn in the
  * text colour (`currentColor`), so it follows light and dark and any `text-*` class; a coloured one can have a
  * dark version. Without a logo: a placeholder square and the name, so pages look the same before a brand is
  * applied.

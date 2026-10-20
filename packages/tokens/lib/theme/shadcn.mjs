@@ -247,7 +247,7 @@ export function shadcnTheme(theme, { name, title: label, description, fontsUrl =
     $schema: 'https://ui.shadcn.com/schema/registry-item.json',
     name: name ?? `halftone-${theme.code}`,
     title: label ?? `Halftone theme ${theme.code}`,
-    description: description ?? `A Halftone theme (${theme.code}): colours for light and dark, radius, shadows and fonts. halftonedesignsystem.com/themes/?t=${theme.code}`,
+    description: description ?? `A Halftone theme (${theme.code}): colours for light and dark, radius, shadows and fonts. halftonedesignsystem.com/studio/?t=${theme.code}`,
     type: 'registry:theme',
     ...(dependencies.length ? { registryDependencies: dependencies } : {}),
     cssVars: {

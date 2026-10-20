@@ -55,7 +55,7 @@ function ThemeSummary() {
       </View>
       {live ? (
         <Text className="text-muted-foreground text-xs">
-          Previewing {live} from the docs theme picker. The values below follow it; the summary above is what tokens.json holds.
+          Previewing {live} from Studio on the docs site. The values below follow it; the summary above is what tokens.json holds.
         </Text>
       ) : null}
     </View>
@@ -250,7 +250,7 @@ export const FOUNDATION_SECTIONS: FoundationSection[] = [
     title: 'Theme',
     category: 'color',
     aliases: ['preset', 'brand', 'theme code', 'recipe'],
-    caption: 'Pick and preview themes on the docs site (/themes), then apply one: npx halftone-tokens theme apply <code>. Tap to copy the code.',
+    caption: 'Make and preview systems in Studio on the docs site (/studio), then apply one: npx halftone-tokens theme apply <code>. Tap to copy the code.',
     Demo: ThemeSummary,
   },
   {

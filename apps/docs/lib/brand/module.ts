@@ -9,7 +9,7 @@ export function brandModule(brand: { name: string; logo?: BrandImage; logoDark?:
   const data = JSON.stringify({ name: brand.name, logo: brand.logo, logoDark: brand.logoDark, mark: brand.mark, markDark: brand.markDark }, null, 2);
   return `/**
  * Your brand, as <Logo> shows it (components/kit/logo.tsx). Replace this file by unzipping the brand
- * download from the theme studio (halftonedesignsystem.com/themes › Use theme › Brand assets): it carries
+ * download from Studio (halftonedesignsystem.com/studio › Use system › Brand assets): it carries
  * your logo inline, so it renders the same on a phone, in a static export and in the frames on the docs site.
  *
  * No logo (the default): <Logo> draws a placeholder square and the name, as the kit always has.

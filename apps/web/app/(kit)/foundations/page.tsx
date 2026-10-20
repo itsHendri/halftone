@@ -56,7 +56,7 @@ function ThemeSummary() {
         ))}
       </dl>
       <p className="text-muted-foreground text-xs">
-        Pick and preview themes on the docs site (/themes), then apply one: <code>npx halftone-tokens theme apply &lt;code&gt;</code>.
+        Make and preview systems in Studio on the docs site (/studio), then apply one: <code>npx halftone-tokens theme apply &lt;code&gt;</code>.
       </p>
     </div>
   );

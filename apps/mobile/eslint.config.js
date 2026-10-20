@@ -16,7 +16,7 @@ module.exports = defineConfig([
   },
   {
     // Hex colours reach components through usePalette(), which follows a runtime theme override
-    // (the docs site's theme picker); the generated THEME and NAV_THEME don't.
+    // (the docs site's Studio); the generated THEME and NAV_THEME don't.
     files: ['app/**', 'components/**'],
     rules: {
       'no-restricted-imports': [

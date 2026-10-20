@@ -24,8 +24,8 @@ npm run dev        # http://localhost:3100
 
 1. Rename `name` in `package.json`, and remove the samples: `npm run eject-samples`.
 2. Brand: edit `tokens/tokens.json` (brand ramp, semantic colours, radius), run `npm run tokens:build`.
-3. Logo and favicons: add your logo in the theme studio (halftonedesignsystem.com/themes), download
-   **Use theme › Brand assets › Web kit** and unzip it here (the `apply-theme` skill's "Brand assets" steps).
+3. Logo and favicons: add your logo in Studio (halftonedesignsystem.com/studio), download
+   **Use system › Brand assets › Web kit** and unzip it here (the `apply-theme` skill's "Brand assets" steps).
 4. Build your prototype in its own folder, `app/<slug>/` (see `AGENTS.md › Building a prototype`), or hand
    a brief to the `transcript-to-prototype` skill.
 

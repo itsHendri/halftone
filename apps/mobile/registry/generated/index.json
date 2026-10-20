@@ -1665,7 +1665,7 @@
         "lib/brand.ts",
         "lib/brand-context.tsx"
       ],
-      "notes": "the brand from lib/brand.ts (theme studio › Use theme › Brand assets) · one-colour logos follow the theme · placeholder + name without one",
+      "notes": "the brand from lib/brand.ts (Studio › Use system › Brand assets) · one-colour logos follow the theme · placeholder + name without one",
       "api": "<Logo variant?=\"full|mark\" size? name? tone? />",
       "caption": "Your logo, in the scheme on screen. Without one it's a placeholder square and the name, so screens look right before a brand is applied.",
       "aliases": [

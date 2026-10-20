@@ -1,6 +1,6 @@
 /**
  * Starting points by personality. Each is a full recipe, typeset included; the picker starts from one and tweaks.
- * Drafts — review them in the docs studio (/themes) and adjust here. Order is the gallery order.
+ * Drafts — review them in Studio on the docs site (/studio) and adjust here. Order is the gallery order.
  */
 export const PRESETS = [
   {

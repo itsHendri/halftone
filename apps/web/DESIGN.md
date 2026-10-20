@@ -196,7 +196,7 @@ components:
 A neutral, brand-agnostic base for clickable prototypes on phone and web. Calm surfaces, one brand
 colour reserved for the primary action and focus, generous spacing, and both light and dark themes
 from day one. The applied theme is `ht1-29B3XC60003T`. Re-branding means applying a
-theme (`npx halftone-tokens theme apply <code>`, codes come from the docs theme picker) or editing
+theme (`npx halftone-tokens theme apply <code|file.halftone.json>`, both from Studio on the docs site) or editing
 `tokens/tokens.json`; everything else follows. The full rules and the component registry are in
 `DESIGN_SYSTEM.md` — read it before building UI.
 

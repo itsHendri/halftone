@@ -1670,7 +1670,7 @@
       "name": "logo",
       "type": "registry:component",
       "title": "Logo",
-      "description": "the brand from lib/brand.ts (theme studio › Use theme › Brand assets) · one-colour logos take the text colour · placeholder + name without one",
+      "description": "the brand from lib/brand.ts (Studio › Use system › Brand assets) · one-colour logos take the text colour · placeholder + name without one",
       "dependencies": [
         "cn@^0.4.0"
       ],

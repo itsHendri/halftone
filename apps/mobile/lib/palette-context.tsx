@@ -12,7 +12,7 @@ import * as React from 'react';
  * reaches every consumer.
  *
  * The values default to the generated THEME (tokens/tokens.json). An override replaces some or all of
- * them at runtime; only the docs site's theme picker sets one, in an embedded session (lib/embed-theme.ts),
+ * them at runtime; only the docs site's Studio sets one, in an embedded session (lib/embed-theme.ts),
  * together with the CSS variables behind the classNames, so both stay in step.
  */
 export type Palette = Record<ThemeColorName, string>;

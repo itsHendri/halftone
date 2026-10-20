@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import type { ConfigContext, ExpoConfig } from 'expo/config';
 
 /**
- * The brand download from the theme studio (assets/brand/brand.json, beside the icon and splash images it
+ * The brand download from Studio (assets/brand/brand.json, beside the icon and splash images it
  * unzips into assets/images): the app icon's Android background and the splash colours, light and dark.
  * Without it, app.json's values stand.
  */

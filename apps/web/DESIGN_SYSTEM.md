@@ -224,7 +224,7 @@ the tables. Text between `GENERATED` markers is overwritten.
 <!-- GENERATED:registry:media -->
 | Component | Path | Notes |
 |---|---|---|
-| Logo | `components/kit/logo.tsx` | the brand from lib/brand.ts (theme studio › Use theme › Brand assets) · one-colour logos take the text colour · placeholder + name without one |
+| Logo | `components/kit/logo.tsx` | the brand from lib/brand.ts (Studio › Use system › Brand assets) · one-colour logos take the text colour · placeholder + name without one |
 | ImageTile | `components/kit/image-tile.tsx` | rounded image · `seed` draws generated art when there is no `src` |
 | AspectRatio | `components/ui/aspect-ratio.tsx` | holds a box at a ratio (video, map, embed) |
 | Placeholder | `components/kit/placeholder.tsx` | deterministic abstract SVG art from a `seed` · the kit ships no raster imagery |
