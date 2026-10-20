@@ -195,6 +195,17 @@ export function Studio() {
     window.history.replaceState(window.history.state, '', url);
   };
 
+  // The bar's height (it wraps on a phone), for what sticks under it: the section index and the jump menu.
+  const root = React.useRef<HTMLDivElement>(null);
+  const bar = React.useRef<HTMLDivElement>(null);
+  React.useEffect(() => {
+    const el = bar.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => root.current?.style.setProperty('--studio-bar', `${el.offsetHeight}px`));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
   // Undo / redo from the keyboard (not while typing in a field).
   React.useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -209,13 +220,13 @@ export function Studio() {
   }, []);
 
   return (
-    <div data-studio className="bg-muted/40 flex w-full flex-1 flex-col">
+    <div ref={root} data-studio className="bg-muted/40 flex w-full flex-1 flex-col">
       {/* The switcher shows each system's name in its own heading font, and the preset cards theirs. */}
       {ALL_FONTS ? <link rel="stylesheet" href={ALL_FONTS} /> : null}
       {PRESET_FONTS ? <link rel="stylesheet" href={PRESET_FONTS} /> : null}
       <h1 className="sr-only">Studio</h1>
 
-      <div className="bg-background/90 border-border sticky top-12 z-30 border-b backdrop-blur-sm">
+      <div ref={bar} className="bg-background/90 border-border sticky top-12 z-30 border-b backdrop-blur-sm">
         <div className="flex flex-wrap items-center gap-x-2 gap-y-2 px-4 py-2 md:px-6">
           <SystemsMenu onDialog={setDialog} />
           <div className="max-sm:order-last max-sm:w-full sm:ml-2">

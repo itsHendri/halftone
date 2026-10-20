@@ -78,6 +78,16 @@ body:has([data-studio]) {
   padding-bottom: 0;
 }
 
+/*
+ * The Studio's popovers (components/theme/studio/item-popover.tsx) are bottom sheets on a phone: Radix positions the
+ * wrapper inline, so the sheet pins it to the bottom edge instead.
+ */
+[data-radix-popper-content-wrapper]:has(> [data-sheet]) {
+  inset: auto 0 0 0 !important;
+  transform: none !important;
+  min-width: 0 !important;
+}
+
 html > body[data-scroll-locked] {
   margin-right: 0px !important;
   --removed-body-scroll-bar-size: 0px !important;
