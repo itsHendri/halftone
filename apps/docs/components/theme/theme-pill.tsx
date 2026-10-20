@@ -1,10 +1,8 @@
 'use client';
 import { fontById, normalizeRecipe, PRESETS, sameRecipe, type Adjustment, type Recipe } from '@halftone-ds/tokens/theme';
 import { Popover, PopoverContent, PopoverTrigger } from 'fumadocs-ui/components/ui/popover';
-import { CheckIcon, ChevronDownIcon, MoonIcon, PaintBucketIcon, PauseIcon, PlayIcon, RotateCcwIcon, ShieldCheckIcon, SlidersHorizontalIcon, SunIcon } from 'lucide-react';
-import Link from 'next/link';
+import { CheckIcon, ChevronDownIcon, PauseIcon, PlayIcon } from 'lucide-react';
 import { usePathname } from 'next/navigation';
-import { useTheme as useSiteMode } from 'next-themes';
 import * as React from 'react';
 import { ExportPanel } from '@/components/theme/export-panel';
 import { SWATCHES, swatchName } from '@/lib/theme/swatches';
@@ -61,38 +59,52 @@ export const visibleAdjustments = (list: Adjustment[]) => list.filter((a) => !/^
 
 const itemClass =
   'focus-visible:ring-ring inline-flex h-9 shrink-0 items-center justify-center gap-1.5 rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2';
+const rowClass = 'hover:bg-accent focus-visible:ring-ring flex items-center gap-3 rounded-lg px-2.5 py-2 text-left focus-visible:outline-none focus-visible:ring-2';
+
+/** The drifting colours as a swatch: the route the hue takes (lib/theme/ambient.ts). */
+const DRIFT_SWATCH = 'conic-gradient(from 0deg, oklch(0.58 0.19 292), oklch(0.58 0.19 40), oklch(0.58 0.19 355), oklch(0.58 0.19 262), oklch(0.58 0.19 292))';
+
+/** Back to the drifting colours: the first choice in both popovers. */
+function DriftChoice({ selected, tabIndex, close }: { selected: boolean; tabIndex: number; close?: () => void }) {
+  return (
+    <button
+      type="button"
+      role="radio"
+      aria-checked={selected}
+      tabIndex={tabIndex}
+      onClick={() => {
+        resumeAmbient();
+        playAmbient();
+        close?.();
+      }}
+      className={rowClass}>
+      <span className="ring-background size-4 shrink-0 rounded-full ring-2" style={{ background: DRIFT_SWATCH }} aria-hidden />
+      <span className="min-w-0 flex-1">
+        <span className="block text-sm font-medium">Drifting colours</span>
+        <span className="text-muted-foreground block truncate text-xs">Moves until you pick a colour</span>
+      </span>
+      {selected ? <CheckIcon className="size-4 shrink-0" aria-hidden /> : null}
+    </button>
+  );
+}
 
 /**
- * The theme bar at the bottom of every docs page: a preset, a colour, light or dark, and the way out
- * (export). The full set of controls lives on /themes. Everything here changes the site and every
- * embedded kit live. Until anything is picked the colours drift (lib/theme/ambient.ts): the bar says so,
- * can pause it, and any pick (or "Use theme") keeps the colour on screen.
+ * The theme bar at the bottom of every docs page: a preset, a colour, pausing the drift, and the way out
+ * (Use theme). Everything else lives in the theme studio (/themes, in the header). Every control is a fixed
+ * width and opens upwards in a popover, so the bar never changes size as names change. Until anything is
+ * picked the colours drift (lib/theme/ambient.ts); "Drifting colours", first in both popovers, brings it back.
  */
 export function ThemePill() {
   const pathname = usePathname();
   const { recipe, theme, ambient } = useLiveTheme();
   const drift = useAmbient();
-  const { resolvedTheme, setTheme } = useSiteMode();
-  const [colours, setColours] = React.useState(false);
+  const [colourOpen, setColourOpen] = React.useState(false);
   const bar = React.useRef<HTMLDivElement>(null);
   const covering = useCoversAvoided(bar, pathname);
 
-  // Close the colour row on Escape or a click outside the bar.
-  React.useEffect(() => {
-    if (!colours) return;
-    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setColours(false);
-    const onDown = (e: PointerEvent) => !bar.current?.contains(e.target as Node) && setColours(false);
-    document.addEventListener('keydown', onKey);
-    document.addEventListener('pointerdown', onDown);
-    return () => {
-      document.removeEventListener('keydown', onKey);
-      document.removeEventListener('pointerdown', onDown);
-    };
-  }, [colours]);
-
   if (pathname?.startsWith('/themes')) return null;
-  const adjusted = visibleAdjustments(theme.adjustments);
-  const dark = resolvedTheme === 'dark';
+  const presetIndex = ambient ? -1 : PRESETS.findIndex((x) => sameRecipe(recipe, x.recipe));
+  const swatchIndex = ambient ? -1 : SWATCHES.findIndex((x) => x.hex === recipe.brand);
 
   return (
     <div
@@ -104,15 +116,17 @@ export function ThemePill() {
         ref={bar}
         role="toolbar"
         aria-label="Theme"
-        className="border-border bg-background/85 text-foreground pointer-events-auto flex max-w-full items-center gap-1 overflow-x-auto rounded-full border p-1.5 shadow-[0_8px_30px_rgb(0_0_0/0.12)] backdrop-blur-xl">
+        className="border-border bg-background/85 text-foreground pointer-events-auto flex max-w-full items-center gap-1 rounded-full border p-1.5 shadow-[0_8px_30px_rgb(0_0_0/0.12)] backdrop-blur-xl">
         <Popover>
           <PopoverTrigger className={`${itemClass} hover:bg-accent px-3`} aria-label={ambient ? 'Preset: none, the colours drift' : `Preset: ${presetLabel(recipe)}`}>
-            <span className="bg-primary size-3 rounded-full" aria-hidden />
-            <span className="hidden max-w-32 truncate sm:inline">{ambient ? 'Ambient' : presetLabel(recipe)}</span>
-            <ChevronDownIcon className="text-muted-foreground size-3.5" aria-hidden />
+            <span className="bg-primary size-3 shrink-0 rounded-full" aria-hidden />
+            {/* A fixed width: the bar keeps its size whatever the preset is called. */}
+            <span className="hidden w-28 truncate text-left sm:inline">{ambient ? 'Drifting' : presetLabel(recipe)}</span>
+            <ChevronDownIcon className="text-muted-foreground size-3.5 shrink-0" aria-hidden />
           </PopoverTrigger>
-          <PopoverContent side="top" align="start" sideOffset={10} className="w-72 p-1.5">
+          <PopoverContent side="top" align="start" sideOffset={10} className="max-h-[70vh] w-72 overflow-y-auto p-1.5">
             <div role="radiogroup" aria-label="Presets" className="flex flex-col" onKeyDown={(e) => rovingKeyDown(e)}>
+              <DriftChoice selected={ambient} tabIndex={rovingTabIndex(0, ambient ? 0 : presetIndex + 1)} />
               {PRESETS.map((p, i) => {
                 const t = themeFor(normalizeRecipe(p.recipe));
                 const selected = !ambient && sameRecipe(recipe, p.recipe);
@@ -122,9 +136,9 @@ export function ThemePill() {
                     type="button"
                     role="radio"
                     aria-checked={selected}
-                    tabIndex={rovingTabIndex(i, ambient ? -1 : PRESETS.findIndex((x) => sameRecipe(recipe, x.recipe)))}
+                    tabIndex={rovingTabIndex(i + 1, ambient ? 0 : presetIndex + 1)}
                     onClick={() => setRecipe({ ...p.recipe, preset: p.id })}
-                    className="hover:bg-accent focus-visible:ring-ring flex items-center gap-3 rounded-lg px-2.5 py-2 text-left focus-visible:outline-none focus-visible:ring-2">
+                    className={rowClass}>
                     <span className="flex shrink-0 -space-x-1" aria-hidden>
                       <span className="ring-background size-4 rounded-full ring-2" style={{ background: t.resolved.light.primary }} />
                       <span className="ring-background size-4 rounded-full ring-2" style={{ background: t.resolved.light.muted }} />
@@ -143,59 +157,50 @@ export function ThemePill() {
           </PopoverContent>
         </Popover>
 
-        <span className="bg-border mx-0.5 h-5 w-px shrink-0" aria-hidden />
-
-        <button
-          type="button"
-          onClick={() => setColours((v) => !v)}
-          aria-expanded={colours}
-          aria-label={ambient ? 'Brand colour: drifting' : `Brand colour: ${swatchName(recipe.brand)}`}
-          className={`${itemClass} hover:bg-accent w-9`}>
-          {colours ? (
-            <PaintBucketIcon className="size-4" aria-hidden />
-          ) : (
-            <span className="ring-border bg-primary size-4 rounded-full ring-1" style={ambient ? undefined : { background: recipe.brand }} aria-hidden />
-          )}
-        </button>
-        <div
-          className="flex items-center overflow-hidden transition-[max-width,opacity] duration-300 ease-[cubic-bezier(0.2,0,0,1)] motion-reduce:transition-none"
-          style={{ maxWidth: colours ? 400 : 0, opacity: colours ? 1 : 0 }}
-          aria-hidden={!colours}>
-          <div role="radiogroup" aria-label="Brand colour" className="flex items-center gap-1.5 px-1" onKeyDown={(e) => rovingKeyDown(e)}>
-            {SWATCHES.map((s, i) => {
-              const selected = !ambient && recipe.brand === s.hex;
-              return (
-                <button
-                  key={s.hex}
-                  type="button"
-                  role="radio"
-                  tabIndex={colours ? rovingTabIndex(i, ambient ? -1 : SWATCHES.findIndex((x) => x.hex === recipe.brand)) : -1}
-                  aria-label={s.name}
-                  aria-checked={selected}
-                  onClick={() => {
-                    setRecipe({ brand: s.hex });
-                    setColours(false);
-                  }}
-                  className="focus-visible:ring-ring size-5 shrink-0 rounded-full transition-transform hover:scale-110 focus-visible:outline-none focus-visible:ring-2 motion-reduce:transition-none"
-                  style={{ background: s.hex, boxShadow: selected ? `0 0 0 2px var(--background), 0 0 0 3.5px ${s.hex}` : undefined }}
-                />
-              );
-            })}
-            <label
-              className="relative size-5 shrink-0 cursor-pointer rounded-full"
-              style={{ background: 'conic-gradient(from 0deg, #ef4444, #f59e0b, #22c55e, #06b6d4, #6366f1, #d946ef, #ef4444)' }}
-              title="Any colour">
-              <span className="sr-only">Any colour</span>
-              <input
-                type="color"
-                tabIndex={colours ? 0 : -1}
-                value={recipe.brand}
-                onChange={(e) => setRecipe({ brand: e.target.value }, { coalesce: 'brand' })}
-                className="absolute inset-0 size-full cursor-pointer opacity-0"
-              />
-            </label>
-          </div>
-        </div>
+        <Popover open={colourOpen} onOpenChange={setColourOpen}>
+          <PopoverTrigger className={`${itemClass} hover:bg-accent w-9`} aria-label={ambient ? 'Brand colour: drifting' : `Brand colour: ${swatchName(recipe.brand)}`}>
+            <span className="ring-border size-4 rounded-full ring-1" style={{ background: ambient ? DRIFT_SWATCH : recipe.brand }} aria-hidden />
+          </PopoverTrigger>
+          <PopoverContent side="top" sideOffset={10} className="w-72 p-1.5">
+            <div role="radiogroup" aria-label="Brand colour" className="flex flex-col gap-1" onKeyDown={(e) => rovingKeyDown(e)}>
+              <DriftChoice selected={ambient} tabIndex={rovingTabIndex(0, ambient ? 0 : swatchIndex + 1)} close={() => setColourOpen(false)} />
+              <div className="grid grid-cols-5 gap-2 px-2.5 pb-1.5 pt-1">
+                {SWATCHES.map((s, i) => {
+                  const selected = !ambient && recipe.brand === s.hex;
+                  return (
+                    <button
+                      key={s.hex}
+                      type="button"
+                      role="radio"
+                      tabIndex={rovingTabIndex(i + 1, ambient ? 0 : swatchIndex + 1)}
+                      aria-label={s.name}
+                      aria-checked={selected}
+                      title={s.name}
+                      onClick={() => {
+                        setRecipe({ brand: s.hex });
+                        setColourOpen(false);
+                      }}
+                      className="focus-visible:ring-ring mx-auto size-8 rounded-full transition-transform hover:scale-110 focus-visible:outline-none focus-visible:ring-2 motion-reduce:transition-none"
+                      style={{ background: s.hex, boxShadow: selected ? `0 0 0 2px var(--background), 0 0 0 3.5px ${s.hex}` : undefined }}
+                    />
+                  );
+                })}
+                <label
+                  className="relative mx-auto size-8 cursor-pointer rounded-full"
+                  style={{ background: 'conic-gradient(from 0deg, #ef4444, #f59e0b, #22c55e, #06b6d4, #6366f1, #d946ef, #ef4444)' }}
+                  title="Any colour">
+                  <span className="sr-only">Any colour</span>
+                  <input
+                    type="color"
+                    value={recipe.brand}
+                    onChange={(e) => setRecipe({ brand: e.target.value }, { coalesce: 'brand' })}
+                    className="absolute inset-0 size-full cursor-pointer opacity-0"
+                  />
+                </label>
+              </div>
+            </div>
+          </PopoverContent>
+        </Popover>
 
         {/* The drift moves for longer than five seconds, so it can be paused (WCAG 2.2.2). */}
         {ambient && drift.active && !drift.reduced ? (
@@ -209,51 +214,13 @@ export function ThemePill() {
           </button>
         ) : null}
 
-        <span className="bg-border mx-0.5 h-5 w-px shrink-0" aria-hidden />
-
-        {/* The icon switches in CSS: the server can't know the visitor's theme (a hydration mismatch). */}
-        <button type="button" onClick={() => setTheme(dark ? 'light' : 'dark')} className={`${itemClass} hover:bg-accent w-9`} aria-label="Toggle light and dark">
-          <SunIcon className="hidden size-4 dark:block" aria-hidden />
-          <MoonIcon className="size-4 dark:hidden" aria-hidden />
-        </button>
-
-        {adjusted.length && !ambient ? (
-          <Popover>
-            <PopoverTrigger className={`${itemClass} text-muted-foreground hover:bg-accent hover:text-foreground px-2.5 max-sm:hidden`} aria-label={`${adjusted.length} colours adjusted for contrast`}>
-              <ShieldCheckIcon className="size-4" aria-hidden />
-              <span className="tabular-nums">{adjusted.length}</span>
-            </PopoverTrigger>
-            <PopoverContent side="top" sideOffset={10} className="w-80">
-              <AdjustmentList adjustments={adjusted} />
-            </PopoverContent>
-          </Popover>
-        ) : null}
-
-        {!ambient ? (
-          <button
-            type="button"
-            onClick={() => {
-              resumeAmbient();
-              playAmbient();
-            }}
-            className={`${itemClass} text-muted-foreground hover:bg-accent hover:text-foreground w-9 max-sm:hidden`}
-            aria-label="Back to the drifting colours"
-            title="Back to the drifting colours">
-            <RotateCcwIcon className="size-4" aria-hidden />
-          </button>
-        ) : null}
-
-        <Link href="/themes" className={`${itemClass} text-muted-foreground hover:bg-accent hover:text-foreground w-9`} aria-label="Open the theme studio" title="Theme studio">
-          <SlidersHorizontalIcon className="size-4" aria-hidden />
-        </Link>
-
         <Popover
           onOpenChange={(open) => {
             // Taking the theme while it drifts keeps the colour on screen.
             const brand = ambientBrand();
             if (open && ambient && brand) setRecipe({ brand });
           }}>
-          <PopoverTrigger className={`${itemClass} bg-primary text-primary-foreground px-4 hover:opacity-90`}>Use theme</PopoverTrigger>
+          <PopoverTrigger className={`${itemClass} bg-primary text-primary-foreground ml-1 px-4 hover:opacity-90`}>Use theme</PopoverTrigger>
           <PopoverContent side="top" align="end" sideOffset={10} className="max-h-[70vh] w-96 max-w-[calc(100vw-2rem)] overflow-y-auto p-4">
             <ExportPanel theme={theme} />
           </PopoverContent>
