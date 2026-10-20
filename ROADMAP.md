@@ -51,6 +51,18 @@ a mood each (Tactile, Studio) and three presets that use the styles. Themes with
 characters, with room for more styles). Ships with `@halftone-ds/tokens` 1.2. Still to come: more styles (cards,
 chips, tabs) in the reserved bits.
 
+## Next: Studio, a design system manager
+
+`/themes` becomes `/studio`: a page you edit in place, like Subframe's Theme page, with several saved systems
+(say a portfolio and a client). Foundations, Components and Accessibility tabs:
+- Every role is a full 50–950 ramp from one colour, and any step can be edited.
+- Text styles, corners, shadows and borders are editable items, and "+ New" adds extras.
+- The logo slot always shows a placeholder.
+
+Saved in the browser first; accounts come later. After foundations comes component-level editing (Button, Chip,
+Tag). The contract is `apps/docs/design/studio-wireframes.md`; the data layer is the `HalftoneSystem` document
+in `@halftone-ds/tokens`.
+
 ## Later: agent reach
 
 - The skills as a Claude Code plugin, so they load outside the kit folders.

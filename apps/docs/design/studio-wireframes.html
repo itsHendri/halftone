@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Studio wireframes</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.19.0/dist/tabler-icons.min.css" />
+<style>
+:root{--bg:#fafafa;--surface:#fff;--muted:#f4f4f5;--border:#e4e4e7;--strong:#d4d4d8;--fg:#09090b;--fg2:#52525b;--fg3:#71717a;--accent:#2563eb;--tint:#eff6ff;--tint-fg:#1d4ed8;--ok:#15803d;--warn:#b45309;--danger:#b91c1c;--serif:ui-serif,Georgia,"Times New Roman",serif;--mono:ui-monospace,"SF Mono",Menlo,monospace}
+@media (prefers-color-scheme:dark){:root{--bg:#09090b;--surface:#18181b;--muted:#27272a;--border:#27272a;--strong:#3f3f46;--fg:#fafafa;--fg2:#a1a1aa;--fg3:#a1a1aa;--accent:#448bff;--tint:#172554;--tint-fg:#bfdbfe;--ok:#4ade80;--warn:#fbbf24;--danger:#f87171}}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:14px/1.6 ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;padding:32px 20px 64px}
+main{max-width:1100px;margin:0 auto}h1{font-size:24px;font-weight:600;margin:0 0 4px}h2{font-size:18px;font-weight:600;margin:48px 0 4px}
+.cap{color:var(--fg2);margin:0 0 14px;max-width:780px}
+.win{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.chrome{display:flex;gap:6px;align-items:center;height:30px;padding:0 12px;border-bottom:1px solid var(--border);background:var(--muted)}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--strong)}
+.bar{display:flex;align-items:center;gap:10px;height:46px;padding:0 16px;border-bottom:1px solid var(--border);font-size:13px;color:var(--fg2)}
+.pill{border:1px solid var(--border);border-radius:999px;padding:3px 10px;font-size:12px;color:var(--fg);white-space:nowrap}
+.on{background:var(--muted);border-color:var(--strong)}
+.cta{background:var(--fg);color:var(--surface);border-color:var(--fg)}
+.sp{flex:1}
+.page{display:grid;grid-template-columns:150px minmax(0,1fr);gap:24px;padding:8px 24px 28px}
+.idx{position:sticky;top:0;font-size:13px;color:var(--fg2);line-height:2.1;padding-top:22px}.idx b{color:var(--fg);font-weight:600}
+.h{display:flex;align-items:baseline;justify-content:space-between;margin:22px 0 8px}
+.h b{font-size:18px;font-weight:600}.h b em{font-style:normal;color:var(--fg3);font-weight:400;margin-left:6px}
+.h span{font-size:12px;color:var(--fg2);display:flex;gap:16px}
+.card{background:var(--muted);border-radius:12px;padding:14px}
+.lbl{font-size:12px;color:var(--fg2)}.lbl3{font-size:12px;color:var(--fg3)}
+.g{display:grid;gap:10px}
+.slot{border:1.5px dashed var(--strong);border-radius:10px;height:72px;display:flex;align-items:center;justify-content:center;font-family:var(--serif)}
+.ramp{display:grid;grid-template-columns:90px repeat(11,minmax(0,1fr));gap:4px;align-items:center;margin:4px 0}
+.ramp i{display:block;height:28px;border-radius:6px}
+.seed{outline:2px solid var(--fg);outline-offset:1px}
+.role{display:flex;align-items:center;gap:8px;font-size:13px}.role i{width:16px;height:16px;border-radius:50%;border:1px solid var(--border)}
+.row{display:grid;grid-template-columns:minmax(0,1fr) 230px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--border)}
+.row:last-child{border:0}
+.tag{border:1px solid var(--strong);border-radius:999px;padding:0 8px;font-size:11px;color:var(--fg3)}
+.pop{background:var(--surface);border:1px solid var(--strong);border-radius:12px;padding:10px;font-size:12px;display:flex;flex-direction:column;gap:8px}
+.pop .t{font-size:11px;color:var(--fg3);margin:0 0 -4px}
+.nm{display:flex;align-items:center;gap:8px;background:var(--muted);border-radius:8px;padding:5px 8px}.nm span{flex:1}
+.f{display:flex;align-items:center;justify-content:space-between;gap:6px;background:var(--muted);border-radius:8px;padding:5px 8px}.f em{font-style:normal;color:var(--fg2)}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:6px}.four{display:grid;grid-template-columns:repeat(4,1fr);gap:6px}
+.pv{height:56px;border-radius:8px;background:var(--muted);display:flex;align-items:center;justify-content:center}
+.ok{color:var(--ok)}.warn{color:var(--warn)}.danger{color:var(--danger)}
+.sw{width:14px;height:14px;border-radius:4px;display:inline-block;border:1px solid var(--border);vertical-align:-2px}
+.strip{display:inline-flex;gap:1px}.strip i{width:10px;height:18px;display:block}
+.menu{background:var(--surface);border:1px solid var(--strong);border-radius:12px;padding:6px;font-size:13px;width:320px}
+.it{display:flex;align-items:center;gap:10px;padding:6px 8px;border-radius:8px}.it.sel{background:var(--muted)}
+.sep{border-top:1px solid var(--border);margin:4px 0}
+.ban{display:flex;align-items:center;gap:10px;background:var(--tint);color:var(--tint-fg);border-radius:10px;padding:8px 12px;font-size:13px}
+.btn{border:1px solid var(--strong);border-radius:8px;padding:5px 12px;font-size:12px;color:var(--fg);background:var(--surface)}
+.tile{background:var(--muted);border-radius:12px;padding:12px;min-height:110px;display:flex;flex-direction:column;justify-content:space-between;gap:8px}
+.tbl{display:grid;grid-template-columns:minmax(0,1fr) 90px 90px 110px;padding:8px 0;border-bottom:1px solid var(--border);font-size:13px}
+.metric{background:var(--muted);border-radius:10px;padding:10px 12px}.metric b{display:block;font-size:22px;font-weight:600}
+.phone{width:260px;border:7px solid var(--fg);border-radius:30px;background:var(--surface);padding:10px;font-size:12px;min-height:420px;display:flex;flex-direction:column}
+.sheet{border-top:1px solid var(--strong);border-radius:16px 16px 0 0;padding:10px;margin:auto -10px -10px;background:var(--surface);display:flex;flex-direction:column;gap:6px}
+.kbtn{border-radius:8px;padding:6px 14px;font-size:13px;display:inline-block}
+.note{font-size:12px;color:var(--fg3)}
+</style>
+</head>
+<body><main>
+<h1>Studio: a design system manager</h1>
+<p class="cap">The wireframes for <code>/studio</code>, which replaces <code>/themes</code>. The decision record is <code>studio-wireframes.md</code>. Swatches use a sample system ("Acme portfolio": brand seed #1C452E pinned at 800, Newsreader / Manrope / Geist Mono).</p>
+
+<h2>1 · Foundations, the whole page</h2>
+<p class="cap">Concept A: one scroll, a sticky section index, every item edited in a popover in place. Each section header has a count, its base knob (Scale, Base radius, Depth) and "+ New". There's no live component rail; the Components tab is one click away. Above the Studio bar, the site nav shrinks to a slim header (not drawn).</p>
+<div class="win">
+ <div class="chrome"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>
+ <div class="bar"><span class="pill">Acme portfolio <i class="ti ti-chevron-down"></i></span><span class="pill on">Foundations</span><span class="pill">Components</span><span class="pill">Accessibility</span><span class="sp"></span><i class="ti ti-arrow-back-up"></i><i class="ti ti-arrow-forward-up"></i><i class="ti ti-arrows-shuffle"></i><i class="ti ti-moon"></i><span class="pill cta">Use system</span></div>
+ <div class="page">
+  <div class="idx">Brand<br><b>Colours</b><br>Typography<br>Corners<br>Shadows<br>Borders<br>Controls</div>
+  <div>
+   <div class="h"><b>Brand</b><span>Acme <i class="ti ti-pencil"></i></span></div>
+   <div class="card g" style="grid-template-columns:2fr 2fr 1fr 1fr 1fr">
+    <div><div class="slot" style="font-size:24px">Acme</div><div class="lbl">Logo · placeholder</div></div>
+    <div><div class="slot" style="font-size:24px;background:#0D2117;color:#F0F9F2;border-color:#2B7047">Acme</div><div class="lbl">Logo dark</div></div>
+    <div><div class="slot" style="font-size:26px">A</div><div class="lbl">Mark</div></div>
+    <div><div class="slot" style="font-size:26px;background:#0D2117;color:#F0F9F2;border-color:#2B7047">A</div><div class="lbl">Mark dark</div></div>
+    <div><div class="slot" style="border-color:transparent"><div style="width:52px;height:52px;border-radius:13px;background:#2B7047;color:#F0F9F2;display:flex;align-items:center;justify-content:center;font-size:24px">A</div></div><div class="lbl">App icon</div></div>
+   </div>
+
+   <div class="h"><b>Colours<em>66</em></b><span><span><i class="ti ti-sun"></i> Light · <span class="lbl3">dark</span></span><span><i class="ti ti-plus"></i> New colour</span></span></div>
+   <div class="card" style="margin-bottom:8px">
+    <div class="lbl" style="margin-bottom:8px">Roles · what components use</div>
+    <div class="g" style="grid-template-columns:repeat(4,minmax(0,1fr))">
+     <div class="role"><i style="background:#2B7047"></i>Primary <span class="lbl3">brand 600</span></div>
+     <div class="role"><i style="background:#fff"></i>Background <span class="lbl3">neutral 0</span></div>
+     <div class="role"><i style="background:#1C1917"></i>Foreground <span class="lbl3">neutral 900</span></div>
+     <div class="role"><i style="background:#E7E5E4"></i>Border <span class="lbl3">neutral 200</span></div>
+     <div class="role"><i style="background:#F5F5F4"></i>Muted <span class="lbl3">neutral 100</span></div>
+     <div class="role"><i style="background:#DC2626"></i>Destructive <span class="lbl3">error 600</span></div>
+     <div class="role"><i style="background:#3C8D5B"></i>Ring <span class="lbl3">brand 500</span></div>
+     <div class="role lbl3">+ 14 more (expands)</div>
+    </div>
+   </div>
+   <div class="card">
+    <div class="ramp"><span class="lbl">Brand</span><i style="background:#F0F9F2"></i><i style="background:#DCEFE0"></i><i style="background:#BBDFC4"></i><i style="background:#8DC8A0"></i><i style="background:#5DAA78"></i><i style="background:#3C8D5B"></i><i style="background:#2B7047"></i><i style="background:#225A3A"></i><i class="seed" style="background:#1C452E"></i><i style="background:#193B29"></i><i style="background:#0D2117"></i></div>
+    <div class="ramp"><span class="lbl">Neutral</span><i style="background:#FAFAF9"></i><i style="background:#F5F5F4"></i><i style="background:#E7E5E4"></i><i style="background:#D6D3D1"></i><i style="background:#A8A29E"></i><i style="background:#78716C"></i><i style="background:#57534E"></i><i style="background:#44403C"></i><i style="background:#292524"></i><i style="background:#1C1917"></i><i style="background:#0C0A09"></i></div>
+    <div class="ramp"><span class="lbl">Error</span><i style="background:#FEF2F2"></i><i style="background:#FEE2E2"></i><i style="background:#FECACA"></i><i style="background:#FCA5A5"></i><i style="background:#F87171"></i><i style="background:#EF4444"></i><i class="seed" style="background:#DC2626"></i><i style="background:#B91C1C"></i><i style="background:#991B1B"></i><i style="background:#7F1D1D"></i><i style="background:#450A0A"></i></div>
+    <div class="ramp"><span class="lbl">Success</span><i style="background:#F0FDF4"></i><i style="background:#DCFCE7"></i><i style="background:#BBF7D0"></i><i style="background:#86EFAC"></i><i style="background:#4ADE80"></i><i style="background:#22C55E"></i><i class="seed" style="background:#16A34A"></i><i style="background:#15803D"></i><i style="background:#166534"></i><i style="background:#14532D"></i><i style="background:#052E16"></i></div>
+    <div class="ramp"><span class="lbl">Warning</span><i style="background:#FFFBEB"></i><i style="background:#FEF3C7"></i><i style="background:#FDE68A"></i><i style="background:#FCD34D"></i><i class="seed" style="background:#FBBF24"></i><i style="background:#F59E0B"></i><i style="background:#D97706"></i><i style="background:#B45309"></i><i style="background:#92400E"></i><i style="background:#78350F"></i><i style="background:#451A03"></i></div>
+    <div class="ramp"><span class="lbl">Info</span><i style="background:#EFF6FF"></i><i style="background:#DBEAFE"></i><i style="background:#BFDBFE"></i><i style="background:#93C5FD"></i><i style="background:#60A5FA"></i><i style="background:#3B82F6"></i><i class="seed" style="background:#2563EB"></i><i style="background:#1D4ED8"></i><i style="background:#1E40AF"></i><i style="background:#1E3A8A"></i><i style="background:#172554"></i></div>
+    <div class="ramp"><span></span><span class="lbl3">50</span><span class="lbl3">100</span><span class="lbl3">200</span><span class="lbl3">300</span><span class="lbl3">400</span><span class="lbl3">500</span><span class="lbl3">600</span><span class="lbl3">700</span><span class="lbl3">800</span><span class="lbl3">900</span><span class="lbl3">950</span></div>
+    <div class="ramp"><span class="lbl">Trendy green</span><i style="background:#7C881A"></i><span class="tag" style="grid-column:span 4">Not used by components</span></div>
+   </div>
+
+   <div class="h"><b>Typography<em>11</em></b><span><span>Scale · 15px · regular</span><span><i class="ti ti-plus"></i> New text style</span></span></div>
+   <div class="card g" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-bottom:8px">
+    <div><div style="font-family:var(--serif);font-size:36px">Newsreader</div><div class="lbl">Heading · Google Font · 5 styles</div></div>
+    <div><div style="font-size:32px">Manrope</div><div class="lbl">Body · Google Font · 5 styles</div></div>
+    <div><div style="font-family:var(--mono);font-size:28px">Geist Mono</div><div class="lbl">Mono · Google Font · 1 style</div></div>
+   </div>
+   <div class="card">
+    <div class="row"><span style="font-family:var(--serif);font-size:30px">Heading 1 <span class="tag">h1</span></span><span class="lbl">Newsreader 300 · 30 / 36 · 0em</span></div>
+    <div class="row"><span style="font-family:var(--serif);font-size:24px">Heading 2 <span class="tag">h2</span></span><span class="lbl">Newsreader 300 · 24 / 30 · 0em</span></div>
+    <div class="row"><span style="font-family:var(--serif);font-size:20px">Heading 3 <span class="tag">h3</span></span><span class="lbl">Newsreader 400 · 20 / 26 · 0em</span></div>
+    <div class="row"><span style="font-family:var(--serif);font-size:17px">Heading 4 <span class="tag">h4</span></span><span class="lbl">Newsreader 400 · 16 / 22 · 0em</span></div>
+    <div class="row"><span style="font-size:18px">Lead <span class="tag">lead</span></span><span class="lbl">Manrope 400 · 18 / 28 · 0em</span></div>
+    <div class="row"><span style="font-size:16px">Large <span class="tag">large</span></span><span class="lbl">Manrope 500 · 16 / 24 · 0em</span></div>
+    <div class="row"><span style="font-size:14px">Body <span class="tag">p</span></span><span class="lbl">Manrope 400 · 14 / 20 · 0em</span></div>
+    <div class="row"><span style="font-size:12px">Small <span class="tag">small</span></span><span class="lbl">Manrope 500 · 12 / 16 · 0em</span></div>
+    <div class="row"><span style="font-size:13px;color:var(--fg2)">Muted <span class="tag">muted</span></span><span class="lbl">Manrope 400 · 13 / 20 · 0em</span></div>
+    <div class="row"><span style="font-family:var(--serif);font-size:16px;font-style:italic">Quote <span class="tag">blockquote</span></span><span class="lbl">Newsreader 400 · 16 / 26 · 0em</span></div>
+    <div class="row"><span style="font-family:var(--mono);font-size:13px">Code <span class="tag">code</span></span><span class="lbl">Geist Mono 400 · 13 / 20 · 0em</span></div>
+   </div>
+
+   <div class="h"><b>Corners<em>6</em></b><span><span>Base radius · medium</span><span><i class="ti ti-plus"></i> New corner</span></span></div>
+   <div class="card g" style="grid-template-columns:repeat(6,minmax(0,1fr))">
+    <div><div style="height:46px;border:2px solid var(--strong);border-bottom:0;border-radius:4px 4px 0 0"></div><div class="lbl">Small · 4</div></div>
+    <div><div style="height:46px;border:2px solid var(--strong);border-bottom:0;border-radius:6px 6px 0 0"></div><div class="lbl">Medium · 6</div></div>
+    <div><div style="height:46px;border:2px solid var(--strong);border-bottom:0;border-radius:10px 10px 0 0"></div><div class="lbl">Large · 10</div></div>
+    <div><div style="height:46px;border:2px solid var(--strong);border-bottom:0;border-radius:14px 14px 0 0"></div><div class="lbl">XL · 14</div></div>
+    <div><div style="height:46px;border:2px solid var(--strong);border-bottom:0;border-radius:18px 18px 0 0"></div><div class="lbl">2XL · 18</div></div>
+    <div><div style="height:46px;border:2px solid var(--strong);border-bottom:0;border-radius:46px 46px 0 0"></div><div class="lbl">Full</div></div>
+   </div>
+
+   <div class="h"><b>Shadows<em>3</em></b><span><span>Depth · soft</span><span><i class="ti ti-plus"></i> New shadow</span></span></div>
+   <div class="card g" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+    <div style="background:var(--surface);border-radius:12px;padding:14px;box-shadow:0 1px 2px rgba(0,0,0,.05)"><div>Shadow 1</div><div class="lbl">0 1 2 0 · black 5%</div></div>
+    <div style="background:var(--surface);border-radius:12px;padding:14px;box-shadow:0 4px 12px -2px rgba(0,0,0,.08)"><div>Shadow 2</div><div class="lbl">0 4 12 −2 · black 8%</div></div>
+    <div style="background:var(--surface);border-radius:12px;padding:14px;box-shadow:0 12px 24px -6px rgba(0,0,0,.12)"><div>Shadow 3</div><div class="lbl">0 12 24 −6 · black 12%</div></div>
+   </div>
+
+   <div class="h"><b>Borders<em>2</em></b><span><i class="ti ti-plus"></i> New border</span></div>
+   <div class="card g" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+    <div style="border:1px solid #E7E5E4;border-radius:12px;padding:14px;background:var(--surface)"><div>Default</div><div class="lbl">1px solid · border role</div></div>
+    <div style="border:1px solid #D6D3D1;border-radius:12px;padding:14px;background:var(--surface)"><div>Input</div><div class="lbl">1px solid · input role</div></div>
+   </div>
+
+   <div class="h"><b>Controls</b><span>Icon stroke 1.5 · density regular</span></div>
+   <div class="card g" style="grid-template-columns:repeat(2,minmax(0,1fr))">
+    <div><div style="display:flex;gap:8px;margin-bottom:6px"><span class="kbtn" style="background:#2B7047;color:#F0F9F2">Book a call</span><span class="kbtn" style="border:1px solid #D6D3D1">Cancel</span></div><div class="lbl">Buttons · solid · mobile pill</div></div>
+    <div><div style="border:1px solid #D6D3D1;border-radius:8px;padding:6px 10px;color:var(--fg3);background:var(--surface);margin-bottom:6px">name@studio.com</div><div class="lbl">Inputs · outline</div></div>
+   </div>
+  </div>
+ </div>
+</div>
+
+<h2>2 · Popovers</h2>
+<p class="cap">One shape: a name row (lock and slot tag for fixed slots, an editable name and a trash for extras), then a preview, the values, and a footer for status ("edited · reset", contrast, "used by"). Edits apply live and are undoable, Esc or clicking outside closes, one popover is open at a time, and it opens beside the item and flips at the edge. On a phone it becomes a bottom sheet.</p>
+<div class="g" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+ <div class="pop"><p class="t">Ramp · click the row label</p><div class="nm"><span>Brand</span><i class="ti ti-lock"></i></div>
+  <div class="f"><span><span class="sw" style="background:#1C452E"></span> #1C452E</span><em>input</em></div>
+  <div class="two"><div class="f">Pin <em>auto · 800</em></div><div class="f">Hue drift <em>0°</em></div></div>
+  <div class="lbl">1 step edited · <u>reset all</u></div></div>
+ <div class="pop"><p class="t">Step · click a swatch</p><div class="nm"><span>Brand 600</span><i class="ti ti-lock"></i></div>
+  <div class="pv" style="background:#2E7349"></div><div class="f"><span>#2E7349</span><em>edited · <u>reset</u></em></div>
+  <div class="two"><div class="f">on white <em class="ok">5.9 AA</em></div><div class="f">on 950 <em class="warn">2.9</em></div></div>
+  <div class="lbl">Used by Primary, Ring</div></div>
+ <div class="pop"><p class="t">Role · click a role</p><div class="nm"><span>Primary</span><i class="ti ti-lock"></i></div>
+  <div class="two"><div class="pv" style="background:#2B7047;color:#F0F9F2">Light</div><div class="pv" style="background:#5DAA78;color:#0D2117">Dark</div></div>
+  <div class="f"><i class="ti ti-sun"></i><span style="flex:1">Brand 600</span><i class="ti ti-chevron-down"></i></div>
+  <div class="f"><i class="ti ti-moon"></i><span style="flex:1">Brand 400</span><em>edited</em></div>
+  <div class="lbl">Primary foreground on it · <span class="ok">6.1 AA</span></div></div>
+ <div class="pop"><p class="t">Text style · click a row</p><div class="nm"><span>Heading 2</span><span class="tag">h2</span><i class="ti ti-lock"></i></div>
+  <div class="pv" style="font-family:var(--serif);font-size:24px">Case studies</div>
+  <div class="f"><span>Heading font · Newsreader</span><i class="ti ti-chevron-down"></i></div>
+  <div class="four"><div class="f">B <em>300</em></div><div class="f">Aa <em>24</em></div><div class="f">↕ <em>30</em></div><div class="f">|A| <em>0</em></div></div>
+  <div class="lbl">Size edited · <u>reset to scale</u></div></div>
+ <div class="pop"><p class="t">Font · click a font card</p><div class="f"><i class="ti ti-search"></i><span style="flex:1">Fraun</span><i class="ti ti-x"></i></div>
+  <div class="lbl3">Halftone picks</div><div class="f" style="font-family:var(--serif)">Newsreader <i class="ti ti-check"></i></div>
+  <div class="lbl3">All Google Fonts</div><div class="f" style="font-family:var(--serif)">Fraunces <em>100–900</em></div>
+  <div class="lbl">Outside the picks: shares as a JSON link, not a code</div></div>
+ <div class="pop"><p class="t">Corner · click a corner</p><div class="nm"><span>Medium</span><span class="tag">md</span><i class="ti ti-lock"></i></div>
+  <div class="pv" style="justify-content:flex-start;align-items:flex-end;padding-left:40px"><div style="width:120px;height:36px;border:2px solid var(--fg);border-right:0;border-bottom:0;border-radius:6px 0 0 0"></div></div>
+  <div class="f"><i class="ti ti-border-corner-rounded"></i><span>6</span></div>
+  <div class="lbl">Follows base · <u>override</u> · used by Card, Input, Menu</div></div>
+ <div class="pop"><p class="t">Shadow · click a card</p><div class="nm"><span>Shadow 2</span><i class="ti ti-lock"></i></div>
+  <div class="f">Drop shadow <span><i class="ti ti-plus"></i> <i class="ti ti-minus"></i></span></div>
+  <div class="four"><div class="f">X <em>0</em></div><div class="f">Y <em>4</em></div><div class="f">B <em>12</em></div><div class="f">S <em>−2</em></div></div>
+  <div class="f"><span><span class="sw" style="background:#000"></span> #000000</span><em>8%</em></div>
+  <div class="lbl">Used by Card, Popover</div></div>
+ <div class="pop"><p class="t">Border · click a card</p><div class="nm"><span>Input</span><i class="ti ti-lock"></i></div>
+  <div class="two"><div class="f">solid <i class="ti ti-chevron-down"></i></div><div class="f"><i class="ti ti-square"></i><em>1</em></div></div>
+  <div class="f"><span><span class="sw" style="background:#D6D3D1"></span> Input role</span><em>neutral 300</em></div></div>
+ <div class="pop"><p class="t">Logo slot · click a slot</p><div class="nm"><span>Logo</span><i class="ti ti-lock"></i></div>
+  <div class="pv" style="font-family:var(--serif);font-size:22px;border:1.5px dashed var(--strong)">Acme</div>
+  <div class="lbl">Placeholder · the system name in its heading font</div>
+  <div class="f" style="justify-content:center;border:1.5px dashed var(--strong)"><i class="ti ti-upload"></i> Upload SVG or PNG</div></div>
+ <div class="pop" style="grid-column:span 3"><p class="t">Extra · anything made with "+ New"</p>
+  <div class="two"><div class="nm"><span>Trendy green</span><i class="ti ti-trash"></i></div><div class="f"><span><span class="sw" style="background:#7C881A"></span> #7C881A</span><em>100% <i class="ti ti-link"></i> link to a step</em></div></div>
+  <div class="lbl">Shown inline in its section with a "Not used by components" tag; exported to tokens.json and CSS.</div></div>
+</div>
+
+<h2>3 · Systems: switcher, new system, first run, shared links</h2>
+<p class="cap">The switcher is the system name in the top bar. Systems are listed newest edit first, each with a 4-colour strip and its name in its own heading font. New starts from a preset, a copy or an import (file, ht- code, shadcn code). There's no blank system: Default is the blank. Migration is silent and one-time. A shared link opens read-only and never overwrites your work.</p>
+<div class="g" style="grid-template-columns:auto minmax(0,1fr);align-items:start">
+ <div class="menu">
+  <div class="it sel"><span class="strip"><i style="background:#2B7047"></i><i style="background:#8DC8A0"></i><i style="background:#F5F5F4"></i><i style="background:#1C1917"></i></span><span style="flex:1;font-family:var(--serif);font-size:15px">Acme portfolio</span><span class="lbl3">now</span><i class="ti ti-check"></i></div>
+  <div class="it"><span class="strip"><i style="background:#2563EB"></i><i style="background:#93C5FD"></i><i style="background:#F4F4F5"></i><i style="background:#18181B"></i></span><span style="flex:1">Northwind · client</span><span class="lbl3">2d</span><i class="ti ti-dots"></i></div>
+  <div class="it"><span class="strip"><i style="background:#C2410C"></i><i style="background:#FDBA74"></i><i style="background:#FAFAF9"></i><i style="background:#1C1917"></i></span><span style="flex:1;font-family:var(--mono);font-size:12px">Side project</span><span class="lbl3">3w</span><i class="ti ti-dots"></i></div>
+  <div class="sep"></div>
+  <div class="it"><i class="ti ti-plus"></i>New system</div>
+  <div class="it"><i class="ti ti-file-import"></i>Import file or code…</div>
+  <div class="sep"></div>
+  <div class="it lbl3"><i class="ti ti-device-laptop"></i>Saved in this browser · sign in to sync (later)</div>
+  <div class="sep"></div>
+  <div class="lbl3" style="padding:4px 8px">Per system (…): Rename · Duplicate · Export .halftone.json · Copy share link · Delete (with undo)</div>
+ </div>
+ <div class="win" style="padding:16px;display:flex;flex-direction:column;gap:10px">
+  <b style="font-weight:600">New system</b>
+  <div class="f">Northwind · client</div>
+  <div style="display:flex;gap:6px"><span class="pill on">Preset</span><span class="pill">Copy of Acme portfolio</span><span class="pill">Import</span></div>
+  <div class="g" style="grid-template-columns:repeat(5,minmax(0,1fr))">
+   <div class="pill" style="border-radius:10px;padding:8px">Default</div><div class="pill" style="border-radius:10px;padding:8px;font-family:var(--serif)">Editorial</div><div class="pill" style="border-radius:10px;padding:8px">Soft</div><div class="pill" style="border-radius:10px;padding:8px">Playful</div><div class="pill" style="border-radius:10px;padding:8px">Brutalist</div>
+   <div class="pill" style="border-radius:10px;padding:8px;font-family:var(--mono)">Mono</div><div class="pill" style="border-radius:10px;padding:8px">Bold</div><div class="pill" style="border-radius:10px;padding:8px;border:2px solid var(--accent)">Calm</div><div class="pill" style="border-radius:10px;padding:8px">Tactile</div><div class="pill" style="border-radius:10px;padding:8px">Studio</div>
+  </div>
+  <div style="display:flex;justify-content:flex-end;gap:8px"><span class="btn">Cancel</span><span class="btn cta">Create system</span></div>
+ </div>
+</div>
+<div class="g" style="grid-template-columns:1fr 1fr;margin-top:12px">
+ <div class="win"><div class="bar"><span class="pill">My system <i class="ti ti-chevron-down"></i></span><span class="pill on">Foundations</span></div>
+  <div style="padding:12px"><div class="ban"><i class="ti ti-sparkles"></i><span style="flex:1">Your theme and logo moved in as "My system". Click anything to edit it. It saves in this browser.</span><span>Rename</span><i class="ti ti-x"></i></div>
+  <p class="note">A first-time visitor with nothing saved gets "Halftone" (the committed theme) and no banner.</p></div></div>
+ <div class="win"><div class="bar"><span class="pill">Northwind · shared <i class="ti ti-eye"></i></span><span class="pill on">Foundations</span></div>
+  <div style="padding:12px"><div class="ban" style="background:var(--muted);color:var(--fg)"><i class="ti ti-link"></i><span style="flex:1">You're viewing a shared system. Edits are kept only once you save it.</span><span class="btn">Discard</span><span class="btn cta">Save as new system</span></div>
+  <p class="note">For <code>?s=</code> (JSON) and <code>?t=</code> (code) links. Links never carry the logo.</p></div></div>
+</div>
+
+<h2>4 · Components tab</h2>
+<p class="cap">Every catalogue tile (<code>GroupTiles</code>), live on the active system, with a group filter and a Web / Mobile toggle. Light and dark come from the top bar. Read-only: clicking a tile opens its docs page. Editing components happens in Foundations (section 7).</p>
+<div class="win"><div class="bar"><span class="pill">Acme portfolio</span><span class="pill">Foundations</span><span class="pill on">Components</span><span class="pill">Accessibility</span><span class="sp"></span><span class="pill on">Web</span><span class="pill">Mobile</span></div>
+ <div style="padding:14px">
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px"><span class="pill on">All</span><span class="pill">Actions</span><span class="pill">Inputs and selection</span><span class="pill">Navigation</span><span class="pill">Data display</span><span class="pill">Feedback and status</span><span class="pill">Containers and layout</span><span class="pill">Overlays</span><span class="pill">+ 4</span></div>
+  <div class="g" style="grid-template-columns:repeat(4,minmax(0,1fr))">
+   <div class="tile"><span class="kbtn" style="background:#2B7047;color:#F0F9F2;align-self:flex-start">Book a call</span><span class="lbl">Button</span></div>
+   <div class="tile"><div style="border:1px solid #D6D3D1;border-radius:8px;padding:6px 10px;color:var(--fg3);background:var(--surface)">name@studio.com</div><span class="lbl">Input</span></div>
+   <div class="tile"><div style="display:flex;gap:6px"><span style="background:#DCEFE0;color:#193B29;border-radius:99px;padding:2px 10px;font-size:12px">Branding</span><span style="background:#FEF3C7;color:#78350F;border-radius:99px;padding:2px 10px;font-size:12px">Draft</span></div><span class="lbl">Badge</span></div>
+   <div class="tile"><div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:8px"><div style="font-family:var(--serif);font-size:15px">Northwind rebrand</div><div class="lbl">Case study · 2026</div></div><span class="lbl">Card</span></div>
+  </div>
+ </div>
+</div>
+
+<h2>5 · Accessibility tab</h2>
+<p class="cap">Today's Contrast view, renamed, with a summary first. The pairing table shows light and dark. Choices you made warn and carry a "fix"; generated values that were auto-fixed are listed. Below it: a contrast grid for each ramp (text on every step) and the colour-vision previews. The tab label shows the number of warnings.</p>
+<div class="win"><div class="bar"><span class="pill">Acme portfolio</span><span class="pill">Foundations</span><span class="pill">Components</span><span class="pill on">Accessibility <span class="warn">2</span></span></div>
+ <div style="padding:14px">
+  <div class="g" style="grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:12px">
+   <div class="metric"><span class="lbl">Pairings pass AA</span><b>40 of 42</b></div><div class="metric"><span class="lbl">Your edits to check</span><b class="warn">2</b></div><div class="metric"><span class="lbl">Auto-fixed</span><b>3</b></div><div class="metric"><span class="lbl">Colour vision</span><b>4 previews</b></div>
+  </div>
+  <div class="tbl lbl"><span>Pairing</span><span>Light</span><span>Dark</span><span></span></div>
+  <div class="tbl"><span>Muted foreground on muted</span><span class="warn">4.1</span><span class="ok">7.2 AA</span><span><u>fix</u> · edited</span></div>
+  <div class="tbl"><span>Primary foreground on primary</span><span class="ok">6.1 AA</span><span class="warn">3.8</span><span><u>fix</u> · edited</span></div>
+  <div class="tbl"><span>Destructive on background</span><span class="ok">4.8 AA</span><span class="ok">5.2 AA</span><span class="lbl3">auto-fixed</span></div>
+  <div class="tbl" style="border:0"><span>Foreground on card</span><span class="ok">17 AAA</span><span class="ok">16 AAA</span><span></span></div>
+ </div>
+</div>
+
+<h2>6 · Phone width</h2>
+<p class="cap">The section index becomes a jump menu under the top bar; the tabs stay; popovers become bottom sheets. Undo, shuffle and light/dark move into the ⋯ menu.</p>
+<div style="display:flex;gap:24px;justify-content:center;flex-wrap:wrap">
+ <div class="phone"><div style="display:flex;justify-content:space-between;margin-bottom:8px"><span class="pill on">Acme portfolio</span><i class="ti ti-dots"></i></div>
+  <div style="display:flex;gap:4px;margin-bottom:8px"><span class="pill on">Foundations</span><span class="pill">Components</span></div>
+  <div class="f" style="margin-bottom:10px">Colours <i class="ti ti-chevron-down"></i></div>
+  <div class="lbl">Brand</div>
+  <div style="display:grid;grid-template-columns:repeat(11,1fr);gap:2px;margin:4px 0 10px"><i style="height:20px;background:#F0F9F2"></i><i style="height:20px;background:#DCEFE0"></i><i style="height:20px;background:#BBDFC4"></i><i style="height:20px;background:#8DC8A0"></i><i style="height:20px;background:#5DAA78"></i><i style="height:20px;background:#3C8D5B"></i><i style="height:20px;background:#2B7047"></i><i style="height:20px;background:#225A3A"></i><i style="height:20px;background:#1C452E"></i><i style="height:20px;background:#193B29"></i><i style="height:20px;background:#0D2117"></i></div>
+  <div class="lbl">Neutral</div>
+  <div style="display:grid;grid-template-columns:repeat(11,1fr);gap:2px;margin:4px 0"><i style="height:20px;background:#FAFAF9"></i><i style="height:20px;background:#F5F5F4"></i><i style="height:20px;background:#E7E5E4"></i><i style="height:20px;background:#D6D3D1"></i><i style="height:20px;background:#A8A29E"></i><i style="height:20px;background:#78716C"></i><i style="height:20px;background:#57534E"></i><i style="height:20px;background:#44403C"></i><i style="height:20px;background:#292524"></i><i style="height:20px;background:#1C1917"></i><i style="height:20px;background:#0C0A09"></i></div>
+ </div>
+ <div class="phone" style="background:var(--muted)"><div class="sheet"><div style="width:36px;height:4px;border-radius:2px;background:var(--strong);align-self:center"></div>
+  <div class="nm"><span>Brand 600</span><i class="ti ti-lock"></i></div><div style="height:48px;border-radius:8px;background:#2E7349"></div>
+  <div class="f"><span>#2E7349</span><em>edited · reset</em></div><div class="f"><span>on white</span><em class="ok">5.9 AA</em></div></div></div>
+</div>
+
+<h2>7 · Later: the Components section of Foundations</h2>
+<p class="cap">Option 1, after foundations. Controls grows into a Components section. Each base component (Button, Chip, Tag to start) is a card with the same popover. Each value points at a foundation token or is overridden. Stored in the document's reserved <code>components</code> key.</p>
+<div class="card">
+ <div class="h" style="margin-top:0"><b>Components<em>3</em></b><span>Icon stroke 1.5 · density regular</span></div>
+ <div class="g" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+  <div class="tile" style="background:var(--surface)"><div style="display:flex;gap:6px"><span class="kbtn" style="background:#2B7047;color:#F0F9F2">Primary</span><span class="kbtn" style="border:1px solid #D6D3D1">Outline</span></div><span class="lbl">Button · solid · md radius · 36 high</span></div>
+  <div class="tile" style="background:var(--surface);outline:2px solid var(--accent)"><div style="display:flex;gap:6px"><span style="border:1px solid #D6D3D1;border-radius:99px;padding:2px 10px;font-size:12px">Branding</span><span style="background:#DCEFE0;color:#193B29;border-radius:99px;padding:2px 10px;font-size:12px">Selected</span></div><span class="lbl">Chip · pill · outline</span></div>
+  <div class="tile" style="background:var(--surface)"><div style="display:flex;gap:6px"><span style="background:#F5F5F4;color:#44403C;border-radius:4px;padding:2px 8px;font-size:12px">Figma</span><span style="background:#F5F5F4;color:#44403C;border-radius:4px;padding:2px 8px;font-size:12px">React</span></div><span class="lbl">Tag · soft · small radius</span></div>
+ </div>
+ <p class="note">Chip popover: style · corner (token) · height · padding · selected role.</p>
+</div>
+
+</main></body></html>
