@@ -228,8 +228,8 @@ test('the default typeset builds exactly the text scale the kits always had', as
 
 /**
  * What each Text variant drew before the per-style variables (apps/mobile/components/ui/text.tsx): its text-*
- * size and that size's line height, or leading-prose (p) / leading-none (small), tracking-tight on h1–h4 (-0.025em,
- * and -0.25px on native), and its font-* weight.
+ * size and that size's line height, or leading-prose (p) / leading-none (small), tracking-tight on h1–h4 (Tailwind's
+ * -0.025em; native drew NativeWind's fixed -0.25px until the styles, and now takes the em too), and its font-* weight.
  */
 const VARIANT_CLASSES = {
   h1: ['4xl', null, -0.025, 800],
@@ -263,8 +263,6 @@ test('the text style variables draw exactly what the Text variants drew, at ever
           // leading-none is 1 × the size.
           assert.equal(vars[`--type-${name}-leading`], lead === 'prose' ? theme.lineHeight.prose : lead === 'none' ? fontSize : lineHeight, at);
           assert.equal(vars[`--type-${name}-tracking`], `${tracking}em`, at);
-          // NativeWind's native preset: tracking-tight is -0.25px.
-          assert.equal(vars[`--type-${name}-tracking-native`], tracking ? '-0.25px' : '0px', at);
           assert.equal(vars[`--type-${name}-weight`], String(weight), at);
         }
         // The web's line heights are unitless: the same ratio.

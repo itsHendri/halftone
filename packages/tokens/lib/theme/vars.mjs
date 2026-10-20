@@ -29,9 +29,8 @@ export const themeTextStyles = (theme) => resolveTextStyles(theme.type, textEdit
  * The text styles' variables, --type-<style>-{size,leading,weight,tracking,font}, from resolveTextStyles. Literal
  * values at the theme's typeset, in each kit's units:
  *   'hsl'    mobile (NativeWind): size and line height in rem (native line heights are lengths); the font is
- *            the role, which components/ui/text.tsx picks in JS, so no variable. Tracking twice: em for the web
- *            export, and -tracking-native in px for native, where NativeWind's own scale is em × 10 px
- *            (tracking-tight is -0.25px there, -0.025em on the web), so the kits draw what they always did
+ *            the role, which components/ui/text.tsx picks in JS, so no variable. Tracking is em on native too:
+ *            NativeWind resolves it against the style's own size (its preset's tracking-* are fixed px instead)
  *   'oklch'  web: rem and a unitless line height; the font is the role's family variable. `font(role)` writes
  *            it (the build adds fallbacks; a live theme always sets --kit-font-*)
  */
@@ -45,7 +44,6 @@ export function textStyleVars(styles, format, font = (role) => `var(--kit-font-$
     vars[`${v}-leading`] = format === 'hsl' ? length(s.lineHeight ?? s.size * s.leading) : String(fixed(s.leading, 6));
     vars[`${v}-weight`] = String(s.weight);
     vars[`${v}-tracking`] = `${s.tracking}em`;
-    if (format === 'hsl') vars[`${v}-tracking-native`] = `${fixed(s.tracking * 10)}px`;
     if (format !== 'hsl') vars[`${v}-font`] = font(s.font);
   }
   return vars;

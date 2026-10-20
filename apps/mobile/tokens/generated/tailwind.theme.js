@@ -196,18 +196,3 @@ module.exports = {
     "measure": "35rem"
   }
 };
-// Native: NativeWind's preset draws tracking in px (tracking-tight is -0.25px, the web's -0.025em × 10), so the
-// text styles' tracking reads their px variables there.
-if (process.env.NATIVEWIND_OS && process.env.NATIVEWIND_OS !== 'web') module.exports.letterSpacing = {
-  "type-h1": "var(--type-h1-tracking-native)",
-  "type-h2": "var(--type-h2-tracking-native)",
-  "type-h3": "var(--type-h3-tracking-native)",
-  "type-h4": "var(--type-h4-tracking-native)",
-  "type-lead": "var(--type-lead-tracking-native)",
-  "type-p": "var(--type-p-tracking-native)",
-  "type-large": "var(--type-large-tracking-native)",
-  "type-small": "var(--type-small-tracking-native)",
-  "type-muted": "var(--type-muted-tracking-native)",
-  "type-code": "var(--type-code-tracking-native)",
-  "type-blockquote": "var(--type-blockquote-tracking-native)"
-};

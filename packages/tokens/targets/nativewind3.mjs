@@ -88,12 +88,7 @@ ${cssBlock('.dark:root', ctx.semDark, { styleShape: ctx.shape }, 'dark', ctx.col
   }
   const letterSpacing = Object.fromEntries(Object.keys(ctx.textStyles).map((name) => [`type-${name}`, `var(--type-${name}-tracking)`]));
   const fontWeight = Object.fromEntries(Object.keys(ctx.textStyles).map((name) => [`type-${name}`, `var(--type-${name}-weight)`]));
-  const nativeLetterSpacing = Object.fromEntries(Object.keys(ctx.textStyles).map((name) => [`type-${name}`, `var(--type-${name}-tracking-native)`]));
-  const tailwind = `// ${ctx.header}\nmodule.exports = ${JSON.stringify({ colors, borderRadius, borderWidth, boxShadow, height, minHeight: height, width: height, spacing, fontSize, lineHeight, letterSpacing, fontWeight, maxWidth }, null, 2)};
-// Native: NativeWind's preset draws tracking in px (tracking-tight is -0.25px, the web's -0.025em × 10), so the
-// text styles' tracking reads their px variables there.
-if (process.env.NATIVEWIND_OS && process.env.NATIVEWIND_OS !== 'web') module.exports.letterSpacing = ${JSON.stringify(nativeLetterSpacing, null, 2)};
-`;
+  const tailwind = `// ${ctx.header}\nmodule.exports = ${JSON.stringify({ colors, borderRadius, borderWidth, boxShadow, height, minHeight: height, width: height, spacing, fontSize, lineHeight, letterSpacing, fontWeight, maxWidth }, null, 2)};\n`;
   return [
     { path: options.css, contents: css },
     { path: options.tailwind, contents: tailwind },

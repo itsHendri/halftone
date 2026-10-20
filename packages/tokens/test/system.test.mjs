@@ -506,5 +506,6 @@ test('an edited style\'s font role reaches the build from tokens.json', () => {
   assert.equal(styles.code.font, 'body');
   assert.equal(styles.code.weight, 600, 'the keys not edited keep the default');
   assert.equal(styles.h1.size, 36, 'and the styles not edited keep the typeset');
-  assert.equal(textStyleVars(styles, 'hsl')['--type-code-tracking-native'], '0.5px');
+  assert.equal(textStyleVars(styles, 'hsl')['--type-code-tracking'], '0.05em');
+  assert.equal(textStyleVars(styles, 'hsl')['--type-code-tracking-native'], undefined, 'one tracking, in em, on every platform');
 });
