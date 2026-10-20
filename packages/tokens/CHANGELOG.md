@@ -1,5 +1,27 @@
 # @halftone-ds/tokens
 
+## 1.3.0
+
+### Minor Changes
+
+- a523d18: Halftone systems. A system (`name.halftone.json`) is a theme recipe plus what was edited by hand on top of it, the document the Studio will keep: a seed for every colour role (brand, neutral, danger, success, warning, info) with steps edited by hand, the role mapping for light and dark, text styles, any Google Fonts family, corners, shadows, borders, named extras and the brand.
+
+  - `@halftone-ds/tokens/system` (also re-exported from `/theme`): `normalizeSystem`, `validateSystem`, `createSystem`, `migrate`, `systemToRecipe`, `generateSystem`, `systemRamps`, `textStyles`, `systemRadii`, `systemCode`, `systemOverrides` and `applySystem`, with types. A system with no overrides generates exactly what `generateTheme` does for its recipe.
+  - `theme apply ./name.halftone.json` writes it into `tokens.json` and records the document (without brand images) in `$extensions`; `theme show` lists its overrides and warnings. `theme encode` and `theme resolve` give its `ht-` code when it has no overrides, and say why when it has.
+  - Contrast: generated colours are fixed as before. A colour chosen by hand (a mapped role, an edited step) is never moved; a pairing it fails is reported in the new `theme.warnings`.
+  - The status ramps can be themed from a seed, and their tones follow the step the seed sits on. `brandRamp(seed, { anchor })` pins a seed to any step, and `neutralSeedRamp` makes a neutral from any colour.
+  - Fonts: the `fonts` target and `theme apply` accept any Google Fonts family (`fontByFamily`), not only the curated list.
+  - New tokens a system can write: `semantic.type.<style>.*`, `semantic.radius.<step>` (built as fixed px instead of a multiple of the base), `semantic.border.style` and the `extra` group. Shadows take `inset`. Existing themes and codes build exactly as before.
+  - `components` is reserved in the document for component-level edits later (Button, Chip, Tag…): it is checked to be an object of objects, kept as given, and not generated from yet.
+
+- 4ad1328: Per-style text tokens: every Text variant (`h1 h2 h3 h4 lead p large small muted code blockquote`) is built as
+  `--type-<style>-{size,leading,weight,tracking}` variables (`-font` on Tailwind 4, `-tracking-native` in px for
+  NativeWind's native build), with `text-/leading-/tracking-/font-type-<style>` keys in nativewind3, `type-<style>`
+  utilities in shadcn-web and `TOKENS.textStyles` in ts-theme. A system's edited styles (`semantic.type.<style>`)
+  change just their variables; with none, the output draws exactly what the `text-*` classes did. `themeVars`
+  carries the styles to live previews. New: `resolveTextStyles`, `textEdits`, `textStyleVars`, `themeTextStyles`,
+  `TEXT_STYLES` and `TEXT_DEFAULTS` from `/theme`.
+
 ## 1.2.0
 
 ### Minor Changes
