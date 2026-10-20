@@ -5,6 +5,7 @@
  *   'oklch'  Tailwind 4 / shadcn web (`oklch(0.546 0.2152 262.88)`) — the web kit and the docs site
  */
 import { hexToHslTriplet, hexToOklch } from '../color.mjs';
+import { extraList, extraTextStyles } from './extras.mjs';
 import { resolveTextStyles, shadowCss, textEdits } from './recipe.mjs';
 
 export const rem = (px) => (px >= 9999 ? '9999px' : `${px / 16}rem`);
@@ -73,7 +74,29 @@ export function styleVars({ button, field }, format) {
   };
 }
 
-/** { light: { '--primary': '…', '--radius': '0.625rem' }, dark: { … } } */
+/**
+ * A system's extras as variables (lib/theme/extras.mjs): --<colour> (a ramp's --<name>-<step>), --radius-<name>,
+ * --shadow-<name> per mode, --border-<name>-width and --type-<name>-*. `font` as textStyleVars takes it.
+ */
+export function extraVars(list, format, font) {
+  const convert = format === 'hsl' ? hexToHslTriplet : hexToOklch;
+  const light = {};
+  const dark = {};
+  for (const c of list.color) {
+    light[`--${c.name}`] = convert(c.light);
+    dark[`--${c.name}`] = convert(c.dark);
+  }
+  for (const r of list.radius) light[`--radius-${r.name}`] = rem(r.px);
+  for (const s of list.shadow) {
+    light[`--shadow-${s.name}`] = shadowCss(s.light);
+    dark[`--shadow-${s.name}`] = shadowCss(s.dark);
+  }
+  for (const b of list.border) light[`--border-${b.name}-width`] = `${b.width}px`;
+  Object.assign(light, textStyleVars(extraTextStyles(list), format, font));
+  return { light, dark };
+}
+
+/** { light: { '--primary': '…', '--radius': '0.625rem' }, dark: { … } } (a system's extras too) */
 export function themeVars(theme, format) {
   const convert = format === 'hsl' ? hexToHslTriplet : hexToOklch;
   const mode = (m) => {
@@ -89,6 +112,7 @@ export function themeVars(theme, format) {
     }
     Object.assign(vars, styleVars(theme, format)[m]);
     for (const [level, value] of Object.entries(theme.semantic.shadow)) vars[`--shadow-${level}`] = shadowCss(value[m]);
+    if (theme.extra) Object.assign(vars, extraVars(extraList(theme.extra), format)[m]);
     return vars;
   };
   return { light: mode('light'), dark: mode('dark') };

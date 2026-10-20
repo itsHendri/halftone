@@ -1,5 +1,9 @@
 'use client';
+import { Popover, PopoverContent, PopoverTrigger } from 'fumadocs-ui/components/ui/popover';
+import { LockIcon, LockOpenIcon, PlusIcon } from 'lucide-react';
 import * as React from 'react';
+import { openItem, useOpenItem } from '@/components/theme/studio/item-popover';
+import { toggleLock, useLocks, type LockKey } from '@/lib/theme/store';
 
 /**
  * The Foundations page's scaffold (wireframe 1): each section's header has its name and count, its base knob (the
@@ -167,5 +171,62 @@ export function Segmented<T extends string>({ label, value, options, onChange }:
         </button>
       ))}
     </div>
+  );
+}
+
+/**
+ * "+ New" (wireframe 8): a short menu of what to start from. Colours asks for the kind (a single colour or a ramp);
+ * every other section, which item to copy. Picking one adds the extra and opens its popover.
+ */
+export function NewMenu({ section, label, heading, options, onPick }: { section: SectionId; label: string; heading: string; options: { id: string; label: string; hint?: string }[]; onPick: (id: string) => void }) {
+  const id = `new:${section}`;
+  const open = useOpenItem() === id;
+  return (
+    <Popover open={open} onOpenChange={(next) => openItem(next ? id : null)}>
+      <PopoverTrigger className="border-border hover:bg-accent focus-visible:ring-ring inline-flex h-7 items-center gap-1 rounded-full border px-2.5 text-xs font-medium focus-visible:outline-none focus-visible:ring-2">
+        <PlusIcon className="size-3.5" aria-hidden />
+        {label}
+      </PopoverTrigger>
+      <PopoverContent align="end" sideOffset={6} className="bg-popover w-60 p-1 backdrop-blur-none">
+        <p className="text-muted-foreground px-2 pb-1 pt-1 text-xs font-medium">{heading}</p>
+        <div role="menu" aria-label={heading} className="flex flex-col">
+          {options.map((o) => (
+            <button
+              key={o.id}
+              type="button"
+              role="menuitem"
+              onClick={() => {
+                openItem(null);
+                onPick(o.id);
+              }}
+              className="hover:bg-accent focus-visible:bg-accent flex w-full flex-col items-start rounded-md px-2 py-1.5 text-left text-sm outline-none">
+              {o.label}
+              {o.hint ? <span className="text-muted-foreground text-xs">{o.hint}</span> : null}
+            </button>
+          ))}
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+}
+
+/** A base knob's lock: shuffle leaves the axis (or axes) alone while it's on. */
+export function KnobLock({ keys, label }: { keys: LockKey[]; label: string }) {
+  const locks = useLocks();
+  const locked = keys.every((k) => locks.has(k));
+  return (
+    <button
+      type="button"
+      aria-pressed={locked}
+      aria-label={`Lock ${label} for shuffle`}
+      title={locked ? `${label} is locked: shuffle leaves it alone` : `Lock ${label} for shuffle`}
+      onClick={() => {
+        for (const k of keys) if (locks.has(k) === locked) toggleLock(k);
+      }}
+      className={`focus-visible:ring-ring inline-flex size-7 items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2 ${
+        locked ? 'bg-accent text-foreground' : 'text-muted-foreground hover:bg-accent hover:text-foreground'
+      }`}>
+      {locked ? <LockIcon className="size-3.5" aria-hidden /> : <LockOpenIcon className="size-3.5" aria-hidden />}
+    </button>
   );
 }

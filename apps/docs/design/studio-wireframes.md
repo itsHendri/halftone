@@ -41,7 +41,7 @@ Subframe's Theme page, plus uicolors' ramps.
 | --- | --- |
 | System switcher (the system's name) | List, switch, New, Import; per system: Rename, Duplicate, Export `.halftone.json`, Copy share link, Delete |
 | Foundations · Components · Accessibility | The three tabs; Accessibility shows its warning count |
-| Undo · Redo · Shuffle · Light/dark | Undo works across the whole system; Shuffle respects locks (today's `LOCK_KEYS`) |
+| Undo · Redo · Shuffle · Light/dark | Undo works across the whole system; Shuffle respects locks (today's `LOCK_KEYS`), set with "Lock for shuffle" in an item's menu or the lock beside a base knob |
 | **Use system** | The one primary action. Opens today's export panel (code, agent prompt, `.halftone.json`, brand zip) |
 
 - **Slim site header on `/studio`** (decided 2026-10-20). The site's Docs / Components / Screens nav shrinks to a
@@ -53,18 +53,20 @@ Subframe's Theme page, plus uicolors' ramps.
 ## Foundations, section by section
 
 Every section header has, in order: its name and count; its **base knob**; and **+ New**.
-- The base knob rewrites every item you haven't edited. It's today's recipe axis: Scale, Base radius, Depth.
-- **+ New** adds an extra.
+- The base knob rewrites every item you haven't edited. It's today's recipe axis: Scale, Base radius, Depth, Width.
+  - Each base knob has a lock beside it: shuffle leaves a locked axis alone (Scale locks size, leading, flow and
+    measure together).
+- **+ New** adds an extra (every section that has a kind of extra: Colours, Typography, Corners, Shadows, Borders).
 
 | Section | Items (fixed slots) | Base knob | Notes |
 | --- | --- | --- | --- |
 | Brand | Logo, Logo dark, Mark, Mark dark, App icon; system name | (none) | Slots always show (see "Logo placeholder" below); upload, replace and remove happen in the slot's popover |
 | Colours | **Roles** (21 aliases: primary, background, foreground, border, muted, destructive, ring, card, popover, secondary, accent, input, sidebar-\*, chart-1–5…), then **ramps**: Brand, Neutral, Error, Success, Warning, Info, each 50–950 | Light / dark switch | The ramps share one 50–950 axis. The input step is outlined |
-| Typography | Font cards (Heading, Body, Mono), then 11 text styles: Heading 1–4 (`h1`–`h4`), Lead, Large, Body (`p`), Small, Muted, Quote (`blockquote`), Code | Scale (base size, leading, flow) | Fonts can be any Google Font; the curated 22 come first as "Halftone picks" |
+| Typography | Font cards (Heading, Body, Mono), then 11 text styles: Heading 1–4 (`h1`–`h4`), Lead, Large, Body (`p`), Small, Muted, Quote (`blockquote`), Code | Scale (base size, leading, flow, measure) | Fonts can be any Google Font; the curated 22 come first as "Halftone picks". The full list is a static file (`lib/studio/google-fonts.json`, from Google's public metadata), so nothing but Google Fonts CSS is fetched |
 | Corners | Small, Medium, Large, XL, 2XL, Full (`sm`…`2xl`, `full`) | Base radius | |
 | Shadows | Shadow 1–3 | Depth | Multi-layer shadows, as in Subframe |
-| Borders | Default, Input | (none) | Width, style and a colour role |
-| Controls | Button style, field style, mobile button shape, icon stroke, density | (none) | Grows into **Components** later (see below) |
+| Borders | Default, Input | Width (the recipe's border: hairline, regular, heavy) | Width, style and a colour role. Width and style are one setting for every border (the kits draw one width); the colour role is each card's own (`border`, `input`) |
+| Controls | Button style, field style, mobile button shape, icon stroke, density | (none) | Each is a recipe axis with its own lock in the item menu. Grows into **Components** later (see below) |
 
 ### Rules
 
@@ -128,30 +130,39 @@ Every section header has, in order: its name and count; its **base knob**; and *
   selected.
 - **Names:** you type a name ("Trendy green"); the token name is its kebab-case version (`trendy-green`), shown
   under the field. The list shows it sentence-cased.
-  - A name used by a built-in slot or another extra is refused inline, as the schema refuses it.
+  - A name used by a built-in slot or another extra is refused inline, as the schema refuses it. So is a name whose
+    token or class would collide (`extraNameProblem` in packages/tokens): a Tailwind colour (`red`, `white`), a
+    theme variable (`radius`, `type-…`), or a Tailwind corner, shadow or border class (`none`, `lg`, `dashed`).
 
 ### The item menu and Show usage (wireframe 8)
 
-- **How to open it:** right-click any item, or use its ⋯ on hover (long-press on a phone).
+- **How to open it:** right-click any item, or use its ⋯ on hover or focus (long-press on a phone; the Menu key or
+  Shift+F10 from the keyboard).
 - **Menu items:**
   - **Show usage:** components that draw it, plus other roles that point at the same step. It links to the
     Components tab, filtered to those components.
   - **Copy class** (`bg-primary`), **Copy variable** (`--primary`), **Copy value**.
   - **Reset to generated** (when edited).
   - **Duplicate as extra.**
+  - **Lock for shuffle**, on the items that are a recipe axis or a ramp seed (Brand and Neutral ramps, font cards,
+    corners, shadows, borders, controls).
   - **Delete**, for extras only. A built-in slot shows "Built-in slot, can't delete" instead.
-- **Where usage comes from:** a map built at `registry:build` time, from scanning each kit's components for token
-  classes and variables. The docs site reads it as JSON. Building it is part of Phase 4.
+- **Where usage comes from:** a map built at `registry:build` time, from scanning each kit's registry files for
+  token classes, `var(--…)`, the mobile palette and Text variants (`tokenUsage`, packages/tokens `lib/usage.mjs`).
+  Each kit writes `registry/generated/token-usage.json`; the docs site joins the two onto the catalogue. A step's
+  usage is that of the roles on it. Classes built at runtime from parts aren't seen.
 
 ### What an extra becomes (wireframe 8)
 
 - **tokens.json:** `extra.<kind>.<name>`.
-- **CSS:** a variable (`--trendy-green`).
-- **Tailwind:** classes (`bg-trendy-green`, `text-trendy-green`).
+- **CSS:** a variable (`--trendy-green`; a ramp's `--sunset-500`), in light and dark. Corners `--radius-<name>`,
+  shadows `--shadow-<name>`, borders `--border-<name>-width`, text styles `--type-<name>-*`.
+- **Tailwind:** classes (`bg-trendy-green`, `text-trendy-green`, `rounded-<name>`, `shadow-<name>`,
+  `border-<name>`, `type-<name>` on the web and `text-type-<name>`… on mobile).
 - **Agent docs:** an "Extras" section in DESIGN.md and llms.txt saying no kit component uses them and screens
   may. Extras are tokens, so the raw-colour lint rule allows them.
-- Phase 4 checks that each of these is actually emitted. Today `theme apply` writes them into tokens.json; the
-  CSS, Tailwind and DESIGN.md outputs are not yet verified.
+- Verified in phase 4b: `theme apply` of an exported `.halftone.json` emits every one of these in both kits
+  (tests in packages/tokens `system.test.mjs`).
 
 ## Systems (wireframe 3)
 

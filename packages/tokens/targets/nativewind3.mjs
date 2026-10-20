@@ -5,8 +5,9 @@
  */
 import { hexToHslTriplet } from '../lib/color.mjs';
 import { cssName, group, isColor, radiusCss } from '../lib/resolve.mjs';
-import { TEXT_LINE_HEIGHT } from '../lib/theme/recipe.mjs';
-import { styleVars, textStyleVars } from '../lib/theme/vars.mjs';
+import { shadowCss, TEXT_LINE_HEIGHT } from '../lib/theme/recipe.mjs';
+import { extraTextStyles } from '../lib/theme/extras.mjs';
+import { extraVars, styleVars, textStyleVars } from '../lib/theme/vars.mjs';
 
 const rem = (px) => (px >= 9999 ? '9999px' : `${Number((px / 16).toFixed(4))}rem`);
 
@@ -36,6 +37,11 @@ function cssBlock(selector, tokens, shape, mode, colors) {
   const present = new Set(tokens.filter(isColor).map(cssName));
   for (const c of colors) if (!present.has(c.name)) lines.push(`    --${c.name}: ${hexToHslTriplet(c[mode])};`);
   for (const [name, value] of Object.entries(styleVars(shape.styleShape, 'hsl')[mode])) lines.push(`    ${name}: ${value};`);
+  // A system's extras: colours, text styles and border widths (corners and shadows are literal in tailwind.theme.js).
+  if (shape.extras) {
+    const extra = Object.entries(extraVars(shape.extras, 'hsl')[mode]).filter(([name]) => !/^--(radius|shadow)-/.test(name));
+    if (extra.length) lines.push('    /* Extras: this system\'s own tokens. No kit component uses them; screens may. */', ...extra.map(([name, value]) => `    ${name}: ${value};`));
+  }
   return `  ${selector} {\n${lines.join('\n')}\n  }`;
 }
 
@@ -46,9 +52,9 @@ export default function nativewind3(ctx, options) {
 @tailwind utilities;
 
 @layer base {
-${cssBlock(':root', ctx.semLight, { ...ctx.shape, styleShape: ctx.shape, textStyles: ctx.textStyles }, 'light', ctx.colors)}
+${cssBlock(':root', ctx.semLight, { ...ctx.shape, styleShape: ctx.shape, textStyles: ctx.textStyles, extras: ctx.extras }, 'light', ctx.colors)}
 
-${cssBlock('.dark:root', ctx.semDark, { styleShape: ctx.shape }, 'dark', ctx.colors)}
+${cssBlock('.dark:root', ctx.semDark, { styleShape: ctx.shape, extras: ctx.extras }, 'dark', ctx.colors)}
 }
 `;
   const colors = Object.fromEntries(ctx.colors.map((c) => [c.name, `hsl(var(--${c.name}))`]));
@@ -88,6 +94,18 @@ ${cssBlock('.dark:root', ctx.semDark, { styleShape: ctx.shape }, 'dark', ctx.col
   }
   const letterSpacing = Object.fromEntries(Object.keys(ctx.textStyles).map((name) => [`type-${name}`, `var(--type-${name}-tracking)`]));
   const fontWeight = Object.fromEntries(Object.keys(ctx.textStyles).map((name) => [`type-${name}`, `var(--type-${name}-weight)`]));
+  // A system's extras: bg-<name>, rounded-<name>, shadow-<name>, border-<name> (its width), text-type-<name>…
+  const extras = ctx.extras ?? { color: [], text: [], radius: [], shadow: [], border: [] };
+  for (const c of extras.color) colors[c.name] = `hsl(var(--${c.name}))`;
+  for (const r of extras.radius) borderRadius[r.name] = rem(r.px);
+  for (const sh of extras.shadow) boxShadow[sh.name] = shadowCss(sh.light);
+  for (const b of extras.border) borderWidth[b.name] = `var(--border-${b.name}-width)`;
+  for (const name of Object.keys(extraTextStyles(extras))) {
+    fontSize[`type-${name}`] = `var(--type-${name}-size)`;
+    lineHeight[`type-${name}`] = `var(--type-${name}-leading)`;
+    letterSpacing[`type-${name}`] = `var(--type-${name}-tracking)`;
+    fontWeight[`type-${name}`] = `var(--type-${name}-weight)`;
+  }
   const tailwind = `// ${ctx.header}\nmodule.exports = ${JSON.stringify({ colors, borderRadius, borderWidth, boxShadow, height, minHeight: height, width: height, spacing, fontSize, lineHeight, letterSpacing, fontWeight, maxWidth }, null, 2)};\n`;
   return [
     { path: options.css, contents: css },

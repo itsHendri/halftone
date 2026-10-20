@@ -186,14 +186,30 @@ export function Studio() {
     const t = params.get('tab') ?? (params.get('view') === 'contrast' ? 'accessibility' : null);
     if (TABS.some((x) => x.id === t)) setTab(t as Tab);
   }, []);
-  const changeTab = (t: Tab) => {
+  // Show usage › "See them in Components" filters the Components tab to what draws a token (`?uses=`).
+  const [uses, setUses] = React.useState<string | null>(null);
+  const changeTab = (t: Tab, filter: string | null = null) => {
     setTab(t);
+    setUses(filter);
     const url = new URL(window.location.href);
     url.searchParams.delete('view');
     if (t === 'foundations') url.searchParams.delete('tab');
     else url.searchParams.set('tab', t);
+    if (filter) url.searchParams.set('uses', filter);
+    else url.searchParams.delete('uses');
     window.history.replaceState(window.history.state, '', url);
   };
+  React.useEffect(() => {
+    const uses = new URLSearchParams(window.location.search).get('uses');
+    if (uses) setUses(uses);
+    const onTab = (e: Event) => {
+      const { tab: t, uses: u } = (e as CustomEvent<{ tab: Tab; uses?: string }>).detail;
+      changeTab(t, u ?? null);
+      window.scrollTo({ top: 0 });
+    };
+    window.addEventListener('studio:tab', onTab);
+    return () => window.removeEventListener('studio:tab', onTab);
+  }, []);
 
   // The bar's height (it wraps on a phone), for what sticks under it: the section index and the jump menu.
   const root = React.useRef<HTMLDivElement>(null);
@@ -241,7 +257,7 @@ export function Studio() {
       <div className="flex flex-col gap-4 px-4 pb-24 pt-4 md:px-6">
         <Banners onDialog={setDialog} />
         <div id="studio-panel" role="tabpanel" aria-labelledby={`studio-tab-${tab}`}>
-          <Canvas tab={tab} />
+          <Canvas tab={tab} uses={uses} onClearUses={() => changeTab('components')} />
         </div>
       </div>
 

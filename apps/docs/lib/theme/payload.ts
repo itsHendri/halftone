@@ -2,7 +2,7 @@
  * What the docs site sends each embedded kit for a theme, in that kit's own variable format (the format
  * its tokens:build writes), text styles included (--type-<style>-*). Shared contract: apps/mobile/lib/embed-theme.ts and apps/web/lib/embed-theme.ts.
  */
-import { googleFontsHref, themeHex, themeTextStyles, themeVars, type Theme } from '@halftone-ds/tokens/theme';
+import { FONTS, fontByFamily, googleFontsHref, themeHex, themeTextStyles, themeVars, type Theme } from '@halftone-ds/tokens/theme';
 
 type FontRole = 'heading' | 'body' | 'mono';
 /** `roles`: each text style's font role, for the mobile kit, which picks fonts in JS (the web's are variables). */
@@ -33,8 +33,26 @@ export function kitPayloads(theme: Theme, live: boolean): KitPayloads {
 const SANS = "ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif";
 const MONO = 'ui-monospace, SFMono-Regular, Menlo, monospace';
 
-/** Google Fonts for a theme's heading, body and mono, or null for the system fonts. */
-export const fontsHref = (theme: Theme) => googleFontsHref(Object.values(theme.recipe.font));
+/**
+ * Google Fonts for a theme's heading, body and mono, or null for the system fonts. A system's font may be any Google
+ * Font (theme.fonts holds the families): a Halftone pick loads as before, any other family at 400–700 (Google Fonts
+ * serves the weights a family has and skips the rest).
+ */
+export function fontsHref(theme: Theme) {
+  const ids = new Set<string>();
+  const others: string[] = [];
+  for (const role of ['heading', 'body', 'mono'] as const) {
+    const family = theme.fonts[role];
+    if (!family || (role === 'mono' && theme.recipe.font.mono === 'system-mono')) continue;
+    const pick = FONTS.find((f) => f.family.toLowerCase() === family.toLowerCase());
+    if (pick) ids.add(pick.id);
+    else others.push(family);
+  }
+  const href = googleFontsHref([...ids]);
+  const extra = [...new Set(others)].map((family) => `family=${family.replace(/ /g, '+')}:wght@${fontByFamily(family).weights.join(';')}`);
+  if (!extra.length) return href;
+  return href ? href.replace('&display=swap', `&${extra.join('&')}&display=swap`) : `https://fonts.googleapis.com/css2?${extra.join('&')}&display=swap`;
+}
 
 /**
  * Variables that shape components (radius, border, stroke, density, type, depth, and the button and field

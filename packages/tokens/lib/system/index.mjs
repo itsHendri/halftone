@@ -8,6 +8,7 @@ export {
   COLOR_ROLES,
   createSystem,
   EXTRA_KINDS,
+  extraNameProblem,
   FONT_ROLES,
   hasOverrides,
   isSystem,

@@ -5,6 +5,7 @@
  */
 import StyleDictionary from 'style-dictionary';
 import { readFileSync } from 'node:fs';
+import { extraList } from './theme/extras.mjs';
 import { BUTTON, DEFAULT_RECIPE, DENSITY, DEPTH, FIELD, fieldWidth, resolveTextStyles, shadowCss, textEdits, TYPE, typeScale } from './theme/recipe.mjs';
 
 export const MODES = ['light', 'dark'];
@@ -85,6 +86,7 @@ export function radiusCss(step) {
  *   shape.button/.field  the styles' numbers (semantic.button / .field), radii in px; a token file from
  *                          before the styles gets solid buttons and outline fields, and colours to match
  *   styles               { button, field }: the style names, from the recorded theme (or the defaults)
+ *   extras               a system's own tokens (tokens.json `extra.*`) as lists (lib/theme/extras.mjs extraList)
  */
 export async function loadTokens(sourcePath) {
   const source = JSON.parse(readFileSync(sourcePath, 'utf8'));
@@ -141,7 +143,8 @@ export async function loadTokens(sourcePath) {
   const textStyles = resolveTextStyles(type, textEdits(source.semantic?.type));
   const recorded = source.$extensions?.['com.halftonedesignsystem.theme']?.recipe ?? {};
   const styles = { button: recorded.button ?? DEFAULT_RECIPE.button, field: recorded.field ?? DEFAULT_RECIPE.field };
-  return { source, semLight, semDark, prim, colors, radius, shape, type, textStyles, styles };
+  const extras = extraList(source.extra);
+  return { source, semLight, semDark, prim, colors, radius, shape, type, textStyles, styles, extras };
 }
 
 /** Primitive tokens under a path prefix, e.g. group(prim, ['font', 'size']) → [{ key: 'xs', value: 12 }, …]. */

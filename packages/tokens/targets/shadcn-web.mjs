@@ -10,7 +10,8 @@
 import { hexToOklch } from '../lib/color.mjs';
 import { group, radiusCss } from '../lib/resolve.mjs';
 import { TEXT_LINE_HEIGHT } from '../lib/theme/recipe.mjs';
-import { styleVars, textStyleVars, typeVars } from '../lib/theme/vars.mjs';
+import { hasExtras } from '../lib/theme/extras.mjs';
+import { extraVars, styleVars, textStyleVars, typeVars } from '../lib/theme/vars.mjs';
 
 const rem = (px) => (px >= 9999 ? '9999px' : `${px / 16}rem`);
 const SYSTEM_SANS = "ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif";
@@ -38,8 +39,8 @@ const FONT_ROLE = {
  * The text styles as utilities: type-h1 … type-blockquote set the style's font, size, line height, tracking and
  * weight from its variables. leading-*, tracking-* and font-* on the same element still win, as on text-*.
  */
-function textStyleUtilities(ctx) {
-  return Object.keys(ctx.textStyles)
+function textStyleUtilities(names) {
+  return names
     .map(
       (name) => `@utility type-${name} {
   font-family: var(--type-${name}-font);
@@ -52,7 +53,36 @@ function textStyleUtilities(ctx) {
     .join('\n');
 }
 
+/**
+ * A system's extras (lib/theme/extras.mjs): their variables in :root and .dark, colours and corners in @theme (so
+ * bg-<name>, text-<name>, rounded-<name> exist), and shadow-, border- and type- utilities. No kit component uses them.
+ */
+function extrasCss(ctx) {
+  const list = ctx.extras;
+  if (!list || !hasExtras(list)) return { light: '', dark: '', theme: '', utilities: '' };
+  const vars = extraVars(list, 'oklch', (role) => FONT_ROLE[role]);
+  const lines = (map) => Object.entries(map).map(([k, v]) => `  ${k}: ${v};`).join('\n');
+  // Corners are literal in @theme (rounded-<name>), not variables of their own.
+  const light = Object.fromEntries(Object.entries(vars.light).filter(([k]) => !k.startsWith('--radius-')));
+  const theme = [
+    ...list.color.map((c) => `  --color-${c.name}: var(--${c.name});`),
+    ...list.radius.map((r) => `  --radius-${r.name}: ${rem(r.px)};`),
+  ];
+  const utilities = [
+    ...list.shadow.map((s) => `@utility shadow-${s.name} {\n  box-shadow: var(--shadow-${s.name});\n}`),
+    ...list.border.map((b) => `@utility border-${b.name} {\n  border-width: var(--border-${b.name}-width);\n  border-style: ${b.style ?? 'solid'};\n}`),
+    textStyleUtilities(list.text.map((t) => t.name)),
+  ].filter(Boolean);
+  return {
+    light: `\n  /* Extras: this system's own tokens. No kit component uses them; screens may. */\n${lines(light)}`,
+    dark: Object.keys(vars.dark).length ? `\n  /* Extras */\n${lines(vars.dark)}` : '',
+    theme: theme.length ? `\n  /* Extras */\n${theme.join('\n')}` : '',
+    utilities: utilities.length ? `\n/* Extras */\n${utilities.join('\n')}\n` : '',
+  };
+}
+
 export default function shadcnWeb(ctx, options) {
+  const extras = extrasCss(ctx);
   const vars = (mode) => ctx.colors.map((c) => `  --${c.name}: ${hexToOklch(c[mode])};`).join('\n');
   const styles = (mode) => Object.entries(styleVars(ctx.shape, 'oklch')[mode]).map(([k, v]) => `  ${k}: ${v};`).join('\n');
   // The styles' fills carry their own opacity (an outline button, a transparent field).
@@ -73,13 +103,13 @@ ${styles('light')}
 ${shadows('light')}
   /* The text styles (type-h1…type-blockquote), literal at the typeset: an edited style is one variable. */
 ${Object.entries(textStyleVars(ctx.textStyles, 'oklch', (role) => FONT_ROLE[role])).map(([k, v]) => `  ${k}: ${v};`).join('\n')}
-${vars('light')}
+${vars('light')}${extras.light}
 }
 
 .dark {
 ${styles('dark')}
 ${shadows('dark')}
-${vars('dark')}
+${vars('dark')}${extras.dark}
 }
 
 @theme inline {
@@ -102,11 +132,11 @@ ${ctx.radius.steps.map((s) => `  --radius-${s.name}: ${radiusCss(s)};`).join('\n
   --font-mono: var(--kit-font-mono, ${SYSTEM_MONO});${
     options.typeset === false ? '' : `\n  /* The theme's typeset scales every text size and its line height (text-sm, text-base…). */\n${textScale(ctx)}`
   }
-${ctx.colors.map((c) => `  --color-${c.name}: ${color(c.name)};`).join('\n')}
+${ctx.colors.map((c) => `  --color-${c.name}: ${color(c.name)};`).join('\n')}${extras.theme}
 }
 
-${textStyleUtilities(ctx)}
-
+${textStyleUtilities(Object.keys(ctx.textStyles))}
+${extras.utilities}
 @layer base {
   * {
     @apply border-border outline-ring/50;

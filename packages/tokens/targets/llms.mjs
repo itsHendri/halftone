@@ -7,6 +7,7 @@ import { group } from '../lib/resolve.mjs';
 import { AA, describeTintLimits, textOnTintLimits } from '../lib/contrast.mjs';
 import { themeStatus } from '../lib/theme/index.mjs';
 import { themeFonts } from './fonts.mjs';
+import { describeExtras } from '../lib/theme/extras.mjs';
 
 export default function llms(ctx, options) {
   const rows = ctx.colors.map((c) => `| \`${c.name}\` | ${c.light} | ${c.dark} |`).join('\n');
@@ -16,6 +17,7 @@ export default function llms(ctx, options) {
       .join(' · ');
   const fonts = themeFonts(ctx);
   const theme = themeStatus(ctx.source);
+  const extras = describeExtras(ctx.extras ?? { color: [], text: [], radius: [], shadow: [], border: [] }, { platform: options.controlRadius === false ? 'web' : 'mobile' });
   const contents = `<!-- ${ctx.header} -->
 ## Tokens
 
@@ -39,6 +41,6 @@ ${rows}
 - Typeset: body ${ctx.type.size}px, leading ${ctx.type.leading}; every \`text-*\` size below scales by ${ctx.type.scale}${theme.applied ? `\n- Theme: \`${theme.code}\` (\`npx halftone-tokens theme show\`)` : ''}
 - Font sizes (\`text-*\`): ${steps(['font', 'size'])}
 - Durations: ${steps(['duration'], 'ms')}
-`;
+${extras.length ? `\n### Extras (this brand's own)\n\nNo kit component uses these; screens may, as classes (never their hex):\n\n${extras.join('\n')}\n` : ''}`;
   return [{ path: options.out, contents }];
 }

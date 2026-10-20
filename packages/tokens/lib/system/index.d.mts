@@ -130,6 +130,8 @@ export class SystemError extends Error {
   errors: string[];
 }
 export function isSystem(value: unknown): boolean;
+/** Why an extra can't take this name (a built-in slot, a Tailwind class it would shadow, a theme variable, `taken`), or null. */
+export function extraNameProblem(kind: ExtraKind, name: string, taken?: string[]): string | null;
 export function newSystemId(): string;
 export function normalizeSystem(input: HalftoneSystemInput | HalftoneSystem): HalftoneSystem;
 export function validateSystem(input: unknown): { ok: boolean; errors: string[]; system: HalftoneSystem | null };

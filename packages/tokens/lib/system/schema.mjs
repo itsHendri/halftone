@@ -236,9 +236,31 @@ function fonts(r, input, recipe) {
   return out;
 }
 
+/** Tailwind's palette families and keywords: a colour extra by one of these names would shadow Tailwind's own. */
+const PALETTE = ['slate', 'gray', 'zinc', 'neutral', 'stone', 'red', 'orange', 'amber', 'yellow', 'lime', 'green', 'emerald', 'teal', 'cyan', 'sky', 'blue', 'indigo', 'violet', 'purple', 'fuchsia', 'pink', 'rose', 'mauve', 'olive', 'mist', 'taupe', 'white', 'black', 'transparent', 'current', 'inherit'];
+/** A colour extra is a variable (--<name>): never one of the theme's own (--radius, --type-*, --shadow-*…). */
+const VARIABLE_CLASH = /^(radius|density|spacing|border-width|icon-stroke)$|^(radius|control|type|leading|typeset|shadow|button|field|font|kit|tw)-/;
+/** Names an extra can't take, per kind: the built-in slots, and the Tailwind classes its class would shadow. */
+const RESERVED = {
+  color: [...COLOR_ROLES, ...ROLE_NAMES, ...PALETTE],
+  text: TEXT_STYLES,
+  radius: [...RADIUS_STEPS, 'full', 'base', 'control', 'none', 'xs', '3xl', '4xl'],
+  shadow: [...SHADOW_LEVELS, '2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', 'none', 'inner'],
+  border: ['width', 'style', 'x', 'y', 't', 'r', 'b', 'l', 's', 'e', 'solid', 'dashed', 'dotted', 'double', 'hidden', 'none', 'collapse', 'separate', 'spacing'],
+};
+
+/** Why an extra can't have this name, or null: what the Studio says inline, and what normalizeSystem refuses. */
+export function extraNameProblem(kind, name, taken = []) {
+  if (typeof name !== 'string' || !NAME.test(name)) return 'Use letters, numbers and dashes, starting with a letter (40 at most).';
+  const what = { color: 'colour', text: 'text style', radius: 'corner', shadow: 'shadow', border: 'border' }[kind] ?? kind;
+  if (RESERVED[kind]?.includes(name)) return PALETTE.includes(name) && kind === 'color' ? `"${name}" is a Tailwind colour; give it a name of its own.` : `"${name}" is a built-in ${what} slot or class; give the extra its own name.`;
+  if (kind === 'color' && VARIABLE_CLASH.test(name)) return `"${name}" would clash with the theme's own variables; give it another name.`;
+  if (taken.includes(name)) return `"${name}" is already an extra.`;
+  return null;
+}
+
 function extras(r, input) {
   const out = Object.fromEntries(EXTRA_KINDS.map((kind) => [kind, []]));
-  const reserved = { color: [...COLOR_ROLES, ...ROLE_NAMES], text: TEXT_STYLES, radius: [...RADIUS_STEPS, 'full', 'base', 'control'], shadow: SHADOW_LEVELS, border: ['width', 'style'] };
   for (const [kind, list] of r.keys('extras', r.object('extras', input), EXTRA_KINDS)) {
     if (!Array.isArray(list)) {
       r.fail(`extras.${kind}`, 'must be a list');
@@ -250,7 +272,8 @@ function extras(r, input) {
       if (!isObject(item)) return r.fail(path, 'must be an object');
       const name = typeof item.name === 'string' && NAME.test(item.name) ? item.name : r.fail(`${path}.name`, `must be kebab-case (a-z, 0-9, -), got ${JSON.stringify(item.name)}`);
       if (name && seen.has(name)) r.fail(`${path}.name`, `"${name}" is used twice`);
-      if (name && reserved[kind].includes(name)) r.fail(`${path}.name`, `"${name}" is a built-in ${kind} slot; give the extra its own name`);
+      const problem = name && extraNameProblem(kind, name);
+      if (problem) r.fail(`${path}.name`, problem.replace(/\.$/, ''));
       if (name) seen.add(name);
       let value;
       if (kind === 'color') {

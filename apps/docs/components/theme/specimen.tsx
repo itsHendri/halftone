@@ -1,31 +1,5 @@
 'use client';
 import { FONTS } from '@halftone-ds/tokens/theme';
-import {
-  BellIcon,
-  CalendarIcon,
-  CameraIcon,
-  CheckIcon,
-  ChevronRightIcon,
-  CloudIcon,
-  CreditCardIcon,
-  DownloadIcon,
-  FileTextIcon,
-  HeartIcon,
-  HomeIcon,
-  ImageIcon,
-  InboxIcon,
-  LockIcon,
-  MailIcon,
-  MapPinIcon,
-  MessageCircleIcon,
-  PlusIcon,
-  SearchIcon,
-  SettingsIcon,
-  ShoppingBagIcon,
-  SparklesIcon,
-  StarIcon,
-  UserIcon,
-} from 'lucide-react';
 import type * as React from 'react';
 import { useLiveTheme } from '@/lib/theme/store';
 
@@ -140,69 +114,6 @@ export function TypeSpecimen() {
           Prose · {size}px · leading {leading} · flow {flow}em · measure {measure}ch
         </Label>
         <ProseSample />
-      </div>
-    </div>
-  );
-}
-
-const ICONS = [
-  HomeIcon,
-  SearchIcon,
-  InboxIcon,
-  BellIcon,
-  SettingsIcon,
-  UserIcon,
-  MailIcon,
-  MessageCircleIcon,
-  CalendarIcon,
-  CreditCardIcon,
-  ShoppingBagIcon,
-  HeartIcon,
-  StarIcon,
-  CameraIcon,
-  ImageIcon,
-  FileTextIcon,
-  DownloadIcon,
-  CloudIcon,
-  LockIcon,
-  MapPinIcon,
-  PlusIcon,
-  CheckIcon,
-  ChevronRightIcon,
-  SparklesIcon,
-];
-
-/** Lucide at the theme's stroke (this site's svg.lucide follows --icon-stroke). */
-export function IconGrid() {
-  return (
-    <div className="grid grid-cols-6 gap-1.5" aria-hidden>
-      {ICONS.map((Icon, i) => (
-        <span key={i} className="border-border flex aspect-square items-center justify-center rounded-md border">
-          <Icon className="size-5" />
-        </span>
-      ))}
-    </div>
-  );
-}
-
-/** Radius, depth and border: the shape of every surface and control. */
-export function ShapeSpecimen() {
-  return (
-    <div className="flex flex-col gap-4">
-      <div className="flex items-end gap-3">
-        {(['rounded-sm', 'rounded-md', 'rounded-lg', 'rounded-xl', 'rounded-2xl'] as const).map((r) => (
-          <div key={r} className="flex flex-col items-center gap-1.5">
-            <span className={`border-foreground/60 bg-muted size-12 border-l-2 border-t-2 ${r}`} />
-            <span className="text-muted-foreground font-mono text-[11px]">{r.replace('rounded-', '')}</span>
-          </div>
-        ))}
-      </div>
-      <div className="grid grid-cols-3 gap-3">
-        {(['shadow-sm', 'shadow-md', 'shadow-lg'] as const).map((s, i) => (
-          <div key={s} className={`border-border bg-card flex h-16 items-end rounded-lg border p-2 ${s}`}>
-            <span className="text-muted-foreground font-mono text-[11px]">depth {i + 1}</span>
-          </div>
-        ))}
       </div>
     </div>
   );

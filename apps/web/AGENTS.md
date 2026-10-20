@@ -55,7 +55,7 @@ npm run dev               # http://localhost:3100
 npm run build && npm start
 npm run typecheck && npm run lint
 npm run tokens:build      # after editing tokens/tokens.json (names any pairing below WCAG AA; --strict fails)
-npm run registry:build    # after editing registry/components.ts
+npm run registry:build    # after editing registry/components.ts or a component's classes (also token-usage.json)
 npm run tokens:check && npm run registry:build -- --check   # what CI checks
 npm run registry:drift    # after `shadcn add`: which components/ui files differ from shadcn (network)
 npm run registry:dist && npm run registry:roundtrip         # build the shadcn registry and prove it reinstalls

@@ -47,7 +47,7 @@ npm run ios            # expo start --ios --go (simulator)
 npm run web            # expo start --web
 npm run typecheck && npm run lint -- --max-warnings 0   # CI runs these plus tokens:build and export:web
 npm run tokens:build   # after editing tokens/tokens.json (names any pairing below WCAG AA; --strict fails on it)
-npm run registry:build # after editing registry/components.ts: DESIGN_SYSTEM.md tables, llms.txt, index
+npm run registry:build # after editing registry/components.ts or a component's classes: DESIGN_SYSTEM.md tables, llms.txt, index, token-usage.json
 npm run tokens:check && npm run registry:build -- --check   # what CI checks (plus the halftone-tokens tests in the monorepo)
 npm run eject-samples  # delete the shop, habits and Northwind samples, their stores and every reference
 npm run share -- "msg" # EAS Update to the main channel, prints the links

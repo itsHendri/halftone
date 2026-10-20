@@ -6,6 +6,7 @@
  *   options: { out: 'DESIGN.md', name?: string, description?: string }
  */
 import { describeTintLimits, textOnTintLimits } from '../lib/contrast.mjs';
+import { describeExtras } from '../lib/theme/extras.mjs';
 import { themeFonts } from './fonts.mjs';
 import { themeStatus } from '../lib/theme/index.mjs';
 import { group } from '../lib/resolve.mjs';
@@ -103,6 +104,19 @@ export default function designMd(ctx, options) {
   const radius = Object.fromEntries(group(ctx.prim, ['radius']).map((t) => [t.key, t.value]));
   const duration = Object.fromEntries(group(ctx.prim, ['duration']).map((t) => [t.key, t.value]));
 
+  // A system's own tokens: listed, never in the front matter's shared vocabulary.
+  const extras = describeExtras(ctx.extras ?? { color: [], text: [], radius: [], shadow: [], border: [] }, { platform: options.platform ?? (options.buttonRadius ? 'web' : 'mobile') });
+  const extrasSection = extras.length
+    ? `
+## Extras (this brand's own)
+
+Tokens this system added beyond the kit's slots. No kit component uses them; use them in screens, as classes like
+any token (never their hex). They are not part of the shared vocabulary above.
+
+${extras.join('\n')}
+`
+    : '';
+
   const contents = `---
 version: alpha
 name: ${q(name)}
@@ -171,7 +185,7 @@ ${describeTintLimits(textOnTintLimits(ctx.colors))}.
 
 On a stronger tint, the text stays \`text-foreground\` and the tint, an icon or a dot carries the
 colour. \`halftone-tokens check\` flags class strings that break this.
-
+${extrasSection}
 ## Typography
 
 Headings (h1–h4, titles) use ${fontName(fonts.heading)}; everything else uses ${fontName(fonts.body)}; code and

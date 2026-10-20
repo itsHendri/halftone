@@ -4,7 +4,7 @@
  * through `editSystem` (lib/studio/systems.ts), so it applies live, saves itself and can be undone; the document is
  * normalised on the way in, so a value set back to what is generated stops being an edit.
  */
-import { normalizeSystem, systemOverrides, systemRamps, type ColorRole, type HalftoneSystem, type SystemRamp } from '@halftone-ds/tokens/system';
+import { extraNameProblem, normalizeSystem, systemOverrides, systemRamps, type ColorRole, type HalftoneSystem, type SystemRamp } from '@halftone-ds/tokens/system';
 import { editSystem, systemTheme } from '@/lib/studio/systems';
 import { base } from '@/lib/theme/base';
 
@@ -227,4 +227,179 @@ export function readHex(input: string): string | null {
   if (!s.startsWith('#')) s = `#${s}`;
   if (/^#[0-9a-f]{3}$/.test(s)) s = `#${s[1]}${s[1]}${s[2]}${s[2]}${s[3]}${s[3]}`;
   return HEX.test(s) ? s : null;
+}
+
+// ---- typography, corners, shadows, borders ---------------------------------------------------------------
+
+export type TextStyleName = (typeof TEXT_STYLE_NAMES)[number];
+export const TEXT_STYLE_NAMES = ['h1', 'h2', 'h3', 'h4', 'lead', 'large', 'p', 'small', 'muted', 'blockquote', 'code'] as const;
+export const TEXT_LABELS: Record<TextStyleName, string> = {
+  h1: 'Heading 1',
+  h2: 'Heading 2',
+  h3: 'Heading 3',
+  h4: 'Heading 4',
+  lead: 'Lead',
+  large: 'Large',
+  p: 'Body',
+  small: 'Small',
+  muted: 'Muted',
+  blockquote: 'Quote',
+  code: 'Code',
+};
+type TextKey = 'font' | 'weight' | 'size' | 'leading' | 'tracking';
+type TextPatch = Partial<Record<TextKey, string | number | null>>;
+
+/** Set (or, with null, reset) keys of a text style. `null` patch resets the whole style to the scale. */
+export function setTextStyle(name: TextStyleName, patch: TextPatch | null, coalesce?: string) {
+  edit((doc) => {
+    const type = { ...doc.type } as Record<string, Record<string, unknown>>;
+    if (patch === null) delete type[name];
+    else {
+      const style = { ...type[name] };
+      for (const [k, v] of Object.entries(patch)) {
+        if (v === null) delete style[k];
+        else style[k] = v;
+      }
+      if (Object.keys(style).length) type[name] = style;
+      else delete type[name];
+    }
+    doc.type = type as HalftoneSystem['type'];
+    return doc;
+  }, coalesce);
+}
+
+/** A font role's family: any Google Font (a Halftone pick folds into the recipe and keeps a code), or null to go back. */
+export function setFont(role: 'heading' | 'body' | 'mono', family: string | null) {
+  edit((doc) => {
+    const fonts = { ...doc.fonts };
+    if (family === null) delete fonts[role];
+    else fonts[role] = family;
+    doc.fonts = fonts;
+    return doc;
+  });
+}
+
+export function setRadius(step: string, px: number | null) {
+  edit(
+    (doc) => {
+      const radius = { ...doc.radius } as Record<string, number>;
+      if (px === null) delete radius[step];
+      else radius[step] = px;
+      doc.radius = radius;
+      return doc;
+    },
+    px === null ? undefined : `radius.${step}`
+  );
+}
+
+export type Layer = { x: number; y: number; blur: number; spread: number; color: string; alpha: number; inset?: true };
+export function setShadow(level: string, value: { light: Layer[]; dark: Layer[] } | null, coalesce?: string) {
+  edit((doc) => {
+    const shadow = { ...doc.shadow } as Record<string, unknown>;
+    if (value === null) delete shadow[level];
+    else shadow[level] = value;
+    doc.shadow = shadow as HalftoneSystem['shadow'];
+    return doc;
+  }, coalesce);
+}
+
+/** A DTCG shadow layer ({ offsetX, …, color: '#rrggbbaa' }) as the document's layer. */
+export function layerOf(v: { offsetX: number; offsetY: number; blur: number; spread: number; color: string; inset?: boolean }): Layer {
+  const color = v.color.slice(0, 7).toLowerCase();
+  const alpha = v.color.length === 9 ? Math.round((parseInt(v.color.slice(7), 16) / 255) * 100) / 100 : 1;
+  return { x: v.offsetX, y: v.offsetY, blur: v.blur, spread: v.spread, color, alpha, ...(v.inset ? { inset: true as const } : {}) };
+}
+
+/** A shadow level as drawn (generated or edited), as the document's layers per mode. */
+export function shadowLayers(doc: HalftoneSystem, level: string): { light: Layer[]; dark: Layer[] } {
+  const own = (doc.shadow as Record<string, { light: Layer[]; dark: Layer[] }>)[level];
+  if (own) return own;
+  const s = (systemTheme(doc).semantic as { shadow: Record<string, Record<Mode, Parameters<typeof layerOf>[0][]>> }).shadow[level];
+  return { light: s.light.map(layerOf), dark: s.dark.map(layerOf) };
+}
+
+export const layerCss = (layers: Layer[]) =>
+  layers.length
+    ? layers
+        .map((l) => {
+          const n = parseInt(l.color.slice(1), 16);
+          return `${l.inset ? 'inset ' : ''}${l.x}px ${l.y}px ${l.blur}px ${l.spread}px rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${l.alpha})`;
+        })
+        .join(', ')
+    : 'none';
+
+export function setBorder(patch: { width?: number | null; style?: string | null } | null) {
+  edit((doc) => {
+    if (patch === null) doc.border = {};
+    else {
+      const border = { ...doc.border } as Record<string, unknown>;
+      for (const [k, v] of Object.entries(patch)) {
+        if (v === null) delete border[k];
+        else border[k] = v;
+      }
+      doc.border = border as HalftoneSystem['border'];
+    }
+    return doc;
+  }, 'border');
+}
+
+// ---- extras ----------------------------------------------------------------------------------------
+
+export type ExtraKind = 'color' | 'text' | 'radius' | 'shadow' | 'border';
+type ExtraItem = { name: string } & Record<string, unknown>;
+
+/** "trendy-green" → "Trendy green": how the list shows an extra. */
+export const extraLabel = (token: string) => {
+  const s = token.replace(/-/g, ' ');
+  return s.charAt(0).toUpperCase() + s.slice(1);
+};
+/** "Trendy green" → "trendy-green": the token name an extra is stored under. */
+export const kebab = (name: string) =>
+  name
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 40);
+
+export const extrasOf = (doc: HalftoneSystem, kind: ExtraKind) => (doc.extras[kind] ?? []) as unknown as ExtraItem[];
+
+/** A free name: `base`, then `base-2`, `base-3`… */
+export function freeName(doc: HalftoneSystem, kind: ExtraKind, base: string) {
+  const taken = new Set(extrasOf(doc, kind).map((e) => e.name));
+  if (!taken.has(base) && !extraNameProblem(kind, base)) return base;
+  for (let i = 2; ; i++) if (!taken.has(`${base}-${i}`)) return `${base}-${i}`;
+}
+
+/** Add an extra at the end of its section; returns its token name (its popover opens with the name selected). */
+export function addExtra(kind: ExtraKind, item: ExtraItem) {
+  edit((doc) => {
+    doc.extras = { ...doc.extras, [kind]: [...extrasOf(doc, kind), item] } as HalftoneSystem['extras'];
+    return doc;
+  });
+  return item.name;
+}
+
+export function updateExtra(kind: ExtraKind, name: string, change: (item: ExtraItem) => ExtraItem, coalesce?: string) {
+  edit((doc) => {
+    doc.extras = { ...doc.extras, [kind]: extrasOf(doc, kind).map((e) => (e.name === name ? change({ ...e }) : e)) } as HalftoneSystem['extras'];
+    return doc;
+  }, coalesce);
+}
+
+/** Rename an extra from what was typed ("Trendy green"); returns the problem to show, or null. */
+export function renameExtra(doc: HalftoneSystem, kind: ExtraKind, from: string, typed: string) {
+  const to = kebab(typed);
+  if (to === from) return null;
+  const problem = extraNameProblem(kind, to, extrasOf(doc, kind).map((e) => e.name).filter((n) => n !== from));
+  if (problem) return problem;
+  updateExtra(kind, from, (e) => ({ ...e, name: to }));
+  return null;
+}
+
+export function deleteExtra(kind: ExtraKind, name: string) {
+  edit((doc) => {
+    doc.extras = { ...doc.extras, [kind]: extrasOf(doc, kind).filter((e) => e.name !== name) } as HalftoneSystem['extras'];
+    return doc;
+  });
 }
