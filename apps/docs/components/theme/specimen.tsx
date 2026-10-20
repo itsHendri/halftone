@@ -27,7 +27,6 @@ import {
   UserIcon,
 } from 'lucide-react';
 import type * as React from 'react';
-import { useMode } from '@/lib/theme/mode';
 import { useLiveTheme } from '@/lib/theme/store';
 
 /**
@@ -142,36 +141,6 @@ export function TypeSpecimen() {
         </Label>
         <ProseSample />
       </div>
-    </div>
-  );
-}
-
-const PALETTE = [
-  ['background', 'bg-background', 'text-foreground'],
-  ['card', 'bg-card', 'text-card-foreground'],
-  ['muted', 'bg-muted', 'text-muted-foreground'],
-  ['accent', 'bg-accent', 'text-accent-foreground'],
-  ['primary', 'bg-primary', 'text-primary-foreground'],
-  ['secondary', 'bg-secondary', 'text-secondary-foreground'],
-  ['destructive', 'bg-destructive', 'text-destructive-foreground'],
-  ['success', 'bg-success', 'text-success-foreground'],
-  ['warning', 'bg-warning', 'text-warning-foreground'],
-  ['info', 'bg-info', 'text-info-foreground'],
-] as const;
-
-/** The semantic colours as fills with their own foreground, and their hex in the current mode. */
-export function PaletteSpecimen() {
-  const { theme } = useLiveTheme();
-  const mode = useMode();
-  // Fits the panel, not the window: in the two-column overview a five-wide row cut the values off at 1024px.
-  return (
-    <div className="grid grid-cols-[repeat(auto-fill,minmax(7.5rem,1fr))] gap-2">
-      {PALETTE.map(([name, bg, fg]) => (
-        <div key={name} className={`border-border flex h-20 flex-col justify-between rounded-lg border p-2.5 ${bg} ${fg}`}>
-          <span className="text-xs font-medium">{name}</span>
-          <span className="font-mono text-[11px] uppercase">{theme.resolved[mode][name]}</span>
-        </div>
-      ))}
     </div>
   );
 }

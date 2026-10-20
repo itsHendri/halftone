@@ -30,15 +30,15 @@ export function kitBrand(s: BrandState = systemsState().doc.brand as BrandState)
   return { name: s.name.trim() || 'Your brand', logo: s.logo, logoDark: s.logoDark, mark: s.mark, markDark: s.markDark };
 }
 
-/** Change the active system's brand (undoable). */
-export function setBrand(patch: Partial<BrandState>) {
+/** Change the active system's brand (undoable; `coalesce` folds typing a name into one step). */
+export function setBrand(patch: Partial<BrandState>, { coalesce }: { coalesce?: string } = {}) {
   editSystem((doc) => {
     let brand = { ...doc.brand, ...patch } as SystemBrand;
     // Without a logo there's nothing to have a dark version of.
     if (!brand.logo) brand = { ...brand, logoDark: undefined };
     if (!brand.mark) brand = { ...brand, markDark: undefined };
     return { ...doc, brand };
-  });
+  }, { coalesce });
 }
 
 const brandOf = () => systemsState().doc.brand as BrandState;
