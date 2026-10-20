@@ -1,165 +1,106 @@
 'use client';
 /**
- * The docs site's live theme: one recipe, shared by the pill, the studio, the site chrome and every
- * embedded kit frame. Where it starts, in order:
- *   1. `?t=<code>` in the URL (a shared link), which is then dropped from the address bar
- *   2. the visitor's last theme (localStorage)
- *   3. the theme committed in tokens.json (`$extensions`), *ambient*: until the visitor picks anything, the
- *      colours drift along a gradient (lib/theme/ambient.ts) over that theme
- * Nothing here reaches the repo: committing goes through the export panel (a code, a CLI command, a
- * prompt or a tokens.json download).
+ * The docs site's live theme: the active system's (lib/studio/systems.ts), shared by the theme bar, the Studio, the
+ * site chrome and every embedded kit frame. This module is the recipe-level view of it: the bar's presets and
+ * colours, shuffle and the hover preview change the system's recipe and leave its hand edits alone. Undo and redo
+ * work on the whole document.
+ *
+ * Until a system is active the committed theme (tokens.json `$extensions`) is on screen, *ambient*: the colours
+ * drift along a gradient (lib/theme/ambient.ts). Nothing here reaches the repo: committing goes through the export
+ * panel (a code, a CLI command, a prompt, a `.halftone.json` or a tokens.json download).
  */
-import {
-  BRAND_RAMPS,
-  FONTS,
-  OPTIONS,
-  generateTheme,
-  normalizeRecipe,
-  sameRecipe,
-  themeStatus,
-  type Recipe,
-  type RecipeInput,
-  type Theme,
-  type TokensJson,
-} from '@halftone-ds/tokens/theme';
+import { BRAND_RAMPS, FONTS, OPTIONS, normalizeRecipe, sameRecipe, type Recipe, type RecipeInput, type Theme } from '@halftone-ds/tokens/theme';
+import { hasOverrides } from '@halftone-ds/tokens/system';
 import * as React from 'react';
-import { STORAGE_KEY } from './keys';
-import { readThemeCode } from './read-code';
-import tokensJson from '../../../mobile/tokens/tokens.json';
+import {
+  editSystem,
+  redoSystem,
+  STARTER,
+  startSystems,
+  subscribeSystems,
+  switchSystem,
+  systemsState,
+  systemTheme,
+  undoSystem,
+  useSystems,
+  type HalftoneSystem,
+} from '@/lib/studio/systems';
+import { base, committed } from './base';
 
-export const base = tokensJson as unknown as TokensJson;
-const status = themeStatus(base);
-/** The theme the kits ship with right now. */
-// normalizeRecipe: a recipe recorded before the typeset gets its defaults.
-export const committed: Recipe = normalizeRecipe(status.applied ? status.recipe : {});
+export { base, committed };
 
+/** Read the URL and storage once, on the client. */
+export const startTheme = startSystems;
 
-/** `ambient`: nothing picked yet (no stored theme, no shared code), so the colours drift. */
-type State = { recipe: Recipe; history: Recipe[]; future: Recipe[]; ambient: boolean };
-/** What the server rendered with; hydration uses it too, then the client's own state takes over. */
-const serverState: State = { recipe: committed, history: [], future: [], ambient: true };
-let state: State = serverState;
-const listeners = new Set<() => void>();
-const emit = () => listeners.forEach((l) => l());
-
-/** A stored recipe is a pick, even the committed one; ambient stores nothing. */
-function persist(recipe: Recipe, ambient = false) {
-  try {
-    if (ambient) localStorage.removeItem(STORAGE_KEY);
-    else localStorage.setItem(STORAGE_KEY, JSON.stringify(recipe));
-  } catch {
-    /* storage unavailable: the theme lasts for this page */
-  }
-}
-
-let started = false;
-/** Read the URL and storage once, on the client. Safe to call any number of times. */
-export function startTheme() {
-  if (started || typeof window === 'undefined') return;
-  started = true;
-  let recipe: Recipe | null = null;
-  const url = new URL(window.location.href);
-  const code = url.searchParams.get('t');
-  if (code) {
-    try {
-      // A Halftone code or a shadcn preset code (its notes only show where the code is pasted).
-      recipe = readThemeCode(code).recipe;
-    } catch {
-      /* a bad code: ignore it */
-    }
-    url.searchParams.delete('t');
-    window.history.replaceState(window.history.state, '', url);
-  }
-  if (!recipe) {
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) recipe = normalizeRecipe(JSON.parse(saved));
-    } catch {
-      /* unreadable: forget it, and fall back to the committed theme (ambient) */
-      try {
-        localStorage.removeItem(STORAGE_KEY);
-      } catch {}
-    }
-  }
-  if (recipe) {
-    state = { ...state, recipe, ambient: false };
-    persist(recipe);
-  }
-}
-
-/** Called on every change. */
-export function subscribeTheme(listener: () => void) {
-  startTheme();
-  listeners.add(listener);
-  return () => {
-    listeners.delete(listener);
-  };
-}
+const merged = (recipe: Recipe, input: RecipeInput) => normalizeRecipe({ ...recipe, ...input, font: { ...recipe.font, ...input.font } });
 
 /**
- * A hover preview: the studio's pickers show a value on the site and in the frames before it is picked.
- * Not persisted and not in the undo history; `previewRecipe(null)` ends it.
+ * A hover preview: a picker shows a value on the site and in the frames before it is picked. Not saved and not in
+ * the undo history; `previewRecipe(null)` ends it.
  */
 let preview: Recipe | null = null;
 let previewTimer: ReturnType<typeof setTimeout> | undefined;
+const previewListeners = new Set<() => void>();
 export function previewRecipe(input: RecipeInput | null) {
   clearTimeout(previewTimer);
   const apply = () => {
-    const next = input ? normalizeRecipe({ ...state.recipe, ...input, font: { ...state.recipe.font, ...input.font } }) : null;
+    const next = input ? merged(systemsState().doc.recipe, input) : null;
     if (JSON.stringify(next) === JSON.stringify(preview)) return;
     preview = next;
-    state = { ...state };
-    emit();
+    previewListeners.forEach((l) => l());
   };
   // Leaving is immediate; entering waits a beat, so sweeping across a list doesn't re-theme every row.
   if (input) previewTimer = setTimeout(apply, 80);
   else apply();
 }
 export const isPreviewing = () => preview !== null;
+const subscribePreview = (l: () => void) => {
+  previewListeners.add(l);
+  return () => {
+    previewListeners.delete(l);
+  };
+};
 
-/** The theme on screen: the hover preview while there is one, else the recipe. */
-export const currentRecipe = () => preview ?? state.recipe;
+/** Called whenever what is on screen changes: an edit, a switch, or a hover preview. */
+export function subscribeTheme(listener: () => void) {
+  const a = subscribeSystems(listener);
+  const b = subscribePreview(listener);
+  return () => {
+    a();
+    b();
+  };
+}
 
-let lastEdit = { key: '', at: 0 };
+/** The document on screen: the hover preview over the active system while there is one. */
+export const currentSystem = (): HalftoneSystem => {
+  const doc = systemsState().doc;
+  return preview ? { ...doc, recipe: preview } : doc;
+};
+export const currentRecipe = () => currentSystem().recipe;
+export const currentTheme = () => systemTheme(currentSystem());
 
-/**
- * Replace the theme (or change part of it). Keeps an undo history; `coalesce` folds a burst of changes to
- * the same control (dragging the colour picker) into one undo step.
- */
+/** The site differs from app/tokens.css: anything but the committed theme with no hand edits. */
+export const isLive = (doc: HalftoneSystem) => hasOverrides(doc) || !sameRecipe(doc.recipe, committed);
+
+/** Change the active system's recipe (or part of it). Undoable; `coalesce` folds a drag into one step. */
 export function setRecipe(next: RecipeInput | ((current: Recipe) => RecipeInput), { coalesce }: { coalesce?: string } = {}) {
-  const input = typeof next === 'function' ? next(state.recipe) : next;
-  const recipe = normalizeRecipe({ ...state.recipe, ...input, font: { ...state.recipe.font, ...input.font } });
-  // Picking what is already shown still ends the ambient drift: it is a choice.
-  if (JSON.stringify(recipe) === JSON.stringify(state.recipe) && !state.ambient) return;
-  const now = Date.now();
-  const merge = !!coalesce && lastEdit.key === coalesce && now - lastEdit.at < 1000 && state.history.length > 0;
-  lastEdit = { key: coalesce ?? '', at: now };
-  const history = merge ? state.history : [...state.history, state.recipe].slice(-50);
   preview = null;
-  state = { recipe, history, future: [], ambient: false };
-  persist(recipe);
-  emit();
+  editSystem(
+    (doc) => {
+      const input = typeof next === 'function' ? next(doc.recipe) : next;
+      const recipe = merged(doc.recipe, input);
+      return { ...doc, recipe, preset: recipe.preset };
+    },
+    { coalesce }
+  );
 }
 
-export function undo() {
-  const prev = state.history.at(-1);
-  if (!prev) return;
-  state = { recipe: prev, history: state.history.slice(0, -1), future: [state.recipe, ...state.future], ambient: false };
-  persist(prev);
-  emit();
-}
-
-export function redo() {
-  const [next, ...future] = state.future;
-  if (!next) return;
-  state = { recipe: next, history: [...state.history, state.recipe], future, ambient: false };
-  persist(next);
-  emit();
-}
+export const undo = undoSystem;
+export const redo = redoSystem;
 
 /**
- * What shuffle may change, one key per control row in the studio: a locked row keeps its value. Fonts lock
- * one role at a time; the rest are recipe axes.
+ * What shuffle may change, one key per control in the Studio: a locked one keeps its value. Fonts lock one role at
+ * a time; the rest are recipe axes.
  */
 export const LOCK_KEYS = ['brand', 'neutral', 'heading', 'body', 'mono', 'size', 'leading', 'flow', 'measure', 'radius', 'controls', 'button', 'field', 'border', 'depth', 'stroke', 'density'] as const;
 export type LockKey = (typeof LOCK_KEYS)[number];
@@ -213,7 +154,7 @@ function randomFonts(): Recipe['font'] {
   return { heading: pick(visible.filter((f) => f.category === 'serif' || f.category === 'display')).id, body: pick(sans).id, mono };
 }
 
-/** A new theme from random values for every unlocked row. */
+/** New random values for every unlocked recipe axis (the system's hand edits stay). */
 export function shuffle() {
   const free = (key: LockKey) => !locks.has(key);
   const next: RecipeInput = { preset: undefined };
@@ -231,52 +172,48 @@ export function shuffle() {
   setRecipe(next);
 }
 
-/** Back to the theme in tokens.json, picked (the studio's reset). */
-export const reset = () => setRecipe({ ...committed, preset: committed.preset });
-
-/** Back to the start: the committed theme with the ambient drift over it, and nothing stored. */
+/** Back to the start: no system active, the committed theme with the ambient drift over it. Saved systems stay. */
 export function resumeAmbient() {
-  if (state.ambient) return;
   preview = null;
-  state = { recipe: committed, history: [...state.history, state.recipe].slice(-50), future: [], ambient: true };
-  persist(committed, true);
-  emit();
+  switchSystem(null);
 }
 
-/** Whether the colours are drifting (nothing picked yet). Read outside React by lib/theme/ambient.ts. */
-export const isAmbient = () => state.ambient;
+/** Whether the colours are drifting (nothing active). Read outside React by lib/theme/ambient.ts. */
+export const isAmbient = () => systemsState().ambient;
 
-const getSnapshot = () => state;
-const getServerSnapshot = () => serverState;
-
-/** The current recipe and its undo state. */
-export function useThemeState() {
-  return React.useSyncExternalStore(subscribeTheme, getSnapshot, getServerSnapshot);
-}
-
-const cache = new Map<string, Theme>();
-/** A generated theme, memoised by recipe. */
+/** A recipe's theme (preset cards, the theme bar's rows): a system with no hand edits. */
+const recipeThemes = new Map<string, Theme>();
 export function themeFor(recipe: Recipe): Theme {
   const key = JSON.stringify(recipe);
-  let theme = cache.get(key);
+  let theme = recipeThemes.get(key);
   if (!theme) {
-    theme = generateTheme(recipe, base);
-    cache.set(key, theme);
+    theme = systemTheme({ ...STARTER, recipe });
+    recipeThemes.set(key, theme);
   }
   return theme;
 }
 
-/** The current theme, generated. */
-export function useLiveTheme(): { recipe: Recipe; theme: Theme; isCommitted: boolean; ambient: boolean; canUndo: boolean; canRedo: boolean } {
-  const s = useThemeState();
+/** The active system, generated, and its undo state. */
+export function useLiveTheme(): {
+  system: HalftoneSystem;
+  recipe: Recipe;
+  theme: Theme;
+  isCommitted: boolean;
+  ambient: boolean;
+  canUndo: boolean;
+  canRedo: boolean;
+} {
+  const s = useSystems();
+  const previewing = React.useSyncExternalStore(subscribePreview, () => preview, () => null);
   // `recipe` is what is picked (the controls show it); `theme` is what is on screen (a hover preview).
-  const shown = preview ?? s.recipe;
+  const shown = previewing ? { ...s.doc, recipe: previewing } : s.doc;
   return {
-    recipe: s.recipe,
-    theme: themeFor(shown),
-    isCommitted: sameRecipe(shown, committed),
-    ambient: s.ambient && !preview,
-    canUndo: s.history.length > 0,
-    canRedo: s.future.length > 0,
+    system: s.doc,
+    recipe: s.doc.recipe,
+    theme: systemTheme(shown),
+    isCommitted: !isLive(shown),
+    ambient: s.ambient && !previewing,
+    canUndo: s.canUndo,
+    canRedo: s.canRedo,
   };
 }

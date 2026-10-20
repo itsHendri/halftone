@@ -1,7 +1,8 @@
 'use client';
 import { fontById, normalizeRecipe, PRESETS, sameRecipe, type Adjustment, type Recipe } from '@halftone-ds/tokens/theme';
 import { Popover, PopoverContent, PopoverTrigger } from 'fumadocs-ui/components/ui/popover';
-import { CheckIcon, ChevronDownIcon, PauseIcon, PlayIcon } from 'lucide-react';
+import { ArrowRightIcon, CheckIcon, ChevronDownIcon, PauseIcon, PlayIcon } from 'lucide-react';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import * as React from 'react';
 import { ExportPanel } from '@/components/theme/export-panel';
@@ -9,6 +10,7 @@ import { SWATCHES, swatchName } from '@/lib/theme/swatches';
 import { rovingKeyDown, rovingTabIndex } from '@/lib/roving';
 import { ambientBrand, pauseAmbient, playAmbient, useAmbient } from '@/lib/theme/ambient';
 import { resumeAmbient, setRecipe, themeFor, useLiveTheme } from '@/lib/theme/store';
+import { switchSystem, systemLabel, systemTheme, useSystems } from '@/lib/studio/systems';
 
 /** The preset a recipe came from, if it is still exactly that preset. */
 export function presetLabel(recipe: Recipe) {
@@ -89,21 +91,25 @@ function DriftChoice({ selected, tabIndex, close }: { selected: boolean; tabInde
 }
 
 /**
- * The theme bar at the bottom of every docs page: a preset, a colour, pausing the drift, and the way out
- * (Use theme). Everything else lives in the theme studio (/themes, in the header). Every control is a fixed
- * width and opens upwards in a popover, so the bar never changes size as names change. Until anything is
- * picked the colours drift (lib/theme/ambient.ts); "Drifting colours", first in both popovers, brings it back.
+ * The theme bar at the bottom of every docs page. It follows the active system (lib/studio/systems.ts): its name,
+ * switching between saved systems, a preset or a colour for it, pausing the drift, and the way out (Use system).
+ * Everything else lives in Studio (/studio, in the header). Every control is a fixed width and opens upwards in a
+ * popover, so the bar never changes size as names change. Until a system is active the colours drift
+ * (lib/theme/ambient.ts); "Drifting colours", first in both popovers, brings it back (saved systems stay).
  */
 export function ThemePill() {
   const pathname = usePathname();
   const { recipe, theme, ambient } = useLiveTheme();
+  const systems = useSystems();
   const drift = useAmbient();
   const [colourOpen, setColourOpen] = React.useState(false);
   const bar = React.useRef<HTMLDivElement>(null);
   const covering = useCoversAvoided(bar, pathname);
 
-  if (pathname?.startsWith('/themes')) return null;
+  if (pathname?.startsWith('/studio') || pathname?.startsWith('/themes')) return null;
   const presetIndex = ambient ? -1 : PRESETS.findIndex((x) => sameRecipe(recipe, x.recipe));
+  const systemIndex = ambient || systems.shared ? -1 : systems.saved.findIndex((x) => x.id === systems.activeId);
+  const label = ambient ? 'Drifting' : systemLabel(systems);
   const swatchIndex = ambient ? -1 : SWATCHES.findIndex((x) => x.hex === recipe.brand);
 
   return (
@@ -118,15 +124,42 @@ export function ThemePill() {
         aria-label="Theme"
         className="border-border bg-background/85 text-foreground pointer-events-auto flex max-w-full items-center gap-1 rounded-full border p-1.5 shadow-[0_8px_30px_rgb(0_0_0/0.12)] backdrop-blur-xl">
         <Popover>
-          <PopoverTrigger className={`${itemClass} hover:bg-accent px-3`} aria-label={ambient ? 'Preset: none, the colours drift' : `Preset: ${presetLabel(recipe)}`}>
+          <PopoverTrigger className={`${itemClass} hover:bg-accent px-3`} aria-label={ambient ? 'System: none, the colours drift' : `System: ${label}`}>
             <span className="bg-primary size-3 shrink-0 rounded-full" aria-hidden />
-            {/* A fixed width: the bar keeps its size whatever the preset is called. */}
-            <span className="hidden w-28 truncate text-left sm:inline">{ambient ? 'Drifting' : presetLabel(recipe)}</span>
+            {/* A fixed width: the bar keeps its size whatever the system is called. */}
+            <span className="hidden w-28 truncate text-left sm:inline">{label}</span>
             <ChevronDownIcon className="text-muted-foreground size-3.5 shrink-0" aria-hidden />
           </PopoverTrigger>
           <PopoverContent side="top" align="start" sideOffset={10} className="max-h-[70vh] w-72 overflow-y-auto p-1.5">
+            <div role="radiogroup" aria-label="Systems" className="flex flex-col" onKeyDown={(e) => rovingKeyDown(e)}>
+              <DriftChoice selected={ambient} tabIndex={rovingTabIndex(0, ambient ? 0 : systemIndex + 1)} />
+              {systems.saved.map((doc, i) => {
+                const t = systemTheme(doc);
+                const selected = !ambient && !systems.shared && systems.activeId === doc.id;
+                return (
+                  <button
+                    key={doc.id}
+                    type="button"
+                    role="radio"
+                    aria-checked={selected}
+                    tabIndex={rovingTabIndex(i + 1, ambient ? 0 : systemIndex + 1)}
+                    onClick={() => switchSystem(doc.id)}
+                    className={rowClass}>
+                    <span className="flex shrink-0 -space-x-1" aria-hidden>
+                      <span className="ring-background size-4 rounded-full ring-2" style={{ background: t.resolved.light.primary }} />
+                      <span className="ring-background size-4 rounded-full ring-2" style={{ background: t.resolved.light.muted }} />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-sm font-medium">{doc.name}</span>
+                      <span className="text-muted-foreground block truncate text-xs">Saved in this browser</span>
+                    </span>
+                    {selected ? <CheckIcon className="size-4 shrink-0" aria-hidden /> : null}
+                  </button>
+                );
+              })}
+            </div>
+            <p className="text-muted-foreground px-2.5 pb-1 pt-3 text-xs font-medium">{ambient ? 'Start from a preset' : `Presets for ${label}`}</p>
             <div role="radiogroup" aria-label="Presets" className="flex flex-col" onKeyDown={(e) => rovingKeyDown(e)}>
-              <DriftChoice selected={ambient} tabIndex={rovingTabIndex(0, ambient ? 0 : presetIndex + 1)} />
               {PRESETS.map((p, i) => {
                 const t = themeFor(normalizeRecipe(p.recipe));
                 const selected = !ambient && sameRecipe(recipe, p.recipe);
@@ -136,7 +169,7 @@ export function ThemePill() {
                     type="button"
                     role="radio"
                     aria-checked={selected}
-                    tabIndex={rovingTabIndex(i + 1, ambient ? 0 : presetIndex + 1)}
+                    tabIndex={rovingTabIndex(i, Math.max(0, presetIndex))}
                     onClick={() => setRecipe({ ...p.recipe, preset: p.id })}
                     className={rowClass}>
                     <span className="flex shrink-0 -space-x-1" aria-hidden>
@@ -153,6 +186,12 @@ export function ThemePill() {
                   </button>
                 );
               })}
+            </div>
+            <div className="border-border mt-1.5 border-t pt-1.5">
+              <Link href="/studio" className={`${rowClass} text-sm font-medium`}>
+                <span className="flex-1">Open in Studio</span>
+                <ArrowRightIcon className="size-4 shrink-0" aria-hidden />
+              </Link>
             </div>
           </PopoverContent>
         </Popover>
@@ -220,7 +259,7 @@ export function ThemePill() {
             const brand = ambientBrand();
             if (open && ambient && brand) setRecipe({ brand });
           }}>
-          <PopoverTrigger className={`${itemClass} bg-primary text-primary-foreground ml-1 px-4 hover:opacity-90`}>Use theme</PopoverTrigger>
+          <PopoverTrigger className={`${itemClass} bg-primary text-primary-foreground ml-1 px-4 hover:opacity-90`}>Use system</PopoverTrigger>
           <PopoverContent side="top" align="end" sideOffset={10} className="max-h-[70vh] w-96 max-w-[calc(100vw-2rem)] overflow-y-auto p-4">
             <ExportPanel theme={theme} />
           </PopoverContent>

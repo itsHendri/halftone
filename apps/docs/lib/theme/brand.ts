@@ -1,13 +1,15 @@
 'use client';
 /**
- * The studio's brand: a name, a logo (and its dark version), a mark for the app icon, and the icon's background.
- * A sibling of the theme store (lib/theme/store.ts), not part of the recipe: a theme code is a fixed few
- * characters, so the brand travels as files instead (Use theme › Brand assets, lib/brand/zip.ts). Kept in this
- * browser, and sent to the embedded kits live (`kit:brand`, lib/frames.ts).
+ * The active system's brand: a name, a logo (and its dark version), a mark for the app icon, and the icon's
+ * background. Part of the system document (`brand`, lib/studio/systems.ts), so it is saved, switched and undone with
+ * it. A theme code never carries it, and neither does a shared link: it travels as files instead (Use system › Brand
+ * assets, lib/brand/zip.ts). The embedded kits get it live (`kit:brand`, lib/frames.ts) and, on a new page, from
+ * sessionStorage (EMBED_BRAND_KEY, written by components/theme/theme-runtime.tsx).
  */
+import type { SystemBrand } from '@halftone-ds/tokens/system';
 import * as React from 'react';
+import { editSystem, subscribeSystems, systemsState, STARTER } from '@/lib/studio/systems';
 import type { BrandImage } from '@/lib/brand/svg';
-import { BRAND_KEY, EMBED_BRAND_KEY } from './keys';
 
 /** The app icon's background: the brand colour, white, black, or any hex. */
 export type IconBackground = 'brand' | 'white' | 'black' | `#${string}`;
@@ -22,66 +24,22 @@ export type BrandState = {
 };
 export type BrandSlot = 'logo' | 'logoDark' | 'mark' | 'markDark';
 
-const EMPTY: BrandState = { name: '', iconBackground: 'brand' };
-let state: BrandState = EMPTY;
-const listeners = new Set<() => void>();
-
 /** What the kits get (lib/brand.ts's Brand): null until there's a logo. */
-export function kitBrand(s: BrandState = state) {
+export function kitBrand(s: BrandState = systemsState().doc.brand as BrandState) {
   if (!s.logo) return null;
   return { name: s.name.trim() || 'Your brand', logo: s.logo, logoDark: s.logoDark, mark: s.mark, markDark: s.markDark };
 }
 
-function persist() {
-  try {
-    if (state.logo || state.name) localStorage.setItem(BRAND_KEY, JSON.stringify(state));
-    else localStorage.removeItem(BRAND_KEY);
-  } catch {
-    throw new Error("This browser's storage is full, so the logo can't be kept. Try a smaller image, or an SVG.");
-  }
-  try {
-    const kit = kitBrand();
-    if (kit) sessionStorage.setItem(EMBED_BRAND_KEY, JSON.stringify(kit));
-    else sessionStorage.removeItem(EMBED_BRAND_KEY);
-  } catch {}
-}
-
-let started = false;
-function start() {
-  if (started || typeof window === 'undefined') return;
-  started = true;
-  try {
-    const saved = JSON.parse(localStorage.getItem(BRAND_KEY) ?? 'null') as Partial<BrandState> | null;
-    if (saved && typeof saved === 'object') state = { ...EMPTY, ...saved };
-  } catch {}
-  // A new tab: the kit frames paint the saved logo from their first frame.
-  try {
-    const kit = kitBrand();
-    if (kit) sessionStorage.setItem(EMBED_BRAND_KEY, JSON.stringify(kit));
-  } catch {}
-}
-
-/** Change the brand. Throws when storage refuses it (too large), leaving the brand as it was. */
+/** Change the active system's brand (undoable). */
 export function setBrand(patch: Partial<BrandState>) {
-  const before = state;
-  state = { ...state, ...patch };
-  // Without a logo there's nothing to have a dark version of.
-  if (!state.logo) state = { ...state, logoDark: undefined };
-  if (!state.mark) state = { ...state, markDark: undefined };
-  try {
-    persist();
-  } catch (error) {
-    state = before;
-    throw error;
-  }
-  listeners.forEach((l) => l());
+  editSystem((doc) => {
+    let brand = { ...doc.brand, ...patch } as SystemBrand;
+    // Without a logo there's nothing to have a dark version of.
+    if (!brand.logo) brand = { ...brand, logoDark: undefined };
+    if (!brand.mark) brand = { ...brand, markDark: undefined };
+    return { ...doc, brand };
+  });
 }
 
-const subscribe = (l: () => void) => {
-  start();
-  listeners.add(l);
-  return () => {
-    listeners.delete(l);
-  };
-};
-export const useBrand = () => React.useSyncExternalStore(subscribe, () => (start(), state), () => EMPTY);
+const brandOf = () => systemsState().doc.brand as BrandState;
+export const useBrand = () => React.useSyncExternalStore(subscribeSystems, brandOf, () => STARTER.brand as BrandState);

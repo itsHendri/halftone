@@ -55,10 +55,10 @@ export default function HomePage() {
         <HeroField />
         <section className="mx-auto flex w-full max-w-3xl flex-col items-center gap-6 px-4 pb-12 pt-14 text-center md:px-6 md:pt-20">
           <Link
-            href="/themes"
+            href="/studio"
             className="border-border bg-card hover:bg-accent focus-visible:ring-ring inline-flex items-center gap-2 rounded-full border px-3 py-1 text-sm font-medium focus-visible:outline-none focus-visible:ring-2"
           >
-            New: the typeset is part of the theme{" "}
+            New: Studio keeps your design systems{" "}
             <ArrowRightIcon className="size-3.5" aria-hidden />
           </Link>
           <h1 className="text-4xl font-semibold tracking-tight text-balance sm:text-5xl">
@@ -105,12 +105,12 @@ export default function HomePage() {
       </section>
       <p className="text-muted-foreground mx-auto max-w-2xl px-4 pt-4 text-center text-sm">
         Every card is the web kit running live. Change the theme with the bar at
-        the bottom, or open the{" "}
+        the bottom, or open{" "}
         <Link
-          href="/themes"
+          href="/studio"
           className="text-foreground underline underline-offset-4"
         >
-          theme studio
+          Studio
         </Link>
         .
       </p>

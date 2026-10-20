@@ -39,6 +39,7 @@ export function siteLlmsHeader(): string {
     `- [Everything in one file](${site('/llms-full.txt')})`,
     `- [shadcn registry for Expo + react-native-reusables (${kit.registry.native})](${site('/r/native/registry.json')})`,
     `- [shadcn registry for Next.js + shadcn/ui (${kit.registry.web})](${site('/r/web/registry.json')})`,
+    `- [Studio](${site('/studio/')}): people make and keep design systems here (saved in their browser). They hand you an \`ht-\` theme code or a \`.halftone.json\`; apply either with \`npx halftone-tokens theme apply <code|file>\` (the kits' apply-theme skill)`,
     '',
   ].join('\n');
 }

@@ -5,16 +5,27 @@ description: What changed, newest first.
 
 ## October 2026
 
+### Studio
+
+The theme studio is now **Studio**, at [/studio](/studio) (old `/themes` links still work). It keeps several
+**systems** in your browser, each with its own theme, logo and name: switch, make a new one from a preset, copy one,
+import a `.halftone.json` or a theme code, rename, duplicate, export or delete (with undo). The theme you had and
+your logo moved in as "My system". Studio has three tabs: **Foundations**, **Components** (every component, live on
+your system) and **Accessibility** (contrast in light and dark, and colour vision). Undo, redo and shuffle work on
+the whole system, and **Use system** downloads its `.halftone.json` for `halftone-tokens theme apply`. A shared link
+opens read-only, with **Save as new system** or **Discard**, so it never overwrites yours. The theme bar follows
+the active system on every page.
+
 ### A calmer theme bar
 
 The theme bar keeps to three things: a preset, a colour and **Use theme**. The colour opens in a menu like the
 presets, and the preset's name has a fixed width, so the bar no longer changes size as you pick. Both menus start
 with **Drifting colours**, which sets the site's colour moving again after you've picked one. Light and dark
-stay in the header; contrast details and the full set of controls are in the [theme studio](/themes).
+stay in the header; contrast details and the full set of controls are in the [theme studio](/studio).
 
 ### Button and input styles
 
-Two new rows in the [theme studio](/themes), under Shape. **Buttons:** solid, soft (a brand tint with brand
+Two new rows in the [theme studio](/studio), under Shape. **Buttons:** solid, soft (a brand tint with brand
 text), outline, or raised (a darker bottom edge you want to press). **Inputs:** outlined boxes, filled (a tinted
 field with a line along the bottom), or underline (just a line). Both kits draw them on every Button, Input,
 Textarea and Select, live in the previews; the line of a filled or underline field is held to 3:1 like any other
@@ -24,7 +35,7 @@ next release of `@halftone-ds/tokens`. See [Themes](/docs/themes#what-a-theme-se
 
 ### Your logo in both kits
 
-Add a logo in the [theme studio](/themes) (**Logo**, at the top) and both kits show it live: a new `Logo`
+Add a logo in the [theme studio](/studio) (**Logo**, at the top) and both kits show it live: a new `Logo`
 component in the kit header and every sample. A one-colour SVG follows the theme's text colour in light and
 dark; a coloured logo or a PNG can have a dark version, and a square mark makes the app icon. **Use theme ›
 Brand assets** downloads it, with the app icon, Android's adaptive icon, light and dark splash screens and the
@@ -81,7 +92,7 @@ Pick a theme on this site and watch both kits change, live, then commit it with 
 - **The theme bar** sits at the bottom of every page: a preset, a brand colour, light or dark, how many
   colours were adjusted for contrast, and **Use theme**. The whole site and every live phone and browser
   frame follow it.
-- **The [theme studio](/themes)** has every control next to a live phone and browser: eight personality
+- **The [theme studio](/studio)** has every control next to a live phone and browser: eight personality
   presets, any brand colour, a neutral, heading and body fonts from 14 Google families, radius, pill or
   matching buttons, border weight, depth (flat, soft, raised, hard), icon stroke and density. Undo, and a
   shuffle that keeps what you lock.

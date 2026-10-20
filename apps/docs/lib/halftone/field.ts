@@ -4,12 +4,12 @@
  * the lab (apps/docs/design/halftone-lab/DECISIONS.md).
  */
 import { ambientResolved } from '@/lib/theme/ambient';
-import { currentRecipe, themeFor } from '@/lib/theme/store';
+import { currentTheme } from '@/lib/theme/store';
 
 /** The site's colours as hex, in the current mode: the drifting theme while ambient, else the picked one. */
 export function siteColours() {
   const mode = document.documentElement.classList.contains('dark') ? 'dark' : 'light';
-  return (ambientResolved() ?? themeFor(currentRecipe()).resolved)[mode];
+  return (ambientResolved() ?? currentTheme().resolved)[mode];
 }
 
 /** A click ripple, in page coordinates (so it stays put while the page scrolls). */
