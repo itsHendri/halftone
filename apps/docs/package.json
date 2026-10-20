@@ -17,7 +17,7 @@
     "test": "node --test lib/brand/*.test.ts"
   },
   "dependencies": {
-    "@halftone-ds/tokens": "^1.1.0",
+    "@halftone-ds/tokens": "^1.2.0",
     "fflate": "0.8.2",
     "fumadocs-core": "16.16.2",
     "fumadocs-mdx": "15.4.6",

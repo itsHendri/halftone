@@ -1,5 +1,39 @@
 # @halftone-ds/tokens
 
+## 1.2.0
+
+### Minor Changes
+
+- aa5526c: Add `apcaContrast(text, background)` (APCA-W3 0.0.98G-4g Lc, in `lib/apca.mjs`) and `contrastReport(resolved)`, which lists every pairing the contrast gate checks in both themes with its WCAG ratio, pass/fail and the APCA Lc. Both are exported from `@halftone-ds/tokens/theme`, along with `contrastPairs`, `AA` and `AA_NON_TEXT`. APCA is advisory: the build still gates on WCAG 2.1 AA only.
+- aa5526c: Add a colour-vision check (`lib/cvd.mjs`): `simulateCvd(hex, 'protanopia' | 'deuteranopia' | 'tritanopia')` (Machado 2009, severity 1.0, in linear sRGB) and `cvdWarnings(theme.resolved)`, which lists the status-tone pairs and adjacent chart colours that fall below OKLab ΔE 0.05 (`MIN_DELTA_E`) under normal sight or any of the three, in either theme. `color.mjs` gains `hexToOklab` and `deltaEOK`. Exported from `@halftone-ds/tokens/theme`; `halftone-tokens theme apply` prints the warnings. A warning only: nothing fails on it.
+- 6cdb66e: Button and field styles. A theme recipe now has `button` (solid, soft, outline, raised) and `field` (outline, filled, underline). They expand into five colours (`button`, `button-foreground`, `button-edge`, `field`, `field-edge`) and a few variables (`--button-alpha`, `--button-border-w`, `--button-edge-w`, `--field-alpha`, `--field-border-w`, `--field-edge-w`, `--field-radius`, `--field-radius-b`, `--field-x`) in every target. The contrast gate checks the button's label, and the line of a filled or underline field at 3:1. A theme with styles is an `ht3-` code (18 characters). Themes with the default styles keep their `ht1-`/`ht2-` codes, and a token file from before the styles builds as it always did.
+
+  The Soft, Playful and Editorial presets use styles now, so their codes change; their old codes still open the old look. There are two new presets, Tactile and Studio. `theme show` lists the styles. The shadcn export leaves the style colours out, because shadcn's components don't read them.
+
+- 04937c4: `tokens:build` and `tokens:check` now **warn** on contrast instead of failing. Every pairing below WCAG AA
+  (4.5:1), and every tone's text on a tint the palette can't carry, is still named with its ratio, and the
+  build carries on. Pass `--strict` (or set `HALFTONE_STRICT=1`) to fail on them as before; `theme apply`
+  passes `--strict` through to its rebuild. A CI that relied on the build failing should add `--strict` to keep
+  that.
+
+  A palette built below AA without `--strict` names its failing pairings in the generated DESIGN.md and
+  llms tokens section; for a passing palette they now say the build names any pairing that falls short, and
+  `--strict` fails on it.
+
+- 3c09fc4: Bridge Halftone themes and shadcn/ui.
+
+  - `theme apply`, `encode` and `shadcn` accept a shadcn/ui preset code (`b5owWMfJ8l`) as well as a Halftone code,
+    preset or recipe file. It becomes the nearest Halftone recipe; every value it approximates or drops is listed.
+  - `theme decode <code> [--json]` explains a Halftone code, a preset or a shadcn code (with the Halftone theme it
+    maps to).
+  - `theme resolve [--json]` prints the code for `tokens.json` as it is, and exits 1 when none is recorded or it was
+    edited by hand.
+  - `theme shadcn <theme> [--out] [--fonts-url]` writes the theme as a shadcn `registry:theme` item: colours for light
+    and dark, radius, shadows, and its fonts as `registry:font` dependencies.
+  - New in `@halftone-ds/tokens/theme`: `isShadcnPresetCode`, `decodeShadcnPreset`, `encodeShadcnPreset` (a port of
+    shadcn/ui's preset codec, MIT), `recipeFromShadcn`, `shadcnTheme`, `shadcnFont`, `shadcnFontPath` and
+    `SHADCN_FONTS_URL`.
+
 ## 1.1.0
 
 ### Minor Changes
