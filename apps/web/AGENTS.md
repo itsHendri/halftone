@@ -27,7 +27,7 @@ app/shop/, app/habits/  the web halves of the native kit's Shop and Habits sampl
                         `npm run eject-samples` removes all five, their data in components/<sample>/ and the kit
                         home's links.
 app/showcase/           the showcase: registry components in a masonry, and /showcase/typeset (long-form Prose
-                        beside components). The docs home page and theme studio frame it; not a sample to copy.
+                        beside components). The docs home page and Studio frame it; not a sample to copy.
 components/showcase/    its mock data, cards and typeset fixtures (kept by eject-samples)
 components/ui/          shadcn/ui — add more with the add-component skill (`npx shadcn@latest add <name>`)
 components/kit/         ours: AppShell, PageHeader, StatTile, DataTable, EmptyState, DatePicker, Hero,
@@ -97,11 +97,12 @@ npm run eject-samples     # delete the dashboard, landing, assistant, shop and h
 - **Static export:** `KIT_WEB_EXPORT=1 KIT_WEB_BASE_PATH=/w npm run build` writes `out/` under a sub-path
   (how the docs site embeds the kit).
 - **Share a link:** deploy to any Next host (Vercel, Cloudflare via OpenNext) or a static export.
-- **Re-brand:** pick a theme on the docs site (theme bar or `/themes`) and apply its code with the `apply-theme`
-  skill: `npx halftone-tokens theme apply <theme-code|preset>` (in the monorepo, `npm run theme:apply -- <code>` at the
-  root, so both kits stay one brand). Editing tokens.json by hand still works (in the monorepo:
+- **Re-brand:** make or pick a system in Studio on the docs site (`/studio`, or the theme pill on any docs page)
+  and apply it with the `apply-theme` skill: `npx halftone-tokens theme apply <theme-code|preset|file.halftone.json>`
+  (in the monorepo, `npm run theme:apply -- <code|file>` at the root, so both kits stay one brand). **Use system**
+  gives the code, or the system's `.halftone.json` once it has edits a code can't carry. Editing tokens.json by hand still works (in the monorepo:
   `apps/mobile/tokens/tokens.json`, then `npm run tokens:sync`), then `npm run tokens:build`. The logo and
-  favicons come from the studio too (**Use theme › Brand assets**, a zip): the `apply-theme` skill's "Brand assets"
+  favicons come from Studio too (**Use system › Brand assets**, a zip): the `apply-theme` skill's "Brand assets"
   steps unzip it.
 
 ## Gotchas

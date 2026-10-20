@@ -26,8 +26,8 @@ Then open **Components** in the app.
    and set `APP_ID` (bundle identifier and Android package).
 2. Brand: edit `tokens/tokens.json` (brand ramp + semantic colours + radius), run `npm run tokens:build`.
    Add a font with the `expo-font` config plugin and set `primitive.font.family.sans`.
-3. Logo, app icon, splash and favicon: add your logo in the theme studio (halftonedesignsystem.com/themes), download
-   **Use theme › Brand assets › Mobile kit** and unzip it here (the `apply-theme` skill's "Brand assets" steps).
+3. Logo, app icon, splash and favicon: add your logo in Studio (halftonedesignsystem.com/studio), download
+   **Use system › Brand assets › Mobile kit** and unzip it here (the `apply-theme` skill's "Brand assets" steps).
 4. Delete the samples: `npm run eject-samples` (removes `app/shop`, `app/habits`, `app/northwind`, their data and every reference).
 5. `eas init` under your account, then put the owner and project id it prints into `.env.local`
    (`EAS_OWNER`, `EAS_PROJECT_ID`) and into your EAS environment variables for cloud builds.

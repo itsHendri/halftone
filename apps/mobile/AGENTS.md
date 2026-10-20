@@ -96,13 +96,15 @@ npx expo run:ios       # build + install the dev client on the simulator (needs 
   installed, or Expo Go signed into the owning account/org (Expo Go on iOS requires login since SDK 57).
 - **Web link for clients:** `npm run export:web && eas deploy` → immutable preview URL. `web.output` is `single`
   so deep links resolve.
-- **Re-brand:** pick a theme on the docs site (theme bar or `/themes`) and apply its code with the `apply-theme`
-  skill: `npx halftone-tokens theme apply <theme-code|preset>` (in the monorepo, `npm run theme:apply -- <code>` at the
-  root). It rewrites only the theme's paths in `tokens/tokens.json` (colours, radius, fonts, depth, density, border,
-  icon stroke, typeset), fixes contrast itself and records the recipe (`halftone-tokens theme show`). Editing tokens.json by hand
+- **Re-brand:** make or pick a system in Studio on the docs site (`/studio`, or the theme pill on any docs page)
+  and apply it with the `apply-theme` skill: `npx halftone-tokens theme apply <theme-code|preset|file.halftone.json>`
+  (in the monorepo, `npm run theme:apply -- <code|file>` at the root). **Use system** gives the code, or the
+  system's `.halftone.json` once it has edits a code can't carry. It rewrites only the theme's paths in
+  `tokens/tokens.json` (colours, radius, fonts, depth, density, border, icon stroke, typeset, plus a system's hand
+  edits), fixes contrast itself and records the recipe or system (`halftone-tokens theme show`). Editing tokens.json by hand
   still works: `tokens:build` names any pairing below 4.5:1 with its ratio (treat that as a bug unless the person
   chose the colour knowingly; `--strict` makes it an error). Then set `name`/`slug`/`scheme`
-  in `app.json` and `APP_ID` in `.env.local`. The logo, app icon and splash come from the studio too (**Use theme ›
+  in `app.json` and `APP_ID` in `.env.local`. The logo, app icon and splash come from Studio too (**Use system ›
   Brand assets**, a zip): the `apply-theme` skill's "Brand assets" steps unzip it; don't hand-edit `assets/images/*`.
 
 ## Agent tooling

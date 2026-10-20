@@ -21,7 +21,7 @@ type Props = {
 };
 
 /**
- * The brand's logo from lib/brand.ts (the theme studio's brand download), in the scheme on screen. A one-colour
+ * The brand's logo from lib/brand.ts (Studio's brand download), in the scheme on screen. A one-colour
  * logo takes the theme's text colour, so it works in light and dark; a coloured one can have a dark version.
  * Without a logo: a placeholder square and the name, so screens look the same before a brand is applied.
  */
