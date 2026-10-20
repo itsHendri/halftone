@@ -217,7 +217,7 @@ Foundations** (Option 1, chosen over making the Components tab editable).
 | 0 | These wireframes and this record | done 2026-10-20 |
 | 1 | `HalftoneSystem` v1 document, `generateSystem`, `migrate`, CLI apply of `.halftone.json` (packages/tokens) | PR #55 |
 | 2 | The kits read per-style text tokens (`semantic.type.<variant>.*`) in both kits and the embed payloads | PR #58 |
-| 3 | Studio shell: `/studio`, systems in IndexedDB, switcher, migration, tabs; the rail and the Mobile/Web/Typeset views removed | |
+| 3 | Studio shell: `/studio`, systems in IndexedDB, switcher, migration, tabs; the rail and the Mobile/Web/Typeset views removed | PR #63 |
 | 4 | Foundations sections and popovers | |
 | 5 | Components and Accessibility tabs | |
 | 6 | Component-level editing (Button, Chip, Tag) | later |
