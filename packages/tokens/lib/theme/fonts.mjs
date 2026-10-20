@@ -45,6 +45,19 @@ export const FONTS = [
 
 export const fontById = (id) => FONTS.find((f) => f.id === id);
 
+/**
+ * A font for any Google Fonts family (a system's fonts can be any): its curated entry, or one made from the
+ * name the way @expo-google-fonts and next/font name it ('Inter Tight' → inter-tight, InterTight_600SemiBold,
+ * Inter_Tight), loading 400–700. A family without one of those weights fails to load; pick weights in the Studio.
+ */
+export function fontByFamily(family) {
+  const name = String(family).trim();
+  const curated = FONTS.find((f) => f.family.toLowerCase() === name.toLowerCase());
+  if (curated) return curated;
+  const id = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+  return { id, family: name, category: 'sans', weights: [400, 500, 600, 700], expoPrefix: name.replace(/[^A-Za-z0-9]/g, '') };
+}
+
 /** The nearest loaded weight of a font to the one a class asks for. */
 export function nearestWeight(font, weight) {
   return font.weights.reduce((best, w) => (Math.abs(w - weight) < Math.abs(best - weight) ? w : best), font.weights[0]);

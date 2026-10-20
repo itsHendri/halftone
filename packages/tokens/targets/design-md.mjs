@@ -88,7 +88,7 @@ export default function designMd(ctx, options) {
     .join('\n');
   // The theme's radius: rounded-* are multiples of its base (rounded-lg); control is buttons and chips.
   const rounded = [
-    ...ctx.radius.steps.map((s) => `  ${s.name}: ${px(Math.round(ctx.radius.base * s.scale * 10) / 10)}`),
+    ...ctx.radius.steps.map((s) => `  ${s.name}: ${px(s.px)}`),
     `  control: ${px(Math.min(ctx.shape.control, 9999))}`,
     `  full: ${px(9999)}`,
   ].join('\n');

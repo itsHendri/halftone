@@ -13,8 +13,18 @@ const p = (ramp, step) => `{primitive.color.${ramp}.${step}}`;
 const DARK_STEP = { 600: '500', 700: '400', 800: '300', 900: '200', 950: '100' };
 export const darkStep = (anchor) => DARK_STEP[anchor] ?? anchor;
 
-/** { name: { light: ref, dark: ref } } in the order the kit's tokens.json lists them. */
-export function semanticColors(anchor = '600') {
+/**
+ * The status tones' steps, as offsets from the step their seed sits on (600 for the curated ramps the kits
+ * ship), light and dark: a status seed that lands on another step moves its tone with it, as the brand does.
+ */
+const STATUS_STEPS = { danger: [0, -1], success: [1, -1], warning: [1, -2], info: [1, -1] };
+const status = (ramp, anchor = '600') => ({ light: p(ramp, shift(anchor, STATUS_STEPS[ramp][0])), dark: p(ramp, shift(anchor, STATUS_STEPS[ramp][1])) });
+
+/**
+ * { name: { light: ref, dark: ref } } in the order the kit's tokens.json lists them. `anchors` holds the step
+ * each status seed sits on (`{ danger: '500' }`); a status without one uses its 600, the curated ramps' seed.
+ */
+export function semanticColors(anchor = '600', anchors = {}) {
   const brand = { light: b(anchor), dark: b(darkStep(anchor)) };
   const onDark = { light: n(0), dark: n(950) };
   return {
@@ -32,13 +42,13 @@ export function semanticColors(anchor = '600') {
     'muted-foreground': { light: n(600), dark: n(400) },
     accent: { light: n(100), dark: n(800) },
     'accent-foreground': { light: n(900), dark: n(50) },
-    destructive: { light: p('danger', 600), dark: p('danger', 500) },
+    destructive: status('danger', anchors.danger),
     'destructive-foreground': onDark,
-    success: { light: p('success', 700), dark: p('success', 500) },
+    success: status('success', anchors.success),
     'success-foreground': onDark,
-    warning: { light: p('warning', 700), dark: p('warning', 400) },
+    warning: status('warning', anchors.warning),
     'warning-foreground': onDark,
-    info: { light: p('info', 700), dark: p('info', 500) },
+    info: status('info', anchors.info),
     'info-foreground': onDark,
     border: { light: n(200), dark: n(800) },
     input: { light: n(200), dark: n(800) },
@@ -59,7 +69,9 @@ export function semanticColors(anchor = '600') {
   };
 }
 
-const shift = (step, by) => STEPS[Math.min(STEPS.length - 1, Math.max(0, STEPS.indexOf(step) + by))];
+function shift(step, by) {
+  return STEPS[Math.min(STEPS.length - 1, Math.max(0, STEPS.indexOf(step) + by))];
+}
 
 /**
  * The colours a recipe's styles add (button, field), from the base colours after their contrast fix, so a moved

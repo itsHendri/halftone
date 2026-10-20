@@ -2,7 +2,8 @@
  * `halftone-tokens theme …` — commit a theme from the docs picker into tokens.json.
  *
  *   theme apply <theme> [--dry-run] [--force]
- *        write the theme into tokens.json (only the paths a theme owns) and rebuild
+ *        write the theme into tokens.json (only the paths a theme owns) and rebuild; a system document is
+ *        recorded in tokens.json's $extensions (without its brand images)
  *   theme show [--check]   the applied theme, its code and any hand edits since (drift)
  *                          --check: exit 1 if the recorded theme no longer reproduces (CI)
  *   theme presets          list the presets and their codes
@@ -12,19 +13,22 @@
  *   theme shadcn <theme> [--out file] [--fonts-url url]
  *                          the theme as a shadcn registry:theme item (stdout, or a file), for `npx shadcn add`
  *
- * <theme> is a Halftone code (ht1-…, ht2-…, ht3-…), a preset name, a recipe .json, or a shadcn/ui preset code
- * (ui.shadcn.com/create, e.g. b5owWMfJ8l), which becomes the nearest Halftone recipe: what it approximates
- * or drops is listed on stderr.
+ * <theme> is a Halftone code (ht1-…, ht2-…, ht3-…), a preset name, a recipe .json, a system document
+ * (name.halftone.json, from the Studio), or a shadcn/ui preset code (ui.shadcn.com/create, e.g. b5owWMfJ8l),
+ * which becomes the nearest Halftone recipe: what it approximates or drops is listed on stderr.
  */
 import { spawnSync } from 'node:child_process';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { cvdWarnings, describeCvdWarnings, MIN_DELTA_E } from './cvd.mjs';
-import { FONTS } from './theme/fonts.mjs';
+import { FONTS, fontByFamily } from './theme/fonts.mjs';
+import { isSystem, normalizeSystem, SystemError, systemOverrides } from './system/schema.mjs';
+import { systemCode } from './system/generate.mjs';
 
 import {
   applyRecipe,
+  applySystem,
   decodeRecipe,
   encodeRecipe,
   fontById,
@@ -37,6 +41,7 @@ import {
   recipeFromShadcn,
   SHADCN_FONTS_URL,
   shadcnTheme,
+  THEME_EXTENSION,
   themeStatus,
 } from './theme/index.mjs';
 
@@ -51,8 +56,54 @@ function printNotes(code, notes) {
   console.error(`From shadcn preset ${code}, approximated or not carried:\n${notes.map((n) => `  - ${n}`).join('\n')}`);
 }
 
+/** { recipe, system? }: a system document when <theme> is one (name.halftone.json), else a recipe. */
+function readTheme(arg, root) {
+  const file = arg ? join(root, arg) : '';
+  if (arg?.endsWith('.json') && existsSync(file)) {
+    let json;
+    try {
+      json = JSON.parse(readFileSync(file, 'utf8'));
+    } catch (error) {
+      fail(`${arg} is not valid JSON: ${error.message}`);
+    }
+    if (isSystem(json)) {
+      try {
+        const system = normalizeSystem(json);
+        return { recipe: system.recipe, system };
+      } catch (error) {
+        if (error instanceof SystemError) fail(`${arg}: ${error.message}`);
+        throw error;
+      }
+    }
+  }
+  return { recipe: readRecipe(arg, root) };
+}
+
+/** Why a system has no code: its overrides, briefly. */
+function noCode(system) {
+  const overrides = systemOverrides(system);
+  const shown = overrides.slice(0, 6).join(', ') + (overrides.length > 6 ? `, and ${overrides.length - 6} more` : '');
+  return `"${system.name}" has ${overrides.length} override(s) a theme code can't carry (${shown}). Share its .halftone.json instead.`;
+}
+
+/** A system's overrides, grouped by section, for `show` and `apply`. */
+function describeOverrides(system) {
+  const bySection = {};
+  for (const path of systemOverrides(system)) {
+    const [section, ...rest] = path.split('.');
+    (bySection[section] ??= []).push(rest.join('.'));
+  }
+  return Object.entries(bySection).map(([section, list]) => `${section}: ${list.join(', ')}`);
+}
+
+function printWarnings(warnings) {
+  if (!warnings?.length) return;
+  console.log(`\nBelow WCAG AA because of colours chosen by hand (warnings; the fixer leaves hand-picked colours alone):`);
+  for (const w of warnings) console.log(`  ${w.mode.padEnd(5)} ${w.label.padEnd(40)} ${w.ratio}:1 (needs ${w.threshold})${w.locked.length ? `  · chosen: ${w.locked.join(', ')}` : ''}`);
+}
+
 function readRecipe(arg, root) {
-  if (!arg) fail('say which theme: a code (ht1-…, ht2-… or ht3-…), a preset name, a recipe .json or a shadcn preset code', 2);
+  if (!arg) fail('say which theme: a code (ht1-…, ht2-… or ht3-…), a preset name, a recipe .json, a system .halftone.json or a shadcn preset code', 2);
   if (isThemeCode(arg)) {
     try {
       return decodeRecipe(arg);
@@ -98,7 +149,8 @@ function installFonts(root, config, theme, flags) {
   if (config.targets?.fonts?.platform !== 'expo') return;
   const pkg = JSON.parse(readFileSync(join(root, 'package.json'), 'utf8'));
   const have = new Set(Object.keys({ ...pkg.dependencies, ...pkg.devDependencies }).filter((d) => d.startsWith('@expo-google-fonts/')));
-  const ids = Object.values(theme.recipe.font).filter((id) => !fontById(id)?.system);
+  // The theme's families: curated ones, or any Google Fonts family a system names.
+  const ids = Object.values(theme.fonts).filter(Boolean).map(fontByFamily).filter((f) => !f.system).map((f) => f.id);
   const need = [...new Set(ids)].map((id) => `@expo-google-fonts/${id}`);
   const missing = need.filter((p) => !have.has(p));
   const unused = [...have].filter((p) => !need.includes(p) && FONTS.some((f) => `@expo-google-fonts/${f.id}` === p));
@@ -124,7 +176,9 @@ export async function themeCommand({ positional, flags, root, sourcePath, config
   }
 
   if (sub === 'encode') {
-    console.log(encodeRecipe(readRecipe(arg, root)));
+    const { recipe, system } = readTheme(arg, root);
+    if (system && !systemCode(system)) fail(noCode(system));
+    console.log(encodeRecipe(recipe));
     return;
   }
 
@@ -166,6 +220,7 @@ export async function themeCommand({ positional, flags, root, sourcePath, config
   if (sub === 'resolve') {
     const status = themeStatus(tokens());
     if (!status.applied) fail('no theme recorded in tokens.json, so there is no code for it. Apply one with `halftone-tokens theme apply <theme>`.');
+    if (!status.code) fail(`the applied system ${noCode(status.system)} Its document is recorded in tokens.json ($extensions).`);
     if (status.drift.length) fail(`tokens.json was edited by hand since ${status.code} was applied (${status.drift.length} token(s)); no code reproduces it. \`theme show\` lists them.`);
     if (flags.json) console.log(JSON.stringify({ code: status.code, recipe: status.recipe }, null, 2));
     else console.log(status.code);
@@ -173,8 +228,8 @@ export async function themeCommand({ positional, flags, root, sourcePath, config
   }
 
   if (sub === 'shadcn') {
-    const recipe = readRecipe(arg, root);
-    const { theme } = applyRecipe(tokens(), recipe);
+    const { recipe, system } = readTheme(arg, root);
+    const { theme } = system ? applySystem(tokens(), system) : applyRecipe(tokens(), recipe);
     const item = shadcnTheme(theme, {
       ...(recipe.preset ? { name: `halftone-${recipe.preset}`, title: `Halftone ${presetById(recipe.preset)?.name} theme` } : {}),
       fontsUrl: typeof flags['fonts-url'] === 'string' ? flags['fonts-url'] : SHADCN_FONTS_URL,
@@ -194,8 +249,16 @@ export async function themeCommand({ positional, flags, root, sourcePath, config
       if (flags.check) process.exit(0);
       return;
     }
-    const name = status.recipe.preset ? ` (${presetById(status.recipe.preset)?.name ?? status.recipe.preset})` : '';
-    console.log(`Theme ${status.code}${name}\n  ${describe(status.recipe)}`);
+    if (status.system) {
+      const { system } = status;
+      const overrides = describeOverrides(system);
+      console.log(`System "${system.name}"${status.code ? ` ${status.code}` : ' (no theme code: it has overrides)'}\n  ${describe(status.recipe)}`);
+      if (overrides.length) console.log(`\nOverrides:\n${overrides.map((o) => `  ${o}`).join('\n')}`);
+      printWarnings(tokens().$extensions?.[THEME_EXTENSION]?.warnings);
+    } else {
+      const name = status.recipe.preset ? ` (${presetById(status.recipe.preset)?.name ?? status.recipe.preset})` : '';
+      console.log(`Theme ${status.code}${name}\n  ${describe(status.recipe)}`);
+    }
     if (status.drift.length) {
       console.log(`\nEdited by hand since it was applied (${status.drift.length}):\n${status.drift.map((p) => `  ${p}`).join('\n')}`);
       if (flags.check) fail('tokens.json no longer matches its recorded theme. Re-apply it, or apply with --force to record the edits away.');
@@ -204,7 +267,7 @@ export async function themeCommand({ positional, flags, root, sourcePath, config
   }
 
   if (sub === 'apply') {
-    const recipe = readRecipe(arg, root);
+    const { recipe, system } = readTheme(arg, root);
     const current = tokens();
     const status = themeStatus(current);
     const blocked = !status.applied
@@ -214,12 +277,18 @@ export async function themeCommand({ positional, flags, root, sourcePath, config
         ? `these theme tokens were edited by hand since ${status.code} was applied:\n${status.drift.map((p) => `  ${p}`).join('\n')}\nRe-run with --force to overwrite them.`
         : null;
     if (blocked && !flags.force && !flags['dry-run']) fail(blocked);
-    const { tokens: next, theme } = applyRecipe(current, recipe);
-    console.log(`Theme ${theme.code}${recipe.preset ? ` (${presetById(recipe.preset)?.name})` : ''}\n  ${describe(theme.recipe)}`);
+    const { tokens: next, theme } = system ? applySystem(current, system) : applyRecipe(current, recipe);
+    if (system) {
+      const code = systemCode(system);
+      const overrides = describeOverrides(system);
+      console.log(`System "${system.name}"${code ? ` ${code}` : ''}\n  ${describe(theme.recipe)}`);
+      if (overrides.length) console.log(`\nOverrides (no theme code carries these; tokens.json records the document):\n${overrides.map((o) => `  ${o}`).join('\n')}`);
+    } else console.log(`Theme ${theme.code}${recipe.preset ? ` (${presetById(recipe.preset)?.name})` : ''}\n  ${describe(theme.recipe)}`);
     if (theme.adjustments.length) {
       console.log(`\nAdjusted for contrast (WCAG AA), hue kept:`);
       for (const a of theme.adjustments) console.log(`  ${a.mode.padEnd(5)} ${a.token.padEnd(28)} ${a.from} → ${a.to}`);
     }
+    printWarnings(theme.warnings);
     const cvd = cvdWarnings(theme.resolved);
     if (cvd.length) {
       console.log(`\nColour vision: ${cvd.length} pair(s) of tones closer than ΔE ${MIN_DELTA_E} (a warning; give them an icon or a label as well):`);

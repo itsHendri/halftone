@@ -10,6 +10,14 @@
  *
  * It checks the STRICT set (tones on muted/accent too). A moved token becomes a literal hex for that
  * mode, and every move is reported as { token, mode, from, to } so the picker can show it.
+ *
+ * A system's hand-made choices are never moved; each is a { light: Set, dark: Set } of token names:
+ *   locked   a role mapped by hand: the fixer changes nothing about it (no label flip, no nudge)
+ *   pinned   a role on an edited step: as a label it may still flip between the neutrals, but its colour is
+ *            never nudged off the step
+ * The fixer still flips a generated label on a fixed fill, and moves generated ink off a fixed surface. It never
+ * moves a fill to suit a hand-picked label (that would move every surface the fill is). A pairing it leaves
+ * failing is reported in `warnings` as { mode, label, fg, bg, ratio, threshold, locked }.
  */
 import { contrast, hexToOklchParts } from '../color.mjs';
 import { contrastPairs } from '../contrast.mjs';
@@ -37,9 +45,10 @@ function nudge(hex, dir, ok) {
  * semantic: { name: { light, dark } } of references or hex; lookup: (value) → hex.
  * Returns { semantic, adjustments } — a new map, the input is not touched.
  */
-export function fixContrast(semantic, lookup) {
+export function fixContrast(semantic, lookup, { locked, pinned } = {}) {
   const out = Object.fromEntries(Object.entries(semantic).map(([k, v]) => [k, { ...v }]));
   const adjustments = [];
+  const warnings = [];
 
   for (const mode of ['light', 'dark']) {
     const original = Object.fromEntries(Object.entries(out).map(([k, v]) => [k, lookup(v[mode])]));
@@ -48,39 +57,83 @@ export function fixContrast(semantic, lookup) {
     const set = (name, value) => {
       out[name][mode] = value;
     };
+    const lockedHere = locked?.[mode] ?? new Set();
+    const pinnedHere = pinned?.[mode] ?? new Set();
+    const isLocked = (name) => lockedHere.has(name);
+    // Its colour stays: locked, or on an edited step.
+    const isFixed = (name) => lockedHere.has(name) || pinnedHere.has(name);
+    // Pairings left as they are: only a locked colour could fix them.
+    const accepted = new Set();
+    const accept = (f) => accepted.add(f.label);
+    // Without locks, a pairing nothing fixes is a bug (it throws, as it always has); with them, a warning.
+    const cannot = (f) => {
+      if (!lockedHere.size && !pinnedHere.size) throw new Error(`fixContrast: cannot fix ${f.label} (${mode})`);
+      accept(f);
+    };
 
-    for (let pass = 0; pass < MAX_PASSES; pass++) {
+    for (let pass = 0; pass < MAX_PASSES; ) {
       const hex = hexNow();
-      const [f] = failing(contrastPairs(hex, mode, { strict: true }));
+      const [f] = failing(contrastPairs(hex, mode, { strict: true })).filter((p) => !accepted.has(p.label));
       if (!f) break;
 
       if (f.fgName === `${f.bgName}-foreground`) {
         // 1. A label on its own fill.
         const [best] = FOREGROUND_CHOICES.map((ref) => ({ ref, ratio: contrast(lookup(ref), hex[f.bgName]) })).sort((a, b) => b.ratio - a.ratio);
-        if (best.ratio >= f.threshold && out[f.fgName][mode] !== best.ref) {
+        if (!isLocked(f.fgName) && best.ratio >= f.threshold && out[f.fgName][mode] !== best.ref) {
           set(f.fgName, best.ref);
+          pass++;
+          continue;
+        }
+        if (isFixed(f.bgName) || isLocked(f.fgName)) {
+          accept(f);
           continue;
         }
         const label = lookup(best.ref);
         // A light label (it reads on black) needs a darker fill; a dark label a lighter one.
         const dir = contrast(label, '#000000') > contrast(label, '#ffffff') ? -1 : 1;
         const moved = nudge(hex[f.bgName], dir, (c) => contrast(label, c) >= f.threshold);
-        if (!moved) throw new Error(`fixContrast: cannot fix ${f.label} (${mode})`);
+        if (!moved) {
+          cannot(f);
+          continue;
+        }
         set(f.fgName, best.ref);
         moveFill(f.bgName, moved);
+        pass++;
         continue;
       }
 
       // 2 and 3: move the ink until every pairing it takes part in as ink passes.
       const ink = f.fgName;
-      const asInk = (candidate) => failing(contrastPairs({ ...hex, [ink]: candidate }, mode, { strict: true, fg: ink })).length === 0;
+      if (isFixed(ink)) {
+        accept(f);
+        continue;
+      }
+      const asInk = (candidate) =>
+        failing(contrastPairs({ ...hex, [ink]: candidate }, mode, { strict: true, fg: ink })).filter((p) => !accepted.has(p.label)).length === 0;
       const moved = nudge(hex[ink], away, asInk);
-      if (!moved) throw new Error(`fixContrast: cannot fix ${f.label} (${mode})`);
+      if (!moved) {
+        cannot(f);
+        continue;
+      }
       moveFill(ink, moved);
+      pass++;
     }
 
-    const left = failing(contrastPairs(hexNow(), mode, { strict: true }));
+    const all = failing(contrastPairs(hexNow(), mode, { strict: true }));
+    const left = all.filter((p) => !accepted.has(p.label));
     if (left.length) throw new Error(`fixContrast: ${left[0].label} still fails in ${mode} after ${MAX_PASSES} passes`);
+    // The strict set can name a pairing twice (muted-foreground on muted): warn once.
+    for (const p of all.filter((p, i) => all.findIndex((q) => q.label === p.label) === i)) {
+      warnings.push({
+        mode,
+        label: p.label,
+        fg: p.fgName,
+        bg: p.bgName,
+        ratio: Number(p.ratio.toFixed(2)),
+        threshold: p.threshold,
+        locked: [p.fgName, p.bgName].filter(isFixed),
+      });
+    }
 
     for (const [name, before] of Object.entries(original)) {
       const after = lookup(out[name][mode]);
@@ -91,9 +144,9 @@ export function fixContrast(semantic, lookup) {
       const was = lookup(out[name][mode]);
       set(name, hex);
       if (name === 'primary') {
-        for (const linked of BRAND_LINKED) if (lookup(out[linked][mode]) === was) set(linked, hex);
+        for (const linked of BRAND_LINKED) if (!isFixed(linked) && lookup(out[linked][mode]) === was) set(linked, hex);
       }
     }
   }
-  return { semantic: out, adjustments };
+  return { semantic: out, adjustments, warnings };
 }
