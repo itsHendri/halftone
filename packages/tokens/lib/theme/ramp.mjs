@@ -32,36 +32,62 @@ export function curatedRamp(seed) {
   return Object.entries(BRAND_RAMPS).find(([, ramp]) => ramp[600] === hex)?.[0] ?? null;
 }
 
+/** The step nearest a lightness, in a lightness table. */
+const nearestStep = (L, table) => STEPS.reduce((best, s) => (Math.abs(table[s] - L) < Math.abs(table[best] - L) ? s : best), '600');
+
 /** The step a seed sits on: its curated 600, or the generated step nearest its lightness. */
 export function anchorStep(seed) {
   if (curatedRamp(seed)) return '600';
-  const [L] = hexToOklchParts(seed);
-  return STEPS.reduce((best, s) => (Math.abs(LIGHTNESS[s] - L) < Math.abs(LIGHTNESS[best] - L) ? s : best), '600');
+  return nearestStep(hexToOklchParts(seed)[0], LIGHTNESS);
 }
 
-/** { 50: '#…', …, 950: '#…' } for a brand seed. */
-export function brandRamp(seed) {
-  const curated = curatedRamp(seed);
-  if (curated) return { ...BRAND_RAMPS[curated] };
-
+/**
+ * The 11 steps around a seed, in OKLCH, with the seed exactly on `anchor`.
+ *   lightness, chroma   the profile per step (chroma is relative: scaled so the anchor keeps the seed's chroma)
+ *   auto                the anchor nearest the seed's lightness: the seed's offset fades out over three steps
+ *   forced              any other anchor: each side is stretched between the seed and its end of the profile,
+ *                       which keeps the ramp in order however far the seed is from its step
+ */
+function seededRamp(seed, anchor, lightness, chroma) {
   const [Ls, Cs, Hs] = hexToOklchParts(seed);
-  const anchor = anchorStep(seed);
   const ai = STEPS.indexOf(anchor);
-  const dL = Ls - LIGHTNESS[anchor];
-  const chromaScale = Cs / CHROMA[anchor];
+  const auto = nearestStep(Ls, lightness) === anchor;
+  const dL = Ls - lightness[anchor];
+  const chromaScale = chroma[anchor] ? Cs / chroma[anchor] : 0;
+  // Forced: the ends of the ramp, kept a little beyond the seed so a step never repeats it.
+  const top = Math.min(1, Math.max(lightness[STEPS[0]], Ls + 0.01 * ai));
+  const bottom = Math.max(0, Math.min(lightness[STEPS.at(-1)], Ls - 0.01 * (STEPS.length - 1 - ai)));
   const ramp = {};
   STEPS.forEach((s, i) => {
     if (s === anchor) {
       ramp[s] = seed.toLowerCase();
       return;
     }
-    // The seed's offset from the target lightness fades out over three steps either side, which keeps
-    // neighbours in order (|dL| is at most half the gap to the next step).
-    const fade = Math.max(0, 1 - Math.abs(i - ai) / 3);
-    const L = LIGHTNESS[s] + dL * fade;
-    ramp[s] = toGamutHex([L, CHROMA[s] * chromaScale, Hs]);
+    let L;
+    if (auto) {
+      // The seed's offset from the target lightness fades out over three steps either side, which keeps
+      // neighbours in order (|dL| is at most half the gap to the next step).
+      const fade = Math.max(0, 1 - Math.abs(i - ai) / 3);
+      L = lightness[s] + dL * fade;
+    } else {
+      const end = i < ai ? STEPS[0] : STEPS.at(-1);
+      const t = (lightness[s] - lightness[anchor]) / (lightness[end] - lightness[anchor]);
+      L = Ls + t * ((i < ai ? top : bottom) - Ls);
+    }
+    ramp[s] = toGamutHex([L, chroma[s] * chromaScale, Hs]);
   });
   return ramp;
+}
+
+/**
+ * { 50: '#…', …, 950: '#…' } for a seed. `anchor` pins the seed to another step than its nearest one (the
+ * studio's "pinned step"); a curated seed with any other anchor is generated like any seed.
+ */
+export function brandRamp(seed, { anchor } = {}) {
+  const curated = curatedRamp(seed);
+  if (curated && (!anchor || anchor === '600')) return { ...BRAND_RAMPS[curated] };
+  const [L] = hexToOklchParts(seed);
+  return seededRamp(seed, anchor ?? nearestStep(L, LIGHTNESS), LIGHTNESS, CHROMA);
 }
 
 const TINT_CHROMA = { 50: 0.003, 100: 0.005, 200: 0.008, 300: 0.012, 400: 0.02, 500: 0.024, 600: 0.022, 700: 0.02, 800: 0.016, 900: 0.014, 950: 0.012 };
@@ -79,4 +105,18 @@ export function neutralRamp(kind, seed) {
   }
   ramp[1000] = '#000000';
   return ramp;
+}
+
+/** Zinc's lightness per step: a neutral seed's ramp keeps the grey ramps' range (950 is near black). */
+const NEUTRAL_LIGHTNESS = Object.fromEntries(STEPS.map((s) => [s, hexToOklchParts(NEUTRAL_RAMPS.zinc[s])[0]]));
+
+/** The step a neutral seed sits on: the zinc step nearest its lightness. */
+export const neutralAnchorStep = (seed) => nearestStep(hexToOklchParts(seed)[0], NEUTRAL_LIGHTNESS);
+
+/**
+ * The 13-step neutral for a custom seed (any grey, or any colour as a tint): zinc's lightness, the tint's
+ * chroma profile scaled to the seed, the seed exactly on its step.
+ */
+export function neutralSeedRamp(seed, { anchor } = {}) {
+  return { 0: '#ffffff', ...seededRamp(seed, anchor ?? neutralAnchorStep(seed), NEUTRAL_LIGHTNESS, TINT_CHROMA), 1000: '#000000' };
 }

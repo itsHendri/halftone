@@ -4,7 +4,7 @@
  *   options: { css: 'global.css', tailwind: 'tokens/generated/tailwind.theme.js' }
  */
 import { hexToHslTriplet } from '../lib/color.mjs';
-import { cssName, group, isColor, radiusCalc } from '../lib/resolve.mjs';
+import { cssName, group, isColor, radiusCss } from '../lib/resolve.mjs';
 import { TEXT_LINE_HEIGHT } from '../lib/theme/recipe.mjs';
 import { styleVars } from '../lib/theme/vars.mjs';
 
@@ -17,7 +17,8 @@ function cssBlock(selector, tokens, shape, mode, colors) {
   const lines = tokens
     // Shadows are literal in tailwind.theme.js: a var() box-shadow drops the view on native. The styles'
     // numbers come from shape (with their units), below.
-    .filter((t) => t.$type !== 'shadow' && !SHAPE.has(cssName(t)) && !/^(density|type)-/.test(cssName(t)))
+    // A system's radius steps are in borderRadius below, with their units.
+    .filter((t) => t.$type !== 'shadow' && !SHAPE.has(cssName(t)) && !/^(density|type|radius)-/.test(cssName(t)))
     .filter((t) => isColor(t) || !/^(button|field)-/.test(cssName(t)))
     .map((t) => {
       const name = cssName(t);
@@ -52,7 +53,7 @@ ${cssBlock('.dark:root', ctx.semDark, { styleShape: ctx.shape }, 'dark', ctx.col
   // The styles' fills carry their own opacity (an outline button, a transparent field). No /90 modifiers on these.
   colors.button = 'hsl(var(--button) / var(--button-alpha))';
   colors.field = 'hsl(var(--field) / var(--field-alpha))';
-  const borderRadius = Object.fromEntries(ctx.radius.steps.map((s) => [s.name, radiusCalc(s.scale)]));
+  const borderRadius = Object.fromEntries(ctx.radius.steps.map((s) => [s.name, radiusCss(s)]));
   borderRadius.control = 'var(--radius-control)';
   // Field style: rounded-field (top) and rounded-b-field-b (bottom).
   borderRadius.field = 'var(--field-radius)';

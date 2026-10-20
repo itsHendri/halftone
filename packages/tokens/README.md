@@ -61,7 +61,8 @@ npx halftone-tokens theme resolve [--json]     # the code for tokens.json as it 
 npx halftone-tokens theme shadcn <theme> [--out file] [--fonts-url url]   # a shadcn registry:theme item
 ```
 
-`<theme>` is a Halftone code (`ht1-…`, `ht2-…`, `ht3-…`), a preset name, a recipe `.json`, or a
+`<theme>` is a Halftone code (`ht1-…`, `ht2-…`, `ht3-…`), a preset name, a recipe `.json`, a system
+`.halftone.json` (see Systems), or a
 [shadcn/ui](https://ui.shadcn.com/create) preset code (`b5owWMfJ8l`). A shadcn code becomes the nearest Halftone
 recipe, and what it approximates or drops (shadcn-only greys, radius steps, fonts outside the list, icon
 libraries, chart colours, menu options, styles) is listed on stderr. The other way, `theme shadcn` writes the
@@ -70,6 +71,34 @@ as `registry:font` dependencies (hosted at halftonedesignsystem.com/r/font, or `
 
 From code: `decodeShadcnPreset`, `recipeFromShadcn`, `shadcnTheme` and `shadcnFont` in
 `@halftone-ds/tokens/theme` (browser-safe). The preset codec is ported from shadcn/ui (MIT).
+
+## Systems
+
+A **system** (`name.halftone.json`, what the Halftone Studio saves) is a recipe plus whatever was edited by hand
+on top of it: a seed per colour role (brand, neutral, danger, success, warning, info) with a 50–950 ramp, steps
+edited by hand, the role mapping for light and dark, text styles (h1–h4, lead, p, large, small, muted, code,
+blockquote), any Google Fonts family, corners, shadows, borders, named extras, and the brand (name, logos, icon
+background).
+
+```bash
+npx halftone-tokens theme apply ./acme.halftone.json   # writes tokens.json and records the system
+npx halftone-tokens theme show                         # the system, its overrides, and any contrast warnings
+npx halftone-tokens theme encode ./acme.halftone.json  # its ht- code, when it has no overrides
+```
+
+- `tokens.json` records the document under `$extensions`, without its brand images. A system with overrides has
+  no `ht-` code: a code only carries a recipe.
+- Generated colours are fixed for contrast as a recipe's are. A colour chosen by hand (a mapped role, an edited
+  step) is never moved: a pairing it fails is a warning.
+- A status ramp from a seed replaces the file's; applying a theme without one puts the curated ramp back.
+- Edited text styles are written as `semantic.type.<style>.{size,leading,weight,tracking,font}`, corners as
+  `semantic.radius.<step>` (the build uses them as fixed px), extras under `extra.*` (exported, not drawn by
+  the kits).
+
+From code (`@halftone-ds/tokens/system`, also in `/theme`, browser-safe): `normalizeSystem` / `validateSystem`,
+`createSystem`, `migrate(recipe | code, brand)` and `systemToRecipe`, `generateSystem(system, tokens)` (the same
+shape as `generateTheme`, plus `warnings`), `systemRamps`, `textStyles`, `systemRadii`, `systemCode` and
+`applySystem`. The document's shape is described in `lib/system/schema.mjs`.
 
 ## Guarantees
 

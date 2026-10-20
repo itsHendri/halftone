@@ -16,7 +16,7 @@ export default function figma(ctx, options) {
         .map((t) => [t.key, { value: t.value, code: code(t.key) }])
     );
   // The theme's radius: rounded-* scale with its base (rounded-lg); rounded-control is buttons and chips.
-  const radius = Object.fromEntries(ctx.radius.steps.map((s) => [s.name, { value: Math.round(ctx.radius.base * s.scale * 10) / 10, code: `rounded-${s.name}` }]));
+  const radius = Object.fromEntries(ctx.radius.steps.map((s) => [s.name, { value: s.px, code: `rounded-${s.name}` }]));
   radius.control = { value: Math.min(ctx.shape.control, 9999), code: 'rounded-control' };
   radius.full = { value: 9999, code: 'rounded-full' };
   const numbers = {

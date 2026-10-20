@@ -1,4 +1,7 @@
 /** Types for @halftone-ds/tokens/theme (index.mjs). */
+import type { HalftoneSystem } from '../system/index.mjs';
+// Systems (lib/system): also @halftone-ds/tokens/system.
+export * from '../system/index.mjs';
 
 export type Neutral = 'zinc' | 'neutral' | 'slate' | 'stone' | 'gray' | 'brand';
 export type Radius = 'none' | 'sm' | 'md' | 'lg' | 'xl' | '2xl';
@@ -43,17 +46,22 @@ export type Recipe = {
 export type RecipeInput = Partial<Omit<Recipe, 'font'>> & { font?: Partial<Recipe['font']> };
 
 export type Adjustment = { token: string; mode: Mode; from: string; to: string };
+/** A pairing the contrast fixer left failing because a colour in it was chosen by hand (a system's role or step). */
+export type ThemeWarning = { mode: Mode; label: string; fg: string; bg: string; ratio: number; threshold: number; locked: string[] };
 
 export type Theme = {
   recipe: Recipe;
   code: string;
-  primitives: { brand: Record<string, string>; neutral: Record<string, string> };
+  /** brand and neutral, plus a status ramp a system seeded or edited. */
+  primitives: { brand: Record<string, string>; neutral: Record<string, string> } & Partial<Record<'danger' | 'success' | 'warning' | 'info', Record<string, string>>>;
   semantic: Record<string, unknown>;
   /** Semantic colours as hex per mode, kebab-case names (`primary-foreground`). */
   resolved: Record<Mode, Record<string, string>>;
   /** Base radius in px. */
   radius: number;
   adjustments: Adjustment[];
+  /** Always empty for a recipe; a system's hand-picked colours that fail contrast. */
+  warnings: ThemeWarning[];
   /** Font families by role ('' = system; mono 'Menlo' = the platform monospace). */
   fonts: { heading: string; body: string; mono: string };
   /** The typeset: size (px), scale (size / 16), leading, leadingFactor (leading / 1.75), flow (em), measure (ch). */
@@ -72,7 +80,10 @@ export type Theme = {
 export type TypeScale = { size: number; scale: number; leading: number; leadingFactor: number; flow: number; measure: number };
 export type Font = { id: string; family: string; category: 'sans' | 'serif' | 'display' | 'mono'; weights: number[]; expoPrefix?: string; hidden?: boolean; system?: boolean };
 export type Preset = { id: string; name: string; description: string; recipe: RecipeInput };
-export type ThemeStatus = { applied: false } | { applied: true; code: string; recipe: Recipe; drift: string[] };
+export type ThemeStatus =
+  | { applied: false }
+  /** code is null for a system with overrides; system is set when a system document was applied. */
+  | { applied: true; code: string | null; recipe: Recipe; system?: HalftoneSystem; drift: string[] };
 export type TokensJson = Record<string, unknown> & { primitive: Record<string, unknown>; semantic: Record<string, unknown> };
 
 export const RECIPE_VERSION: number;
@@ -111,6 +122,8 @@ export function encodeRecipe(recipe: RecipeInput): string;
 export function decodeRecipe(code: string): Recipe;
 export function isThemeCode(value: unknown): boolean;
 export function fontById(id: string): Font | undefined;
+/** The curated font for a family, or one made from any Google Fonts family name (400–700). */
+export function fontByFamily(family: string): Font;
 export function googleFontsHref(ids: string[]): string | null;
 export function presetById(id: string): Preset | undefined;
 export function defaultTypeset(recipe: Recipe): boolean;

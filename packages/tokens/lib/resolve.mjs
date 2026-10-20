@@ -45,16 +45,28 @@ export function cssName(token) {
 /**
  * Tailwind radius classes as multiples of primitive.radius.lg. With the default base every class equals
  * its primitive (rounded-xl = radius.xl); moving semantic.radius.base scales the whole set, so a base
- * of 0 makes every rounded-* square.
+ * of 0 makes every rounded-* square. A system can set a step outright (semantic.radius.md = 6): that step is
+ * `fixed` at its px and no longer follows the base.
+ *   → [{ name, scale, px, fixed }]
  */
-function radiusScales(prim) {
+function radiusScales(prim, sem, base) {
   const steps = prim.filter((t) => t.path[1] === 'radius' && t.path.length === 3 && t.path[2] !== 'full');
   const anchor = steps.find((t) => t.path[2] === 'lg').$value;
-  return steps.map((t) => ({ name: t.path[2], scale: Number((t.$value / anchor).toFixed(4)) }));
+  const fixed = Object.fromEntries(sem.filter((t) => t.path[1] === 'radius' && t.path.length === 3).map((t) => [t.path[2], t.$value]));
+  return steps.map((t) => {
+    const scale = Number((t.$value / anchor).toFixed(4));
+    const set = typeof fixed[t.path[2]] === 'number';
+    return { name: t.path[2], scale, px: set ? fixed[t.path[2]] : Math.round(base * scale * 10) / 10, fixed: set };
+  });
 }
 
 export function radiusCalc(scale) {
   return scale === 1 ? 'var(--radius)' : `calc(var(--radius) * ${scale})`;
+}
+
+/** A radius step as CSS: a multiple of --radius, or its own px when a system fixed it. */
+export function radiusCss(step) {
+  return step.fixed ? (step.px >= 9999 ? '9999px' : `${Number((step.px / 16).toFixed(4))}rem`) : radiusCalc(step.scale);
 }
 
 /**
@@ -62,7 +74,7 @@ export function radiusCalc(scale) {
  *   semLight / semDark   semantic tokens per mode (colours + radius), in tokens.json order
  *   prim                 primitive tokens (mode-independent)
  *   colors               [{ name, light, dark }] semantic colours as hex
- *   radius               { base: px, steps: [{ name, scale }] }
+ *   radius               { base: px, steps: [{ name, scale, px, fixed }] } (fixed: set by a system, not scaled)
  *   shape                { control: px, borderWidth: px, stroke, shadows: { light: { 1: css }, dark },
  *                          density: { scale, sm, md, lg, x } }
  *                        (a token file from before themes gets the kit's defaults)
@@ -82,9 +94,10 @@ export async function loadTokens(sourcePath) {
   const colors = semLight
     .filter(isColor)
     .map((t) => ({ name: cssName(t), light: t.$value.toLowerCase(), dark: darkHex[cssName(t)] }));
+  const radiusBase = semLight.find((t) => cssName(t) === 'radius').$value;
   const radius = {
-    base: semLight.find((t) => cssName(t) === 'radius').$value,
-    steps: radiusScales(prim),
+    base: radiusBase,
+    steps: radiusScales(prim, semLight, radiusBase),
   };
   const find = (list, name) => list.find((t) => cssName(t) === name)?.$value;
   // Style colours a token file from before the styles doesn't have: what the components drew before.

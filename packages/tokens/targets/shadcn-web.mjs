@@ -8,7 +8,7 @@
  *            typeset: false   leave the text sizes alone (the docs site keeps its reading sizes)
  */
 import { hexToOklch } from '../lib/color.mjs';
-import { group, radiusCalc } from '../lib/resolve.mjs';
+import { group, radiusCss } from '../lib/resolve.mjs';
 import { TEXT_LINE_HEIGHT } from '../lib/theme/recipe.mjs';
 import { styleVars, typeVars } from '../lib/theme/vars.mjs';
 
@@ -56,7 +56,7 @@ ${vars('dark')}
 }
 
 @theme inline {
-${ctx.radius.steps.map((s) => `  --radius-${s.name}: ${radiusCalc(s.scale)};`).join('\n')}
+${ctx.radius.steps.map((s) => `  --radius-${s.name}: ${radiusCss(s)};`).join('\n')}
   --radius-control: var(--radius-control);
   /* The field style: rounded-field, rounded-b-field-b, px-field-x. Widths are border-(length:--field-border-w) etc. */
   --radius-field: var(--field-radius);

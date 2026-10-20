@@ -3,9 +3,15 @@
  * the browser for the live picker, the CLI runs it to commit a theme into tokens.json.
  *
  *   generateTheme(recipe, base)  base = the app's tokens.json (status ramps, radius steps come from it)
- *     → { recipe, code, primitives, semantic, resolved, radius, type, adjustments }
+ *     → { recipe, code, primitives, semantic, resolved, radius, type, adjustments, warnings }
  *
- * Status colours (success, warning, danger, info) are not themed in v1; they come from `base`.
+ * A recipe doesn't theme the status colours (success, warning, danger, info): they come from `base`. A system
+ * document does (lib/system/generate.mjs), through `colors`, the hook below that only generateSystem uses:
+ *   colors.ramps     { brand?, neutral?, danger?, … }: finished ramps in place of the recipe's (or base's)
+ *   colors.anchor    the brand seed's step; colors.anchors the status seeds' steps
+ *   colors.roles     { name: { light?, dark? } } references or hex chosen by hand: never moved by the fixer
+ *   colors.edited    { ramp: [steps] } edited by hand: a role on one keeps its colour (a warning if it fails)
+ * Without it, the theme is exactly the recipe's.
  */
 import { fixContrast } from './fix.mjs';
 import { encodeRecipe } from './codec.mjs';
@@ -13,19 +19,55 @@ import { fontById } from './fonts.mjs';
 import { BORDER, BUTTON, DENSITY, DEPTH, FIELD, fieldWidth, FLOW, LEADING, normalizeRecipe, RADIUS, STROKE, typeScale } from './recipe.mjs';
 import { anchorStep, brandRamp, neutralRamp } from './ramp.mjs';
 import { resolvedMap } from './refs.mjs';
-import { semanticColors, styleColors } from './semantic.mjs';
+import { BRAND_LINKED, semanticColors, styleColors } from './semantic.mjs';
 
 
 const ramp = (values) => Object.fromEntries(Object.entries(values).map(([step, $value]) => [step, { $type: 'color', $value }]));
+const STATUS = ['danger', 'success', 'warning', 'info'];
+const modes = () => ({ light: new Set(), dark: new Set() });
+
+/** Role overrides on top of a semantic map; the tokens that share primary's step follow a primary override. */
+function withRoles(colors, roles, linked = false) {
+  if (!roles) return colors;
+  const out = Object.fromEntries(Object.entries(colors).map(([k, v]) => [k, { ...v }]));
+  for (const mode of ['light', 'dark']) {
+    const primary = roles.primary?.[mode];
+    if (linked && primary !== undefined) for (const name of BRAND_LINKED) if (!roles[name]?.[mode] && out[name]?.[mode] === colors.primary[mode]) out[name][mode] = primary;
+    for (const [name, value] of Object.entries(roles)) if (name in out && value[mode] !== undefined) out[name][mode] = value[mode];
+  }
+  return out;
+}
+
+/**
+ * Which colours the fixer leaves alone, per mode: `locked` = mapped by hand (and what follows a hand-mapped
+ * primary), `pinned` = on an edited step. `from` locks a style colour that is a locked base colour (a solid
+ * button is the primary).
+ */
+function locks(colors, { roles = {}, edited = {} }, from) {
+  const locked = modes();
+  const pinned = modes();
+  const editedRef = new Set(Object.entries(edited).flatMap(([name, steps]) => steps.map((step) => `{primitive.color.${name}.${step}}`)));
+  for (const mode of ['light', 'dark']) {
+    for (const [name, value] of Object.entries(colors)) {
+      if (roles[name]?.[mode] !== undefined) locked[mode].add(name);
+      else if (roles.primary?.[mode] !== undefined && BRAND_LINKED.includes(name) && value[mode] === roles.primary[mode]) locked[mode].add(name);
+      else if (from && !(name in from.colors) && Object.entries(from.colors).some(([base, v]) => from.locked[mode].has(base) && v[mode] === value[mode])) locked[mode].add(name);
+      else if (editedRef.has(value[mode])) pinned[mode].add(name);
+    }
+  }
+  return { locked, pinned };
+}
 
 /** The theme for a recipe, on top of `base` (a tokens.json object). `fix: false` skips the contrast fixer. */
-export function generateTheme(input, base, { fix = true } = {}) {
+export function generateTheme(input, base, { fix = true, colors: system } = {}) {
   const recipe = normalizeRecipe(input);
-  const brand = brandRamp(recipe.brand);
-  const neutral = neutralRamp(recipe.neutral, recipe.brand);
+  const brand = system?.ramps?.brand ?? brandRamp(recipe.brand);
+  const neutral = system?.ramps?.neutral ?? neutralRamp(recipe.neutral, recipe.brand);
+  const status = Object.fromEntries(STATUS.filter((name) => system?.ramps?.[name]).map((name) => [name, system.ramps[name]]));
+  const statusTokens = Object.fromEntries(Object.entries(status).map(([name, values]) => [name, ramp(values)]));
 
   // Primitive lookup: the base primitives with this theme's ramps swapped in.
-  const primitive = { ...base.primitive, color: { ...base.primitive.color, brand: ramp(brand), neutral: ramp(neutral) } };
+  const primitive = { ...base.primitive, color: { ...base.primitive.color, brand: ramp(brand), neutral: ramp(neutral), ...statusTokens } };
   const prim = resolvedMap({ primitive }, 'light');
   const lookup = (value) => {
     if (typeof value !== 'string' || !value.startsWith('{')) return value;
@@ -34,16 +76,21 @@ export function generateTheme(input, base, { fix = true } = {}) {
     return hex;
   };
 
-  const anchor = anchorStep(recipe.brand);
-  let colors = semanticColors(anchor);
+  const anchor = system?.anchor ?? anchorStep(recipe.brand);
+  let colors = withRoles(semanticColors(anchor, system?.anchors), system?.roles, true);
+  const baseLocks = locks(colors, system ?? {});
   let adjustments = [];
-  if (fix) ({ semantic: colors, adjustments } = fixContrast(colors, lookup));
+  let warnings = [];
+  if (fix) ({ semantic: colors, adjustments, warnings } = fixContrast(colors, lookup, baseLocks));
   // The styles' colours build on the fixed ones, then get their own check (a soft button's ink, a field's line).
-  colors = { ...colors, ...styleColors(recipe, anchor, colors) };
+  const fixed = colors;
+  colors = { ...colors, ...withRoles(styleColors(recipe, anchor, colors), system?.roles) };
   if (fix) {
-    const styled = fixContrast(colors, lookup);
+    const styled = fixContrast(colors, lookup, locks(colors, system ?? {}, { colors: fixed, locked: baseLocks.locked }));
     colors = styled.semantic;
     adjustments = [...adjustments, ...styled.adjustments];
+    // The second pass sees every pairing again: keep each warning once.
+    warnings = styled.warnings;
   }
 
   const radiusRef = RADIUS[recipe.radius];
@@ -79,7 +126,7 @@ export function generateTheme(input, base, { fix = true } = {}) {
   return {
     recipe,
     code: encodeRecipe(recipe),
-    primitives: { brand, neutral },
+    primitives: { brand, neutral, ...status },
     fonts: { heading: font(recipe.font.heading), body: font(recipe.font.body), mono: font(recipe.font.mono) },
     semantic: {
       color: colors,
@@ -102,5 +149,6 @@ export function generateTheme(input, base, { fix = true } = {}) {
     field: { ...field, radius: lookup(radiusValue) * md * fld.round, radiusBottom: lookup(radiusValue) * md * fld.roundBottom },
     stroke: STROKE[recipe.stroke],
     adjustments,
+    warnings,
   };
 }

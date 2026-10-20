@@ -4,7 +4,7 @@
  *   options: { out: 'tokens/generated/theme.registry.json' }
  */
 import { hexToHslTriplet, hexToOklch } from '../lib/color.mjs';
-import { radiusCalc } from '../lib/resolve.mjs';
+import { radiusCss } from '../lib/resolve.mjs';
 
 export default function registryTheme(ctx, options) {
   const radius = `${ctx.radius.base / 16}rem`;
@@ -20,7 +20,7 @@ export default function registryTheme(ctx, options) {
           theme: {
             extend: {
               colors: Object.fromEntries(ctx.colors.map((c) => [c.name, `hsl(var(--${c.name}))`])),
-              borderRadius: Object.fromEntries(ctx.radius.steps.map((s) => [s.name, radiusCalc(s.scale)])),
+              borderRadius: Object.fromEntries(ctx.radius.steps.map((s) => [s.name, radiusCss(s)])),
             },
           },
         },
@@ -28,7 +28,7 @@ export default function registryTheme(ctx, options) {
     },
     web: {
       cssVars: {
-        theme: Object.fromEntries(ctx.radius.steps.map((s) => [`radius-${s.name}`, radiusCalc(s.scale)])),
+        theme: Object.fromEntries(ctx.radius.steps.map((s) => [`radius-${s.name}`, radiusCss(s)])),
         light: { radius, ...vars(hexToOklch, 'light') },
         dark: vars(hexToOklch, 'dark'),
       },

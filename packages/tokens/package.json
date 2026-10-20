@@ -28,6 +28,10 @@
       "types": "./lib/theme/index.d.mts",
       "default": "./lib/theme/index.mjs"
     },
+    "./system": {
+      "types": "./lib/system/index.d.mts",
+      "default": "./lib/system/index.mjs"
+    },
     "./lib/*": "./lib/*.mjs",
     "./targets/*": "./targets/*.mjs",
     "./package.json": "./package.json"
