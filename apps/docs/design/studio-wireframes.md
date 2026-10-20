@@ -110,10 +110,42 @@ Every section header has, in order: its name and count; its **base knob**; and *
 | Shadow | a card | Layers (x, y, blur, spread, colour, alpha, inset), plus and minus a layer |
 | Border | a card | Style, width, colour role |
 | Logo slot | a slot | Upload SVG/PNG (`lib/brand/upload.ts` limits), replace, remove |
-| Extra | the item | Editable name, delete, a value or a link to a step |
+| Extra | the item | Name (stored as its kebab-case token name), delete, a value; colours can add a dark value |
 
-- **Not drawn yet:** the "+ New" menus (New colour → single or ramp; New text style copies the nearest style)
-  and right-click "Show usage".
+### "+ New" (wireframe 8)
+
+- **Colours** asks for the kind:
+  - **Single colour:** one hex, with an optional dark value.
+  - **Ramp:** 50–950 from one colour, with the same popover as the role ramps.
+- **Every other section** asks which item to start from (New text style → copy Body, Heading 2…) and copies it.
+- The new extra appears at the end of its section, tagged "Not used by components". Its popover opens with the name
+  selected.
+- **Names:** you type a name ("Trendy green"); the token name is its kebab-case version (`trendy-green`), shown
+  under the field. The list shows it sentence-cased.
+  - A name used by a built-in slot or another extra is refused inline, as the schema refuses it.
+
+### The item menu and Show usage (wireframe 8)
+
+- **How to open it:** right-click any item, or use its ⋯ on hover (long-press on a phone).
+- **Menu items:**
+  - **Show usage:** components that draw it, plus other roles that point at the same step. It links to the
+    Components tab, filtered to those components.
+  - **Copy class** (`bg-primary`), **Copy variable** (`--primary`), **Copy value**.
+  - **Reset to generated** (when edited).
+  - **Duplicate as extra.**
+  - **Delete**, for extras only. A built-in slot shows "Built-in slot, can't delete" instead.
+- **Where usage comes from:** a map built at `registry:build` time, from scanning each kit's components for token
+  classes and variables. The docs site reads it as JSON. Building it is part of Phase 4.
+
+### What an extra becomes (wireframe 8)
+
+- **tokens.json:** `extra.<kind>.<name>`.
+- **CSS:** a variable (`--trendy-green`).
+- **Tailwind:** classes (`bg-trendy-green`, `text-trendy-green`).
+- **Agent docs:** an "Extras" section in DESIGN.md and llms.txt saying no kit component uses them and screens
+  may. Extras are tokens, so the raw-colour lint rule allows them.
+- Phase 4 checks that each of these is actually emitted. Today `theme apply` writes them into tokens.json; the
+  CSS, Tailwind and DESIGN.md outputs are not yet verified.
 
 ## Systems (wireframe 3)
 
@@ -175,6 +207,8 @@ Foundations** (Option 1, chosen over making the Components tab editable).
 - **A Typeset view.** Typeset lives in Typography's Scale knob and the text styles.
 - **Renaming fixed slots.**
 - **Spacing as a themeable foundation.**
+- **An extra colour that points at a ramp step** instead of a hex (Subframe's link icon). The v1 schema stores a
+  hex or a light/dark pair; adding a `ref` is a schema change for later.
 
 ## Phasing (one PR each)
 

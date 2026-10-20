@@ -198,7 +198,7 @@ main{max-width:1100px;margin:0 auto}h1{font-size:24px;font-weight:600;margin:0 0
   <div class="lbl">Placeholder · the system name in its heading font</div>
   <div class="f" style="justify-content:center;border:1.5px dashed var(--strong)"><i class="ti ti-upload"></i> Upload SVG or PNG</div></div>
  <div class="pop" style="grid-column:span 3"><p class="t">Extra · anything made with "+ New"</p>
-  <div class="two"><div class="nm"><span>Trendy green</span><i class="ti ti-trash"></i></div><div class="f"><span><span class="sw" style="background:#7C881A"></span> #7C881A</span><em>100% <i class="ti ti-link"></i> link to a step</em></div></div>
+  <div class="two"><div class="nm"><span>Trendy green</span><i class="ti ti-trash"></i></div><div class="f"><span><span class="sw" style="background:#7C881A"></span> #7C881A</span><em>light · add dark</em></div></div>
   <div class="lbl">Shown inline in its section with a "Not used by components" tag; exported to tokens.json and CSS.</div></div>
 </div>
 
@@ -292,6 +292,36 @@ main{max-width:1100px;margin:0 auto}h1{font-size:24px;font-weight:600;margin:0 0
   <div class="tile" style="background:var(--surface)"><div style="display:flex;gap:6px"><span style="background:#F5F5F4;color:#44403C;border-radius:4px;padding:2px 8px;font-size:12px">Figma</span><span style="background:#F5F5F4;color:#44403C;border-radius:4px;padding:2px 8px;font-size:12px">React</span></div><span class="lbl">Tag · soft · small radius</span></div>
  </div>
  <p class="note">Chip popover: style · corner (token) · height · padding · selected role.</p>
+</div>
+
+<h2>8 · "+ New", the item menu, and what an extra becomes</h2>
+<p class="cap">Colours asks which kind of colour; every other section copies an item you pick. The new extra lands at the end of its section with the name selected. The token name is the kebab-case version. Right-click (or ⋯) any item to show its usage, copy its class, variable or value, reset it, or duplicate it as an extra. Extras reach tokens.json, CSS, Tailwind and the agent docs.</p>
+<div class="g" style="grid-template-columns:repeat(3,minmax(0,1fr));align-items:start">
+ <div class="menu" style="width:auto"><div class="lbl3" style="padding:2px 8px">New colour</div>
+  <div class="it sel"><span class="sw" style="background:#7C881A"></span>Single colour<span class="lbl3" style="margin-left:auto">one hex, light and dark</span></div>
+  <div class="it"><span class="strip"><i style="background:#E9EDC9"></i><i style="background:#B5C25A"></i><i style="background:#7C881A"></i><i style="background:#3F4510"></i></span>Ramp<span class="lbl3" style="margin-left:auto">50–950</span></div>
+  <div class="sep"></div><div class="lbl3" style="padding:2px 8px">New text style · start from</div>
+  <div class="it">Heading 2</div><div class="it sel">Body</div><div class="it">Code</div></div>
+ <div class="menu" style="width:auto"><div class="lbl3" style="padding:2px 8px">Primary · role</div>
+  <div class="it sel"><i class="ti ti-eye"></i>Show usage</div>
+  <div class="it"><i class="ti ti-copy"></i>Copy class<span class="lbl3" style="margin-left:auto">bg-primary</span></div>
+  <div class="it"><i class="ti ti-braces"></i>Copy variable<span class="lbl3" style="margin-left:auto">--primary</span></div>
+  <div class="it"><i class="ti ti-palette"></i>Copy value<span class="lbl3" style="margin-left:auto">#2B7047</span></div>
+  <div class="sep"></div>
+  <div class="it"><i class="ti ti-arrow-back-up"></i>Reset to generated</div>
+  <div class="it"><i class="ti ti-copy-plus"></i>Duplicate as extra</div>
+  <div class="it lbl3"><i class="ti ti-lock"></i>Built-in slot, can't delete</div></div>
+ <div class="pop"><div class="nm"><span>Primary · used by 23</span><i class="ti ti-x"></i></div>
+  <div class="lbl">Components</div><div style="display:flex;gap:4px;flex-wrap:wrap"><span class="tag">Button</span><span class="tag">Checkbox</span><span class="tag">Switch</span><span class="tag">Progress</span><span class="tag">Slider</span><span class="tag">Tabs</span><span class="tag">+ 17</span></div>
+  <div class="lbl">Other roles</div><div style="display:flex;gap:4px;flex-wrap:wrap"><span class="tag">ring</span><span class="tag">sidebar-primary</span><span class="tag">chart-1</span></div>
+  <div class="f"><span>See them in Components</span><i class="ti ti-arrow-right"></i></div></div>
+</div>
+<div class="g" style="grid-template-columns:auto repeat(2,minmax(0,1fr));margin-top:10px;align-items:start">
+ <div class="pop" style="width:230px"><div class="nm" style="outline:2px solid var(--accent)"><span>Trendy green</span><i class="ti ti-trash"></i></div>
+  <div class="lbl">Token <code>trendy-green</code></div><div class="pv" style="background:#7C881A"></div>
+  <div class="f"><span><span class="sw" style="background:#7C881A"></span> #7C881A</span><em>light · add dark</em></div></div>
+ <div class="card" style="font-family:var(--mono);font-size:12px;line-height:1.7">tokens.json · extra.color.trendy-green<br>global.css · --trendy-green: #7c881a;<br>Tailwind · bg-trendy-green, text-trendy-green</div>
+ <div class="card" style="font-family:var(--mono);font-size:12px;line-height:1.7">DESIGN.md / llms.txt<br>## Extras (this brand's own)<br>- trendy-green #7C881A: no kit component uses it; use it in screens.</div>
 </div>
 
 </main></body></html>
