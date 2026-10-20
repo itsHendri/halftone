@@ -294,6 +294,19 @@ test('validation names every problem, with its path', () => {
   assert.throws(() => normalizeSystem('nope'), /JSON object/);
 });
 
+test('components is reserved: kept as given, checked as an object, ignored by the generator', () => {
+  const doc = normalizeSystem(sys({ components: { button: { radius: 4, height: 44, role: 'primary' }, chip: {} } }));
+  assert.deepEqual(doc.components, { button: { radius: 4, height: 44, role: 'primary' }, chip: {} });
+  assert.deepEqual(normalizeSystem(sys()).components, {});
+  assert.deepEqual(generateSystem(doc, base), generateTheme(DEFAULT_RECIPE, base));
+  assert.equal(hasOverrides(doc), false, 'nothing is generated from it yet');
+  const { errors } = validateSystem(sys({ components: { Button: {}, chip: 3 } }));
+  assert.ok(errors.some((e) => e.startsWith('components.Button:')) && errors.some((e) => e.startsWith('components.chip:')), errors.join('\n'));
+  assert.ok(!validateSystem(sys({ components: [] })).ok);
+  // It travels with the record.
+  assert.deepEqual(applySystem(base, doc).tokens.$extensions['com.halftonedesignsystem.theme'].system.components, doc.components);
+});
+
 test('normalising is idempotent and survives JSON', () => {
   const doc = createSystem({
     name: '  Acme  ',

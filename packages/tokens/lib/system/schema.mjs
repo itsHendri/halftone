@@ -27,6 +27,10 @@
  *   extras               { color: [], text: [], radius: [], shadow: [], border: [] } named tokens of your own,
  *                        exported (tokens.json `extra.*`) and never drawn by the kits
  *   brand                { name, iconBackground, logo?, logoDark?, mark?, markDark? } (the Studio's BrandState)
+ *   components           RESERVED for component-level edits (Button, Chip, Tag…: radius, height, padding, style,
+ *                        colour role), which come after the foundations: { [component]: { …settings } }. Kept as
+ *                        given (plain JSON), and ignored by the generator for now, so adding them needs no new
+ *                        version.
  *
  * normalizeSystem(input) validates and returns a clean document (it throws a SystemError naming every problem);
  * validateSystem(input) returns { ok, errors, system } instead.
@@ -331,7 +335,7 @@ function read(input) {
   if (input.kind !== undefined && input.kind !== SYSTEM_KIND) r.fail('kind', `must be "${SYSTEM_KIND}"`);
   if (input.v !== undefined && !(Number.isInteger(input.v) && input.v >= 1)) r.fail('v', 'must be a version number');
   if (input.v > SYSTEM_VERSION) throw new SystemError([`v: this system is version ${input.v}, from a newer @halftone-ds/tokens; update it to read the system`]);
-  r.keys('', input, ['$schema', 'kind', 'v', 'id', 'name', 'preset', 'updatedAt', 'recipe', 'colors', 'roles', 'type', 'fonts', 'radius', 'shadow', 'border', 'extras', 'brand']);
+  r.keys('', input, ['$schema', 'kind', 'v', 'id', 'name', 'preset', 'updatedAt', 'recipe', 'colors', 'roles', 'type', 'fonts', 'radius', 'shadow', 'border', 'extras', 'brand', 'components']);
 
   let recipe;
   try {
@@ -393,6 +397,14 @@ function read(input) {
   doc.border = border(r, 'border', input.border);
   doc.extras = extras(r, input.extras);
   doc.brand = brand(r, input.brand);
+
+  // Reserved: kept, not generated (yet).
+  doc.components = {};
+  for (const [name, value] of Object.entries(r.object('components', input.components))) {
+    if (!NAME.test(name)) r.fail(`components.${name}`, 'must be a kebab-case component name (button, chip, tag…)');
+    else if (!isObject(value)) r.fail(`components.${name}`, 'must be an object');
+    else doc.components[name] = JSON.parse(JSON.stringify(value));
+  }
   return { doc, errors: r.errors };
 }
 
