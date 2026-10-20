@@ -117,7 +117,7 @@ function RolePopover({ name, mode }: { name: string; mode: Mode }) {
             return (
               <div key={m} className="ring-foreground/10 flex h-14 flex-col justify-between rounded-lg p-2 ring-1 ring-inset" style={{ background: fill, color: ink }}>
                 <span className="text-sm font-semibold">Aa</span>
-                <span className="font-mono text-[10px] uppercase opacity-80">
+                <span className="font-mono text-[10px] uppercase">
                   {m} · {r[name]}
                 </span>
               </div>
