@@ -94,6 +94,12 @@ npx halftone-tokens theme encode ./acme.halftone.json  # its ht- code, when it h
 - Edited text styles are written as `semantic.type.<style>.{size,leading,weight,tracking,font}`, corners as
   `semantic.radius.<step>` (the build uses them as fixed px), extras under `extra.*` (exported, not drawn by
   the kits).
+- Every text style (`h1 h2 h3 h4 lead p large small muted code blockquote`), edited or not, is built as
+  `--type-<style>-{size,leading,weight,tracking}` (plus `-font` on Tailwind 4, and `-tracking-native` in px for
+  NativeWind's native build). nativewind3 adds the `text-`, `leading-`, `tracking-` and `font-type-<style>` keys;
+  shadcn-web adds `type-<style>` utilities; ts-theme adds `TOKENS.textStyles`. With no edits they draw exactly
+  what Tailwind's `text-*` classes did. `themeVars` carries them to live previews (`textStyleVars`,
+  `themeTextStyles`).
 
 From code (`@halftone-ds/tokens/system`, also in `/theme`, browser-safe): `normalizeSystem` / `validateSystem`,
 `createSystem`, `migrate(recipe | code, brand)` and `systemToRecipe`, `generateSystem(system, tokens)` (the same

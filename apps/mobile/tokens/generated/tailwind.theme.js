@@ -139,12 +139,75 @@ module.exports = {
       {
         "lineHeight": "2.5rem"
       }
-    ]
+    ],
+    "type-h1": "var(--type-h1-size)",
+    "type-h2": "var(--type-h2-size)",
+    "type-h3": "var(--type-h3-size)",
+    "type-h4": "var(--type-h4-size)",
+    "type-lead": "var(--type-lead-size)",
+    "type-p": "var(--type-p-size)",
+    "type-large": "var(--type-large-size)",
+    "type-small": "var(--type-small-size)",
+    "type-muted": "var(--type-muted-size)",
+    "type-code": "var(--type-code-size)",
+    "type-blockquote": "var(--type-blockquote-size)"
   },
   "lineHeight": {
-    "prose": "1.75rem"
+    "prose": "1.75rem",
+    "type-h1": "var(--type-h1-leading)",
+    "type-h2": "var(--type-h2-leading)",
+    "type-h3": "var(--type-h3-leading)",
+    "type-h4": "var(--type-h4-leading)",
+    "type-lead": "var(--type-lead-leading)",
+    "type-p": "var(--type-p-leading)",
+    "type-large": "var(--type-large-leading)",
+    "type-small": "var(--type-small-leading)",
+    "type-muted": "var(--type-muted-leading)",
+    "type-code": "var(--type-code-leading)",
+    "type-blockquote": "var(--type-blockquote-leading)"
+  },
+  "letterSpacing": {
+    "type-h1": "var(--type-h1-tracking)",
+    "type-h2": "var(--type-h2-tracking)",
+    "type-h3": "var(--type-h3-tracking)",
+    "type-h4": "var(--type-h4-tracking)",
+    "type-lead": "var(--type-lead-tracking)",
+    "type-p": "var(--type-p-tracking)",
+    "type-large": "var(--type-large-tracking)",
+    "type-small": "var(--type-small-tracking)",
+    "type-muted": "var(--type-muted-tracking)",
+    "type-code": "var(--type-code-tracking)",
+    "type-blockquote": "var(--type-blockquote-tracking)"
+  },
+  "fontWeight": {
+    "type-h1": "var(--type-h1-weight)",
+    "type-h2": "var(--type-h2-weight)",
+    "type-h3": "var(--type-h3-weight)",
+    "type-h4": "var(--type-h4-weight)",
+    "type-lead": "var(--type-lead-weight)",
+    "type-p": "var(--type-p-weight)",
+    "type-large": "var(--type-large-weight)",
+    "type-small": "var(--type-small-weight)",
+    "type-muted": "var(--type-muted-weight)",
+    "type-code": "var(--type-code-weight)",
+    "type-blockquote": "var(--type-blockquote-weight)"
   },
   "maxWidth": {
     "measure": "35rem"
   }
+};
+// Native: NativeWind's preset draws tracking in px (tracking-tight is -0.25px, the web's -0.025em × 10), so the
+// text styles' tracking reads their px variables there.
+if (process.env.NATIVEWIND_OS && process.env.NATIVEWIND_OS !== 'web') module.exports.letterSpacing = {
+  "type-h1": "var(--type-h1-tracking-native)",
+  "type-h2": "var(--type-h2-tracking-native)",
+  "type-h3": "var(--type-h3-tracking-native)",
+  "type-h4": "var(--type-h4-tracking-native)",
+  "type-lead": "var(--type-lead-tracking-native)",
+  "type-p": "var(--type-p-tracking-native)",
+  "type-large": "var(--type-large-tracking-native)",
+  "type-small": "var(--type-small-tracking-native)",
+  "type-muted": "var(--type-muted-tracking-native)",
+  "type-code": "var(--type-code-tracking-native)",
+  "type-blockquote": "var(--type-blockquote-tracking-native)"
 };

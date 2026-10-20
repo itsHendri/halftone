@@ -1,10 +1,12 @@
 /**
  * What the docs site sends each embedded kit for a theme, in that kit's own variable format (the format
- * its tokens:build writes). Shared contract: apps/mobile/lib/embed-theme.ts and apps/web/lib/embed-theme.ts.
+ * its tokens:build writes), text styles included (--type-<style>-*). Shared contract: apps/mobile/lib/embed-theme.ts and apps/web/lib/embed-theme.ts.
  */
-import { googleFontsHref, themeHex, themeVars, type Theme } from '@halftone-ds/tokens/theme';
+import { googleFontsHref, themeHex, themeTextStyles, themeVars, type Theme } from '@halftone-ds/tokens/theme';
 
-type Fonts = { heading?: string; body?: string; mono?: string };
+type FontRole = 'heading' | 'body' | 'mono';
+/** `roles`: each text style's font role, for the mobile kit, which picks fonts in JS (the web's are variables). */
+type Fonts = { heading?: string; body?: string; mono?: string; roles?: Record<string, FontRole> };
 export type KitPayload = {
   code: string | null;
   vars?: Record<'light' | 'dark', Record<string, string>>;
@@ -20,9 +22,10 @@ export function kitPayloads(theme: Theme, live: boolean): KitPayloads {
   // Mono: system-mono is 'Menlo', the platform font, not a Google font.
   const mono = theme.recipe.font.mono === 'system-mono' ? undefined : f.mono;
   const fonts: Fonts = { heading: f.heading || undefined, body: f.body || undefined, mono };
+  const roles = Object.fromEntries(Object.entries(themeTextStyles(theme)).map(([name, style]) => [name, style.font]));
   return {
     code: theme.code,
-    mobile: { code: theme.code, vars: themeVars(theme, 'hsl'), hex: themeHex(theme), fonts },
+    mobile: { code: theme.code, vars: themeVars(theme, 'hsl'), hex: themeHex(theme), fonts: { ...fonts, roles } },
     web: { code: theme.code, vars: themeVars(theme, 'oklch'), fonts },
   };
 }

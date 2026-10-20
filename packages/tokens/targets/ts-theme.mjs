@@ -15,6 +15,14 @@ function themeInfo(source) {
   return JSON.stringify({ code: status.code, name, edited: status.drift.length > 0, recipe: status.recipe }, null, 2);
 }
 
+const round = (n) => Number(n.toFixed(4));
+
+function textStylesObject(styles) {
+  return Object.entries(styles)
+    .map(([name, s]) => `    ${name}: ${JSON.stringify({ font: s.font, weight: s.weight, size: round(s.size), lineHeight: round(s.lineHeight), tracking: s.tracking })},`)
+    .join('\n');
+}
+
 function colorObject(colors, mode) {
   return colors.map((c) => `    ${camel(c.name)}: '${c[mode]}',`).join('\n');
 }
@@ -86,6 +94,12 @@ ${primitiveGroup(ctx.prim, ['font', 'size'])}
   /** The typeset: body size (px) and its scale, running-text leading and its factor on the text sizes' line
    *  heights, and Prose's flow (em between blocks) and measure (characters per line). */
   typeset: ${JSON.stringify(ctx.type)},
+  /** The Text variants at the typeset, a system's edited styles included: font role, weight, size and line height
+   *  (px), tracking (em). The classes (text-type-h1, leading-type-h1…) already follow them; this is for code
+   *  that picks something per style, such as a font file per weight. */
+  textStyles: {
+${textStylesObject(ctx.textStyles)}
+  },
   fontFamily: {
 ${primitiveGroup(ctx.prim, ['font', 'family'])}
   },

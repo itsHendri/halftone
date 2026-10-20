@@ -104,6 +104,74 @@ export const typeScale = ({ size, leading, flow, measure }) => ({
 });
 
 
+/** The Text variants both kits draw (components/ui/text.tsx on mobile; the type-* utilities on the web). */
+export const TEXT_STYLES = ['h1', 'h2', 'h3', 'h4', 'lead', 'p', 'large', 'small', 'muted', 'code', 'blockquote'];
+
+/**
+ * The text styles as the kits draw them at the default typeset (16px, leading 1.75), from the mobile kit's
+ * components/ui/text.tsx and Tailwind's sizes: size px, leading × size, tracking em. `leading: 'prose'` is the typeset's own leading
+ * (Text p's leading-prose); every other leading scales with the typeset's (leading / 1.75), and sizes with
+ * size / 16. `small` is leading-none, which never scales.
+ */
+export const TEXT_DEFAULTS = {
+  h1: { font: 'heading', weight: 800, size: 36, leading: 40 / 36, tracking: -0.025 },
+  h2: { font: 'heading', weight: 600, size: 30, leading: 36 / 30, tracking: -0.025 },
+  h3: { font: 'heading', weight: 600, size: 24, leading: 32 / 24, tracking: -0.025 },
+  h4: { font: 'heading', weight: 600, size: 20, leading: 28 / 20, tracking: -0.025 },
+  lead: { font: 'body', weight: 400, size: 20, leading: 28 / 20, tracking: 0 },
+  p: { font: 'body', weight: 400, size: 16, leading: 'prose', tracking: 0 },
+  large: { font: 'body', weight: 600, size: 18, leading: 28 / 18, tracking: 0 },
+  small: { font: 'body', weight: 500, size: 14, leading: 1, tracking: 0 },
+  muted: { font: 'body', weight: 400, size: 14, leading: 20 / 14, tracking: 0 },
+  code: { font: 'mono', weight: 600, size: 14, leading: 20 / 14, tracking: 0 },
+  blockquote: { font: 'body', weight: 400, size: 16, leading: 24 / 16, tracking: 0 },
+};
+
+const FONT_REF = /^\{primitive\.font\.family\.(heading|body|mono)\}$/;
+
+/**
+ * A system's edited text styles from a semantic.type group: a theme's ({ h1: { size, … } }) or a token file's
+ * DTCG one ({ h1: { size: { $value } } }). The font is a reference to a role's family; a style's other keys
+ * are numbers. The typeset's own numbers (size, leading, flow, measure) are skipped.
+ *   → { h1: { size, leading, weight, tracking, font: 'heading' } }
+ */
+export function textEdits(group = {}) {
+  const out = {};
+  for (const name of TEXT_STYLES) {
+    const style = group?.[name];
+    if (!style || typeof style !== 'object' || '$value' in style) continue;
+    const value = (v) => (v && typeof v === 'object' && '$value' in v ? v.$value : v);
+    const edit = {};
+    for (const key of ['size', 'leading', 'weight', 'tracking']) if (typeof value(style[key]) === 'number') edit[key] = value(style[key]);
+    const font = FONT_REF.exec(String(value(style.font) ?? ''));
+    if (font) edit.font = font[1];
+    out[name] = edit;
+  }
+  return out;
+}
+
+/**
+ * Every text style as drawn at a typeset (typeScale), edits on top, unrounded:
+ *   { h1: { font, weight, size: px, leading: × size, tracking: em, lineHeight: px, edited: bool } }
+ * Sizes scale by the typeset's size / 16 and line heights by its leading / 1.75; Text p takes the typeset's
+ * leading itself and Text small (leading-none) never scales. With no edits this is exactly what the kits drew
+ * with Tailwind's text-* classes.
+ */
+export function resolveTextStyles(type, edits = {}) {
+  return Object.fromEntries(
+    TEXT_STYLES.map((name) => {
+      const d = TEXT_DEFAULTS[name];
+      const leading = d.leading === 'prose' ? type.leading : d.leading === 1 ? 1 : d.leading * type.leadingFactor;
+      const edit = edits[name] ?? {};
+      const style = { font: d.font, weight: d.weight, size: d.size * type.scale, leading, tracking: d.tracking, ...edit, edited: Object.keys(edit).length > 0 };
+      // The line height in px, multiplied in the order the text-* classes always were (so it rounds the same).
+      const px = Math.round(d.size * (d.leading === 'prose' ? 1 : d.leading) * 1e6) / 1e6;
+      style.lineHeight = 'size' in edit || 'leading' in edit ? style.size * style.leading : d.leading === 'prose' ? px * type.scale * type.leading : d.leading === 1 ? style.size : px * type.scale * type.leadingFactor;
+      return [name, style];
+    })
+  );
+}
+
 const s = (x, y, blur, spread, color) => ({ offsetX: x, offsetY: y, blur, spread, color });
 /**
  * Three elevation levels per depth (DTCG shadow values, light and dark): 1 for controls and cards,

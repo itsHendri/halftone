@@ -38,7 +38,7 @@
 import { FONTS } from '../theme/fonts.mjs';
 import { STEPS } from '../theme/palettes.mjs';
 import { anchorStep, neutralAnchorStep } from '../theme/ramp.mjs';
-import { normalizeRecipe, OPTIONS } from '../theme/recipe.mjs';
+import { normalizeRecipe, OPTIONS, TEXT_DEFAULTS, TEXT_STYLES } from '../theme/recipe.mjs';
 import { semanticColors } from '../theme/semantic.mjs';
 
 export const SYSTEM_KIND = 'halftone.system';
@@ -48,8 +48,6 @@ export const COLOR_ROLES = ['brand', 'neutral', 'danger', 'success', 'warning', 
 export const STATUS_ROLES = ['danger', 'success', 'warning', 'info'];
 /** Every semantic colour a role mapping can set: the theme's map plus the button and field styles' colours. */
 export const ROLE_NAMES = [...Object.keys(semanticColors()), 'button', 'button-foreground', 'button-edge', 'field', 'field-edge'];
-/** The Text variants both kits draw. */
-export const TEXT_STYLES = ['h1', 'h2', 'h3', 'h4', 'lead', 'p', 'large', 'small', 'muted', 'code', 'blockquote'];
 export const FONT_ROLES = ['heading', 'body', 'mono'];
 /** rounded-sm…2xl; rounded-full stays a circle. */
 export const RADIUS_STEPS = ['sm', 'md', 'lg', 'xl', '2xl'];
@@ -57,26 +55,8 @@ export const SHADOW_LEVELS = ['1', '2', '3'];
 export const BORDER_STYLES = ['solid', 'dashed', 'dotted'];
 export const EXTRA_KINDS = ['color', 'text', 'radius', 'shadow', 'border'];
 export const TEXT_KEYS = ['font', 'weight', 'size', 'leading', 'tracking'];
+export { TEXT_DEFAULTS, TEXT_STYLES };
 
-/**
- * The text styles as the kits draw them at the default typeset (16px, leading 1.75), from components/ui/text.tsx
- * and Tailwind's sizes: size px, leading × size, tracking em. `leading: 'prose'` is the typeset's own leading
- * (Text p's leading-prose); every other leading scales with the typeset's (leading / 1.75), and sizes with
- * size / 16. `small` is leading-none, which never scales.
- */
-export const TEXT_DEFAULTS = {
-  h1: { font: 'heading', weight: 800, size: 36, leading: 40 / 36, tracking: -0.025 },
-  h2: { font: 'heading', weight: 600, size: 30, leading: 36 / 30, tracking: -0.025 },
-  h3: { font: 'heading', weight: 600, size: 24, leading: 32 / 24, tracking: -0.025 },
-  h4: { font: 'heading', weight: 600, size: 20, leading: 28 / 20, tracking: -0.025 },
-  lead: { font: 'body', weight: 400, size: 20, leading: 28 / 20, tracking: 0 },
-  p: { font: 'body', weight: 400, size: 16, leading: 'prose', tracking: 0 },
-  large: { font: 'body', weight: 600, size: 18, leading: 28 / 18, tracking: 0 },
-  small: { font: 'body', weight: 500, size: 14, leading: 1, tracking: 0 },
-  muted: { font: 'body', weight: 400, size: 14, leading: 20 / 14, tracking: 0 },
-  code: { font: 'mono', weight: 600, size: 14, leading: 20 / 14, tracking: 0 },
-  blockquote: { font: 'body', weight: 400, size: 16, leading: 24 / 16, tracking: 0 },
-};
 
 const HEX = /^#[0-9a-f]{6}$/;
 const NAME = /^[a-z][a-z0-9-]{0,39}$/;

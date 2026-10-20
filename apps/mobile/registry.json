@@ -1502,6 +1502,7 @@
       "registryDependencies": [
         "@halftone-native/lib-fonts",
         "@halftone-native/lib-palette-context",
+        "@halftone-native/lib-theme",
         "@halftone-native/lib-utils"
       ],
       "files": [

@@ -152,6 +152,22 @@ export const TOKENS = {
   /** The typeset: body size (px) and its scale, running-text leading and its factor on the text sizes' line
    *  heights, and Prose's flow (em between blocks) and measure (characters per line). */
   typeset: {"size":16,"scale":1,"leading":1.75,"leadingFactor":1,"flow":1.25,"measure":70},
+  /** The Text variants at the typeset, a system's edited styles included: font role, weight, size and line height
+   *  (px), tracking (em). The classes (text-type-h1, leading-type-h1…) already follow them; this is for code
+   *  that picks something per style, such as a font file per weight. */
+  textStyles: {
+    h1: {"font":"heading","weight":800,"size":36,"lineHeight":40,"tracking":-0.025},
+    h2: {"font":"heading","weight":600,"size":30,"lineHeight":36,"tracking":-0.025},
+    h3: {"font":"heading","weight":600,"size":24,"lineHeight":32,"tracking":-0.025},
+    h4: {"font":"heading","weight":600,"size":20,"lineHeight":28,"tracking":-0.025},
+    lead: {"font":"body","weight":400,"size":20,"lineHeight":28,"tracking":0},
+    p: {"font":"body","weight":400,"size":16,"lineHeight":28,"tracking":0},
+    large: {"font":"body","weight":600,"size":18,"lineHeight":28,"tracking":0},
+    small: {"font":"body","weight":500,"size":14,"lineHeight":14,"tracking":0},
+    muted: {"font":"body","weight":400,"size":14,"lineHeight":20,"tracking":0},
+    code: {"font":"mono","weight":600,"size":14,"lineHeight":20,"tracking":0},
+    blockquote: {"font":"body","weight":400,"size":16,"lineHeight":24,"tracking":0},
+  },
   fontFamily: {
     sans: "",
     mono: "Menlo",

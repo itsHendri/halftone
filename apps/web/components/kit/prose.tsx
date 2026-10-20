@@ -2,13 +2,14 @@ import { cn } from 'cn';
 import type * as React from 'react';
 
 /**
- * Long-form text at the theme's typeset: the measure (longest line), leading (line height) and flow (space
- * between blocks) come from --typeset-measure, --typeset-leading and --typeset-flow; headings take the heading
- * font, code the mono font. Style the HTML you put in it (an article, rendered markdown, a chat answer), not
- * the layout around it: no cards, buttons or grids inside.
+ * Long-form text at the theme's typeset: running text is the paragraph text style (type-p: --type-p-size,
+ * -leading, -weight, -tracking, -font), the measure (longest line) and flow (space between blocks) come from
+ * --typeset-measure and --typeset-flow. Headings, quotes and code keep Prose's own long-form scale (smaller than
+ * the h1–h4 text styles), with the heading and mono fonts. Style the HTML you put in it (an article, rendered
+ * markdown, a chat answer), not the layout around it: no cards, buttons or grids inside.
  */
 const PROSE = cn(
-  'text-foreground max-w-(--typeset-measure) text-base leading-(--typeset-leading)',
+  'text-foreground type-p max-w-(--typeset-measure)',
   // Flow: the same space between every pair of blocks; a heading gets more above it than below.
   '[&>*+*]:mt-(--typeset-flow) [&>:is(h2,h3,h4):not(:first-child)]:mt-[calc(var(--typeset-flow)*1.6)] [&>:is(h2,h3,h4)+*]:mt-[calc(var(--typeset-flow)*0.5)]',
   '[&_:is(h1,h2,h3,h4)]:font-heading [&_:is(h1,h2,h3,h4)]:text-balance [&_:is(h1,h2,h3,h4)]:font-semibold [&_:is(h1,h2,h3,h4)]:tracking-tight',

@@ -18,9 +18,9 @@ import { encodeRecipe } from '../theme/codec.mjs';
 import { generateTheme } from '../theme/generate.mjs';
 import { STEPS } from '../theme/palettes.mjs';
 import { anchorStep, brandRamp, neutralAnchorStep, neutralRamp, neutralSeedRamp } from '../theme/ramp.mjs';
-import { FIELD, fieldWidth, typeScale, LEADING, FLOW } from '../theme/recipe.mjs';
+import { FIELD, fieldWidth, typeScale, LEADING, FLOW, resolveTextStyles } from '../theme/recipe.mjs';
 import { resolvedMap } from '../theme/refs.mjs';
-import { COLOR_ROLES, EXTRA_KINDS, hasOverrides, normalizeSystem, RADIUS_STEPS, STATUS_ROLES, TEXT_DEFAULTS, TEXT_STYLES } from './schema.mjs';
+import { COLOR_ROLES, EXTRA_KINDS, hasOverrides, normalizeSystem, RADIUS_STEPS, STATUS_ROLES, TEXT_STYLES } from './schema.mjs';
 
 const round = (n, places = 4) => Number(n.toFixed(places));
 const alphaHex = (alpha) => Math.round(alpha * 255).toString(16).padStart(2, '0');
@@ -95,13 +95,12 @@ const roleRef = (value) => (value.startsWith('#') ? value : `{primitive.color.${
 export function textStyles(input) {
   const doc = normalizeSystem(input);
   const type = typeScale({ size: Number(doc.recipe.size), leading: LEADING[doc.recipe.leading], flow: FLOW[doc.recipe.flow], measure: Number(doc.recipe.measure) });
+  const generated = resolveTextStyles(type);
   return Object.fromEntries(
     TEXT_STYLES.map((name) => {
-      const d = TEXT_DEFAULTS[name];
-      const leading = d.leading === 'prose' ? type.leading : d.leading === 1 ? 1 : d.leading * type.leadingFactor;
-      const generated = { font: d.font, weight: d.weight, size: round(d.size * type.scale, 2), leading: round(leading), tracking: d.tracking };
+      const { font, weight, size, leading, tracking } = generated[name];
       const edits = doc.type[name] ?? {};
-      return [name, { ...generated, ...edits, edited: Object.keys(edits) }];
+      return [name, { font, weight, size: round(size, 2), leading: round(leading), tracking, ...edits, edited: Object.keys(edits) }];
     })
   );
 }

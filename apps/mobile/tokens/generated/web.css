@@ -25,6 +25,62 @@
   --shadow-1: 0px 1px 2px 0px rgba(0, 0, 0, 0.051);
   --shadow-2: 0px 4px 12px -2px rgba(0, 0, 0, 0.078);
   --shadow-3: 0px 12px 24px -6px rgba(0, 0, 0, 0.122);
+  /* The text styles (type-h1…type-blockquote), literal at the typeset: an edited style is one variable. */
+  --type-h1-size: 2.25rem;
+  --type-h1-leading: 1.111111;
+  --type-h1-weight: 800;
+  --type-h1-tracking: -0.025em;
+  --type-h1-font: var(--kit-font-heading, var(--kit-font-body, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif));
+  --type-h2-size: 1.875rem;
+  --type-h2-leading: 1.2;
+  --type-h2-weight: 600;
+  --type-h2-tracking: -0.025em;
+  --type-h2-font: var(--kit-font-heading, var(--kit-font-body, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif));
+  --type-h3-size: 1.5rem;
+  --type-h3-leading: 1.333333;
+  --type-h3-weight: 600;
+  --type-h3-tracking: -0.025em;
+  --type-h3-font: var(--kit-font-heading, var(--kit-font-body, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif));
+  --type-h4-size: 1.25rem;
+  --type-h4-leading: 1.4;
+  --type-h4-weight: 600;
+  --type-h4-tracking: -0.025em;
+  --type-h4-font: var(--kit-font-heading, var(--kit-font-body, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif));
+  --type-lead-size: 1.25rem;
+  --type-lead-leading: 1.4;
+  --type-lead-weight: 400;
+  --type-lead-tracking: 0em;
+  --type-lead-font: var(--kit-font-body, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif);
+  --type-p-size: 1rem;
+  --type-p-leading: 1.75;
+  --type-p-weight: 400;
+  --type-p-tracking: 0em;
+  --type-p-font: var(--kit-font-body, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif);
+  --type-large-size: 1.125rem;
+  --type-large-leading: 1.555556;
+  --type-large-weight: 600;
+  --type-large-tracking: 0em;
+  --type-large-font: var(--kit-font-body, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif);
+  --type-small-size: 0.875rem;
+  --type-small-leading: 1;
+  --type-small-weight: 500;
+  --type-small-tracking: 0em;
+  --type-small-font: var(--kit-font-body, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif);
+  --type-muted-size: 0.875rem;
+  --type-muted-leading: 1.428571;
+  --type-muted-weight: 400;
+  --type-muted-tracking: 0em;
+  --type-muted-font: var(--kit-font-body, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif);
+  --type-code-size: 0.875rem;
+  --type-code-leading: 1.428571;
+  --type-code-weight: 600;
+  --type-code-tracking: 0em;
+  --type-code-font: var(--kit-font-mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace);
+  --type-blockquote-size: 1rem;
+  --type-blockquote-leading: 1.5;
+  --type-blockquote-weight: 400;
+  --type-blockquote-tracking: 0em;
+  --type-blockquote-font: var(--kit-font-body, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif);
   --background: oklch(1 0 0);
   --foreground: oklch(0.1408 0.0044 285.82);
   --card: oklch(1 0 0);
@@ -204,6 +260,84 @@
   --color-button-edge: var(--button-edge);
   --color-field: color-mix(in oklab, var(--field) calc(var(--field-alpha) * 100%), transparent);
   --color-field-edge: var(--field-edge);
+}
+
+@utility type-h1 {
+  font-family: var(--type-h1-font);
+  font-size: var(--type-h1-size);
+  line-height: var(--tw-leading, var(--type-h1-leading));
+  letter-spacing: var(--tw-tracking, var(--type-h1-tracking));
+  font-weight: var(--tw-font-weight, var(--type-h1-weight));
+}
+@utility type-h2 {
+  font-family: var(--type-h2-font);
+  font-size: var(--type-h2-size);
+  line-height: var(--tw-leading, var(--type-h2-leading));
+  letter-spacing: var(--tw-tracking, var(--type-h2-tracking));
+  font-weight: var(--tw-font-weight, var(--type-h2-weight));
+}
+@utility type-h3 {
+  font-family: var(--type-h3-font);
+  font-size: var(--type-h3-size);
+  line-height: var(--tw-leading, var(--type-h3-leading));
+  letter-spacing: var(--tw-tracking, var(--type-h3-tracking));
+  font-weight: var(--tw-font-weight, var(--type-h3-weight));
+}
+@utility type-h4 {
+  font-family: var(--type-h4-font);
+  font-size: var(--type-h4-size);
+  line-height: var(--tw-leading, var(--type-h4-leading));
+  letter-spacing: var(--tw-tracking, var(--type-h4-tracking));
+  font-weight: var(--tw-font-weight, var(--type-h4-weight));
+}
+@utility type-lead {
+  font-family: var(--type-lead-font);
+  font-size: var(--type-lead-size);
+  line-height: var(--tw-leading, var(--type-lead-leading));
+  letter-spacing: var(--tw-tracking, var(--type-lead-tracking));
+  font-weight: var(--tw-font-weight, var(--type-lead-weight));
+}
+@utility type-p {
+  font-family: var(--type-p-font);
+  font-size: var(--type-p-size);
+  line-height: var(--tw-leading, var(--type-p-leading));
+  letter-spacing: var(--tw-tracking, var(--type-p-tracking));
+  font-weight: var(--tw-font-weight, var(--type-p-weight));
+}
+@utility type-large {
+  font-family: var(--type-large-font);
+  font-size: var(--type-large-size);
+  line-height: var(--tw-leading, var(--type-large-leading));
+  letter-spacing: var(--tw-tracking, var(--type-large-tracking));
+  font-weight: var(--tw-font-weight, var(--type-large-weight));
+}
+@utility type-small {
+  font-family: var(--type-small-font);
+  font-size: var(--type-small-size);
+  line-height: var(--tw-leading, var(--type-small-leading));
+  letter-spacing: var(--tw-tracking, var(--type-small-tracking));
+  font-weight: var(--tw-font-weight, var(--type-small-weight));
+}
+@utility type-muted {
+  font-family: var(--type-muted-font);
+  font-size: var(--type-muted-size);
+  line-height: var(--tw-leading, var(--type-muted-leading));
+  letter-spacing: var(--tw-tracking, var(--type-muted-tracking));
+  font-weight: var(--tw-font-weight, var(--type-muted-weight));
+}
+@utility type-code {
+  font-family: var(--type-code-font);
+  font-size: var(--type-code-size);
+  line-height: var(--tw-leading, var(--type-code-leading));
+  letter-spacing: var(--tw-tracking, var(--type-code-tracking));
+  font-weight: var(--tw-font-weight, var(--type-code-weight));
+}
+@utility type-blockquote {
+  font-family: var(--type-blockquote-font);
+  font-size: var(--type-blockquote-size);
+  line-height: var(--tw-leading, var(--type-blockquote-leading));
+  letter-spacing: var(--tw-tracking, var(--type-blockquote-tracking));
+  font-weight: var(--tw-font-weight, var(--type-blockquote-weight));
 }
 
 @layer base {

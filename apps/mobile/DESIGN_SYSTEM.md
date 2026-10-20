@@ -85,6 +85,8 @@ not `bg-background`, so they stay white if the page surface is ever tinted.
 
 The theme's fonts (`lib/fonts.ts`): h1–h4 and titles take the heading font, everything else the body font;
 add `font-heading` to make any Text a heading. Use `<Text variant>` from `components/ui/text`: `h1 h2 h3 h4 lead p large small muted code blockquote`.
+Each variant is one of the theme's text styles (size, line height, weight, tracking from `--type-<variant>-*` in
+global.css; font role and weight in `TOKENS.textStyles`), so an edited style in tokens.json changes every use of it.
 Never import `Text` from `react-native` in screens. Sizes if a variant does not fit: `text-xs sm base lg xl 2xl 3xl 4xl`.
 Weights: `font-medium` for row titles, `font-semibold` for headings/values, `font-bold` for hero amounts only.
 

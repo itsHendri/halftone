@@ -5,7 +5,7 @@
  *   'oklch'  Tailwind 4 / shadcn web (`oklch(0.546 0.2152 262.88)`) — the web kit and the docs site
  */
 import { hexToHslTriplet, hexToOklch } from '../color.mjs';
-import { shadowCss } from './recipe.mjs';
+import { resolveTextStyles, shadowCss, textEdits } from './recipe.mjs';
 
 export const rem = (px) => (px >= 9999 ? '9999px' : `${px / 16}rem`);
 
@@ -19,6 +19,37 @@ export const typeVars = (type) => ({
   '--typeset-flow': `${type.flow}em`,
   '--typeset-measure': `${type.measure}ch`,
 });
+
+const fixed = (n, places = 4) => Number(n.toFixed(places));
+
+/** A theme's text styles as drawn (recipe.mjs resolveTextStyles): its typeset, its edited styles on top. */
+export const themeTextStyles = (theme) => resolveTextStyles(theme.type, textEdits(theme.semantic?.type));
+
+/**
+ * The text styles' variables, --type-<style>-{size,leading,weight,tracking,font}, from resolveTextStyles. Literal
+ * values at the theme's typeset, in each kit's units:
+ *   'hsl'    mobile (NativeWind): size and line height in rem (native line heights are lengths); the font is
+ *            the role, which components/ui/text.tsx picks in JS, so no variable. Tracking twice: em for the web
+ *            export, and -tracking-native in px for native, where NativeWind's own scale is em × 10 px
+ *            (tracking-tight is -0.25px there, -0.025em on the web), so the kits draw what they always did
+ *   'oklch'  web: rem and a unitless line height; the font is the role's family variable. `font(role)` writes
+ *            it (the build adds fallbacks; a live theme always sets --kit-font-*)
+ */
+export function textStyleVars(styles, format, font = (role) => `var(--kit-font-${role})`) {
+  const vars = {};
+  // Mobile rounds rem to 4 places, as nativewind3's text-* sizes always were.
+  const length = (px) => (format === 'hsl' ? `${fixed(px / 16)}rem` : rem(fixed(px)));
+  for (const [name, s] of Object.entries(styles)) {
+    const v = `--type-${name}`;
+    vars[`${v}-size`] = length(s.size);
+    vars[`${v}-leading`] = format === 'hsl' ? length(s.lineHeight ?? s.size * s.leading) : String(fixed(s.leading, 6));
+    vars[`${v}-weight`] = String(s.weight);
+    vars[`${v}-tracking`] = `${s.tracking}em`;
+    if (format === 'hsl') vars[`${v}-tracking-native`] = `${fixed(s.tracking * 10)}px`;
+    if (format !== 'hsl') vars[`${v}-font`] = font(s.font);
+  }
+  return vars;
+}
 
 /**
  * The button and field styles' variables (both formats), from a theme's or a token file's { button, field }
@@ -56,7 +87,7 @@ export function themeVars(theme, format) {
       vars['--icon-stroke'] = String(theme.stroke);
       vars['--density'] = String(theme.density.scale);
       for (const size of ['sm', 'md', 'lg', 'x']) vars[`--control-${size}`] = `${theme.density[size]}px`;
-      Object.assign(vars, typeVars(theme.type));
+      Object.assign(vars, typeVars(theme.type), textStyleVars(themeTextStyles(theme), format));
     }
     Object.assign(vars, styleVars(theme, format)[m]);
     for (const [level, value] of Object.entries(theme.semantic.shadow)) vars[`--shadow-${level}`] = shadowCss(value[m]);

@@ -69,6 +69,9 @@ The theme's fonts (`app/fonts.ts`): h1–h4 and card titles take the heading fon
 else the body font (`font-sans`). Page title `text-2xl sm:text-3xl font-semibold
 tracking-tight` (PageHeader does this); section titles `text-lg`/`text-xl font-semibold`; body `text-base`
 with `leading-7` for prose; helper text `text-sm text-muted-foreground`. `tabular-nums` for figures.
+The theme's text styles, the mobile kit's Text variants, are utilities: `type-h1 type-h2 type-h3 type-h4 type-lead
+type-p type-large type-small type-muted type-code type-blockquote` (font, size, line height, tracking and weight
+from `--type-<style>-*`; `leading-*`, `tracking-*` and `font-*` still override). Prose's running text is `type-p`.
 
 ### Depth and borders
 

@@ -5,7 +5,7 @@
  */
 import StyleDictionary from 'style-dictionary';
 import { readFileSync } from 'node:fs';
-import { BUTTON, DEFAULT_RECIPE, DENSITY, DEPTH, FIELD, fieldWidth, shadowCss, TYPE, typeScale } from './theme/recipe.mjs';
+import { BUTTON, DEFAULT_RECIPE, DENSITY, DEPTH, FIELD, fieldWidth, resolveTextStyles, shadowCss, textEdits, TYPE, typeScale } from './theme/recipe.mjs';
 
 export const MODES = ['light', 'dark'];
 
@@ -80,6 +80,8 @@ export function radiusCss(step) {
  *                        (a token file from before themes gets the kit's defaults)
  *   type                 { size, scale, leading, leadingFactor, flow, measure } (semantic.type; defaults
  *                          for a token file from before the typeset)
+ *   textStyles           { h1: { font, weight, size, leading, tracking, edited }, … } the Text variants at the typeset,
+ *                          with a system's edited styles (semantic.type.<style>) on top (recipe.mjs resolveTextStyles)
  *   shape.button/.field  the styles' numbers (semantic.button / .field), radii in px; a token file from
  *                          before the styles gets solid buttons and outline fields, and colours to match
  *   styles               { button, field }: the style names, from the recorded theme (or the defaults)
@@ -136,9 +138,10 @@ export async function loadTokens(sourcePath) {
     },
   };
   const type = typeScale(Object.fromEntries(Object.entries(TYPE).map(([key, value]) => [key, find(semLight, `type-${key}`) ?? value])));
+  const textStyles = resolveTextStyles(type, textEdits(source.semantic?.type));
   const recorded = source.$extensions?.['com.halftonedesignsystem.theme']?.recipe ?? {};
   const styles = { button: recorded.button ?? DEFAULT_RECIPE.button, field: recorded.field ?? DEFAULT_RECIPE.field };
-  return { source, semLight, semDark, prim, colors, radius, shape, type, styles };
+  return { source, semLight, semDark, prim, colors, radius, shape, type, textStyles, styles };
 }
 
 /** Primitive tokens under a path prefix, e.g. group(prim, ['font', 'size']) → [{ key: 'xs', value: 12 }, …]. */

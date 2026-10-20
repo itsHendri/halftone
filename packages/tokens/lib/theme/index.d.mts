@@ -129,6 +129,18 @@ export function presetById(id: string): Preset | undefined;
 export function defaultTypeset(recipe: Recipe): boolean;
 export function defaultStyles(recipe: Recipe): boolean;
 export function typeVars(type: TypeScale): Record<string, string>;
+export type TextStyleName = 'h1' | 'h2' | 'h3' | 'h4' | 'lead' | 'p' | 'large' | 'small' | 'muted' | 'code' | 'blockquote';
+export type TextFontRole = 'heading' | 'body' | 'mono';
+/** A text style as drawn: size and lineHeight px, leading × size, tracking em; edited: a system changed it. */
+export type DrawnTextStyle = { font: TextFontRole; weight: number; size: number; leading: number; tracking: number; lineHeight: number; edited: boolean };
+export const TEXT_STYLES: TextStyleName[];
+export const TEXT_DEFAULTS: Record<TextStyleName, { font: TextFontRole; weight: number; size: number; leading: number | 'prose'; tracking: number }>;
+/** A system's edited styles from a semantic.type group (a theme's, or a token file's DTCG one). */
+export function textEdits(group?: Record<string, unknown>): Partial<Record<TextStyleName, Partial<Omit<DrawnTextStyle, 'lineHeight' | 'edited'>>>>;
+export function resolveTextStyles(type: TypeScale, edits?: ReturnType<typeof textEdits>): Record<TextStyleName, DrawnTextStyle>;
+export function themeTextStyles(theme: Theme): Record<TextStyleName, DrawnTextStyle>;
+/** --type-<style>-{size,leading,weight,tracking} (+ -font on the web) in a kit's units. */
+export function textStyleVars(styles: Record<string, DrawnTextStyle>, format: 'hsl' | 'oklch', font?: (role: TextFontRole) => string): Record<string, string>;
 export function styleVars(styles: Pick<Theme, 'button' | 'field'>, format: 'hsl' | 'oklch'): Record<Mode, Record<string, string>>;
 export function themeVars(theme: Theme, format: 'hsl' | 'oklch'): Record<Mode, Record<string, string>>;
 export function themeHex(theme: Theme): Record<Mode, Record<string, string>>;
