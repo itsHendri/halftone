@@ -73,10 +73,15 @@ export type HalftoneSystem = {
   border: BorderOverride;
   extras: Extras;
   brand: SystemBrand;
+  /**
+   * Reserved for component-level edits (Button, Chip, Tag…), which come after the foundations. Kept as given and
+   * not generated yet.
+   */
+  components: Record<string, Record<string, unknown>>;
 };
 
 /** What normalizeSystem accepts: any section may be missing, a shadow may be a plain layer list, a layer partial. */
-export type HalftoneSystemInput = Partial<Omit<HalftoneSystem, 'recipe' | 'colors' | 'shadow' | 'extras' | 'brand' | 'kind' | 'v'>> & {
+export type HalftoneSystemInput = Partial<Omit<HalftoneSystem, 'recipe' | 'colors' | 'shadow' | 'extras' | 'brand' | 'components' | 'kind' | 'v'>> & {
   kind?: 'halftone.system';
   v?: number;
   recipe?: RecipeInput;
@@ -84,6 +89,7 @@ export type HalftoneSystemInput = Partial<Omit<HalftoneSystem, 'recipe' | 'color
   shadow?: Partial<Record<ShadowLevel, Partial<ShadowLayer>[] | { light?: Partial<ShadowLayer>[]; dark?: Partial<ShadowLayer>[] }>>;
   extras?: Partial<Record<ExtraKind, Array<Record<string, unknown> & { name: string }>>>;
   brand?: Partial<SystemBrand>;
+  components?: Record<string, Record<string, unknown>>;
 };
 
 /** A contrast pairing the fixer left failing because a colour in it was chosen by hand. */

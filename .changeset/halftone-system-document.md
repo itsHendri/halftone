@@ -10,3 +10,4 @@ Halftone systems. A system (`name.halftone.json`) is a theme recipe plus what wa
 - The status ramps can be themed from a seed, and their tones follow the step the seed sits on. `brandRamp(seed, { anchor })` pins a seed to any step, and `neutralSeedRamp` makes a neutral from any colour.
 - Fonts: the `fonts` target and `theme apply` accept any Google Fonts family (`fontByFamily`), not only the curated list.
 - New tokens a system can write: `semantic.type.<style>.*`, `semantic.radius.<step>` (built as fixed px instead of a multiple of the base), `semantic.border.style` and the `extra` group. Shadows take `inset`. Existing themes and codes build exactly as before.
+- `components` is reserved in the document for component-level edits later (Button, Chip, Tag…): it is checked to be an object of objects, kept as given, and not generated from yet.
