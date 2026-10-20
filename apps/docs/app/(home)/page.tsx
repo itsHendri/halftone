@@ -49,8 +49,9 @@ export default function HomePage() {
   return (
     <main className="flex w-full flex-col">
       {/* Hero */}
-      {/* The lit dot grid (components/halftone) behind the hero: the halftone idea, in the drifting colour. */}
-      <div className="relative isolate overflow-hidden">
+      {/* The lit dot grid (components/halftone) behind the hero: the halftone idea, in the drifting colour. Its
+          own background covers the page's edge texture (app/global.css), so the two grids never overlap. */}
+      <div className="bg-background relative isolate overflow-hidden">
         <HeroField />
         <section className="mx-auto flex w-full max-w-3xl flex-col items-center gap-6 px-4 pb-12 pt-14 text-center md:px-6 md:pt-20">
           <Link
@@ -71,15 +72,6 @@ export default function HomePage() {
             there.
           </p>
           <CopyPrompt className="w-full max-w-2xl text-left" />
-          <p className="text-muted-foreground text-sm">
-            Have a brief or a transcript?{" "}
-            <Link
-              href="/brief"
-              className="text-foreground focus-visible:ring-ring rounded-sm font-medium underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2"
-            >
-              Start a prototype from it
-            </Link>
-          </p>
         </section>
         {/* The copy button above is the one primary action; these two follow it. The theme bar steps aside on phones. */}
         <div
