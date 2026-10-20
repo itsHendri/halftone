@@ -47,15 +47,14 @@ function typography(prim, type) {
 }
 
 /**
- * The contrast sentence. A passing palette keeps the wording published apps already have (their generated
- * DESIGN.md must not change until a release rewords it); a failing one, which only builds without --strict,
- * names its pairings.
+ * The contrast sentence. A passing palette says the build names any pairing that falls short (and --strict
+ * fails on it); a failing one, which only builds without --strict, names its pairings.
  */
 function contrastLine(ctx) {
   const failures = ctx.contrastFailures ?? [];
   if (!failures.length) {
     return `Every \`X\` / \`X-foreground\` pairing, muted text on every surface, and every status tone used as text
-clears WCAG AA (4.5:1) in both themes; the build refuses a palette that does not.`;
+clears WCAG AA (4.5:1) in both themes; the build names any pairing that falls short, and \`--strict\` fails on it.`;
   }
   return `${failures.length} pairing(s) in this palette fall below WCAG AA (4.5:1). Fix them before handing a prototype
 over (\`npm run tokens:build -- --strict\` fails on them):

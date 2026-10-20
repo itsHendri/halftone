@@ -212,7 +212,7 @@ hex literal or a Tailwind palette colour in UI code. Keys ending in `-dark` are 
 - **Chart 1–5:** data series.
 
 Every `X` / `X-foreground` pairing, muted text on every surface, and every status tone used as text
-clears WCAG AA (4.5:1) in both themes; the build refuses a palette that does not.
+clears WCAG AA (4.5:1) in both themes; the build names any pairing that falls short, and `--strict` fails on it.
 
 A tone's text on that tone's own tint (`text-success` on `bg-success/15`) is a weaker pairing. With
 this palette it clears AA only for:
