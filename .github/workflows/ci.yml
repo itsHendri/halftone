@@ -137,7 +137,8 @@ jobs:
   # Each app must work when copied out on its own (npx giget gh:itsHendri/halftone/apps/<app>): no root
   # lockfile, no root overrides, no workspace links. The tokens package comes from a packed tarball of this
   # commit (`pack`), and again from npm (`published`): what someone copying the app out today installs. The
-  # published leg fails if an app starts to need tokens-package code that hasn't been released.
+  # published leg fails if an app starts to need tokens-package code that hasn't been released, so it is skipped
+  # while .changeset/ holds unreleased changesets (npm is known to lag then) and comes back once they are released.
   extract:
     name: extract (${{ matrix.app }}${{ matrix.tokens == 'published' && ', published tokens' || '' }})
     runs-on: ubuntu-latest
@@ -164,11 +165,22 @@ jobs:
     steps:
       - uses: actions/checkout@v7
 
+      - name: Unreleased changesets (the published leg waits for the release)
+        id: pending
+        run: |
+          pending=$(find .changeset -name '*.md' ! -name README.md | wc -l)
+          if [ "${{ matrix.tokens }}" = published ] && [ "$pending" -gt 0 ]; then
+            echo "skip=true" >> "$GITHUB_OUTPUT"
+            echo "::notice::Skipped: $pending unreleased changeset(s), so npm's @halftone-ds/tokens is behind this commit. Runs again after the release."
+          fi
+
       - uses: actions/setup-node@v7
+        if: steps.pending.outputs.skip != 'true'
         with:
           node-version: 24
 
       - name: Copy apps/${{ matrix.app }} out of the monorepo
+        if: steps.pending.outputs.skip != 'true'
         run: |
           mkdir -p "$RUNNER_TEMP/app"
           git archive HEAD:apps/${{ matrix.app }} | tar -x -C "$RUNNER_TEMP/app"
@@ -179,15 +191,18 @@ jobs:
           fi
 
       - name: Install the standalone app
+        if: steps.pending.outputs.skip != 'true'
         working-directory: ${{ runner.temp }}/app
         run: npm install --no-audit --no-fund
 
       - name: Checks pass standalone
+        if: steps.pending.outputs.skip != 'true'
         working-directory: ${{ runner.temp }}/app
         run: ${{ matrix.checks }}
 
       # The first thing a real project does. Runs on the throwaway copy, so it can be destructive.
       - name: Samples eject cleanly
+        if: steps.pending.outputs.skip != 'true'
         working-directory: ${{ runner.temp }}/app
         run: npm run eject-samples && ${{ matrix['after-eject'] }}
 
