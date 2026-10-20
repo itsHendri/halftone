@@ -1,5 +1,5 @@
 import { EMBED, isAllowedOrigin } from '@/lib/embed';
-import { THEME } from '@/lib/theme';
+import { THEME, TOKENS } from '@/lib/theme';
 import { Platform } from 'react-native';
 
 /**
@@ -11,18 +11,24 @@ import { Platform } from 'react-native';
  *   kit → host   { type: 'kit:applied', code }
  *
  * `vars` are CSS variables in this kit's format (HSL triplets, as global.css writes them); `hex` is the
- * same palette for usePalette(). The host resolves everything; the kit only checks and applies it:
+ * same palette for usePalette(). The text styles are variables too (--type-<style>-size…); their font roles
+ * travel in `fonts.roles`, since components/ui/text.tsx picks the font in JS. The host resolves everything; the kit only checks and applies it:
  * variable names must be ones global.css defines, values plain colour/length syntax. The applied CSS is
  * also kept in sessionStorage (same origin as the docs), so public/index.html can paint it first.
  */
 export type ThemeHex = Partial<Record<keyof typeof THEME.light, string>>;
 export type EmbedTokens = {
   code: string | null;
-  /** Google Fonts family names by role; loaded from fonts.googleapis.com while the theme is live. */
-  fonts?: { heading?: string; body?: string; mono?: string };
+  /** Google Fonts family names by role; loaded from fonts.googleapis.com while the theme is live. `roles`: each
+   *  text style's font role (Text h1…blockquote). */
+  fonts?: { heading?: string; body?: string; mono?: string; roles?: Partial<Record<TextStyleName, FontRole>> };
   vars?: { light?: Record<string, string>; dark?: Record<string, string> };
   hex?: { light?: ThemeHex; dark?: ThemeHex };
 };
+
+type TextStyleName = keyof typeof TOKENS.textStyles;
+type FontRole = 'heading' | 'body' | 'mono';
+const FONT_ROLES: FontRole[] = ['heading', 'body', 'mono'];
 
 const STYLE_ID = 'kit-theme-override';
 const FONTS_ID = 'kit-theme-fonts';
@@ -32,13 +38,15 @@ export const EMBED_THEME_KEY = 'kit.embed.tokens';
 
 /** The typeset's variables (halftone-tokens' typeVars); TYPE_RULES points the text classes at them. */
 const TYPE_VARS = ['--type-scale', '--leading-factor', '--typeset-leading', '--typeset-flow', '--typeset-measure'];
+/** The text styles' variables (halftone-tokens' textStyleVars): Text's variants read them. */
+const TEXT_STYLE_VARS = Object.keys(TOKENS.textStyles).flatMap((s) => ['size', 'leading', 'weight', 'tracking'].map((k) => `--type-${s}-${k}`));
 /** The button and field styles' numbers (their colours are THEME keys). */
 const STYLE_VARS = ['--button-alpha', '--button-border-w', '--button-edge-w', '--field-alpha', '--field-border-w', '--field-edge-w', '--field-radius', '--field-radius-b', '--field-x'];
 /** A theme code: ht1- and 12 characters (the default typeset), or ht2- and 16. */
 const THEME_CODE = /^(ht1-[0-9A-Z]{12}|ht2-[0-9A-Z]{16}|ht3-[0-9A-Z]{18})$/i;
 
 const kebab = (s: string) => s.replace(/([A-Z])/g, '-$1').replace(/([a-z])(\d)/g, '$1-$2').toLowerCase();
-const ALLOWED_VARS = new Set([...Object.keys(THEME.light).map((k) => `--${kebab(k)}`), '--radius', '--radius-control', '--border-width', '--icon-stroke', '--shadow-1', '--shadow-2', '--shadow-3', '--control-sm', '--control-md', '--control-lg', '--control-x', ...TYPE_VARS, ...STYLE_VARS]);
+const ALLOWED_VARS = new Set([...Object.keys(THEME.light).map((k) => `--${kebab(k)}`), '--radius', '--radius-control', '--border-width', '--icon-stroke', '--shadow-1', '--shadow-2', '--shadow-3', '--control-sm', '--control-md', '--control-lg', '--control-x', ...TYPE_VARS, ...TEXT_STYLE_VARS, ...STYLE_VARS]);
 const SAFE_VALUE = /^[\w.%\s(),#/*-]{1,80}$/;
 const HEX = /^#[0-9a-f]{6}$/i;
 
@@ -64,11 +72,16 @@ export function parseEmbedTokens(data: unknown): EmbedTokens | null {
   if (!d || d.type !== 'kit:tokens' || d.v !== 1) return null;
   if (d.code === null) return { code: null };
   if (typeof d.code !== 'string' || !THEME_CODE.test(d.code)) return null;
-  const f = (d as { fonts?: { heading?: unknown; body?: unknown; mono?: unknown } }).fonts;
+  const f = (d as { fonts?: { heading?: unknown; body?: unknown; mono?: unknown; roles?: unknown } }).fonts;
   const family = (v: unknown) => (typeof v === 'string' && FAMILY.test(v) ? v : undefined);
+  const roles = Object.fromEntries(
+    Object.entries(f?.roles && typeof f.roles === 'object' ? f.roles : {}).filter(
+      ([name, role]) => name in TOKENS.textStyles && FONT_ROLES.includes(role as FontRole)
+    )
+  ) as Partial<Record<TextStyleName, FontRole>>;
   return {
     code: d.code,
-    fonts: { heading: family(f?.heading), body: family(f?.body), mono: family(f?.mono) },
+    fonts: { heading: family(f?.heading), body: family(f?.body), mono: family(f?.mono), roles },
     vars: { light: cleanVars(d.vars?.light), dark: cleanVars(d.vars?.dark) },
     hex: { light: cleanHex(d.hex?.light), dark: cleanHex(d.hex?.dark) },
   };

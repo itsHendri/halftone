@@ -6,7 +6,7 @@
 import { hexToHslTriplet } from '../lib/color.mjs';
 import { cssName, group, isColor, radiusCss } from '../lib/resolve.mjs';
 import { TEXT_LINE_HEIGHT } from '../lib/theme/recipe.mjs';
-import { styleVars } from '../lib/theme/vars.mjs';
+import { styleVars, textStyleVars } from '../lib/theme/vars.mjs';
 
 const rem = (px) => (px >= 9999 ? '9999px' : `${Number((px / 16).toFixed(4))}rem`);
 
@@ -30,6 +30,8 @@ function cssBlock(selector, tokens, shape, mode, colors) {
     lines.push(`    --radius-control: ${rem(shape.control)};`, `    --border-width: ${shape.borderWidth}px;`, `    --icon-stroke: ${shape.stroke};`);
     for (const size of ['sm', 'md', 'lg', 'x']) lines.push(`    --control-${size}: ${shape.density[size]}px;`);
   }
+  // The text styles (Text h1…blockquote): literal at the typeset, so an edited style is one variable.
+  if (shape.textStyles) for (const [name, value] of Object.entries(textStyleVars(shape.textStyles, 'hsl'))) lines.push(`    ${name}: ${value};`);
   // Style colours a token file from before the styles doesn't have (resolve.mjs adds them), then the styles' numbers.
   const present = new Set(tokens.filter(isColor).map(cssName));
   for (const c of colors) if (!present.has(c.name)) lines.push(`    --${c.name}: ${hexToHslTriplet(c[mode])};`);
@@ -44,7 +46,7 @@ export default function nativewind3(ctx, options) {
 @tailwind utilities;
 
 @layer base {
-${cssBlock(':root', ctx.semLight, { ...ctx.shape, styleShape: ctx.shape }, 'light', ctx.colors)}
+${cssBlock(':root', ctx.semLight, { ...ctx.shape, styleShape: ctx.shape, textStyles: ctx.textStyles }, 'light', ctx.colors)}
 
 ${cssBlock('.dark:root', ctx.semDark, { styleShape: ctx.shape }, 'dark', ctx.colors)}
 }
@@ -78,7 +80,20 @@ ${cssBlock('.dark:root', ctx.semDark, { styleShape: ctx.shape }, 'dark', ctx.col
   const lineHeight = { prose: rem(size * leading) };
   const spacing = { 'control-x': 'var(--control-x)', 'field-x': 'var(--field-x)', flow: rem(size * flow) };
   const maxWidth = { measure: rem(measure * size * 0.5) };
-  const tailwind = `// ${ctx.header}\nmodule.exports = ${JSON.stringify({ colors, borderRadius, borderWidth, boxShadow, height, minHeight: height, width: height, spacing, fontSize, lineHeight, maxWidth }, null, 2)};\n`;
+  // The text styles, one key per property: text-type-h1, leading-type-h1, tracking-type-h1, font-type-h1 (Text's
+  // variants). Variables (global.css), so a system's edited style changes one value.
+  for (const name of Object.keys(ctx.textStyles)) {
+    fontSize[`type-${name}`] = `var(--type-${name}-size)`;
+    lineHeight[`type-${name}`] = `var(--type-${name}-leading)`;
+  }
+  const letterSpacing = Object.fromEntries(Object.keys(ctx.textStyles).map((name) => [`type-${name}`, `var(--type-${name}-tracking)`]));
+  const fontWeight = Object.fromEntries(Object.keys(ctx.textStyles).map((name) => [`type-${name}`, `var(--type-${name}-weight)`]));
+  const nativeLetterSpacing = Object.fromEntries(Object.keys(ctx.textStyles).map((name) => [`type-${name}`, `var(--type-${name}-tracking-native)`]));
+  const tailwind = `// ${ctx.header}\nmodule.exports = ${JSON.stringify({ colors, borderRadius, borderWidth, boxShadow, height, minHeight: height, width: height, spacing, fontSize, lineHeight, letterSpacing, fontWeight, maxWidth }, null, 2)};
+// Native: NativeWind's preset draws tracking in px (tracking-tight is -0.25px, the web's -0.025em × 10), so the
+// text styles' tracking reads their px variables there.
+if (process.env.NATIVEWIND_OS && process.env.NATIVEWIND_OS !== 'web') module.exports.letterSpacing = ${JSON.stringify(nativeLetterSpacing, null, 2)};
+`;
   return [
     { path: options.css, contents: css },
     { path: options.tailwind, contents: tailwind },

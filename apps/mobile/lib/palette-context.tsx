@@ -20,7 +20,7 @@ export type PaletteOverride = Partial<Record<ColorScheme, Partial<Palette>>>;
 
 const PaletteContext = React.createContext<Palette | null>(null);
 /** A live theme from the docs picker, when one is showing (embedded web only). */
-type LiveTheme = { code: string; stroke?: number; fonts?: { heading?: string; body?: string; mono?: string } };
+type LiveTheme = { code: string; stroke?: number; fonts?: EmbedTokens['fonts'] };
 const LiveThemeContext = React.createContext<LiveTheme | null>(null);
 
 const liveTheme = (tokens: EmbedTokens | null): LiveTheme | null => {

@@ -5,10 +5,10 @@
  */
 export { generateTheme } from './generate.mjs';
 export { encodeRecipe, decodeRecipe, isThemeCode } from './codec.mjs';
-export { DEFAULT_RECIPE, defaultStyles, defaultTypeset, FLOW, LEADING, OPTIONS, normalizeRecipe, sameRecipe, RECIPE_VERSION, STYLE_KEYS, TYPESET_KEYS } from './recipe.mjs';
+export { DEFAULT_RECIPE, defaultStyles, defaultTypeset, FLOW, LEADING, OPTIONS, normalizeRecipe, sameRecipe, RECIPE_VERSION, resolveTextStyles, STYLE_KEYS, TEXT_DEFAULTS, TEXT_STYLES, textEdits, TYPESET_KEYS } from './recipe.mjs';
 export { FONTS, fontByFamily, fontById, googleFontsHref } from './fonts.mjs';
 export { PRESETS, presetById } from './presets.mjs';
-export { styleVars, themeVars, themeCss, themeHex, typeVars } from './vars.mjs';
+export { styleVars, textStyleVars, themeTextStyles, themeVars, themeCss, themeHex, typeVars } from './vars.mjs';
 export { applyRecipe, themeStatus, THEME_EXTENSION } from './apply.mjs';
 // Systems (lib/system): also @halftone-ds/tokens/system.
 export * from '../system/index.mjs';

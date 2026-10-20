@@ -24,7 +24,8 @@ import {
   themeStatus,
   themeVars,
 } from '../lib/theme/index.mjs';
-import { normalizeRecipe, STYLE_KEYS } from '../lib/theme/recipe.mjs';
+import { normalizeRecipe, STYLE_KEYS, TEXT_STYLES } from '../lib/theme/recipe.mjs';
+import { textStyleVars } from '../lib/theme/vars.mjs';
 import { brandRamp, curatedRamp } from '../lib/theme/ramp.mjs';
 import nativewind3 from '../targets/nativewind3.mjs';
 import shadcnWeb from '../targets/shadcn-web.mjs';
@@ -223,6 +224,75 @@ test('the default typeset builds exactly the text scale the kits always had', as
   assert.deepEqual(bigTheme.fontSize.base, ['1.125rem', { lineHeight: `${Number(((24 * 1.125 * (1.9 / 1.75)) / 16).toFixed(4))}rem` }]);
   assert.match(shadcnWeb(big, { out: 'x' })[0].contents, /--type-scale: 1.125;/);
   unlinkSync(path);
+});
+
+/**
+ * What each Text variant drew before the per-style variables (apps/mobile/components/ui/text.tsx): its text-*
+ * size and that size's line height, or leading-prose (p) / leading-none (small), tracking-tight on h1–h4 (-0.025em,
+ * and -0.25px on native), and its font-* weight.
+ */
+const VARIANT_CLASSES = {
+  h1: ['4xl', null, -0.025, 800],
+  h2: ['3xl', null, -0.025, 600],
+  h3: ['2xl', null, -0.025, 600],
+  h4: ['xl', null, -0.025, 600],
+  lead: ['xl', null, 0, 400],
+  p: ['base', 'prose', 0, 400],
+  large: ['lg', null, 0, 600],
+  small: ['sm', 'none', 0, 500],
+  muted: ['sm', null, 0, 400],
+  code: ['sm', null, 0, 600],
+  blockquote: ['base', null, 0, 400],
+};
+
+test('the text style variables draw exactly what the Text variants drew, at every typeset', async () => {
+  const path = join(pkg, 'test/fixtures/.text-style-tokens.json');
+  try {
+    for (const size of ['14', '15', '16', '18'])
+      for (const leading of ['tight', 'normal', 'relaxed']) {
+        writeFileSync(path, JSON.stringify(applyRecipe(base, { ...DEFAULT_RECIPE, size, leading }).tokens));
+        const ctx = await loadTokens(path);
+        ctx.header = 'test';
+        const theme = new Function('module', `${nativewind3(ctx, { css: 'a', tailwind: 'b' })[1].contents}; return module.exports;`)({});
+        const vars = textStyleVars(ctx.textStyles, 'hsl');
+        assert.deepEqual(Object.keys(ctx.textStyles), TEXT_STYLES);
+        for (const [name, [text, lead, tracking, weight]] of Object.entries(VARIANT_CLASSES)) {
+          const [fontSize, { lineHeight }] = theme.fontSize[text];
+          const at = `${name} at ${size}/${leading}`;
+          assert.equal(vars[`--type-${name}-size`], fontSize, at);
+          // leading-none is 1 × the size.
+          assert.equal(vars[`--type-${name}-leading`], lead === 'prose' ? theme.lineHeight.prose : lead === 'none' ? fontSize : lineHeight, at);
+          assert.equal(vars[`--type-${name}-tracking`], `${tracking}em`, at);
+          // NativeWind's native preset: tracking-tight is -0.25px.
+          assert.equal(vars[`--type-${name}-tracking-native`], tracking ? '-0.25px' : '0px', at);
+          assert.equal(vars[`--type-${name}-weight`], String(weight), at);
+        }
+        // The web's line heights are unitless: the same ratio.
+        const web = textStyleVars(ctx.textStyles, 'oklch');
+        assert.equal(web['--type-p-leading'], String(ctx.type.leading));
+        assert.equal(web['--type-h1-font'], 'var(--kit-font-heading)');
+        assert.equal(web['--type-code-font'], 'var(--kit-font-mono)');
+      }
+  } finally {
+    if (existsSync(path)) unlinkSync(path);
+  }
+});
+
+test('a theme carries its text styles to the live previews, edited ones included', () => {
+  const { theme } = applyRecipe(base, DEFAULT_RECIPE);
+  const hsl = themeVars(theme, 'hsl').light;
+  assert.equal(hsl['--type-h1-size'], '2.25rem');
+  assert.equal(hsl['--type-small-leading'], '0.875rem');
+  assert.equal(hsl['--type-h1-font'], undefined, 'mobile picks the font in JS');
+  assert.equal(themeVars(theme, 'oklch').light['--type-blockquote-leading'], '1.5');
+  const edited = { ...theme, semantic: { ...theme.semantic, type: { ...theme.semantic.type, h2: { size: 40, leading: 1.2, weight: 700, tracking: 0, font: '{primitive.font.family.body}' } } } };
+  const vars = themeVars(edited, 'oklch').light;
+  assert.equal(vars['--type-h2-size'], '2.5rem');
+  assert.equal(vars['--type-h2-weight'], '700');
+  assert.equal(vars['--type-h2-tracking'], '0em');
+  assert.equal(vars['--type-h2-font'], 'var(--kit-font-body)');
+  // Every value passes the kits' live-theme check (lib/embed-theme.ts SAFE_VALUE, public/index.html).
+  for (const [name, value] of [...Object.entries(vars), ...Object.entries(hsl)]) if (name.startsWith('--type-')) assert.match(value, /^[\w.%\s(),#/-]{1,80}$/);
 });
 
 // Golden output: a generator change that alters what an existing code produces must bump RECIPE_VERSION.

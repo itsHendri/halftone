@@ -11,6 +11,8 @@ import { hexToOklchParts, inGamut } from '../lib/color.mjs';
 import { contrastFailures } from '../lib/contrast.mjs';
 import { loadTokens } from '../lib/resolve.mjs';
 import { STEPS } from '../lib/theme/palettes.mjs';
+import { resolveTextStyles, textEdits, TYPE, typeScale } from '../lib/theme/recipe.mjs';
+import { textStyleVars } from '../lib/theme/vars.mjs';
 import { brandRamp, neutralSeedRamp } from '../lib/theme/ramp.mjs';
 import {
   applyRecipe,
@@ -413,7 +415,7 @@ test('applying another theme removes what the system owned and restores its stat
   }
 });
 
-test('a system builds: fixed corners reach the CSS, the new tokens collide with nothing', async () => {
+test('a system builds: fixed corners and edited text styles reach the CSS, the new tokens collide with nothing', async () => {
   const { tokens } = applySystem(base, EDITED);
   const dir = mkdtempSync(join(tmpdir(), 'halftone-system-'));
   try {
@@ -422,13 +424,23 @@ test('a system builds: fixed corners reach the CSS, the new tokens collide with 
     const ctx = await loadTokens(path);
     ctx.header = 'test';
     assert.deepEqual(ctx.radius.steps.find((s) => s.name === 'md'), { name: 'md', scale: 0.8, px: 6, fixed: true });
+    assert.equal(ctx.textStyles.h1.size, 44);
+    assert.equal(ctx.textStyles.h1.edited, true);
+    assert.equal(ctx.textStyles.h2.edited, false);
     const [web] = shadcnWeb(ctx, { out: 'web.css' });
     assert.match(web.contents, /--radius-md: 0\.375rem;/);
     assert.match(web.contents, /--radius-lg: var\(--radius\);/);
     const [css, tw] = nativewind3(ctx, { css: 'global.css', tailwind: 'theme.js' });
-    assert.doesNotMatch(css.contents, /--radius-md|--type-h1/);
+    assert.doesNotMatch(css.contents, /--radius-md|--type-h1-font/);
+    // The edited h1 (44px, 800, leading 1.1111 × size) is its variables; the others keep the typeset's.
+    assert.match(css.contents, /--type-h1-size: 2\.75rem;\n    --type-h1-leading: 3\.0555rem;\n    --type-h1-weight: 800;\n    --type-h1-tracking: -0\.025em;/);
+    assert.match(css.contents, /--type-h2-size: 1\.875rem;/);
+    assert.match(web.contents, /--type-h1-size: 2\.75rem;\n  --type-h1-leading: 1\.1111;\n  --type-h1-weight: 800;/);
+    assert.match(web.contents, /@utility type-h1 \{/);
     const theme = new Function('module', `${tw.contents}; return module.exports;`)({});
     assert.equal(theme.borderRadius.md, '0.375rem');
+    assert.equal(theme.fontSize['type-h1'], 'var(--type-h1-size)');
+    assert.equal(theme.fontWeight['type-code'], 'var(--type-code-weight)');
   } finally {
     rmSync(dir, { recursive: true, force: true });
   }
@@ -481,4 +493,18 @@ test('the CLI applies a .halftone.json, shows it, and refuses a code for one wit
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
+});
+
+test('an edited style\'s font role reaches the build from tokens.json', () => {
+  const { tokens } = applySystem(base, { ...EDITED, type: { code: { font: 'body', tracking: 0.05 } } });
+  const edits = textEdits(tokens.semantic.type);
+  // An edited style is written whole (generateSystem), so every key is there.
+  assert.deepEqual(Object.keys(edits), ['code']);
+  assert.equal(edits.code.font, 'body');
+  assert.equal(edits.code.tracking, 0.05);
+  const styles = resolveTextStyles(typeScale(TYPE), edits);
+  assert.equal(styles.code.font, 'body');
+  assert.equal(styles.code.weight, 600, 'the keys not edited keep the default');
+  assert.equal(styles.h1.size, 36, 'and the styles not edited keep the typeset');
+  assert.equal(textStyleVars(styles, 'hsl')['--type-code-tracking-native'], '0.5px');
 });

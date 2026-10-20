@@ -10,7 +10,7 @@
 import { hexToOklch } from '../lib/color.mjs';
 import { group, radiusCss } from '../lib/resolve.mjs';
 import { TEXT_LINE_HEIGHT } from '../lib/theme/recipe.mjs';
-import { styleVars, typeVars } from '../lib/theme/vars.mjs';
+import { styleVars, textStyleVars, typeVars } from '../lib/theme/vars.mjs';
 
 const rem = (px) => (px >= 9999 ? '9999px' : `${px / 16}rem`);
 const SYSTEM_SANS = "ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif";
@@ -24,6 +24,31 @@ function textScale(ctx) {
       // Exact ratios, as Tailwind writes them (calc(1 / 0.75)), so the default typeset changes nothing.
       return `  --text-${key}: calc(${value / 16}rem * var(--type-scale));\n  --text-${key}--line-height: calc(${TEXT_LINE_HEIGHT[key]} / ${value} * var(--leading-factor));`;
     })
+    .join('\n');
+}
+
+/** A font role's family, as @theme's --font-* resolve it (app/fonts.ts or a live theme sets --kit-font-*). */
+const FONT_ROLE = {
+  heading: `var(--kit-font-heading, var(--kit-font-body, ${SYSTEM_SANS}))`,
+  body: `var(--kit-font-body, ${SYSTEM_SANS})`,
+  mono: `var(--kit-font-mono, ${SYSTEM_MONO})`,
+};
+
+/**
+ * The text styles as utilities: type-h1 … type-blockquote set the style's font, size, line height, tracking and
+ * weight from its variables. leading-*, tracking-* and font-* on the same element still win, as on text-*.
+ */
+function textStyleUtilities(ctx) {
+  return Object.keys(ctx.textStyles)
+    .map(
+      (name) => `@utility type-${name} {
+  font-family: var(--type-${name}-font);
+  font-size: var(--type-${name}-size);
+  line-height: var(--tw-leading, var(--type-${name}-leading));
+  letter-spacing: var(--tw-tracking, var(--type-${name}-tracking));
+  font-weight: var(--tw-font-weight, var(--type-${name}-weight));
+}`
+    )
     .join('\n');
 }
 
@@ -46,6 +71,8 @@ export default function shadcnWeb(ctx, options) {
   }
 ${styles('light')}
 ${shadows('light')}
+  /* The text styles (type-h1…type-blockquote), literal at the typeset: an edited style is one variable. */
+${Object.entries(textStyleVars(ctx.textStyles, 'oklch', (role) => FONT_ROLE[role])).map(([k, v]) => `  ${k}: ${v};`).join('\n')}
 ${vars('light')}
 }
 
@@ -77,6 +104,8 @@ ${ctx.radius.steps.map((s) => `  --radius-${s.name}: ${radiusCss(s)};`).join('\n
   }
 ${ctx.colors.map((c) => `  --color-${c.name}: ${color(c.name)};`).join('\n')}
 }
+
+${textStyleUtilities(ctx)}
 
 @layer base {
   * {
