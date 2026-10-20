@@ -288,3 +288,46 @@ test('theme shadcn writes a registry:theme item for a preset', () => {
   assert.ok(item.registryDependencies.every((d) => d.startsWith('https://example.com/r/font/')));
   assert.match(item.cssVars.light.primary, /^oklch\(/);
 });
+
+test('token usage: which components draw which tokens, from their class strings', async () => {
+  const { usageIn, tokenUsage } = await import('../lib/usage.mjs');
+  const colours = new Set(['primary', 'primary-foreground', 'muted-foreground', 'border', 'input', 'trendy-green']);
+  const keys = usageIn(
+    `const a = cn('bg-primary text-primary-foreground hover:bg-primary/90 rounded-md shadow-sm border', 'dark:text-muted-foreground/80 rounded-t-lg shadow-lg');
+     <Text variant="h2" className="type-h3 font-heading" />; const c = palette.mutedForeground; style={{ color: 'var(--trendy-green)' }};
+     cn('bg-red-500 text-white border-input');`,
+    colours
+  );
+  assert.deepEqual([...keys].sort(), [
+    'border.width',
+    'color.input',
+    'color.muted-foreground',
+    'color.primary',
+    'color.primary-foreground',
+    'color.trendy-green',
+    'font.heading',
+    'radius.lg',
+    'radius.md',
+    'shadow.1',
+    'shadow.3',
+    'type.h2',
+    'type.h3',
+  ]);
+  const root = mkdtempSync(join(tmpdir(), 'halftone-usage-'));
+  try {
+    mkdirSync(join(root, 'components'));
+    writeFileSync(join(root, 'components/button.tsx'), `cn('bg-primary rounded-md')`);
+    writeFileSync(join(root, 'components/badge.tsx'), `cn('bg-primary/15 text-primary')`);
+    const usage = tokenUsage({
+      root,
+      components: [
+        { id: 'button', files: ['components/button.tsx'] },
+        { id: 'badge', files: ['components/badge.tsx', 'components/missing.tsx'] },
+      ],
+      tokens: { semantic: { color: { primary: {} } }, extra: { color: { sunset: { 500: { $value: '#f70' } } } } },
+    });
+    assert.deepEqual(usage, { 'color.primary': ['badge', 'button'], 'radius.md': ['button'] });
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});

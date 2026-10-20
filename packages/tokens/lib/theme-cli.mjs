@@ -19,7 +19,7 @@
  */
 import { spawnSync } from 'node:child_process';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
-import { join } from 'node:path';
+import { join, resolve } from 'node:path';
 
 import { cvdWarnings, describeCvdWarnings, MIN_DELTA_E } from './cvd.mjs';
 import { FONTS, fontByFamily } from './theme/fonts.mjs';
@@ -58,7 +58,8 @@ function printNotes(code, notes) {
 
 /** { recipe, system? }: a system document when <theme> is one (name.halftone.json), else a recipe. */
 function readTheme(arg, root) {
-  const file = arg ? join(root, arg) : '';
+  // resolve: an absolute path stays itself (join would put it under root).
+  const file = arg ? resolve(root, arg) : '';
   if (arg?.endsWith('.json') && existsSync(file)) {
     let json;
     try {
@@ -113,7 +114,7 @@ function readRecipe(arg, root) {
   }
   const preset = presetById(arg.toLowerCase());
   if (preset) return normalizeRecipe({ ...preset.recipe, preset: preset.id });
-  const file = join(root, arg);
+  const file = resolve(root, arg);
   if (arg.endsWith('.json') && existsSync(file)) return normalizeRecipe(JSON.parse(readFileSync(file, 'utf8')));
   // Last, so a preset name that happens to look like one (bold, brutalist) stays Halftone's preset.
   const shadcn = isShadcnPresetCode(arg) ? decodeShadcnPreset(arg) : null;

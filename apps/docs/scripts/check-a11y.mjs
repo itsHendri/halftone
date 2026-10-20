@@ -65,13 +65,18 @@ const PAGES = [
 /**
  * The Studio's popovers, open (components/theme/studio/item-popover.tsx): each is clicked open on /studio/ and checked
  * as it stands, in both themes, at a desktop width and as a phone's bottom sheet. `click` is the selectors to click
- * in turn.
+ * in turn; `wait` what shows once it's open (a popover, by default).
  */
 const POPOVERS = [
   { name: 'logo slot', click: ['button[aria-label^="Logo:"]'] },
   { name: 'role + token picker', click: ['button[aria-label^="Primary:"]', 'button[aria-label^="Primary, light:"]'] },
   { name: 'ramp', click: ['button[aria-label^="Brand ramp"]'] },
   { name: 'step', click: ['button[aria-label^="Brand 600,"]'] },
+  { name: 'font picker', click: ['button[aria-label^="Heading font:"]'] },
+  { name: 'text style', click: ['button[aria-label^="Heading 2,"]'] },
+  { name: 'shadow layers', click: ['button[aria-label^="Shadow 2:"]'] },
+  { name: 'item menu', click: ['button[aria-label="Primary · role: more"]'], wait: '[role="menu"]' },
+  { name: '+ New', click: ['button:has-text("New colour")'], wait: '[role="menu"]' },
 ];
 const SCHEMES = ['light', 'dark'];
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
@@ -148,7 +153,7 @@ for (const scheme of SCHEMES) {
           await page.locator(selector).first().click();
           await page.waitForTimeout(400);
         }
-        await page.locator('[data-studio-popover]').waitFor({ state: 'visible', timeout: 5000 });
+        await page.locator(popover.wait ?? '[data-studio-popover]').first().waitFor({ state: 'visible', timeout: 5000 });
       } catch (error) {
         failures.push({ path: label, scheme, rule: 'open', help: `could not open it: ${error.message.split('\n')[0]}`, nodes: [] });
         await page.close();

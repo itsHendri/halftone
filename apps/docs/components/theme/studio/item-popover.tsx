@@ -90,6 +90,13 @@ export function ItemPopover({ id, title, slot, extra, trigger, preview, children
   const phone = usePhone();
   const titleId = React.useId();
   const footer = status && (status.edited || status.contrast || status.usedBy || status.note);
+  // A renamed extra gets a new id: stay open under it.
+  const previous = React.useRef(id);
+  React.useEffect(() => {
+    if (previous.current === id) return;
+    if (openId === previous.current) openItem(id);
+    previous.current = id;
+  }, [id]);
   return (
     <Popover modal open={open} onOpenChange={(next) => openItem(next ? id : current === id ? null : current)}>
       <PopoverTrigger asChild>{trigger}</PopoverTrigger>

@@ -36,8 +36,12 @@ import {
   systemToRecipe,
   textStyles,
   themeStatus,
+  themeVars,
   validateSystem,
+  extraNameProblem,
 } from '../lib/theme/index.mjs';
+import designMd from '../targets/design-md.mjs';
+import llms from '../targets/llms.mjs';
 import nativewind3 from '../targets/nativewind3.mjs';
 import shadcnWeb from '../targets/shadcn-web.mjs';
 
@@ -446,6 +450,105 @@ test('a system builds: fixed corners and edited text styles reach the CSS, the n
   }
 });
 
+const EXTRAS = {
+  name: 'Extras',
+  extras: {
+    color: [
+      { name: 'trendy-green', value: '#7c881a' },
+      { name: 'ink', value: { light: '#111111', dark: '#eeeeee' } },
+      { name: 'sunset', seed: '#ff7700' },
+    ],
+    text: [{ name: 'eyebrow', font: 'mono', weight: 600, size: 12, leading: 1.4, tracking: 0.08 }],
+    radius: [{ name: 'hero', value: 32 }],
+    shadow: [{ name: 'glow', layers: [{ x: 0, y: 0, blur: 24, spread: 0, color: '#7c3aed', alpha: 0.4 }] }],
+    border: [{ name: 'thick', width: 4, style: 'dashed' }],
+  },
+};
+
+test('extras reach the CSS variables, the Tailwind classes, the live theme and the agent docs', async () => {
+  const { tokens } = applySystem(base, EXTRAS);
+  const dir = mkdtempSync(join(tmpdir(), 'halftone-extras-'));
+  try {
+    const path = join(dir, 'tokens.json');
+    writeFileSync(path, JSON.stringify(tokens));
+    const ctx = await loadTokens(path);
+    ctx.header = 'test';
+    assert.deepEqual(ctx.extras.color.slice(0, 2), [
+      { name: 'trendy-green', light: '#7c881a', dark: '#7c881a' },
+      { name: 'ink', light: '#111111', dark: '#eeeeee' },
+    ]);
+    assert.equal(ctx.extras.color.filter((c) => c.ramp === 'sunset').length, 11);
+
+    // Web: variables in :root and .dark, colours and corners in @theme, utilities for the rest.
+    const [web] = shadcnWeb(ctx, { out: 'web.css' });
+    const root = web.contents.slice(web.contents.indexOf(':root {'), web.contents.indexOf('.dark {'));
+    const dark = web.contents.slice(web.contents.indexOf('.dark {'), web.contents.indexOf('@theme inline'));
+    assert.match(root, /--trendy-green: oklch\(/);
+    assert.match(root, /--sunset-500: oklch\(/);
+    assert.match(root, /--shadow-glow: 0px 0px 24px 0px rgba\(124, 58, 237, 0\.4\);/);
+    assert.match(root, /--border-thick-width: 4px;/);
+    assert.match(root, /--type-eyebrow-size: 0\.75rem;\n  --type-eyebrow-leading: 1\.4;\n  --type-eyebrow-weight: 600;\n  --type-eyebrow-tracking: 0\.08em;\n  --type-eyebrow-font: var\(--kit-font-mono/);
+    assert.match(dark, /--ink: oklch\(0\.9491/);
+    assert.match(web.contents, /--color-trendy-green: var\(--trendy-green\);/);
+    assert.match(web.contents, /--color-sunset-950: var\(--sunset-950\);/);
+    assert.match(web.contents, /--radius-hero: 2rem;/);
+    assert.match(web.contents, /@utility shadow-glow \{\n  box-shadow: var\(--shadow-glow\);/);
+    assert.match(web.contents, /@utility border-thick \{\n  border-width: var\(--border-thick-width\);\n  border-style: dashed;/);
+    assert.match(web.contents, /@utility type-eyebrow \{/);
+
+    // Mobile: the variables in global.css, the classes in tailwind.theme.js.
+    const [css, tw] = nativewind3(ctx, { css: 'global.css', tailwind: 'theme.js' });
+    assert.match(css.contents, /--trendy-green: [\d.]+ [\d.]+% [\d.]+%;/);
+    assert.match(css.contents, /--type-eyebrow-size: 0\.75rem;/);
+    const theme = new Function('module', `${tw.contents}; return module.exports;`)({});
+    assert.equal(theme.colors['trendy-green'], 'hsl(var(--trendy-green))');
+    assert.equal(theme.colors['sunset-600'], 'hsl(var(--sunset-600))');
+    assert.equal(theme.borderRadius.hero, '2rem');
+    assert.match(theme.boxShadow.glow, /rgba\(124, 58, 237, 0\.4\)/);
+    assert.equal(theme.borderWidth.thick, 'var(--border-thick-width)');
+    assert.equal(theme.fontSize['type-eyebrow'], 'var(--type-eyebrow-size)');
+
+    // The agent docs say what each one is and that no kit component uses it.
+    const [md] = designMd(ctx, { out: 'DESIGN.md', buttonRadius: 'md' });
+    assert.match(md.contents, /## Extras \(this brand's own\)\n\nTokens this system added beyond the kit's slots\. No kit component uses them/);
+    assert.match(md.contents, /- `trendy-green` colour #7C881A: `bg-trendy-green`, `text-trendy-green`, `border-trendy-green`/);
+    assert.match(md.contents, /- `ink` colour #111111 \(dark #EEEEEE\)/);
+    assert.match(md.contents, /- `sunset` colour ramp 50–950/);
+    assert.match(md.contents, /- `eyebrow` text style, mono font 600 · 12px \/ ×1\.4 · 0\.08em: `type-eyebrow`/);
+    assert.match(md.contents, /- `hero` corner 32px: `rounded-hero`/);
+    assert.match(md.contents, /- `glow` shadow, 1 layer: `shadow-glow`/);
+    assert.match(md.contents, /- `thick` border 4px dashed: `border-thick`/);
+    const [mobileMd] = designMd(ctx, { out: 'DESIGN.md' });
+    assert.match(mobileMd.contents, /`text-type-eyebrow leading-type-eyebrow tracking-type-eyebrow font-type-eyebrow font-mono`/);
+    const [fragment] = llms(ctx, { out: 'llms-tokens.md' });
+    assert.match(fragment.contents, /### Extras \(this brand's own\)\n\nNo kit component uses these/);
+    assert.match(fragment.contents, /`trendy-green` colour #7C881A/);
+  } finally {
+    rmSync(dir, { recursive: true, force: true });
+  }
+
+  // The docs site and the embedded kits get them live (themeVars).
+  const vars = themeVars(generateSystem(EXTRAS, base), 'oklch');
+  assert.ok(vars.light['--trendy-green'] && vars.dark['--ink'] && vars.light['--radius-hero'] === '2rem' && vars.dark['--shadow-glow']);
+  assert.equal(themeVars(generateSystem({ name: 'Plain' }, base), 'oklch').light['--trendy-green'], undefined);
+});
+
+test('an extra can\'t take a name its token or class would clash with', () => {
+  assert.equal(extraNameProblem('color', 'trendy-green'), null);
+  assert.match(extraNameProblem('color', 'primary'), /built-in colour slot/);
+  assert.match(extraNameProblem('color', 'red'), /Tailwind colour/);
+  assert.match(extraNameProblem('color', 'radius'), /theme's own variables/);
+  assert.match(extraNameProblem('color', 'type-heading'), /theme's own variables/);
+  assert.match(extraNameProblem('radius', 'none'), /built-in corner slot or class/);
+  assert.match(extraNameProblem('shadow', 'lg'), /built-in shadow slot/);
+  assert.match(extraNameProblem('border', 'dashed'), /built-in border slot/);
+  assert.match(extraNameProblem('text', 'Trendy green'), /letters, numbers and dashes/);
+  assert.match(extraNameProblem('text', 'eyebrow', ['eyebrow']), /already an extra/);
+  const result = validateSystem({ extras: { color: [{ name: 'red', seed: '#ff0000' }], radius: [{ name: 'none', value: 0 }] } });
+  assert.equal(result.ok, false);
+  assert.deepEqual(result.errors.map((e) => e.split(':')[0]), ['extras.color[0].name', 'extras.radius[0].name']);
+});
+
 // ---------- CLI -----------------------------------------------------------------------------------
 
 test('the CLI applies a .halftone.json, shows it, and refuses a code for one with overrides', () => {
@@ -458,6 +561,9 @@ test('the CLI applies a .halftone.json, shows it, and refuses a code for one wit
     writeFileSync(join(root, 'acme.halftone.json'), JSON.stringify(EDITED));
     writeFileSync(join(root, 'plain.halftone.json'), JSON.stringify(migrate({ ...DEFAULT_RECIPE, brand: '#7c3aed' }, { name: 'Plain', iconBackground: 'brand' })));
 
+    // An absolute path works as well as one relative to the app.
+    const absolute = cli('apply', join(root, 'plain.halftone.json'));
+    assert.equal(absolute.status, 0, absolute.stderr);
     const applied = cli('apply', 'acme.halftone.json');
     assert.equal(applied.status, 0, applied.stderr);
     assert.match(applied.stdout, /System "Acme"/);
@@ -466,6 +572,9 @@ test('the CLI applies a .halftone.json, shows it, and refuses a code for one wit
     assert.equal(tokens.$extensions['com.halftonedesignsystem.theme'].system.name, 'Acme');
     assert.equal(tokens.$extensions['com.halftonedesignsystem.theme'].system.brand.logo, undefined, 'no brand images in tokens.json');
     assert.match(readFileSync(join(root, 'web.css'), 'utf8'), /--radius-md: 0\.375rem;/);
+    // The extra (a sunset ramp) is in tokens.json and in the CSS the build wrote.
+    assert.ok(tokens.extra.color.sunset['500']);
+    assert.match(readFileSync(join(root, 'web.css'), 'utf8'), /--color-sunset-500: var\(--sunset-500\);/);
     assert.match(readFileSync(join(root, 'fonts.ts'), 'utf8'), /Inter_Tight/);
 
     const shown = cli('show', '--check');
