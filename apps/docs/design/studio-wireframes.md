@@ -212,7 +212,7 @@ to check", with "fix" and what you edited.
 - Generated values the build moved say "auto-fixed", and the moves are listed under the table.
 
 Below it, each ramp gets a contrast grid (text on every step): white text and the ramp's own 950 on each step, with
-the ratio and AA / AAA / L (large text only).
+the ratio and AA / AAA / L (large text only). Eleven to a row from `md`, six on a phone, where the ratio shows alone.
 
 The tab's badge is the number of pairings below AA: the table's rows to check.
 
