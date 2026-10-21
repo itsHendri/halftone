@@ -5,11 +5,13 @@ import { useTheme } from 'next-themes';
 import * as React from 'react';
 import { ExportPanel } from '@/components/theme/export-panel';
 import { Canvas, TABS, type Tab } from '@/components/theme/studio/canvas';
+import { readView, writeView, type ComponentsView } from '@/components/theme/studio/components-tab';
 import { outlineButton, primaryButton } from '@/components/theme/studio/dialog';
 import { ALL_FONTS, PRESET_FONTS } from '@/components/theme/studio/parts';
 import { SystemDialogs } from '@/components/theme/studio/system-dialogs';
 import { SystemsMenu, type StudioDialog } from '@/components/theme/studio/systems-menu';
 import { toast, Toaster } from '@/components/theme/studio/toast';
+import { failingCount } from '@/lib/studio/accessibility';
 import { dismissMigrated, discardShared, saveShared, useSystems } from '@/lib/studio/systems';
 import { holdAmbient } from '@/lib/theme/ambient';
 import { useMode } from '@/lib/theme/mode';
@@ -26,10 +28,10 @@ function useScheme() {
   return { dark, toggle: () => setTheme(dark ? 'light' : 'dark') };
 }
 
-/** The tabs, with the number of contrast warnings on Accessibility. Arrow keys move between them. */
+/** The tabs, with the number of pairings below AA on Accessibility (its table's rows to check). Arrow keys move between them. */
 function Tabs({ tab, onTab }: { tab: Tab; onTab: (t: Tab) => void }) {
   const { theme } = useLiveTheme();
-  const warnings = theme.warnings.length;
+  const warnings = failingCount(theme);
   const onKey = (e: React.KeyboardEvent<HTMLDivElement>) => {
     const keys = ['ArrowRight', 'ArrowLeft', 'Home', 'End'];
     if (!keys.includes(e.key)) return;
@@ -57,8 +59,9 @@ function Tabs({ tab, onTab }: { tab: Tab; onTab: (t: Tab) => void }) {
           }`}>
           {t.label}
           {t.id === 'accessibility' && warnings ? (
-            <span className="bg-destructive text-destructive-foreground rounded-full px-1.5 text-xs tabular-nums" aria-label={`${warnings} warnings`}>
+            <span className="bg-destructive text-destructive-foreground rounded-full px-1.5 text-xs tabular-nums">
               {warnings}
+              <span className="sr-only"> {warnings === 1 ? 'pairing' : 'pairings'} below AA</span>
             </span>
           ) : null}
         </button>
@@ -180,35 +183,37 @@ export function Studio() {
   // The Studio shows the system being edited, so the ambient drift holds still here.
   React.useEffect(() => holdAmbient('studio'), []);
 
-  // ?tab= in, and out on every change (the page is static: read it on the client).
+  // ?tab= (and the Components tab's view) in, and out on every change. The page is static: read it on the client.
+  const [view, setView] = React.useState<ComponentsView>({ group: null, kit: 'web', uses: null });
   React.useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const t = params.get('tab') ?? (params.get('view') === 'contrast' ? 'accessibility' : null);
     if (TABS.some((x) => x.id === t)) setTab(t as Tab);
+    setView(readView(params));
   }, []);
-  // Show usage › "See them in Components" filters the Components tab to what draws a token (`?uses=`).
-  const [uses, setUses] = React.useState<string | null>(null);
-  const changeTab = (t: Tab, filter: string | null = null) => {
-    setTab(t);
-    setUses(filter);
+  const go = (t: Tab, next: ComponentsView) => {
     const url = new URL(window.location.href);
     url.searchParams.delete('view');
     if (t === 'foundations') url.searchParams.delete('tab');
     else url.searchParams.set('tab', t);
-    if (filter) url.searchParams.set('uses', filter);
-    else url.searchParams.delete('uses');
+    writeView(url.searchParams, t === 'components' ? next : null);
+    // The hash is the group scrolled to; a new tab or a new filter starts at the top.
+    url.hash = '';
     window.history.replaceState(window.history.state, '', url);
+    setTab(t);
+    setView(next);
   };
+  const changeTab = (t: Tab) => go(t, view);
+  const changeView = (patch: Partial<ComponentsView>) => go('components', { ...view, ...patch });
+  // Show usage › "See them in Components": exactly the components that draw a token (`?uses=`), every group.
+  const onShowUsage = React.useEffectEvent((e: Event) => {
+    const { tab: t, uses } = (e as CustomEvent<{ tab: Tab; uses?: string }>).detail;
+    go(t, { ...view, group: null, uses: uses ?? null });
+    window.scrollTo({ top: 0 });
+  });
   React.useEffect(() => {
-    const uses = new URLSearchParams(window.location.search).get('uses');
-    if (uses) setUses(uses);
-    const onTab = (e: Event) => {
-      const { tab: t, uses: u } = (e as CustomEvent<{ tab: Tab; uses?: string }>).detail;
-      changeTab(t, u ?? null);
-      window.scrollTo({ top: 0 });
-    };
-    window.addEventListener('studio:tab', onTab);
-    return () => window.removeEventListener('studio:tab', onTab);
+    window.addEventListener('studio:tab', onShowUsage);
+    return () => window.removeEventListener('studio:tab', onShowUsage);
   }, []);
 
   // The bar's height (it wraps on a phone), for what sticks under it: the section index and the jump menu.
@@ -257,7 +262,7 @@ export function Studio() {
       <div className="flex flex-col gap-4 px-4 pb-24 pt-4 md:px-6">
         <Banners onDialog={setDialog} />
         <div id="studio-panel" role="tabpanel" aria-labelledby={`studio-tab-${tab}`}>
-          <Canvas tab={tab} uses={uses} onClearUses={() => changeTab('components')} />
+          <Canvas tab={tab} view={view} onView={changeView} />
         </div>
       </div>
 

@@ -11,7 +11,8 @@ import type * as React from 'react';
 export function rovingKeyDown(e: React.KeyboardEvent<HTMLElement>, { select = false }: { select?: boolean } = {}) {
   const keys = ['ArrowDown', 'ArrowRight', 'ArrowUp', 'ArrowLeft', 'Home', 'End'];
   if (!keys.includes(e.key)) return;
-  const items = Array.from(e.currentTarget.querySelectorAll<HTMLElement>('[role="radio"]:not([disabled])'));
+  // Items hidden at this width (display: none) are skipped.
+  const items = Array.from(e.currentTarget.querySelectorAll<HTMLElement>('[role="radio"]:not([disabled])')).filter((el) => el.getClientRects().length > 0);
   if (!items.length) return;
   const current = items.indexOf(document.activeElement as HTMLElement);
   const next =

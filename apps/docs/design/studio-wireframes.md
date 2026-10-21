@@ -185,18 +185,36 @@ Every section header has, in order: its name and count; its **base knob**; and *
 Every catalogue tile (`components/kit-tiles.tsx` `GroupTiles`, `lib/catalogue.ts` `GROUPS`), live on the active
 system.
 - A group filter, a Web / Mobile toggle, and light/dark from the top bar.
-- Read-only: clicking a tile opens its docs page.
+  - One kit at a time. The toggle is the Studio's own (it starts on the site's Native/Web filter, else Web).
+  - Groups the kit has nothing in are left out. From `sm` up the first seven chips show and "+ N" opens the rest; on
+    a phone every chip sits in one row that scrolls.
+- Read-only: clicking a tile opens its docs page, on that kit (`?kit=`).
+- **Show usage** lands here filtered to exactly the components whose version in this kit draws the token, every
+  group: "Showing N components that use Primary · clear", plus "M more in Web" when the other kit has more.
+- **In the URL:** `?tab=components&group=<group>&kit=web|mobile&uses=<keys>`, and the group scrolled to as the hash
+  (`#components-<group>`), so a reload, a link or Back lands in the same place.
 
 ## Accessibility tab (wireframe 5)
 
 `ContrastTable` and `ColourVision`, with a summary first:
-- Pairings passing AA.
-- Your edits to check.
-- Values that were auto-fixed.
+- Pairings passing AA (a pairing passes when it does in light and dark).
+- Your edits to check: the hand-made choices behind failing pairings (a mapped role, or a role on an edited step),
+  counted once each. One choice can fail several pairings: a pale primary fails it as text on four surfaces.
+- Values that were auto-fixed (the fixer's adjustments, once per token and mode).
 - Colour-vision previews.
 
-The pairing table shows light and dark, with "fix" on your own choices. Below it, each ramp gets a contrast grid
-(text on every step).
+The pairing table shows light and dark. Pairings that fail because of your choices come first, under "Your edits
+to check", with "fix" and what you edited.
+- **Fix** moves the colour you chose to the nearest step on the ramp it points at (nearest in lightness) where the
+  pairing passes. A step that clears every pairing that choice fails wins; one that breaks something else is never
+  picked. A hand-picked foreground moves before a hand-picked fill. It's one edit: the toast's Undo or ⌘Z puts it back.
+  A typed hex looks on the ramp the role would point at; with no passing step, the row says to pick one by hand.
+- Generated values the build moved say "auto-fixed", and the moves are listed under the table.
+
+Below it, each ramp gets a contrast grid (text on every step): white text and the ramp's own 950 on each step, with
+the ratio and AA / AAA / L (large text only).
+
+The tab's badge is the number of pairings below AA: the table's rows to check.
 
 ## Phone width (wireframe 6)
 

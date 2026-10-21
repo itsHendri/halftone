@@ -8,6 +8,7 @@
 import mobile from '../../../mobile/registry/generated/token-usage.json';
 import web from '../../../web/registry/generated/token-usage.json';
 import { CATALOGUE, type Entry, type Side } from '@/lib/catalogue';
+import { TEXT_LABELS, type TextStyleName } from '@/lib/studio/foundations';
 
 type Usage = Record<string, string[]>;
 const KITS: Record<Side, Usage> = { native: (mobile as { usage: Usage }).usage, web: (web as { usage: Usage }).usage };
@@ -34,5 +35,34 @@ export function usageOf(keys: string | string[]): { entry: Entry; sides: Side[] 
   return [...found.values()].sort((a, b) => a.entry.title.localeCompare(b.entry.title));
 }
 
-/** Entry ids for the Components tab's `?uses=` filter. */
-export const entriesUsing = (keys: string) => new Set(usageOf(keys).map((u) => u.entry.id));
+/** The Components tab's `?uses=` filter: entry id → the kits whose version draws the token. */
+export const entriesUsing = (keys: string) => new Map(usageOf(keys).map((u) => [u.entry.id, u.sides]));
+
+const sentence = (s: string) => {
+  const t = s.replace(/-/g, ' ');
+  return t.charAt(0).toUpperCase() + t.slice(1);
+};
+
+/**
+ * What a `?uses=` filter is called, as the item menu named it: "Primary", "rounded-md", "Shadow 2", "Heading 2",
+ * "Body font", "Input border". Read from the keys, so a reloaded or shared link says the same.
+ */
+export function usesLabel(keys: string) {
+  const list = keys.split(',');
+  if (list.includes('border.width')) {
+    const role = list.find((k) => k.startsWith('color.'))?.slice(6);
+    return role === 'input' ? 'Input border' : 'Default border';
+  }
+  return list
+    .map((key) => {
+      const [kind, ...rest] = key.split('.');
+      const name = rest.join('.');
+      if (kind === 'color') return sentence(name);
+      if (kind === 'radius') return `rounded-${name}`;
+      if (kind === 'shadow') return `Shadow ${name}`;
+      if (kind === 'type') return TEXT_LABELS[name as TextStyleName] ?? sentence(name);
+      if (kind === 'font') return `${sentence(name)} font`;
+      return key;
+    })
+    .join(', ');
+}
