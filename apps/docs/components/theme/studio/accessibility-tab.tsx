@@ -66,6 +66,9 @@ function Summary() {
   );
 }
 
+/** A ramp sample: the ratio alone on a phone (six to a row), with its grade from sm up. */
+const SAMPLE = 'truncate before:content-[attr(data-ratio)] sm:before:content-[attr(data-sample)]';
+
 /**
  * Each ramp's steps with white text and with the ramp's own 950 on them, and the ratio. The samples are drawn
  * with CSS content: they're pictures of contrast (some fail on purpose), and each step's numbers are in its text.
@@ -78,6 +81,7 @@ function RampGrids() {
       <p className="text-muted-foreground text-xs leading-5">
         Text on every step: white on top, the ramp’s 950 below. <span className="text-foreground font-medium">AA</span> is 4.5:1 for text,{' '}
         <span className="text-foreground font-medium">AAA</span> 7:1; <span className="text-foreground font-medium">L</span> passes for large text only (3:1).
+        <span className="sm:hidden"> On a phone the ratio shows alone.</span>
       </p>
       {(Object.keys(RAMP_LABELS) as (keyof typeof RAMP_LABELS)[]).map((role) => {
         const values = ramps[role].values;
@@ -87,7 +91,7 @@ function RampGrids() {
             <h3 id={`a11y-ramp-${role}`} className="text-sm font-medium">
               {RAMP_LABELS[role]}
             </h3>
-            <ul aria-labelledby={`a11y-ramp-${role}`} className="grid grid-cols-4 gap-1.5 sm:grid-cols-6 md:grid-cols-11">
+            <ul aria-labelledby={`a11y-ramp-${role}`} className="grid grid-cols-6 gap-1 sm:gap-1.5 md:grid-cols-11">
               {STEPS.map((step) => {
                 const hex = values[step];
                 const onWhite = contrast('#ffffff', hex);
@@ -99,10 +103,10 @@ function RampGrids() {
                   <li key={step} className="flex min-w-0 flex-col gap-1">
                     <span
                       aria-hidden
-                      className="ring-border flex h-14 flex-col justify-center gap-0.5 rounded-md px-1.5 text-[11px] font-semibold tabular-nums ring-1 ring-inset"
+                      className="ring-border flex h-14 flex-col justify-center gap-0.5 rounded-md px-1 text-[11px] font-semibold tabular-nums ring-1 ring-inset sm:px-1.5"
                       style={{ background: hex }}>
-                      <span data-sample={sample(onWhite)} className="truncate before:content-[attr(data-sample)]" style={{ color: '#ffffff' }} />
-                      <span data-sample={sample(onInk)} className="truncate before:content-[attr(data-sample)]" style={{ color: ink }} />
+                      <span data-sample={sample(onWhite)} data-ratio={ratioText(onWhite)} className={SAMPLE} style={{ color: '#ffffff' }} />
+                      <span data-sample={sample(onInk)} data-ratio={ratioText(onInk)} className={SAMPLE} style={{ color: ink }} />
                     </span>
                     <span className="text-muted-foreground font-mono text-[11px]">
                       {step}
