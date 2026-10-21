@@ -256,6 +256,6 @@ Foundations** (Option 1, chosen over making the Components tab editable).
 | 2 | The kits read per-style text tokens (`semantic.type.<variant>.*`) in both kits and the embed payloads | PR #58 |
 | 3 | Studio shell: `/studio`, systems in IndexedDB, switcher, migration, tabs; the rail and the Mobile/Web/Typeset views removed | PR #63 |
 | 4 | Foundations sections and popovers: 4a the popover, Brand and Colours; 4b the other sections, "+ New", the item menu, locks, extras in every output | 4a PR #65, 4b PR #66 |
-| 5 | Components and Accessibility tabs | |
+| 5 | Components and Accessibility tabs | PR #67 |
 | 6 | Component-level editing (Button, Chip, Tag) | later |
 | 7 | Accounts | later, planned separately |
