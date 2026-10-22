@@ -55,7 +55,7 @@ export function ExtraTag() {
  */
 
 /** "6.1 AA", with a warning colour when it fails. */
-function Ratio({ fg, bg, threshold = 4.5, label }: { fg: string; bg: string; threshold?: number; label?: string }) {
+export function Ratio({ fg, bg, threshold = 4.5, label }: { fg: string; bg: string; threshold?: number; label?: string }) {
   const r = contrast(fg, bg);
   const g = grade(r, threshold);
   return (

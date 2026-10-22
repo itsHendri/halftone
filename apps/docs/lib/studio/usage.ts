@@ -3,7 +3,8 @@
  * 8). Each kit's `registry:build` scans its registry files and writes registry/generated/token-usage.json
  * (@halftone-ds/tokens lib/usage.mjs); this joins the two kits onto the catalogue's entries.
  *
- * Keys: color.<name>, radius.<sm…2xl|full|control>, shadow.<1|2|3>, type.<style>, font.<role>, border.width.
+ * Keys: color.<name>, radius.<sm…2xl|full|control>, shadow.<1|2|3>, type.<style>, font.<role>, border.width,
+ * component.<button|chip|badge|input>.
  */
 import mobile from '../../../mobile/registry/generated/token-usage.json';
 import web from '../../../web/registry/generated/token-usage.json';
@@ -62,6 +63,7 @@ export function usesLabel(keys: string) {
       if (kind === 'shadow') return `Shadow ${name}`;
       if (kind === 'type') return TEXT_LABELS[name as TextStyleName] ?? sentence(name);
       if (kind === 'font') return `${sentence(name)} font`;
+      if (kind === 'component') return sentence(name);
       return key;
     })
     .join(', ');

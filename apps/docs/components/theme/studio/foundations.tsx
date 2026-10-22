@@ -2,12 +2,14 @@
 import { BrandSection } from '@/components/theme/studio/brand-section';
 import { ColoursSection } from '@/components/theme/studio/colours-section';
 import { SectionIndex } from '@/components/theme/studio/section';
-import { BordersSection, ControlsSection, CornersSection, ShadowsSection } from '@/components/theme/studio/shape-sections';
+import { ComponentsSection } from '@/components/theme/studio/components-section';
+import { BordersSection, CornersSection, ShadowsSection } from '@/components/theme/studio/shape-sections';
 import { TypographySection } from '@/components/theme/studio/type-section';
 
 /**
  * Foundations (wireframe 1): one scroll, a sticky section index, every item edited in a popover where it sits, its
- * menu on right-click or ⋯, and "+ New" for an extra in every section that has them.
+ * menu on right-click or ⋯, and "+ New" for an extra in every section that has them. Components (Button, Chip,
+ * Badge, Input) come last.
  */
 export function Foundations() {
   return (
@@ -20,7 +22,7 @@ export function Foundations() {
         <CornersSection />
         <ShadowsSection />
         <BordersSection />
-        <ControlsSection />
+        <ComponentsSection />
       </div>
     </div>
   );

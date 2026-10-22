@@ -34,7 +34,7 @@ import { useMode } from '@/lib/theme/mode';
 import { setRecipe, useLiveTheme, type LockKey } from '@/lib/theme/store';
 
 /**
- * Foundations › Corners, Shadows, Borders and Controls (wireframes 1, 2 and 8). Each base knob is the recipe axis that
+ * Foundations › Corners, Shadows and Borders (wireframes 1, 2 and 8). Each base knob is the recipe axis that
  * rewrites every item you haven't edited (Base radius, Depth, Border width), with its lock for shuffle.
  */
 
@@ -565,99 +565,6 @@ export function BordersSection() {
         <BorderItem role="input" label="Input" />
         {extras.map((item, i) => (
           <ExtraBorder key={i} item={item} />
-        ))}
-      </div>
-    </FoundationSection>
-  );
-}
-
-// ---- controls ----------------------------------------------------------------------------------------
-
-type ControlAxis = 'button' | 'field' | 'controls' | 'stroke' | 'density';
-const CONTROLS: { axis: ControlAxis; label: string; hint: string }[] = [
-  { axis: 'button', label: 'Button style', hint: 'The primary button, in both kits.' },
-  { axis: 'field', label: 'Field style', hint: 'Inputs, text areas and select triggers.' },
-  { axis: 'controls', label: 'Mobile button shape', hint: 'Mobile buttons and chips: pills, or the base radius.' },
-  { axis: 'stroke', label: 'Icon stroke', hint: 'Lucide’s stroke width.' },
-  { axis: 'density', label: 'Density', hint: 'Control heights and spacing.' },
-];
-
-function ControlPreview({ axis, recipe }: { axis: ControlAxis; recipe: HalftoneSystem['recipe'] }) {
-  if (axis === 'button')
-    return (
-      <span className="bg-button text-button-foreground border-button-edge inline-flex h-9 items-center rounded-md border-(length:--button-border-w) border-b-(length:--button-edge-w) px-4 text-sm font-medium shadow-sm">
-        Book a call
-      </span>
-    );
-  if (axis === 'field')
-    return (
-      <span className="bg-field border-field-edge text-muted-foreground flex h-9 w-full items-center rounded-t-field rounded-b-field-b border-(length:--field-border-w) border-b-(length:--field-edge-w) px-field-x text-sm shadow-(--field-shadow)">
-        name@studio.com
-      </span>
-    );
-  if (axis === 'controls')
-    return (
-      <span className={`bg-button text-button-foreground border-button-edge inline-flex h-9 items-center border-(length:--button-border-w) px-5 text-sm font-medium ${recipe.controls === 'pill' ? 'rounded-full' : 'rounded-md'}`}>
-        Continue
-      </span>
-    );
-  if (axis === 'stroke')
-    return (
-      <span className="flex gap-2" aria-hidden>
-        {[PlusIcon, MinusIcon].map((Icon, i) => (
-          <Icon key={i} className="size-6" />
-        ))}
-      </span>
-    );
-  return (
-    <span className="flex flex-col gap-1" aria-hidden>
-      <span className="bg-muted block h-2 w-24 rounded" />
-      <span className="bg-muted block h-2 w-16 rounded" />
-    </span>
-  );
-}
-
-function ControlItem({ axis, label, hint }: { axis: ControlAxis; label: string; hint: string }) {
-  const { recipe } = useLiveTheme();
-  const value = recipe[axis];
-  const options = (ORDER[axis] as readonly string[]).map((v) => ({ value: v, label: LABELS[v] ?? v }));
-  return (
-    <ItemMenu id={`control.${axis}`} spec={{ title: label, copy: { value: String(value) }, lock: [axis as LockKey] }}>
-      <ItemPopover
-        id={`control.${axis}`}
-        title={label}
-        slot={axis}
-        trigger={
-          <button type="button" aria-label={`${label}: ${LABELS[value] ?? value}. Change`} className="border-border hover:bg-accent/60 focus-visible:ring-ring flex h-full w-full flex-col items-start gap-3 rounded-xl border p-3 text-left focus-visible:outline-none focus-visible:ring-2">
-            <span className="flex h-10 w-full items-center">
-              <ControlPreview axis={axis} recipe={recipe} />
-            </span>
-            <span className="text-xs">
-              <span className="font-medium">{label}</span>
-              <span className="text-muted-foreground"> · {(LABELS[value] ?? value).toLowerCase()}</span>
-            </span>
-          </button>
-        }
-        status={{ note: hint }}>
-        <div role="radiogroup" aria-label={label} className="flex flex-col gap-1">
-          {options.map((o) => (
-            <label key={o.value} className="hover:bg-accent flex cursor-pointer items-center gap-2 rounded-md px-2 py-1.5 text-sm">
-              <input type="radio" name={`control-${axis}`} checked={value === o.value} onChange={() => setRecipe({ [axis]: o.value })} />
-              {o.label}
-            </label>
-          ))}
-        </div>
-      </ItemPopover>
-    </ItemMenu>
-  );
-}
-
-export function ControlsSection() {
-  return (
-    <FoundationSection id="controls" title="Controls" count={CONTROLS.length}>
-      <div className="grid grid-cols-2 gap-2 sm:grid-cols-3 lg:grid-cols-5">
-        {CONTROLS.map((c) => (
-          <ControlItem key={c.axis} {...c} />
         ))}
       </div>
     </FoundationSection>

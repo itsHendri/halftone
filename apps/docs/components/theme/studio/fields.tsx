@@ -51,7 +51,8 @@ export function HexField({ id, value, onChange, label }: { id?: string; value: s
   );
 }
 
-type Option = { value: string; label: string; hex: string; group: string };
+export type PickerOption = { value: string; label: string; hex: string | null; group: string };
+type Option = PickerOption;
 
 /** Every step of every ramp, as the token picker lists them (the neutral's white and black too). */
 function options(doc: HalftoneSystem): Option[] {
@@ -67,21 +68,42 @@ function options(doc: HalftoneSystem): Option[] {
 
 /**
  * A role's colour in one mode: a ramp step from a searchable list (as Subframe's token picker), or any hex typed into
- * the search. A combobox: the arrows move through the list, Enter picks.
+ * the search. A combobox: the arrows move through the list, Enter picks. `items` lists other things instead (a
+ * component's roles), with `allowHex` off and `display` naming the value.
  */
-export function TokenPicker({ doc, value, hex, onPick, label }: { doc: HalftoneSystem; value: string | null; hex: string; onPick: (value: string) => void; label: string }) {
+export function TokenPicker({
+  doc,
+  value,
+  hex,
+  onPick,
+  label,
+  items,
+  allowHex = true,
+  display = targetLabel,
+  placeholder = 'brand 600, #2563eb…',
+}: {
+  doc: HalftoneSystem;
+  value: string | null;
+  hex: string | null;
+  onPick: (value: string) => void;
+  label: string;
+  items?: Option[];
+  allowHex?: boolean;
+  display?: (value: string | null) => string;
+  placeholder?: string;
+}) {
   const [open, setOpen] = React.useState(false);
   const [query, setQuery] = React.useState('');
   const [active, setActive] = React.useState(0);
   const listId = React.useId();
   // After a pick (or Esc from the list) focus goes back to the closed picker's button, not the popover.
   const refocus = React.useRef(false);
-  const all = React.useMemo(() => options(doc), [doc]);
+  const all = React.useMemo(() => items ?? options(doc), [items, doc]);
   const q = query.trim().toLowerCase();
-  const typed = readHex(query);
+  const typed = allowHex ? readHex(query) : null;
   const list = [
     ...(typed ? [{ value: typed, label: `Use ${typed.toUpperCase()}`, hex: typed, group: 'Custom' }] : []),
-    ...all.filter((o) => !q || o.label.toLowerCase().includes(q) || o.value.includes(q) || o.hex.includes(q.replace(/^#/, ''))),
+    ...all.filter((o) => !q || o.label.toLowerCase().includes(q) || o.value.includes(q) || (o.hex ?? '').includes(q.replace(/^#/, ''))),
   ];
   const pick = (o: Option | undefined) => {
     if (!o) return;
@@ -104,10 +126,10 @@ export function TokenPicker({ doc, value, hex, onPick, label }: { doc: HalftoneS
           setOpen(true);
           setActive(Math.max(0, all.findIndex((o) => o.value === value)));
         }}
-        aria-label={`${label}: ${targetLabel(value)}. Change`}
+        aria-label={`${label}: ${display(value)}. Change`}
         className="border-border hover:bg-accent focus-visible:ring-ring flex h-8 min-w-0 flex-1 items-center gap-2 rounded-md border px-2 text-left text-sm focus-visible:outline-none focus-visible:ring-2">
         <Swatch hex={hex} className="size-4" />
-        <span className="min-w-0 flex-1 truncate">{targetLabel(value)}</span>
+        <span className="min-w-0 flex-1 truncate">{display(value)}</span>
         <ChevronDownIcon className="text-muted-foreground size-3.5 shrink-0" aria-hidden />
       </button>
     );
@@ -125,8 +147,8 @@ export function TokenPicker({ doc, value, hex, onPick, label }: { doc: HalftoneS
           aria-controls={listId}
           aria-autocomplete="list"
           aria-activedescendant={activeOption ? `${listId}-${activeOption.value}` : undefined}
-          aria-label={`${label}: search tokens or type a hex`}
-          placeholder="brand 600, #2563eb…"
+          aria-label={allowHex ? `${label}: search tokens or type a hex` : `${label}: search`}
+          placeholder={placeholder}
           value={query}
           onChange={(e) => {
             setQuery(e.target.value);
@@ -164,13 +186,13 @@ export function TokenPicker({ doc, value, hex, onPick, label }: { doc: HalftoneS
                 className={`flex cursor-pointer items-center gap-2 rounded px-1.5 py-1 text-sm ${i === active ? 'bg-accent text-accent-foreground' : ''}`}>
                 <Swatch hex={o.hex} className="size-4" />
                 <span className="min-w-0 flex-1 truncate">{o.label}</span>
-                <span className="text-muted-foreground font-mono text-[11px] uppercase">{o.hex}</span>
+                {o.hex ? <span className="text-muted-foreground font-mono text-[11px] uppercase">{o.hex}</span> : null}
                 {selected ? <CheckIcon className="size-3.5 shrink-0" aria-hidden /> : <span className="w-3.5" />}
               </li>
             );
           })
         ) : (
-          <li className="text-muted-foreground px-1.5 py-1 text-sm">No token matches. Type a hex to use any colour.</li>
+          <li className="text-muted-foreground px-1.5 py-1 text-sm">{allowHex ? 'No token matches. Type a hex to use any colour.' : 'Nothing matches.'}</li>
         )}
       </ul>
     </div>
