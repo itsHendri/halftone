@@ -282,17 +282,36 @@ main{max-width:1100px;margin:0 auto}h1{font-size:24px;font-weight:600;margin:0 0
   <div class="f"><span>#2E7349</span><em>edited · reset</em></div><div class="f"><span>on white</span><em class="ok">5.9 AA</em></div></div></div>
 </div>
 
-<h2>7 · Later: the Components section of Foundations</h2>
-<p class="cap">Option 1, after foundations. Controls grows into a Components section. Each base component (Button, Chip, Tag to start) is a card with the same popover. Each value points at a foundation token or is overridden. Stored in the document's reserved <code>components</code> key.</p>
+<h2>7 · The Components section of Foundations (Phase 6)</h2>
+<p class="cap">Direction B. The card header holds what every variant shares: Style, Corner (a Foundations corner), Size (one scale for both kits; phones raise anything under 44px to 44) and Text (a Foundations text style). Each variant, or for Input each state, is an item with a role-based colour popover. One theme for both kits: web matches mobile. Tag = Badge. The chip's selected colour is a role, inverted by default.</p>
 <div class="card">
- <div class="h" style="margin-top:0"><b>Components<em>3</em></b><span>Icon stroke 1.5 · density regular</span></div>
- <div class="g" style="grid-template-columns:repeat(3,minmax(0,1fr))">
-  <div class="tile" style="background:var(--surface)"><div style="display:flex;gap:6px"><span class="kbtn" style="background:#2B7047;color:#F0F9F2">Primary</span><span class="kbtn" style="border:1px solid #D6D3D1">Outline</span></div><span class="lbl">Button · solid · md radius · 36 high</span></div>
-  <div class="tile" style="background:var(--surface);outline:2px solid var(--accent)"><div style="display:flex;gap:6px"><span style="border:1px solid #D6D3D1;border-radius:99px;padding:2px 10px;font-size:12px">Branding</span><span style="background:#DCEFE0;color:#193B29;border-radius:99px;padding:2px 10px;font-size:12px">Selected</span></div><span class="lbl">Chip · pill · outline</span></div>
-  <div class="tile" style="background:var(--surface)"><div style="display:flex;gap:6px"><span style="background:#F5F5F4;color:#44403C;border-radius:4px;padding:2px 8px;font-size:12px">Figma</span><span style="background:#F5F5F4;color:#44403C;border-radius:4px;padding:2px 8px;font-size:12px">React</span></div><span class="lbl">Tag · soft · small radius</span></div>
+ <div class="h" style="margin-top:0"><b>Components<em>4</em></b><span>Icon stroke 1.5 · density regular</span></div>
+ <div class="g">
+  <div class="tile" style="background:var(--surface);min-height:0"><div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px"><b style="font-weight:600">Button</b><span style="display:flex;gap:4px"><span class="tag">Solid</span><span class="tag">Corner · full</span><span class="tag">Size · 36 (44 on phones)</span><span class="tag">Text · large</span></span></div>
+   <div style="display:flex;gap:8px;flex-wrap:wrap"><span class="kbtn" style="background:#2B7047;color:#F0F9F2;border-radius:99px">Book a call</span><span class="kbtn" style="background:#E7E5E4;color:#1C1917;border-radius:99px">Secondary</span><span class="kbtn" style="border:1px solid #D6D3D1;border-radius:99px">Outline</span><span class="kbtn" style="border-radius:99px">Ghost</span><span class="kbtn" style="background:#DC2626;color:#fff;border-radius:99px">Delete</span></div></div>
+  <div class="tile" style="background:var(--surface);min-height:0"><div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px"><b style="font-weight:600">Chip</b><span style="display:flex;gap:4px"><span class="tag">Outline</span><span class="tag">Corner · full</span><span class="tag">Size · 32</span></span></div>
+   <div style="display:flex;gap:8px;flex-wrap:wrap"><span style="border:1px solid #D6D3D1;border-radius:99px;padding:2px 12px;font-size:12px">Branding</span><span style="border:1px solid #D6D3D1;border-radius:99px;padding:2px 12px;font-size:12px">Web</span><span style="background:#2B7047;color:#F0F9F2;border-radius:99px;padding:2px 12px;font-size:12px;outline:2px solid var(--accent);outline-offset:2px">Selected</span><span class="tag">edited</span></div></div>
+  <div class="tile" style="background:var(--surface);min-height:0"><div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px"><b style="font-weight:600">Badge</b><span style="display:flex;gap:4px"><span class="tag">Pill</span><span class="tag">Corner · full</span><span class="tag">Text · small</span></span></div>
+   <div style="display:flex;gap:8px;flex-wrap:wrap"><span style="background:#2B7047;color:#F0F9F2;border-radius:99px;padding:1px 8px;font-size:12px">Live</span><span style="background:#E7E5E4;color:#1C1917;border-radius:99px;padding:1px 8px;font-size:12px">Draft</span><span style="background:#DC2626;color:#fff;border-radius:99px;padding:1px 8px;font-size:12px">Overdue</span><span style="border:1px solid #D6D3D1;border-radius:99px;padding:1px 8px;font-size:12px">v2.1</span></div></div>
+  <div class="tile" style="background:var(--surface);min-height:0"><div style="display:flex;justify-content:space-between;flex-wrap:wrap;gap:6px"><b style="font-weight:600">Input</b><span style="display:flex;gap:4px"><span class="tag">Outline</span><span class="tag">Corner · md</span><span class="tag">Size · 36 (44 on phones)</span></span></div>
+   <div style="display:flex;gap:8px;flex-wrap:wrap"><span style="border:1px solid #D6D3D1;border-radius:8px;padding:5px 10px;font-size:12px;color:var(--fg3)">name@studio.com</span><span style="border:1px solid #2B7047;box-shadow:0 0 0 2px #BBDFC4;border-radius:8px;padding:5px 10px;font-size:12px">Focus</span><span style="border:1px solid #DC2626;border-radius:8px;padding:5px 10px;font-size:12px">Error</span><span style="border:1px solid #E7E5E4;background:var(--muted);border-radius:8px;padding:5px 10px;font-size:12px;color:var(--fg3)">Disabled</span></div></div>
  </div>
- <p class="note">Chip popover: style · corner (token) · height · padding · selected role.</p>
 </div>
+<div class="g" style="grid-template-columns:repeat(3,minmax(0,1fr));margin-top:10px">
+ <div class="pop"><p class="t">Size knob · Button</p><div class="nm"><span>Button size</span><i class="ti ti-lock"></i></div>
+  <div class="f">Small <em>32</em></div><div class="f">Medium <em>36</em></div><div class="f">Large <em>40</em></div><div class="f">Padding x <em>16</em></div>
+  <div class="lbl">Both kits · phones raise anything under 44 to 44</div></div>
+ <div class="pop"><p class="t">Variant · Button Primary</p><div class="nm"><span>Primary</span><i class="ti ti-lock"></i></div>
+  <div class="f"><span><span class="sw" style="background:#2B7047"></span> Fill</span><em>primary ▾</em></div>
+  <div class="f"><span><span class="sw" style="background:#F0F9F2"></span> Label</span><em>primary foreground ▾</em></div>
+  <div class="f"><span>Border</span><em>none ▾</em></div><div class="f"><span>Pressed</span><em>derived · override</em></div>
+  <div class="lbl">Label on fill <span class="ok">6.1 AA</span> · Show usage</div></div>
+ <div class="pop"><p class="t">Variant · Chip Selected</p><div class="nm"><span>Selected</span><i class="ti ti-lock"></i></div>
+  <div class="f"><span><span class="sw" style="background:#2B7047"></span> Fill</span><em>primary ▾</em></div>
+  <div class="f"><span><span class="sw" style="background:#F0F9F2"></span> Label</span><em>primary foreground ▾</em></div>
+  <div class="lbl">Edited · the default is inverted (foreground on background) · reset</div></div>
+</div>
+<p class="note">Both kits read <code>semantic.component.&lt;name&gt;.*</code> as CSS variables (<code>--button-radius</code>, <code>--button-h-md</code>, <code>--chip-selected-bg</code>, <code>--badge-radius</code>, <code>--field-focus-border</code>…); web drops its hard-coded <code>rounded-md h-9</code>.</p>
 
 <h2>8 · "+ New", the item menu, and what an extra becomes</h2>
 <p class="cap">Colours asks which kind of colour; every other section copies an item you pick. The new extra lands at the end of its section with the name selected. The token name is the kebab-case version. Right-click (or ⋯) any item to show its usage, copy its class, variable or value, reset it, or duplicate it as an extra. Extras reach tokens.json, CSS, Tailwind and the agent docs.</p>

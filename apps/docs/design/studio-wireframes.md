@@ -222,14 +222,66 @@ The tab's badge is the number of pairings below AA: the table's rows to check.
 - Undo, shuffle and light/dark go into a ⋯ menu.
 - Popovers become bottom sheets.
 
-## Later: component-level editing (wireframe 7)
+## Components section of Foundations (wireframe 7, Phase 6)
 
-After foundations, the user wants a fully editable system: Controls grows into a **Components section of
-Foundations** (Option 1, chosen over making the Components tab editable).
-- Button, Chip and Tag come first, each a card with the same popover pattern (style, corner token, height,
-  padding, colour roles).
-- Every value points at a foundation token or is overridden.
-- Stored under the document's reserved `components` key (PR #55).
+Workshopped on 2026-10-22. Controls grows into a **Components** section at the end of Foundations (Option 1). It
+stays one scroll with one interaction, and the Components tab stays a read-only "see everything" view.
+
+**Principle: one theme for both kits.** What mobile has, web has too, for every item. Corners, padding, text and
+colours are shared, so a Button looks the same in both kits. This supersedes the 2026-10-08 decision that web
+buttons use `rounded-md` and only mobile has pill/match.
+- The default recipe shape is `pill`, so **web buttons become pill-shaped like mobile** on every system that
+  hasn't chosen otherwise.
+
+### Scope (v1)
+
+| Card | Kit component | Items |
+| --- | --- | --- |
+| Button | `components/ui/button.tsx` | Variants: Primary, Secondary, Outline, Ghost, Destructive (`link` stays a text style) |
+| Chip | `components/kit/filter-chip.tsx` (FilterChip) | Unselected, Selected |
+| Badge (the "Tag") | `components/ui/badge.tsx` | Default, Secondary, Destructive, Outline |
+| Input | `components/ui/input.tsx`, plus Textarea and Select, which draw the same field tokens | States: Default, Focus, Error, Disabled |
+
+### Direction B: shared anatomy in the header, variants as items
+
+Same model as the other sections: base knobs plus items.
+
+**Header knobs** apply to every variant. Changing one rewrites every variant you haven't edited.
+
+| Knob | What it sets |
+| --- | --- |
+| Style | The component's named look: Button solid/soft/outline/raised (today's recipe), Input outline/filled/underline (today's), Chip outline/soft/solid, Badge pill/square/soft |
+| Corner | A Foundations corner token (Small…Full) the component follows, with "override px". Shared by both kits |
+| Size | One height scale (Small, Medium, Large) and one horizontal padding, shared by both kits. **On phones, any height below 44px is raised to 44** (touch-target floor). Mobile's default comes from density |
+| Text | A Foundations text style (Button and Chip: Large / Body; Badge: Small) |
+
+**Items** are the variants (Input: its states). Each opens a colour popover:
+- **Fill, label and border**, each a **role** picker, so light and dark stay automatic and contrast is checked.
+  Raw ramp steps or a hex are a later option.
+- **Pressed** is derived (fill at 90%) and can be overridden. **Hover** is derived. **Disabled** is 50% opacity
+  and fixed.
+- The footer shows contrast for label on fill, plus the usual "edited · reset" and Show usage.
+
+Other rules:
+- **Chip selected becomes a role.** The default stays inverted (foreground on background), so nothing changes
+  until someone picks, say, primary. The "never the brand colour" rule in `filter-chip.tsx` becomes this default
+  instead of a ban.
+- **Variants are fixed in v1:** no "+ New" here, and none can be deleted. A new variant would need kit code.
+
+### Data and kits
+
+- **Document:** `components.{button,chip,badge,input}` in the reserved `components` key (PR #55):
+  `{ style, radius, size: {sm,md,lg,x}, text, variants: { <name>: { fill, label, border, pressed? } } }`.
+  Overrides only.
+- **Tokens:** a component-token layer, the way Phase 2 added text tokens: `semantic.component.<name>.*` →
+  CSS variables (`--button-radius`, `--button-h-md`, `--button-x`, `--chip-selected-bg`, `--badge-radius`,
+  `--field-focus-border` …) in both kits and the embed payloads. The existing `button.*` and `field.*` tokens
+  fold into it.
+- **Kits:** Button, FilterChip, Badge and Input (plus Textarea and Select) in both kits read only these
+  variables. Web drops its hard-coded `rounded-md` / `h-9`.
+  - With no edits, mobile looks exactly as it does today.
+  - Web changes only where it differed from mobile (corner, height), on purpose (the principle above).
+- **Phone floor:** the 44px minimum is applied in the mobile kit when it reads the size tokens, not in the document.
 
 ## Explicitly deferred
 
@@ -257,5 +309,5 @@ Foundations** (Option 1, chosen over making the Components tab editable).
 | 3 | Studio shell: `/studio`, systems in IndexedDB, switcher, migration, tabs; the rail and the Mobile/Web/Typeset views removed | PR #63 |
 | 4 | Foundations sections and popovers: 4a the popover, Brand and Colours; 4b the other sections, "+ New", the item menu, locks, extras in every output | 4a PR #65, 4b PR #66 |
 | 5 | Components and Accessibility tabs | PR #67 |
-| 6 | Component-level editing (Button, Chip, Tag) | later |
+| 6 | Component-level editing: Button, Chip, Badge, Input (wireframe 7); one theme for both kits | next |
 | 7 | Accounts | later, planned separately |
