@@ -21,7 +21,7 @@ and the hallucination guard. This file covers engineering, workflows and gotchas
 app/_layout.tsx         providers (theme, toast, portal, nav theme) + root Stack
 app/(kit)/              the kit shell: Home · Components · Foundations · Settings
 app/shop/, app/habits/, app/northwind/   three sample apps (named segments, not groups); the web kit has each
-                        too. `npm run eject-samples` removes them.
+                        too. `npm run eject-samples` removes them (or `-- shop` just one; `-- --status` lists them).
 components/ui/          reusables — install more with the add-component skill
 components/kit/         ported/custom components
 registry/               components.ts: what the kit ships (metadata) → DESIGN_SYSTEM.md tables, llms.txt, registry
@@ -50,6 +50,7 @@ npm run tokens:build   # after editing tokens/tokens.json (names any pairing bel
 npm run registry:build # after editing registry/components.ts or a component's classes: DESIGN_SYSTEM.md tables, llms.txt, index, token-usage.json
 npm run tokens:check && npm run registry:build -- --check   # what CI checks (plus the halftone-tokens tests in the monorepo)
 npm run eject-samples  # delete the shop, habits and Northwind samples, their stores and every reference
+npm run eject-samples -- shop   # just the ones named; `-- --status` shows what is left (CI ejects each one and runs the gates)
 npm run share -- "msg" # EAS Update to the main channel, prints the links
 npm run export:web && eas deploy   # hosted web preview URL
 npx expo run:ios       # build + install the dev client on the simulator (needs LANG=en_US.UTF-8, see gotchas)

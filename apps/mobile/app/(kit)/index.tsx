@@ -36,7 +36,7 @@ export default function KitHome() {
         </Link>
       </ListGroup>
 
-      <ListGroup title="Sample apps" footnote="All three are built only from the kit, and the web kit has each of them too. Use the floating Kit chip to come back.">
+      <ListGroup title="Sample apps" footnote="Built only from the kit, and the web kit has each of them too. Use the floating Kit chip to come back.">
         <Link href="/shop/(tabs)" asChild>
           <ListRow leading={<Icon as={ShoppingBagIcon} size={22} className="text-primary" />} title="Shop and orders" subtitle="Browse, cart, checkout, track an order" chevron onPress={() => {}} />
         </Link>

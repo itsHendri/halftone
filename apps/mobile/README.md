@@ -29,6 +29,7 @@ Then open **Components** in the app.
 3. Logo, app icon, splash and favicon: add your logo in Studio (halftonedesignsystem.com/studio), download
    **Use system › Brand assets › Mobile kit** and unzip it here (the `apply-theme` skill's "Brand assets" steps).
 4. Delete the samples: `npm run eject-samples` (removes `app/shop`, `app/habits`, `app/northwind`, their data and every reference).
+   To keep one as a reference for now, name the others: `npm run eject-samples -- shop habits`. `npm run eject-samples -- --status` shows what is left.
 5. `eas init` under your account, then put the owner and project id it prints into `.env.local`
    (`EAS_OWNER`, `EAS_PROJECT_ID`) and into your EAS environment variables for cloud builds.
 6. Build your prototype as its own named segment, `app/<slug>/` (see `AGENTS.md › Building a prototype`).

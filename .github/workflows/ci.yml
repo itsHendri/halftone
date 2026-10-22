@@ -206,6 +206,51 @@ jobs:
         working-directory: ${{ runner.temp }}/app
         run: npm run eject-samples && ${{ matrix['after-eject'] }}
 
+  # The samples go one at a time on real projects, so each one ejects on its own (and all of them together),
+  # and every gate that could notice a dangling reference runs on what is left, bundle included. The extract
+  # job above ejects everything from a standalone copy; this one covers the partial ejects.
+  eject:
+    name: eject (${{ matrix.app }}, ${{ matrix.samples }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { app: mobile, samples: all }
+          - { app: mobile, samples: shop }
+          - { app: mobile, samples: habits }
+          - { app: mobile, samples: northwind }
+          - { app: web, samples: all }
+          - { app: web, samples: northwind }
+          - { app: web, samples: dashboard landing }
+          - { app: web, samples: assistant }
+          - { app: web, samples: shop }
+          - { app: web, samples: habits }
+    defaults:
+      run:
+        working-directory: apps/${{ matrix.app }}
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+        working-directory: .
+
+      - name: Eject ${{ matrix.samples }}
+        run: npm run eject-samples -- ${{ matrix.samples != 'all' && matrix.samples || '' }} && npm run eject-samples -- --status
+
+      - name: Gates pass on what is left
+        run: |
+          if [ "${{ matrix.app }}" = mobile ]; then
+            npm run typecheck && npm run lint -- --max-warnings 0 && npm run lint:rules && npm run registry:build -- --check && npm run export:web
+          else
+            npm run typecheck && npm run lint && npm run lint:rules && npm run registry:build -- --check && npm run build
+          fi
+
   # The docs site: tokens, generated content, both kits' exports (mobile under /m, web under /w), both
   # registries under /r, the static Next export, then every internal link, accessibility and the TypeScript.
   docs:
