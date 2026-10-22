@@ -4,7 +4,9 @@ import { CheckIcon, CircleAlertIcon, ShieldCheckIcon, StarIcon, WrenchIcon, XIco
 import * as React from 'react';
 import { toast } from '@/components/theme/studio/toast';
 import { applyFix, autoFixed, choicesIn, contrastLines, describeMoves, fixFor, lineFails, MODES, type Line } from '@/lib/studio/accessibility';
+import { editedSlots, SLOT_LABELS, VARIANT_LABELS } from '@/lib/studio/components';
 import { roleLabel, targetLabel } from '@/lib/studio/foundations';
+import { COMPONENTS } from '@halftone-ds/tokens/theme';
 import { undo, useLiveTheme } from '@/lib/theme/store';
 
 /**
@@ -21,6 +23,7 @@ const MODE_LABEL: Record<Mode, string> = { light: 'Light', dark: 'Dark' };
 const GROUPS = [
   { id: 'yours', title: 'Your edits to check', note: 'Below AA because of a colour you chose. The build warns and leaves it to you.' },
   { id: 'fill', title: 'Labels on fills', note: 'A fill and its own -foreground: buttons, badges, chips.' },
+  { id: 'components', title: 'Components', note: 'A variant’s label on its fill, as Button, Chip, Badge and Input draw it (Foundations › Components), where it differs from the pairings above.' },
   { id: 'text', title: 'Text on surfaces', note: 'Body and muted text on the page, cards and muted panels.' },
   { id: 'ink', title: 'Tones as text', note: 'A tone used as ink: links, status text, coloured icons.' },
   { id: 'icon', title: 'Icons on tints', note: 'A tone’s icon on its own tint, as Alert and IconCircle draw it.' },
@@ -28,7 +31,7 @@ const GROUPS = [
 type Group = (typeof GROUPS)[number]['id'];
 
 const groupOf = (l: Line): Group =>
-  l.fgName === 'foreground' || l.fgName === 'muted-foreground' ? 'text' : l.fgName === `${l.bgName}-foreground` ? 'fill' : l.threshold < AA ? 'icon' : 'ink';
+  l.component ? 'components' : l.fgName === 'foreground' || l.fgName === 'muted-foreground' ? 'text' : l.fgName === `${l.bgName}-foreground` ? 'fill' : l.threshold < AA ? 'icon' : 'ink';
 
 /** APCA's rough guidance, for the Lc column's word. Advisory, never a verdict. */
 const APCA_USE = [
@@ -47,7 +50,8 @@ export function ContrastTable({ onFixed }: { onFixed?: () => void }) {
   const lines = contrastLines(theme);
   const adjusted = React.useMemo(() => new Set(theme.adjustments.map((a) => `${a.mode}:${a.token}`)), [theme.adjustments]);
   const failing = lines.filter(lineFails);
-  const yours = (l: Line) => lineFails(l) && choicesIn(system, l.label).length > 0;
+  const yours = (l: Line) =>
+    lineFails(l) && (l.component ? editedSlots(system, l.component.name, l.component.variant).some((s) => s === 'fill' || s === 'label') : choicesIn(system, l.label).length > 0);
   const moved = autoFixed(theme);
 
   return (
@@ -118,6 +122,7 @@ export function ContrastTable({ onFixed }: { onFixed?: () => void }) {
                 {list.map((l) => (
                   <tr key={l.label} role="row" className={`border-border border-t ${STACK}`}>
                     <th role="rowheader" scope="row" className="px-3 py-2 align-top font-normal @max-xl:col-span-2 @max-xl:pb-0">
+                      {l.component ? <span className="block text-xs font-medium">{COMPONENTS[l.component.name].label} {VARIANT_LABELS[l.component.variant]?.toLowerCase()}</span> : null}
                       <span className="font-mono text-xs [overflow-wrap:anywhere] @xl:block">{l.fgName}</span>{' '}
                       <span className="text-muted-foreground font-mono text-xs [overflow-wrap:anywhere] @xl:block">on {l.bgName}</span>
                       <span className="text-muted-foreground block text-[11px] @xl:mt-0.5">min {l.threshold}:1</span>
@@ -206,6 +211,18 @@ function ModeCell({ row, icon, moved }: { row: ContrastRow; icon: boolean; moved
 /** "fix · your edit": the nearest passing step for the colour you chose, as one undoable edit. */
 function FixCell({ line, onFixed }: { line: Line; onFixed?: () => void }) {
   const { system } = useLiveTheme();
+  if (line.component) {
+    const { name, variant } = line.component;
+    const slots = editedSlots(system, name, variant).map((s) => SLOT_LABELS[s].toLowerCase());
+    return (
+      <span className="flex flex-col items-start gap-0.5 text-xs">
+        <span className="text-muted-foreground">Pick another fill or label role in Foundations › Components.</span>
+        <span className="text-muted-foreground">
+          edited: {COMPONENTS[name].label} {VARIANT_LABELS[variant]?.toLowerCase()} {slots.join(', ')}
+        </span>
+      </span>
+    );
+  }
   const choices = choicesIn(system, line.label);
   const moves = fixFor(system, line.label);
   const yours = choices.map((c) => `${roleLabel(c.name)} (${c.mode})`).join(', ');

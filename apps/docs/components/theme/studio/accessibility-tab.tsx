@@ -4,6 +4,8 @@ import * as React from 'react';
 import { ContrastTable } from '@/components/theme/studio/contrast-table';
 import { ColourVision } from '@/components/theme/studio/vision';
 import { autoFixed, choicesToCheck, contrastLines, lineFails } from '@/lib/studio/accessibility';
+import { editedSlots, VARIANT_LABELS } from '@/lib/studio/components';
+import { COMPONENTS } from '@halftone-ds/tokens/theme';
 import { contrast, grade, RAMP_LABELS, rampsOf, ratioText, roleLabel, STEPS } from '@/lib/studio/foundations';
 import { useLiveTheme } from '@/lib/theme/store';
 
@@ -42,7 +44,12 @@ function Summary() {
   const { theme, system } = useLiveTheme();
   const lines = contrastLines(theme);
   const failing = lines.filter(lineFails).length;
-  const choices = choicesToCheck(system);
+  const roles = choicesToCheck(system).map((c) => `${roleLabel(c.name)} (${c.mode})`);
+  // A component variant whose own colours (Foundations › Components) fail its label on its fill.
+  const variants = lines
+    .filter((l) => l.component && lineFails(l) && editedSlots(system, l.component.name, l.component.variant).some((s) => s === 'fill' || s === 'label'))
+    .map((l) => `${COMPONENTS[l.component!.name].label} ${VARIANT_LABELS[l.component!.variant]?.toLowerCase()}`);
+  const choices = [...roles, ...variants];
   const moved = autoFixed(theme);
   const close = new Set(cvdWarnings(theme.resolved).map((w) => `${w.a}/${w.b}`)).size;
   return (
@@ -58,7 +65,7 @@ function Summary() {
         label="Your edits to check"
         value={choices.length}
         warn={choices.length > 0}
-        note={choices.length ? choices.map((c) => `${roleLabel(c.name)} (${c.mode})`).join(', ') : 'Nothing you chose fails'}
+        note={choices.length ? choices.join(', ') : 'Nothing you chose fails'}
       />
       <Metric href="#a11y-contrast" label="Auto-fixed" value={moved.length} note={moved.length ? 'Generated values moved to pass' : 'Nothing needed moving'} />
       <Metric href="#a11y-vision" label="Colour vision" value="4 previews" note={close ? `${close} ${close === 1 ? 'pair' : 'pairs'} close together` : 'Every pair stays apart'} />

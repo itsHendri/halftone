@@ -6,14 +6,14 @@
  * cause: the fixer has already moved them (`theme.adjustments`), and the tab says so.
  */
 import { generateSystem, normalizeSystem, type HalftoneSystem } from '@halftone-ds/tokens/system';
-import { contrastReport, type ContrastRow, type Theme } from '@halftone-ds/tokens/theme';
+import { apcaContrast, componentContrast, contrastReport, type ComponentName, type ContrastRow, type Theme } from '@halftone-ds/tokens/theme';
 import { edit, rampsOf, refStep, roleLabel, STEPS, targetLabel, type Mode } from '@/lib/studio/foundations';
 import { base } from '@/lib/theme/base';
 
 export const MODES: Mode[] = ['light', 'dark'];
 
-/** One pairing, light and dark side by side. */
-export type Line = { label: string; fgName: string; bgName: string; threshold: number; modes: Partial<Record<Mode, ContrastRow>> };
+/** One pairing, light and dark side by side. A component variant's label on its fill names its component. */
+export type Line = { label: string; fgName: string; bgName: string; threshold: number; modes: Partial<Record<Mode, ContrastRow>>; component?: { name: ComponentName; variant: string } };
 
 const linesMemo = new WeakMap<Theme, Line[]>();
 /** Every pairing the token build's contrast gate checks (the strict set), one line each. */
@@ -27,9 +27,30 @@ export function contrastLines(theme: Theme): Line[] {
     line.modes[r.mode] ??= r;
     byLabel.set(r.label, line);
   }
+  // The components' own pairings (Foundations › Components): a variant's label on its fill, the fill over the page.
+  // One that draws the same colours as a pairing above (a default Button is primary-foreground on primary) isn't
+  // counted twice.
+  const seen = new Set([...byLabel.values()].map((l) => pairKey(l.modes)));
+  const rows = componentContrast(theme.components, { light: theme.resolved.light.background, dark: theme.resolved.dark.background });
+  const byVariant = new Map<string, Line>();
+  for (const r of rows) {
+    const key = `${r.component}.${r.variant}`;
+    const line = byVariant.get(key) ?? { label: r.label, fgName: r.fgName ?? 'style colour', bgName: r.bgName ?? 'style colour', threshold: r.threshold, modes: {}, component: { name: r.component, variant: r.variant } };
+    line.modes[r.mode] = { ...r, pass: r.ratio >= r.threshold, apca: apcaContrast(r.fg, r.bg) };
+    byVariant.set(key, line);
+  }
+  for (const line of byVariant.values()) {
+    const key = pairKey(line.modes);
+    if (seen.has(key)) continue;
+    seen.add(key);
+    byLabel.set(line.label, line);
+  }
   linesMemo.set(theme, (lines = [...byLabel.values()]));
   return lines;
 }
+
+/** The colours a line draws, both modes, either way round (contrast is symmetric). */
+const pairKey = (modes: Line['modes']) => MODES.map((m) => [modes[m]?.fg, modes[m]?.bg].sort().join('/')).join('|');
 
 export const lineFails = (l: Line) => MODES.some((m) => l.modes[m] && !l.modes[m].pass);
 

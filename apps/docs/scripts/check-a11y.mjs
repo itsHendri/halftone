@@ -77,6 +77,9 @@ const POPOVERS = [
   { name: 'shadow layers', click: ['button[aria-label^="Shadow 2:"]'] },
   { name: 'item menu', click: ['button[aria-label="Primary · role: more"]'], wait: '[role="menu"]' },
   { name: '+ New', click: ['button:has-text("New colour")'], wait: '[role="menu"]' },
+  { name: 'component variant + role picker', click: ['button[aria-label^="Chip Selected"]', 'button[aria-label^="Chip Selected fill:"]'] },
+  { name: 'component corner', click: ['button[aria-label^="Button corner:"]'] },
+  { name: 'component size', click: ['button[aria-label^="Input size:"]'] },
 ];
 const SCHEMES = ['light', 'dark'];
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
