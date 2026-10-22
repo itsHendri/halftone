@@ -316,5 +316,5 @@ is a touch target, not a drawn height; the Text knob keeps the component's weigh
 | 3 | Studio shell: `/studio`, systems in IndexedDB, switcher, migration, tabs; the rail and the Mobile/Web/Typeset views removed | PR #63 |
 | 4 | Foundations sections and popovers: 4a the popover, Brand and Colours; 4b the other sections, "+ New", the item menu, locks, extras in every output | 4a PR #65, 4b PR #66 |
 | 5 | Components and Accessibility tabs | PR #67 |
-| 6 | Component-level editing: Button, Chip, Badge, Input (wireframe 7); one theme for both kits | next |
+| 6 | Component-level editing: Button, Chip, Badge, Input (wireframe 7); one theme for both kits: 6a the component-token layer and the kits, 6b the Studio editor | 6a PR #70 |
 | 7 | Accounts | later, planned separately |
