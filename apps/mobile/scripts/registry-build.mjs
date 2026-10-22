@@ -95,8 +95,8 @@ for (const cat of CATEGORY_META) {
 }
 
 const tokens = JSON.parse(read('tokens/tokens.json'));
-const RADIUS_USE = { md: 'inputs', lg: 'cards, sheets base', '2xl': 'sheet tops, hero surfaces', control: 'buttons, chips', full: 'avatars, dots' };
-// The theme's radius: rounded-* are multiples of its base (rounded-lg), rounded-control is buttons and chips.
+const RADIUS_USE = { md: 'inputs', lg: 'cards, sheets base', '2xl': 'sheet tops, hero surfaces', control: 'pill controls: FloatingButton, SwipeToConfirm', full: 'avatars, dots' };
+// The theme's radius: rounded-* are multiples of its base (rounded-lg), rounded-control the pill controls.
 const prim = Object.fromEntries(
   Object.entries(tokens.primitive.radius)
     .filter(([, t]) => t && typeof t === 'object' && '$value' in t)

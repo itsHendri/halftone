@@ -46,8 +46,8 @@ for (const [name, path] of Object.entries(sources)) {
     const sd = await loadTokens(path);
     const sdBy = (list) => Object.fromEntries(list.map((t) => [t.path.join('.'), t.$value]));
     const ours = (mode) => Object.fromEntries(resolveTree(source, mode).map((t) => [t.path.join('.'), t.$value]));
-    assert.deepEqual(ours('light'), { ...sdBy(sd.prim), ...sdBy(sd.semLight) });
-    assert.deepEqual(ours('dark'), { ...sdBy(sd.prim), ...sdBy(sd.semDark) });
+    assert.deepEqual(ours('light'), { ...sdBy(sd.prim), ...sdBy(sd.semLight), ...sdBy(sd.compLight) });
+    assert.deepEqual(ours('dark'), { ...sdBy(sd.prim), ...sdBy(sd.semDark), ...sdBy(sd.compDark) });
   });
 }
 

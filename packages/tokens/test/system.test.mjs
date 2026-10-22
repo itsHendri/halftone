@@ -257,7 +257,7 @@ test('radius, shadow and border overrides, and extras as their own tokens', () =
   assert.deepEqual(theme.semantic.shadow[2].light, [{ offsetX: 0, offsetY: 6, blur: 16, spread: 0, color: '#00000026' }]);
   assert.equal(theme.semantic.shadow[3].light[0].inset, true);
   assert.deepEqual(theme.semantic.shadow[1], generateTheme(DEFAULT_RECIPE, base).semantic.shadow[1], 'other levels stay');
-  assert.deepEqual([theme.borderWidth, theme.semantic.border.style, theme.field.border, theme.semantic.field['border-width']], [2, 'dashed', 2, 2]);
+  assert.deepEqual([theme.borderWidth, theme.semantic.border.style, theme.field.border, theme.semantic.component.input['border-width']], [2, 'dashed', 2, 2]);
   assert.equal(theme.extra.color.sunset['600'].$value === undefined, false);
   assert.ok(Object.values(theme.extra.color.sunset).some((t) => t.$value === '#ff7700'));
   assert.deepEqual(theme.extra.color.ink.$value, { light: '#111111', dark: '#eeeeee' });
@@ -298,19 +298,6 @@ test('validation names every problem, with its path', () => {
   }
   assert.throws(() => normalizeSystem({ v: 2 }), /newer @halftone-ds\/tokens/);
   assert.throws(() => normalizeSystem('nope'), /JSON object/);
-});
-
-test('components is reserved: kept as given, checked as an object, ignored by the generator', () => {
-  const doc = normalizeSystem(sys({ components: { button: { radius: 4, height: 44, role: 'primary' }, chip: {} } }));
-  assert.deepEqual(doc.components, { button: { radius: 4, height: 44, role: 'primary' }, chip: {} });
-  assert.deepEqual(normalizeSystem(sys()).components, {});
-  assert.deepEqual(generateSystem(doc, base), generateTheme(DEFAULT_RECIPE, base));
-  assert.equal(hasOverrides(doc), false, 'nothing is generated from it yet');
-  const { errors } = validateSystem(sys({ components: { Button: {}, chip: 3 } }));
-  assert.ok(errors.some((e) => e.startsWith('components.Button:')) && errors.some((e) => e.startsWith('components.chip:')), errors.join('\n'));
-  assert.ok(!validateSystem(sys({ components: [] })).ok);
-  // It travels with the record.
-  assert.deepEqual(applySystem(base, doc).tokens.$extensions['com.halftonedesignsystem.theme'].system.components, doc.components);
 });
 
 test('normalising is idempotent and survives JSON', () => {
@@ -509,7 +496,7 @@ test('extras reach the CSS variables, the Tailwind classes, the live theme and t
     assert.equal(theme.fontSize['type-eyebrow'], 'var(--type-eyebrow-size)');
 
     // The agent docs say what each one is and that no kit component uses it.
-    const [md] = designMd(ctx, { out: 'DESIGN.md', buttonRadius: 'md' });
+    const [md] = designMd(ctx, { out: 'DESIGN.md', platform: 'web' });
     assert.match(md.contents, /## Extras \(this brand's own\)\n\nTokens this system added beyond the kit's slots\. No kit component uses them/);
     assert.match(md.contents, /- `trendy-green` colour #7C881A: `bg-trendy-green`, `text-trendy-green`, `border-trendy-green`/);
     assert.match(md.contents, /- `ink` colour #111111 \(dark #EEEEEE\)/);

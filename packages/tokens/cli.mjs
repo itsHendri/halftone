@@ -22,7 +22,7 @@ import { existsSync, mkdirSync, readFileSync, realpathSync, writeFileSync } from
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-import { checkContrast, AA, describeTintLimits, textOnTintLimits } from './lib/contrast.mjs';
+import { checkContrast, AA, componentFailures, describeTintLimits, textOnTintLimits } from './lib/contrast.mjs';
 import { scanTintText } from './lib/scan.mjs';
 import { loadTokens } from './lib/resolve.mjs';
 
@@ -89,7 +89,10 @@ export async function run(argv = process.argv.slice(2)) {
   };
 
   // `strict: true` here is the full set of pairings (muted and accent surfaces too), not the CLI flag.
-  const failures = checkContrast(ctx.colors, { strict: true });
+  const base = checkContrast(ctx.colors, { strict: true });
+  // The components' own pairings (a Button variant's label on its fill), once per colour pair.
+  const seen = new Set(base.map((line) => /^\s+(\w+) .*\((#\w+) on (#\w+)\)$/.exec(line)?.slice(1).join(' ')));
+  const failures = [...base, ...componentFailures(ctx.components, ctx.colors, seen)];
   ctx.contrastFailures = failures;
   if (failures.length) {
     gate(

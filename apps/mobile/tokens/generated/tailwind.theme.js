@@ -43,7 +43,61 @@ module.exports = {
     "button-foreground": "hsl(var(--button-foreground))",
     "button-edge": "hsl(var(--button-edge))",
     "field": "hsl(var(--field) / var(--field-alpha))",
-    "field-edge": "hsl(var(--field-edge))"
+    "field-edge": "hsl(var(--field-edge))",
+    "button-primary-bg": "hsl(var(--button-primary-bg) / var(--button-primary-bg-a))",
+    "button-primary-fg": "hsl(var(--button-primary-fg))",
+    "button-primary-border": "hsl(var(--button-primary-border) / var(--button-primary-border-a))",
+    "button-primary-pressed": "hsl(var(--button-primary-pressed) / var(--button-primary-pressed-a))",
+    "button-secondary-bg": "hsl(var(--button-secondary-bg) / var(--button-secondary-bg-a))",
+    "button-secondary-fg": "hsl(var(--button-secondary-fg))",
+    "button-secondary-border": "hsl(var(--button-secondary-border) / var(--button-secondary-border-a))",
+    "button-secondary-pressed": "hsl(var(--button-secondary-pressed) / var(--button-secondary-pressed-a))",
+    "button-outline-bg": "hsl(var(--button-outline-bg) / var(--button-outline-bg-a))",
+    "button-outline-fg": "hsl(var(--button-outline-fg))",
+    "button-outline-border": "hsl(var(--button-outline-border) / var(--button-outline-border-a))",
+    "button-outline-pressed": "hsl(var(--button-outline-pressed) / var(--button-outline-pressed-a))",
+    "button-ghost-bg": "hsl(var(--button-ghost-bg) / var(--button-ghost-bg-a))",
+    "button-ghost-fg": "hsl(var(--button-ghost-fg))",
+    "button-ghost-border": "hsl(var(--button-ghost-border) / var(--button-ghost-border-a))",
+    "button-ghost-pressed": "hsl(var(--button-ghost-pressed) / var(--button-ghost-pressed-a))",
+    "button-destructive-bg": "hsl(var(--button-destructive-bg) / var(--button-destructive-bg-a))",
+    "button-destructive-fg": "hsl(var(--button-destructive-fg))",
+    "button-destructive-border": "hsl(var(--button-destructive-border) / var(--button-destructive-border-a))",
+    "button-destructive-pressed": "hsl(var(--button-destructive-pressed) / var(--button-destructive-pressed-a))",
+    "chip-unselected-bg": "hsl(var(--chip-unselected-bg) / var(--chip-unselected-bg-a))",
+    "chip-unselected-fg": "hsl(var(--chip-unselected-fg))",
+    "chip-unselected-border": "hsl(var(--chip-unselected-border) / var(--chip-unselected-border-a))",
+    "chip-unselected-pressed": "hsl(var(--chip-unselected-pressed) / var(--chip-unselected-pressed-a))",
+    "chip-selected-bg": "hsl(var(--chip-selected-bg) / var(--chip-selected-bg-a))",
+    "chip-selected-fg": "hsl(var(--chip-selected-fg))",
+    "chip-selected-border": "hsl(var(--chip-selected-border) / var(--chip-selected-border-a))",
+    "chip-selected-pressed": "hsl(var(--chip-selected-pressed) / var(--chip-selected-pressed-a))",
+    "badge-default-bg": "hsl(var(--badge-default-bg) / var(--badge-default-bg-a))",
+    "badge-default-fg": "hsl(var(--badge-default-fg))",
+    "badge-default-border": "hsl(var(--badge-default-border) / var(--badge-default-border-a))",
+    "badge-default-pressed": "hsl(var(--badge-default-pressed) / var(--badge-default-pressed-a))",
+    "badge-secondary-bg": "hsl(var(--badge-secondary-bg) / var(--badge-secondary-bg-a))",
+    "badge-secondary-fg": "hsl(var(--badge-secondary-fg))",
+    "badge-secondary-border": "hsl(var(--badge-secondary-border) / var(--badge-secondary-border-a))",
+    "badge-secondary-pressed": "hsl(var(--badge-secondary-pressed) / var(--badge-secondary-pressed-a))",
+    "badge-destructive-bg": "hsl(var(--badge-destructive-bg) / var(--badge-destructive-bg-a))",
+    "badge-destructive-fg": "hsl(var(--badge-destructive-fg))",
+    "badge-destructive-border": "hsl(var(--badge-destructive-border) / var(--badge-destructive-border-a))",
+    "badge-destructive-pressed": "hsl(var(--badge-destructive-pressed) / var(--badge-destructive-pressed-a))",
+    "badge-outline-bg": "hsl(var(--badge-outline-bg) / var(--badge-outline-bg-a))",
+    "badge-outline-fg": "hsl(var(--badge-outline-fg))",
+    "badge-outline-border": "hsl(var(--badge-outline-border) / var(--badge-outline-border-a))",
+    "badge-outline-pressed": "hsl(var(--badge-outline-pressed) / var(--badge-outline-pressed-a))",
+    "field-default-bg": "hsl(var(--field-default-bg) / var(--field-default-bg-a))",
+    "field-default-fg": "hsl(var(--field-default-fg))",
+    "field-default-border": "hsl(var(--field-default-border) / var(--field-default-border-a))",
+    "field-focus-border": "hsl(var(--field-focus-border) / var(--field-focus-border-a))",
+    "field-focus-ring": "hsl(var(--field-focus-ring) / var(--field-focus-ring-a))",
+    "field-error-border": "hsl(var(--field-error-border) / var(--field-error-border-a))",
+    "field-error-ring": "hsl(var(--field-error-ring) / var(--field-error-ring-a))",
+    "field-disabled-bg": "hsl(var(--field-disabled-bg) / var(--field-disabled-bg-a))",
+    "field-disabled-fg": "hsl(var(--field-disabled-fg))",
+    "field-disabled-border": "hsl(var(--field-disabled-border) / var(--field-disabled-border-a))"
   },
   "borderRadius": {
     "sm": "calc(var(--radius) * 0.6)",
@@ -53,14 +107,27 @@ module.exports = {
     "2xl": "calc(var(--radius) * 2)",
     "control": "var(--radius-control)",
     "field": "var(--field-radius)",
-    "field-b": "var(--field-radius-b)"
+    "field-b": "var(--field-radius-b)",
+    "button": "var(--button-radius)",
+    "chip": "var(--chip-radius)",
+    "badge": "var(--badge-radius)"
   },
   "borderWidth": {
     "DEFAULT": "var(--border-width)",
     "button-w": "var(--button-border-w)",
     "button-edge-w": "var(--button-edge-w)",
     "field-w": "var(--field-border-w)",
-    "field-edge-w": "var(--field-edge-w)"
+    "field-edge-w": "var(--field-edge-w)",
+    "button-primary-w": "var(--button-primary-border-w)",
+    "button-primary-edge-w": "var(--button-primary-edge-w)",
+    "button-secondary-w": "var(--button-secondary-border-w)",
+    "button-secondary-edge-w": "var(--button-secondary-edge-w)",
+    "button-outline-w": "var(--button-outline-border-w)",
+    "button-outline-edge-w": "var(--button-outline-edge-w)",
+    "button-ghost-w": "var(--button-ghost-border-w)",
+    "button-ghost-edge-w": "var(--button-ghost-edge-w)",
+    "button-destructive-w": "var(--button-destructive-border-w)",
+    "button-destructive-edge-w": "var(--button-destructive-edge-w)"
   },
   "boxShadow": {
     "xs": "0px 1px 2px 0px rgba(0, 0, 0, 0.051)",
@@ -74,22 +141,48 @@ module.exports = {
   "height": {
     "control-sm": "var(--control-sm)",
     "control": "var(--control-md)",
-    "control-lg": "var(--control-lg)"
+    "control-lg": "var(--control-lg)",
+    "button-sm": "var(--button-h-sm)",
+    "button-md": "var(--button-h-md)",
+    "button-lg": "var(--button-h-lg)",
+    "chip-md": "var(--chip-h-md)",
+    "field-sm": "var(--field-h-sm)",
+    "field-md": "var(--field-h-md)",
+    "field-lg": "var(--field-h-lg)"
   },
   "minHeight": {
     "control-sm": "var(--control-sm)",
     "control": "var(--control-md)",
-    "control-lg": "var(--control-lg)"
+    "control-lg": "var(--control-lg)",
+    "button-sm": "var(--button-h-sm)",
+    "button-md": "var(--button-h-md)",
+    "button-lg": "var(--button-h-lg)",
+    "chip-md": "var(--chip-h-md)",
+    "field-sm": "var(--field-h-sm)",
+    "field-md": "var(--field-h-md)",
+    "field-lg": "var(--field-h-lg)"
   },
   "width": {
     "control-sm": "var(--control-sm)",
     "control": "var(--control-md)",
-    "control-lg": "var(--control-lg)"
+    "control-lg": "var(--control-lg)",
+    "button-sm": "var(--button-h-sm)",
+    "button-md": "var(--button-h-md)",
+    "button-lg": "var(--button-h-lg)",
+    "chip-md": "var(--chip-h-md)",
+    "field-sm": "var(--field-h-sm)",
+    "field-md": "var(--field-h-md)",
+    "field-lg": "var(--field-h-lg)"
   },
   "spacing": {
     "control-x": "var(--control-x)",
     "field-x": "var(--field-x)",
-    "flow": "1.25rem"
+    "flow": "1.25rem",
+    "button-x": "var(--button-x)",
+    "chip-x": "var(--chip-x)",
+    "badge-x": "var(--badge-x)",
+    "button-x-sm": "var(--button-x-sm)",
+    "button-x-lg": "var(--button-x-lg)"
   },
   "fontSize": {
     "xs": [
@@ -150,7 +243,11 @@ module.exports = {
     "type-small": "var(--type-small-size)",
     "type-muted": "var(--type-muted-size)",
     "type-code": "var(--type-code-size)",
-    "type-blockquote": "var(--type-blockquote-size)"
+    "type-blockquote": "var(--type-blockquote-size)",
+    "type-button": "var(--button-text-size)",
+    "type-chip": "var(--chip-text-size)",
+    "type-badge": "var(--badge-text-size)",
+    "type-field": "var(--field-text-size)"
   },
   "lineHeight": {
     "prose": "1.75rem",
@@ -164,7 +261,11 @@ module.exports = {
     "type-small": "var(--type-small-leading)",
     "type-muted": "var(--type-muted-leading)",
     "type-code": "var(--type-code-leading)",
-    "type-blockquote": "var(--type-blockquote-leading)"
+    "type-blockquote": "var(--type-blockquote-leading)",
+    "type-button": "var(--button-text-leading)",
+    "type-chip": "var(--chip-text-leading)",
+    "type-badge": "var(--badge-text-leading)",
+    "type-field": "var(--field-text-leading)"
   },
   "letterSpacing": {
     "type-h1": "var(--type-h1-tracking)",
@@ -177,7 +278,11 @@ module.exports = {
     "type-small": "var(--type-small-tracking)",
     "type-muted": "var(--type-muted-tracking)",
     "type-code": "var(--type-code-tracking)",
-    "type-blockquote": "var(--type-blockquote-tracking)"
+    "type-blockquote": "var(--type-blockquote-tracking)",
+    "type-button": "var(--button-text-tracking)",
+    "type-chip": "var(--chip-text-tracking)",
+    "type-badge": "var(--badge-text-tracking)",
+    "type-field": "var(--field-text-tracking)"
   },
   "fontWeight": {
     "type-h1": "var(--type-h1-weight)",

@@ -10,6 +10,7 @@
 import { hexToOklch } from '../lib/color.mjs';
 import { group, radiusCss } from '../lib/resolve.mjs';
 import { TEXT_LINE_HEIGHT } from '../lib/theme/recipe.mjs';
+import { COMPONENT_NAMES, COMPONENTS, componentColors, componentVars } from '../lib/theme/components.mjs';
 import { hasExtras } from '../lib/theme/extras.mjs';
 import { extraVars, styleVars, textStyleVars, typeVars } from '../lib/theme/vars.mjs';
 
@@ -81,8 +82,38 @@ function extrasCss(ctx) {
   };
 }
 
+/**
+ * The component layer (Button, Chip, Badge, Input): the variables per mode, each variant's colours as Tailwind colours
+ * (bg-button-primary-bg; a colour with an opacity mixes it in), rounded-button / -chip / -badge, and type-button,
+ * type-chip, type-badge and type-field for the text. Heights and padding are read as h-(--button-h-md), px-(--button-x).
+ */
+function componentsCss(ctx) {
+  const vars = componentVars(ctx.components, 'oklch', hexToOklch, (role) => FONT_ROLE[role]);
+  const lines = (map) => Object.entries(map).map(([k, v]) => `  ${k}: ${v};`).join('\n');
+  const colors = componentColors(ctx.components, (key, alpha) => (alpha ? `color-mix(in oklab, var(--${key}) calc(var(--${key}-a) * 100%), transparent)` : `var(--${key})`));
+  const theme = [
+    ...COMPONENT_NAMES.filter((n) => n !== 'input').map((n) => `  --radius-${n}: var(--${n}-radius);`),
+    ...Object.entries(colors).map(([key, css]) => `  --color-${key}: ${css};`),
+  ];
+  const utilities = COMPONENT_NAMES.map((n) => COMPONENTS[n].prefix).map(
+    (p) => `@utility type-${p} {
+  font-family: var(--${p}-text-font);
+  font-size: var(--${p}-text-size);
+  line-height: var(--tw-leading, var(--${p}-text-leading));
+  letter-spacing: var(--tw-tracking, var(--${p}-text-tracking));
+}`
+  );
+  return {
+    light: `\n  /* Components: Button, Chip, Badge, Input (corners, sizes, text, each variant's colours). */\n${lines(vars.light)}`,
+    dark: `\n  /* Components */\n${lines(vars.dark)}`,
+    theme: `\n  /* Components: rounded-button, bg-button-primary-bg, border-field-focus-border… */\n${theme.join('\n')}`,
+    utilities: `${utilities.join('\n')}\n`,
+  };
+}
+
 export default function shadcnWeb(ctx, options) {
   const extras = extrasCss(ctx);
+  const components = componentsCss(ctx);
   const vars = (mode) => ctx.colors.map((c) => `  --${c.name}: ${hexToOklch(c[mode])};`).join('\n');
   const styles = (mode) => Object.entries(styleVars(ctx.shape, 'oklch')[mode]).map(([k, v]) => `  ${k}: ${v};`).join('\n');
   // The styles' fills carry their own opacity (an outline button, a transparent field).
@@ -103,13 +134,13 @@ ${styles('light')}
 ${shadows('light')}
   /* The text styles (type-h1…type-blockquote), literal at the typeset: an edited style is one variable. */
 ${Object.entries(textStyleVars(ctx.textStyles, 'oklch', (role) => FONT_ROLE[role])).map(([k, v]) => `  ${k}: ${v};`).join('\n')}
-${vars('light')}${extras.light}
+${vars('light')}${components.light}${extras.light}
 }
 
 .dark {
 ${styles('dark')}
 ${shadows('dark')}
-${vars('dark')}${extras.dark}
+${vars('dark')}${components.dark}${extras.dark}
 }
 
 @theme inline {
@@ -132,11 +163,11 @@ ${ctx.radius.steps.map((s) => `  --radius-${s.name}: ${radiusCss(s)};`).join('\n
   --font-mono: var(--kit-font-mono, ${SYSTEM_MONO});${
     options.typeset === false ? '' : `\n  /* The theme's typeset scales every text size and its line height (text-sm, text-base…). */\n${textScale(ctx)}`
   }
-${ctx.colors.map((c) => `  --color-${c.name}: ${color(c.name)};`).join('\n')}${extras.theme}
+${ctx.colors.map((c) => `  --color-${c.name}: ${color(c.name)};`).join('\n')}${components.theme}${extras.theme}
 }
 
 ${textStyleUtilities(Object.keys(ctx.textStyles))}
-${extras.utilities}
+${components.utilities}${extras.utilities}
 @layer base {
   * {
     @apply border-border outline-ring/50;

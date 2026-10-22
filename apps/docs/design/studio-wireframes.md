@@ -252,8 +252,8 @@ Same model as the other sections: base knobs plus items.
 | --- | --- |
 | Style | The component's named look: Button solid/soft/outline/raised (today's recipe), Input outline/filled/underline (today's), Chip outline/soft/solid, Badge pill/square/soft |
 | Corner | A Foundations corner token (Small…Full) the component follows, with "override px". Shared by both kits |
-| Size | One height scale (Small, Medium, Large) and one horizontal padding, shared by both kits. **On phones, any height below 44px is raised to 44** (touch-target floor). Mobile's default comes from density |
-| Text | A Foundations text style (Button and Chip: Large / Body; Badge: Small) |
+| Size | One height scale (Small, Medium, Large) and one horizontal padding, shared by both kits. **On phones, a tap target under 44px gets a 44px touch area** (hitSlop; the drawn height stays). The default is mobile's, from density: Button 40/48/56 with padding 16/20/24, Input 48, Chip 36 with padding 14, Badge padding 8 |
+| Text | A Foundations text style: its font, size and tracking. The component keeps its own weight (medium), and its line height fits the control (Body is 16 on 24). Defaults: Button and Input Body, Chip and Badge Small |
 
 **Items** are the variants (Input: its states). Each opens a colour popover:
 - **Fill, label and border**, each a **role** picker, so light and dark stay automatic and contrast is checked.
@@ -280,8 +280,15 @@ Other rules:
 - **Kits:** Button, FilterChip, Badge and Input (plus Textarea and Select) in both kits read only these
   variables. Web drops its hard-coded `rounded-md` / `h-9`.
   - With no edits, mobile looks exactly as it does today.
-  - Web changes only where it differed from mobile (corner, height), on purpose (the principle above).
-- **Phone floor:** the 44px minimum is applied in the mobile kit when it reads the size tokens, not in the document.
+  - Web changes where it differed from mobile, on purpose (the principle above): corners, heights, padding and text
+    (buttons 48px pills with 16px text, inputs 48px, chips 36px pills, badge text 14px).
+- **Phone floor:** the 44px minimum is applied in the mobile kit when it reads the size tokens, not in the document:
+  `hitSlop` on Button, FilterChip and the Select trigger. A text field has no hitSlop, so Input and Textarea are drawn
+  at least 44 tall on phones (only visible when a system sets them under 44).
+
+Decided while building (2026-10-22): the size scale is mobile's (the wireframe's 32/36/40 were examples); the floor
+is a touch target, not a drawn height; the Text knob keeps the component's weight. The Select's value text stays
+14px (it isn't the Text knob's). A border that is the fill by default (a selected chip) follows an edited fill.
 
 ## Explicitly deferred
 

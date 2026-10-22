@@ -25,5 +25,20 @@ export {
 } from './shadcn.mjs';
 export { CVD_TYPES, cvdWarnings, describeCvdWarnings, DISTINCT_PAIRS, MIN_DELTA_E, pairDistances, simulateCvd } from '../cvd.mjs';
 
-export { AA, AA_NON_TEXT, contrastPairs, contrastReport } from '../contrast.mjs';
+export { AA, AA_NON_TEXT, componentContrast, contrastPairs, contrastReport } from '../contrast.mjs';
+export {
+  COMPONENT_NAMES,
+  COMPONENTS,
+  componentColors,
+  componentPairs,
+  componentVarNames,
+  componentVars,
+  CORNERS,
+  defaultCorner,
+  defaultStyle,
+  fittedLeading,
+  SLOT_VAR,
+  SLOTS,
+  TOUCH_TARGET,
+} from './components.mjs';
 export { apcaContrast } from '../apca.mjs';

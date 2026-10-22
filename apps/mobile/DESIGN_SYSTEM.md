@@ -37,12 +37,17 @@ Use the shadcn vocabulary through Tailwind classes. Each name works as `bg-`, `t
 | `destructive` / `-foreground` | delete, errors |
 | `success`, `warning`, `info` (+ `-foreground`) | status |
 | `border`, `input`, `ring` | hairlines, field borders, focus |
-| `button` / `button-foreground` / `button-edge` | the primary Button, in the theme's button style (Button uses them) |
-| `field` / `field-edge` | text fields, in the theme's field style (Input, Textarea, Select use them) |
+| `button` / `button-foreground` / `button-edge` | the theme's button style's colours (the primary Button's defaults) |
+| `field` / `field-edge` | the theme's field style's colours (Input, Textarea and Select's defaults) |
+| `button-<variant>-bg` / `-fg` / `-border` / `-pressed`, `chip-…`, `badge-…`, `field-<state>-…` | the component layer: each variant's colours, as the theme sets them (Button, FilterChip, Badge and the fields use them) |
 | `chart-1` … `chart-5` | data series |
 
-Sizing: controls follow the theme's density: `h-control` (48 by default) for inputs, selects and default
-buttons, `h-control-sm` (40) and `h-control-lg` (56), padding `px-control-x`. Never hard-code a control's height.
+Sizing: Button, FilterChip, Badge, Input, Textarea and Select take their corners, heights, padding and text from
+the theme's component layer (`semantic.component.*`, the same in both kits): `h-button-md` (48 by default),
+`h-button-sm` (40), `h-button-lg` (56), `h-chip-md` (36), `h-field-md` (48); `rounded-button`, `rounded-chip`,
+`rounded-badge`; `text-type-button`… Other controls follow the theme's density: `h-control` (48), `h-control-sm`
+(40), `h-control-lg` (56), padding `px-control-x`. Never hard-code a control's height. On phones, Button,
+FilterChip and Select raise a tap target under 44 to 44 (hitSlop) and a text field is at least 44 tall.
 Switch 51×31, radio and checkbox 24.
 
 Rules:
@@ -55,12 +60,14 @@ Rules:
 - Tint a surface with an alpha of a semantic colour: `bg-primary/15`, `bg-success/15`. Text on a tint stays
   `text-foreground`: a status colour as small text on its own tint measures under 4.5:1 (success on
   `success/15` 4.09, destructive 3.82). The status colour goes on the icon or a dot.
-- Selected / active states in chips and segments are **neutral** (inverted foreground), not the brand colour.
-  The brand colour is for the primary action and focus.
+- Selected / active states in segments are **neutral** (inverted foreground), not the brand colour. A selected
+  FilterChip is the theme's Chip `selected` colour: inverted by default, and a system may make it a role such as
+  primary. Never colour one by hand. The brand colour is for the primary action and focus.
 - **Styles are the theme's, not the screen's.** The theme picks the primary button (solid, soft, outline,
-  raised) and the text fields (outline, filled, underline); `Button`, `Input`, `Textarea` and `Select` already
-  draw them with `bg-button` / `bg-field` and their edge classes. Never restyle a primary button or a field
-  in a screen (no `bg-primary` on a `Button`, no `border-b` field): change the theme instead. Inside the
+  raised), the text fields (outline, filled, underline), and each component's corner, size, text and variant
+  colours; `Button`, `FilterChip`, `Badge`, `Input`, `Textarea` and `Select` already draw them
+  (`bg-button-primary-bg`, `rounded-button`, `h-field-md`…). Never restyle one in a screen (no `bg-primary` on a
+  `Button`, no `border-b` field, no `h-9` or `rounded-md` on a Button): change the theme instead. Inside the
   primary `Button`, a `Spinner` takes `tone="button-foreground"`; an `Icon` needs no colour.
 - Light and dark are both required. Every component is checked in both on the Components page.
 
@@ -72,13 +79,14 @@ Use `gap-*` for siblings, not margins. Vary spacing to create hierarchy.
 
 ### Radius
 
-Buttons and chips use `rounded-control` (pills, or the base radius: the theme decides); everything else
-uses the scale below, which the theme scales from its base (`rounded-lg`). Raised elements that
+Buttons, chips and badges use their component corners (`rounded-button`, `rounded-chip`, `rounded-badge`: pills
+by default, a Foundations corner or px when the theme says so); the text fields use `rounded-t-field rounded-b-field-b`.
+Everything else uses the scale below, which the theme scales from its base (`rounded-lg`). Raised elements that
 sit on a track — the SegmentedControl thumb, the Switch thumb, the Slider handle — use `bg-card`,
 not `bg-background`, so they stay white if the page surface is ever tinted.
 
 <!-- GENERATED:tokens:radius -->
-`rounded-sm` 6 · `rounded-md` 8 (inputs) · `rounded-lg` 10 (cards, sheets base) · `rounded-xl` 16 · `rounded-2xl` 20 (sheet tops, hero surfaces) · `rounded-control` pill (buttons, chips) · `rounded-full` (avatars, dots).
+`rounded-sm` 6 · `rounded-md` 8 (inputs) · `rounded-lg` 10 (cards, sheets base) · `rounded-xl` 16 · `rounded-2xl` 20 (sheet tops, hero surfaces) · `rounded-control` pill (pill controls: FloatingButton, SwipeToConfirm) · `rounded-full` (avatars, dots).
 <!-- /GENERATED:tokens:radius -->
 
 ### Typography
@@ -144,7 +152,7 @@ tables. Text between `GENERATED` markers is overwritten.
 | RadioGroup | `components/ui/radio-group.tsx` | `RadioGroupItem value id` · a `Label htmlFor` the same id names it |
 | Switch | `components/ui/switch.tsx` | settings on/off |
 | Select | `components/ui/select.tsx` | pass safe-area `insets` to `SelectContent` |
-| FilterChip / FilterChipRow | `components/kit/filter-chip.tsx` | neutral-active chips |
+| FilterChip / FilterChipRow | `components/kit/filter-chip.tsx` | filter chips · selected is the theme's Chip colour (inverted by default) |
 | SegmentedControl | `components/kit/segmented-control.tsx` | 2–4 options, animated thumb |
 | SearchField | `components/kit/search-field.tsx` | Input + search icon + clear |
 | QuantityStepper | `components/kit/quantity-stepper.tsx` | `min max step` |
@@ -336,7 +344,7 @@ Remote push is gone from Expo Go since SDK 53.
 - ✗ Identical card grids (same icon + heading + body repeated).
 - ✗ Same padding on every element; vary it to create rhythm.
 - ✗ Modals as the default home for secondary content.
-- ✗ Brand colour on selected chips/tabs. ✗ Grey-on-grey text below 4.5:1 contrast.
+- ✗ Brand colour put on selected chips/tabs by hand (a chip's selected colour is the theme's). ✗ Grey-on-grey text below 4.5:1 contrast.
 - ✗ Tap targets under 44×44. ✗ Icon-only buttons without `accessibilityLabel`.
 - ✗ A control without a name: a Switch, RadioGroupItem or Checkbox needs a `Label htmlFor` its `id`, or an
   `aria-label` (a Switch at the end of a ListRow). ✗ `accessibilityState`/`accessibilityValue` in new

@@ -5,6 +5,15 @@ description: What changed, newest first.
 
 ## October 2026
 
+### One theme for both kits
+
+Button, FilterChip, Badge, Input, Textarea and Select now draw a shared **component layer** (`semantic.component.*`
+in tokens.json, `--button-*`, `--chip-*`, `--badge-*`, `--field-*`): corners, heights, padding, text and each
+variant's colours, the same in the native and web kits. The native kit looks exactly as before. The web kit now
+matches it: buttons and chips are pills by default, buttons and inputs are 48px tall (40 and 56 small and large),
+button and input text is 16px and badges 14px. A selected chip's colour is a role a system can set (inverted by
+default). On phones, a tap target under 44px gets a 44px touch area.
+
 ### Studio
 
 The theme studio is now **Studio**, at [/studio](/studio) (old `/themes` links still work). It keeps several

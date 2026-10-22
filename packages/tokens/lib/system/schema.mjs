@@ -27,10 +27,15 @@
  *   extras               { color: [], text: [], radius: [], shadow: [], border: [] } named tokens of your own,
  *                        exported (tokens.json `extra.*`) and never drawn by the kits
  *   brand                { name, iconBackground, logo?, logoDark?, mark?, markDark? } (the Studio's BrandState)
- *   components           RESERVED for component-level edits (Button, Chip, Tag…: radius, height, padding, style,
- *                        colour role), which come after the foundations: { [component]: { …settings } }. Kept as
- *                        given (plain JSON), and ignored by the generator for now, so adding them needs no new
- *                        version.
+ *   components           { button|chip|badge|input: { style?, radius?, size?, text?, variants? } } component-level
+ *                        edits (lib/theme/components.mjs), overrides only:
+ *                          style     the component's look. Button and Input fold into recipe.button / recipe.field;
+ *                                    Chip outline|soft|solid, Badge pill|square|soft
+ *                          radius    a Foundations corner (sm…2xl, full) or px
+ *                          size      { sm?, md?, lg?, x? } heights and horizontal padding, px (the keys it has)
+ *                          text      a text style (h1…blockquote); the component keeps its own weight
+ *                          variants  { <variant>: { fill?, label?, border?, pressed? } } roles (ROLE_NAMES), or
+ *                                    'none' for a fill or border. Variants are fixed (Input: its states)
  *
  * normalizeSystem(input) validates and returns a clean document (it throws a SystemError naming every problem);
  * validateSystem(input) returns { ok, errors, system } instead.
@@ -38,6 +43,7 @@
 import { FONTS } from '../theme/fonts.mjs';
 import { STEPS } from '../theme/palettes.mjs';
 import { anchorStep, neutralAnchorStep } from '../theme/ramp.mjs';
+import { COMPONENT_NAMES, COMPONENTS, CORNERS } from '../theme/components.mjs';
 import { normalizeRecipe, OPTIONS, TEXT_DEFAULTS, TEXT_STYLES } from '../theme/recipe.mjs';
 import { semanticColors } from '../theme/semantic.mjs';
 
@@ -239,11 +245,12 @@ function fonts(r, input, recipe) {
 /** Tailwind's palette families and keywords: a colour extra by one of these names would shadow Tailwind's own. */
 const PALETTE = ['slate', 'gray', 'zinc', 'neutral', 'stone', 'red', 'orange', 'amber', 'yellow', 'lime', 'green', 'emerald', 'teal', 'cyan', 'sky', 'blue', 'indigo', 'violet', 'purple', 'fuchsia', 'pink', 'rose', 'mauve', 'olive', 'mist', 'taupe', 'white', 'black', 'transparent', 'current', 'inherit'];
 /** A colour extra is a variable (--<name>): never one of the theme's own (--radius, --type-*, --shadow-*…). */
-const VARIABLE_CLASH = /^(radius|density|spacing|border-width|icon-stroke)$|^(radius|control|type|leading|typeset|shadow|button|field|font|kit|tw)-/;
+const VARIABLE_CLASH = /^(radius|density|spacing|border-width|icon-stroke|chip|badge)$|^(radius|control|type|leading|typeset|shadow|button|field|chip|badge|font|kit|tw)-/;
 /** Names an extra can't take, per kind: the built-in slots, and the Tailwind classes its class would shadow. */
 const RESERVED = {
   color: [...COLOR_ROLES, ...ROLE_NAMES, ...PALETTE],
-  text: TEXT_STYLES,
+  // A text extra is type-<name>: the components' text utilities are type-button, type-chip, type-badge, type-field.
+  text: [...TEXT_STYLES, 'button', 'chip', 'badge', 'field'],
   radius: [...RADIUS_STEPS, 'full', 'base', 'control', 'none', 'xs', '3xl', '4xl'],
   shadow: [...SHADOW_LEVELS, '2xs', 'xs', 'sm', 'md', 'lg', 'xl', '2xl', 'none', 'inner'],
   border: ['width', 'style', 'x', 'y', 't', 'r', 'b', 'l', 's', 'e', 'solid', 'dashed', 'dotted', 'double', 'hidden', 'none', 'collapse', 'separate', 'spacing'],
@@ -329,6 +336,48 @@ function brand(r, input) {
   return out;
 }
 
+/** A role a component colour can take: any semantic colour, or 'none' (no fill, no border). */
+const SLOT_VALUES = { fill: [...ROLE_NAMES, 'none'], label: ROLE_NAMES, border: [...ROLE_NAMES, 'none'], pressed: ROLE_NAMES };
+
+/** components: the edits, checked against each component's styles, sizes and variants. Button and Input styles fold. */
+function components(r, input, recipe) {
+  const out = {};
+  for (const [name, value] of r.keys('components', r.object('components', input), COMPONENT_NAMES)) {
+    const path = `components.${name}`;
+    const def = COMPONENTS[name];
+    const v = r.object(path, value);
+    r.keys(path, v, ['style', 'radius', 'size', 'text', 'variants']);
+    const entry = {};
+    if (v.style !== undefined) {
+      const style = r.oneOf(`${path}.style`, v.style, def.styles);
+      // Button and Input styles are the recipe's (they keep a theme code); a Chip or Badge style is an override.
+      if (style && name === 'button') recipe.button = style;
+      else if (style && name === 'input') recipe.field = style;
+      else if (style && style !== def.styles[0]) entry.style = style;
+    }
+    if (v.radius !== undefined) entry.radius = typeof v.radius === 'number' ? r.num(`${path}.radius`, v.radius, 0, 9999) : r.oneOf(`${path}.radius`, v.radius, CORNERS);
+    if (v.size !== undefined) {
+      const size = {};
+      for (const [key, px] of r.keys(`${path}.size`, r.object(`${path}.size`, v.size), def.sizes)) size[key] = key === 'x' ? r.num(`${path}.size.x`, px, 0, 64) : r.num(`${path}.size.${key}`, px, 16, 120);
+      if (Object.keys(size).length) entry.size = size;
+    }
+    if (v.text !== undefined) entry.text = r.oneOf(`${path}.text`, v.text, TEXT_STYLES);
+    if (v.variants !== undefined) {
+      const variants = {};
+      for (const [variant, slots] of r.keys(`${path}.variants`, r.object(`${path}.variants`, v.variants), Object.keys(def.variants))) {
+        const at = `${path}.variants.${variant}`;
+        const edits = {};
+        for (const [slot, role] of r.keys(at, r.object(at, slots), def.variants[variant])) edits[slot] = r.oneOf(`${at}.${slot}`, role, SLOT_VALUES[slot]);
+        if (Object.keys(edits).length) variants[variant] = edits;
+      }
+      if (Object.keys(variants).length) entry.variants = variants;
+    }
+    for (const key of Object.keys(entry)) if (entry[key] === undefined) delete entry[key];
+    if (Object.keys(entry).length) out[name] = entry;
+  }
+  return out;
+}
+
 /** Is this a system document (rather than a bare recipe)? */
 export const isSystem = (value) => isObject(value) && (value.kind === SYSTEM_KIND || isObject(value.recipe));
 
@@ -401,13 +450,7 @@ function read(input) {
   doc.extras = extras(r, input.extras);
   doc.brand = brand(r, input.brand);
 
-  // Reserved: kept, not generated (yet).
-  doc.components = {};
-  for (const [name, value] of Object.entries(r.object('components', input.components))) {
-    if (!NAME.test(name)) r.fail(`components.${name}`, 'must be a kebab-case component name (button, chip, tag…)');
-    else if (!isObject(value)) r.fail(`components.${name}`, 'must be an object');
-    else doc.components[name] = JSON.parse(JSON.stringify(value));
-  }
+  doc.components = components(r, input.components, recipe);
   return { doc, errors: r.errors };
 }
 
@@ -451,6 +494,11 @@ export function systemOverrides(input) {
   for (const [variant, style] of Object.entries(doc.type)) for (const key of Object.keys(style)) paths.push(`type.${variant}.${key}`);
   for (const section of ['fonts', 'radius', 'shadow', 'border']) for (const key of Object.keys(doc[section])) paths.push(`${section}.${key}`);
   for (const kind of EXTRA_KINDS) for (const item of doc.extras[kind]) paths.push(`extras.${kind}.${item.name}`);
+  for (const [name, entry] of Object.entries(doc.components)) {
+    for (const key of ['style', 'radius', 'text']) if (entry[key] !== undefined) paths.push(`components.${name}.${key}`);
+    for (const key of Object.keys(entry.size ?? {})) paths.push(`components.${name}.size.${key}`);
+    for (const [variant, slots] of Object.entries(entry.variants ?? {})) for (const slot of Object.keys(slots)) paths.push(`components.${name}.variants.${variant}.${slot}`);
+  }
   return paths;
 }
 

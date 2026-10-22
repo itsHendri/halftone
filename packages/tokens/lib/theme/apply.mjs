@@ -7,7 +7,7 @@
  * A system document (lib/system) is applied the same way (applySystem): the record keeps the document too,
  * without its brand images. A system owns more than a recipe: edited text styles (semantic.type.<style>),
  * corner overrides (semantic.radius.<step>), a border style, status ramps from its own seeds, and its extras
- * (the `extra` group). What the previous theme owned and the new one doesn't is removed, and a status ramp it
+ * (the `extra` group), and component edits (semantic.component.<name>, which every theme writes). What the previous theme owned and the new one doesn't is removed, and a status ramp it
  * had replaced goes back to the curated one (red, green, amber, sky).
  */
 import { generateSystem, systemCode } from '../system/generate.mjs';
@@ -50,8 +50,14 @@ function ownedValues(theme) {
     if (value && typeof value === 'object') for (const [k, v] of Object.entries(value)) out[`semantic.type.${key}.${k}`] = v;
     else out[`semantic.type.${key}`] = value;
   }
-  for (const [key, value] of Object.entries(theme.semantic.button)) out[`semantic.button.${key}`] = value;
-  for (const [key, value] of Object.entries(theme.semantic.field)) out[`semantic.field.${key}`] = value;
+  // The component layer (Button, Chip, Badge, Input): leaves are numbers, references, or { light, dark }.
+  const walk = (node, path) => {
+    for (const [key, value] of Object.entries(node)) {
+      if (value && typeof value === 'object' && !('light' in value && 'dark' in value)) walk(value, `${path}.${key}`);
+      else out[`${path}.${key}`] = value;
+    }
+  };
+  walk(theme.semantic.component, 'semantic.component');
   if (theme.extra) Object.assign(out, flatValues(theme.extra, 'extra'));
   return out;
 }
@@ -79,28 +85,52 @@ const DESCRIPTIONS = {
   'semantic.type.leading': "Typeset: line height of running text (× size); the text sizes' line heights scale by leading / 1.75.",
   'semantic.type.flow': 'Typeset: space between blocks of long-form text (Prose), em.',
   'semantic.type.measure': 'Typeset: the longest line of long-form text (Prose), characters.',
-  'semantic.color.button': 'The primary button: bg-button (its alpha is button.alpha). Follows the theme\'s button style.',
+  'semantic.color.button': 'The primary button: bg-button (its alpha is component.button.alpha). Follows the theme\'s button style.',
   'semantic.color.button-foreground': 'Text and icons on the primary button: text-button-foreground.',
   'semantic.color.button-edge': 'The primary button\'s border and bottom edge: border-button-edge.',
-  'semantic.color.field': 'Text fields: bg-field (its alpha is field.alpha). Follows the theme\'s field style.',
+  'semantic.color.field': 'Text fields: bg-field (its alpha is component.input.alpha). Follows the theme\'s field style.',
   'semantic.color.field-edge': 'Text fields\' border or bottom line: border-field-edge.',
-  'semantic.button.alpha': 'Opacity of the primary button\'s fill (0 = an outline button).',
-  'semantic.button.border-width': 'Primary button border, every side (px).',
-  'semantic.button.edge-width': 'Primary button bottom edge (px); raised buttons have a thicker, darker one.',
-  'semantic.field.alpha': 'Opacity of a text field\'s fill, per mode.',
-  'semantic.field.border-width': 'Text field border, top and sides (px).',
-  'semantic.field.edge-width': 'Text field bottom border (px).',
-  'semantic.field.round': '1 = text fields take the md radius on top, 0 = square.',
-  'semantic.field.round-bottom': '1 = text fields take the md radius at the bottom, 0 = square.',
-  'semantic.field.inset': '1 = text fields have inner padding, 0 = flush (underline fields).',
 };
 
 function typeOf(path) {
   const parts = path.split('.');
   if (parts[0] === 'semantic' && parts[1] === 'type' && parts.length === 4) return { font: 'fontFamily', weight: 'fontWeight' }[parts[3]] ?? 'number';
   if (path === 'semantic.border.style') return 'strokeStyle';
+  if (parts[1] === 'component') return COLOR_SLOTS.has(parts.at(-1)) ? 'color' : parts.at(-1) === 'font' ? 'fontFamily' : 'number';
   return TYPES[parts[1]] ?? 'color';
 }
+
+const COLOR_SLOTS = new Set(['fill', 'label', 'border', 'pressed', 'ring']);
+/** What a component token is, for its $description (semantic.component.<name>.…). */
+const COMPONENT_DESCRIPTION = {
+  radius: 'corner radius (px; 9999 = a pill)',
+  'radius-bottom': 'bottom corner radius (px)',
+  'height.sm': 'small height (px; phones raise a touch target under 44 to 44)',
+  'height.md': 'height (px; phones raise a touch target under 44 to 44)',
+  'height.lg': 'large height (px)',
+  'x.sm': 'small horizontal padding (px)',
+  'x.md': 'horizontal padding (px)',
+  'x.lg': 'large horizontal padding (px)',
+  'text.size': 'text size (px), from its text style',
+  'text.leading': 'line height (px), fitted to the control',
+  'text.tracking': 'letter spacing (em)',
+  'text.font': "the text style's font",
+  fill: 'fill colour (a role)',
+  'fill-alpha': 'fill opacity',
+  label: 'label colour (a role)',
+  border: 'border colour (a role)',
+  'border-alpha': 'border opacity',
+  'border-width': 'border width (px)',
+  'edge-width': 'bottom edge width (px)',
+  pressed: 'pressed and hover fill (derived from the fill unless set)',
+  'pressed-alpha': 'pressed and hover opacity',
+  ring: 'focus ring colour (the border, faded)',
+  'ring-alpha': 'focus ring opacity',
+  alpha: "the style's fill opacity",
+  round: '1 = rounded top corners, 0 = square',
+  'round-bottom': '1 = rounded bottom corners, 0 = square',
+  inset: '1 = inner padding, 0 = flush',
+};
 
 const TEXT_DESCRIPTION = {
   size: 'size (px)',
@@ -115,6 +145,13 @@ function describe(path) {
   if (parts[1] === 'type' && parts.length === 4) return `Text ${parts[2]}: ${TEXT_DESCRIPTION[parts[3]] ?? parts[3]}. Edited in the system.`;
   if (parts[1] === 'radius' && parts.length === 3) return `rounded-${parts[2]} (px), edited in the system; otherwise a multiple of the base radius.`;
   if (path === 'semantic.border.style') return 'Border style: solid, dashed or dotted.';
+  if (parts[1] === 'component') {
+    const [name, ...rest] = parts.slice(2);
+    const key = rest.join('.');
+    const label = { button: 'Button', chip: 'Chip', badge: 'Badge', input: 'Input' }[name] ?? name;
+    if (COMPONENT_DESCRIPTION[key]) return `${label}: ${COMPONENT_DESCRIPTION[key]}.`;
+    if (rest.length === 2 && COMPONENT_DESCRIPTION[rest[1]]) return `${label} ${rest[0]}: ${COMPONENT_DESCRIPTION[rest[1]]}.`;
+  }
   return undefined;
 }
 

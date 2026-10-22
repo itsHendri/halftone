@@ -513,7 +513,7 @@
       "name": "filter-chip",
       "type": "registry:component",
       "title": "Filter chip",
-      "description": "neutral-active chips in a scrolling row",
+      "description": "filter chips in a scrolling row · selected is the theme's Chip colour (inverted by default)",
       "dependencies": [
         "cn@^0.4.0",
         "lucide-react@^1.52.0"

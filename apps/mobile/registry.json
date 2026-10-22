@@ -388,6 +388,7 @@
         "class-variance-authority@^0.7.1"
       ],
       "registryDependencies": [
+        "@halftone-native/lib-theme",
         "@halftone-native/lib-utils",
         "@halftone-native/text"
       ],
@@ -609,6 +610,7 @@
       "description": "always with `Label`",
       "dependencies": [],
       "registryDependencies": [
+        "@halftone-native/lib-theme",
         "@halftone-native/lib-utils",
         "@halftone-native/text"
       ],
@@ -665,6 +667,7 @@
       "description": "",
       "dependencies": [],
       "registryDependencies": [
+        "@halftone-native/lib-theme",
         "@halftone-native/lib-utils",
         "@halftone-native/text"
       ],
@@ -790,6 +793,7 @@
       ],
       "registryDependencies": [
         "@halftone-native/icon",
+        "@halftone-native/lib-theme",
         "@halftone-native/lib-utils",
         "@halftone-native/text",
         "https://reactnativereusables.com/r/nativewind/native-only-animated-view.json"
@@ -816,13 +820,14 @@
       "name": "filter-chip",
       "type": "registry:component",
       "title": "Filter chip",
-      "description": "neutral-active chips",
+      "description": "filter chips · selected is the theme's Chip colour (inverted by default)",
       "dependencies": [
         "lucide-react-native@^1.21.0"
       ],
       "registryDependencies": [
         "@halftone-native/icon",
         "@halftone-native/lib-haptics",
+        "@halftone-native/lib-theme",
         "@halftone-native/lib-utils",
         "@halftone-native/text"
       ],
@@ -1590,6 +1595,7 @@
         "class-variance-authority@^0.7.1"
       ],
       "registryDependencies": [
+        "@halftone-native/lib-theme",
         "@halftone-native/lib-utils",
         "@halftone-native/text"
       ],

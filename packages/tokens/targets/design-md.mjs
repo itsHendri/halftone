@@ -3,9 +3,10 @@
  * short, platform-neutral prose an agent can load on its own. The spec has no light/dark modes, so
  * `colors` carries the light value under each name and the dark one under `<name>-dark`.
  * The detailed rules stay in DESIGN_SYSTEM.md; this file points there instead of repeating them.
- *   options: { out: 'DESIGN.md', name?: string, description?: string }
+ *   options: { out: 'DESIGN.md', name?: string, description?: string, platform?: 'mobile' | 'web' }
  */
 import { describeTintLimits, textOnTintLimits } from '../lib/contrast.mjs';
+import { describeComponents } from '../lib/theme/components.mjs';
 import { describeExtras } from '../lib/theme/extras.mjs';
 import { themeFonts } from './fonts.mjs';
 import { themeStatus } from '../lib/theme/index.mjs';
@@ -80,8 +81,9 @@ const STYLE_TEXT = {
 
 export default function designMd(ctx, options) {
   const name = options.name ?? 'Halftone';
-  // Which radius buttons use: 'control' (the theme's pill setting, the mobile kit) or a scale step (web: 'md').
-  const buttons = options.buttonRadius ?? 'control';
+  // The component layer: one theme for both kits (Button, Chip, Badge, Input).
+  const { button, input } = ctx.components;
+  const corner = (r) => (r >= 9999 ? '"{rounded.full}"' : px(r));
   const description =
     options.description ?? 'Brand-agnostic prototype kit: shadcn semantics, light and dark, WCAG AA enforced at build time.';
   const colors = ctx.colors
@@ -105,7 +107,7 @@ export default function designMd(ctx, options) {
   const duration = Object.fromEntries(group(ctx.prim, ['duration']).map((t) => [t.key, t.value]));
 
   // A system's own tokens: listed, never in the front matter's shared vocabulary.
-  const extras = describeExtras(ctx.extras ?? { color: [], text: [], radius: [], shadow: [], border: [] }, { platform: options.platform ?? (options.buttonRadius ? 'web' : 'mobile') });
+  const extras = describeExtras(ctx.extras ?? { color: [], text: [], radius: [], shadow: [], border: [] }, { platform: options.platform ?? 'mobile' });
   const extrasSection = extras.length
     ? `
 ## Extras (this brand's own)
@@ -133,13 +135,13 @@ components:
   button-primary:
     backgroundColor: "{colors.primary}"
     textColor: "{colors.primary-foreground}"
-    rounded: "{rounded.${buttons}}"
-    height: 48px
+    rounded: ${corner(button.radius)}
+    height: ${px(button.h.md)}
   button-secondary:
     backgroundColor: "{colors.secondary}"
     textColor: "{colors.secondary-foreground}"
-    rounded: "{rounded.${buttons}}"
-    height: 48px
+    rounded: ${corner(button.radius)}
+    height: ${px(button.h.md)}
   card:
     backgroundColor: "{colors.card}"
     textColor: "{colors.card-foreground}"
@@ -148,8 +150,8 @@ components:
   input:
     backgroundColor: "{colors.background}"
     textColor: "{colors.foreground}"
-    rounded: "{rounded.md}"
-    height: 48px
+    rounded: ${corner(input.radius)}
+    height: ${px(input.h.md)}
 ---
 
 <!-- ${ctx.header} -->
@@ -209,13 +211,14 @@ a floating button). Content — inputs included — stays flat.
 
 ## Shapes
 
-Buttons are pills. Inputs ${radius.md}px, cards ${radius.lg}px, larger surfaces ${radius.xl}px, sheet tops
+Buttons ${button.radius >= 9999 ? 'are pills' : `have ${button.radius}px corners`}. Inputs ${input.radius}px, cards ${radius.lg}px, larger surfaces ${radius.xl}px, sheet tops
 ${radius['2xl']}px; chips, avatars and dots are fully round.
 
 ## Components
 
-Only components listed in the registry in \`DESIGN_SYSTEM.md\` exist. Controls are 48px tall (small
-40, large 56). ${STYLE_TEXT.button[ctx.styles.button]} ${STYLE_TEXT.field[ctx.styles.field]} Selected chips and segments are neutral (inverted foreground), never the brand colour.
+Only components listed in the registry in \`DESIGN_SYSTEM.md\` exist. ${STYLE_TEXT.button[ctx.styles.button]} ${STYLE_TEXT.field[ctx.styles.field]}
+Button, Chip, Badge and Input draw the theme's component tokens, the same in both kits: ${describeComponents(ctx.components).join('; ')}.
+Never restyle them by hand. Phones raise any tap target under 44px to 44.
 Motion: ${duration.fast}ms for micro-feedback, ${duration.base}ms for most transitions, ${duration.slow}ms for sheets, and
 nothing moves when the OS asks for reduced motion.
 

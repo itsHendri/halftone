@@ -1,12 +1,14 @@
 import { TextClassContext } from '@/components/ui/text';
+import { TOKENS } from '@/lib/theme';
 import { cn } from '@/lib/utils';
 import { Slot } from '@rn-primitives/slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { Platform, View } from 'react-native';
 
+/** The theme's Badge (semantic.component.badge, --badge-*): corner, padding, text and each variant's colours. */
 const badgeVariants = cva(
   cn(
-    'border-border group shrink-0 flex-row items-center justify-center gap-1 overflow-hidden rounded-full border px-2 py-0.5',
+    'group shrink-0 flex-row items-center justify-center gap-1 overflow-hidden rounded-badge border px-badge-x py-0.5',
     Platform.select({
       web: 'focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive w-fit whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none [&>svg]:size-3',
     })
@@ -14,19 +16,10 @@ const badgeVariants = cva(
   {
     variants: {
       variant: {
-        default: cn(
-          'bg-primary border-transparent',
-          Platform.select({ web: '[a&]:hover:bg-primary/90' })
-        ),
-        secondary: cn(
-          'bg-secondary border-transparent',
-          Platform.select({ web: '[a&]:hover:bg-secondary/90' })
-        ),
-        destructive: cn(
-          'bg-destructive border-transparent',
-          Platform.select({ web: '[a&]:hover:bg-destructive/90' })
-        ),
-        outline: Platform.select({ web: '[a&]:hover:bg-accent [a&]:hover:text-accent-foreground' }),
+        default: cn('bg-badge-default-bg border-badge-default-border', Platform.select({ web: '[a&]:hover:bg-badge-default-pressed' })),
+        secondary: cn('bg-badge-secondary-bg border-badge-secondary-border', Platform.select({ web: '[a&]:hover:bg-badge-secondary-pressed' })),
+        destructive: cn('bg-badge-destructive-bg border-badge-destructive-border', Platform.select({ web: '[a&]:hover:bg-badge-destructive-pressed' })),
+        outline: cn('bg-badge-outline-bg border-badge-outline-border', Platform.select({ web: '[a&]:hover:bg-badge-outline-pressed' })),
       },
     },
     defaultVariants: {
@@ -35,19 +28,28 @@ const badgeVariants = cva(
   }
 );
 
-const badgeTextVariants = cva('text-sm font-medium', {
+const text = TOKENS.components.badge.text;
+const badgeTextVariants = cva(
+  cn(
+    'text-type-badge leading-type-badge font-medium',
+    (Platform.OS === 'web' || text.tracking !== 0) && 'tracking-type-badge',
+    text.font === 'heading' && 'font-heading',
+    text.font === 'mono' && 'font-mono'
+  ),
+  {
   variants: {
     variant: {
-      default: 'text-primary-foreground',
-      secondary: 'text-secondary-foreground',
-      destructive: 'text-destructive-foreground',
-      outline: 'text-foreground',
+      default: 'text-badge-default-fg',
+      secondary: 'text-badge-secondary-fg',
+      destructive: 'text-badge-destructive-fg',
+      outline: 'text-badge-outline-fg',
     },
   },
   defaultVariants: {
     variant: 'default',
   },
-});
+  }
+);
 
 type BadgeProps = React.ComponentProps<typeof View> & React.RefAttributes<View> & {
   asChild?: boolean;

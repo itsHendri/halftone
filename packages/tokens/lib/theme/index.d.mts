@@ -74,8 +74,72 @@ export type Theme = {
   button: { alpha: number; border: number; edge: number };
   /** The field style's numbers: fill opacity per mode, border and bottom edge (px), radii (px), inset (0 or 1). */
   field: { alpha: Record<Mode, number>; border: number; edge: number; inset: number; radius: number; radiusBottom: number };
+  /** The component layer (Button, Chip, Badge, Input), resolved: what both kits draw. */
+  components: ComponentShapes;
   [key: string]: unknown;
 };
+
+export type ComponentName = 'button' | 'chip' | 'badge' | 'input';
+export type Corner = 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full';
+export type ComponentSlot = 'fill' | 'label' | 'border' | 'pressed';
+/** A component colour as drawn: its role (null for a style's ramp step), hex and opacity per mode. */
+export type ComponentColor = {
+  role: string | null;
+  light: string;
+  dark: string;
+  alpha: Record<Mode, number>;
+  ref?: Record<Mode, string>;
+  /** Set in the system (not the default). */
+  edited?: boolean;
+  /** Pressed derived from the fill, a ring from the border. */
+  derived?: boolean;
+};
+export type ComponentVariant = Partial<Record<ComponentSlot | 'ring', ComponentColor>> & { borderWidth?: number; edgeWidth?: number };
+export type ComponentShape = {
+  style?: string;
+  /** The Foundations corner it follows, or null when set in px. */
+  corner?: Corner | null;
+  /** px (9999 = a pill); Input: the top corners. */
+  radius: number;
+  radiusBottom?: number;
+  /** Heights (px) by size. */
+  h: Partial<Record<'sm' | 'md' | 'lg', number>>;
+  /** Horizontal padding (px) by size. */
+  x: Partial<Record<'sm' | 'md' | 'lg', number>>;
+  /** Font role, size and line height (px), tracking (em); `style` the text style it follows. */
+  text: { style?: string; font: 'heading' | 'body' | 'mono'; size: number; leading: number; tracking: number };
+  variants: Record<string, ComponentVariant>;
+};
+export type ComponentShapes = Record<ComponentName, ComponentShape>;
+export type ComponentDefinition = {
+  prefix: string;
+  label: string;
+  styles: string[];
+  sizes: Array<'sm' | 'md' | 'lg' | 'x'>;
+  variants: Record<string, ComponentSlot[]>;
+  text: string;
+};
+export const COMPONENT_NAMES: ComponentName[];
+export const COMPONENTS: Record<ComponentName, ComponentDefinition>;
+export const CORNERS: Corner[];
+export const SLOTS: ComponentSlot[];
+export const SLOT_VAR: Record<ComponentSlot | 'ring', string>;
+/** The touch-target floor (px) the mobile kit applies on phones. */
+export const TOUCH_TARGET: number;
+export function defaultCorner(name: ComponentName, options?: { controls?: string; style?: string }): Corner;
+export function defaultStyle(name: ComponentName, recipe?: Partial<Recipe>): string;
+export function fittedLeading(style: string): number;
+export function componentVars(shape: ComponentShapes, format: 'hsl' | 'oklch', convert: (hex: string) => string, font?: (role: string) => string): Record<Mode, Record<string, string>>;
+export function componentVarNames(): string[];
+export function componentColors(shape: ComponentShapes, css: (key: string, alpha: boolean) => string): Record<string, string>;
+export function componentPairs(
+  shape: ComponentShapes,
+  mode: Mode,
+  background: string,
+  blend: (hex: string, base: string, alpha: number) => string
+): Array<{ component: ComponentName; variant: string; label: string; fg: string; bg: string; fgRole: string | null; bgRole: string | null }>;
+/** Every variant's label on its fill, both modes: rows like contrastReport's, with the component and variant. */
+export function componentContrast(shape: ComponentShapes, background: Record<Mode, string>): Array<ContrastPair & { component: ComponentName; variant: string }>;
 
 export type TypeScale = { size: number; scale: number; leading: number; leadingFactor: number; flow: number; measure: number };
 export type Font = { id: string; family: string; category: 'sans' | 'serif' | 'display' | 'mono'; weights: number[]; expoPrefix?: string; hidden?: boolean; system?: boolean };

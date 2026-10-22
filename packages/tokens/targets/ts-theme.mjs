@@ -4,6 +4,7 @@
  *   options: { out: 'lib/theme.ts', navTheme?: 'expo-router/react-navigation' | false }
  */
 import { camel, group } from '../lib/resolve.mjs';
+import { COMPONENT_NAMES, componentVarNames, TOUCH_TARGET } from '../lib/theme/components.mjs';
 import { presetById, sameRecipe, themeStatus } from '../lib/theme/index.mjs';
 
 /** The applied theme, for a read-only summary in the app (Foundations). */
@@ -16,6 +17,17 @@ function themeInfo(source) {
 }
 
 const round = (n) => Number(n.toFixed(4));
+
+/** The component layer's numbers: sizes (px, for the phone touch-target floor) and each text's font role and tracking. */
+function componentsObject(components) {
+  return COMPONENT_NAMES.map((name) => {
+    const c = components[name];
+    const text = { font: c.text.font, size: round(c.text.size), lineHeight: round(c.text.leading), tracking: c.text.tracking };
+    // The font role is typed as a role, so code can branch on it (the object is `as const`).
+    const json = JSON.stringify({ height: c.h, x: c.x, radius: c.radius, text }).replace(/"font":("\w+")/, `"font":$1 as 'heading' | 'body' | 'mono'`);
+    return `    ${name}: ${json},`;
+  }).join('\n');
+}
 
 function textStylesObject(styles) {
   return Object.entries(styles)
@@ -85,6 +97,12 @@ ${primitiveGroup(ctx.prim, ['radius'])}
   styles: ${JSON.stringify(ctx.styles)},
   button: ${JSON.stringify(ctx.shape.button)},
   field: ${JSON.stringify(ctx.shape.field)},
+  /** The component layer (Button, Chip, Badge, Input) as numbers: heights and padding (px), corner, and the text's
+   *  font role and tracking. The classes (h-button-md, rounded-button, text-type-button…) already follow them; this is
+   *  for the touch-target floor (phones raise a height under ${TOUCH_TARGET} with hitSlop) and the font. */
+  components: {
+${componentsObject(ctx.components)}
+  },
   /** Control heights and padding (px) for the theme's density: h-control-sm, h-control, h-control-lg, px-control-x. */
   density: ${JSON.stringify({ sm: ctx.shape.density.sm, md: ctx.shape.density.md, lg: ctx.shape.density.lg, x: ctx.shape.density.x })},
   /** The type scale at 16px; the theme's typeset multiplies it (text-* classes are already scaled). */
@@ -110,6 +128,9 @@ ${primitiveGroup(ctx.prim, ['duration'])}
 ${primitiveGroup(ctx.prim, ['easing'])}
   },
 } as const;
+
+/** The component layer's CSS variables (what an embedded kit accepts from the docs site's live theme). */
+export const COMPONENT_VARS = ${JSON.stringify(componentVarNames())} as const;
 
 /** The theme tokens.json was generated from (\`halftone-tokens theme apply\`), or null. \`edited\`: theme tokens
  *  were changed by hand since. */

@@ -10,12 +10,13 @@
  *     4. per-style text tokens (semantic.type.<style>.{size,leading,weight,tracking,font}) for edited styles
  *     5. fonts, radius, shadow and border overrides
  *     6. extras, as the `extra` token group (theme.extra)
+ *     7. the component layer (semantic.component.<name>), with the system's `components` edits on top
  *
  * A system with no overrides is exactly generateTheme(doc.recipe, base) (a test holds it to that).
  * The theme's `code` is its recipe's: a lossy handle when the system has overrides (systemCode says so).
  */
 import { encodeRecipe } from '../theme/codec.mjs';
-import { generateTheme } from '../theme/generate.mjs';
+import { generateTheme, withComponents } from '../theme/generate.mjs';
 import { STEPS } from '../theme/palettes.mjs';
 import { anchorStep, brandRamp, neutralAnchorStep, neutralRamp, neutralSeedRamp } from '../theme/ramp.mjs';
 import { FIELD, fieldWidth, typeScale, LEADING, FLOW, resolveTextStyles } from '../theme/recipe.mjs';
@@ -196,12 +197,12 @@ export function generateSystem(input, base, { fix = true } = {}) {
       // The field's widths follow the border's (outline fields) or a 1px floor (filled, underline).
       const fld = FIELD[recipe.field];
       field = { ...field, border: fieldWidth(fld.border, borderWidth), edge: fieldWidth(fld.edge, borderWidth) };
-      semantic.field = { ...semantic.field, 'border-width': field.border, 'edge-width': field.edge };
     }
   }
   // 6. Extras.
   const extra = extraTokens(doc);
-  return { ...theme, semantic, fonts, borderWidth, field, ...(extra ? { extra } : {}) };
+  // 7. The component layer again, on the edited corners, border and text styles, with the system's own component edits.
+  return withComponents({ ...theme, semantic, fonts, borderWidth, field, ...(extra ? { extra } : {}) }, base, doc.components);
 }
 
 /** The ht- code for a system with no overrides; null when one would be lost (a code holds only the recipe). */

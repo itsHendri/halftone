@@ -6,6 +6,7 @@
 import { hexToHslTriplet } from '../lib/color.mjs';
 import { cssName, group, isColor, radiusCss } from '../lib/resolve.mjs';
 import { shadowCss, TEXT_LINE_HEIGHT } from '../lib/theme/recipe.mjs';
+import { COMPONENT_NAMES, COMPONENTS, componentColors, componentVars } from '../lib/theme/components.mjs';
 import { extraTextStyles } from '../lib/theme/extras.mjs';
 import { extraVars, styleVars, textStyleVars } from '../lib/theme/vars.mjs';
 
@@ -37,6 +38,8 @@ function cssBlock(selector, tokens, shape, mode, colors) {
   const present = new Set(tokens.filter(isColor).map(cssName));
   for (const c of colors) if (!present.has(c.name)) lines.push(`    --${c.name}: ${hexToHslTriplet(c[mode])};`);
   for (const [name, value] of Object.entries(styleVars(shape.styleShape, 'hsl')[mode])) lines.push(`    ${name}: ${value};`);
+  // The component layer (Button, Chip, Badge, Input): corners, sizes, text and each variant's colours.
+  if (shape.components) for (const [name, value] of Object.entries(componentVars(shape.components, 'hsl', hexToHslTriplet)[mode])) lines.push(`    ${name}: ${value};`);
   // A system's extras: colours, text styles and border widths (corners and shadows are literal in tailwind.theme.js).
   if (shape.extras) {
     const extra = Object.entries(extraVars(shape.extras, 'hsl')[mode]).filter(([name]) => !/^--(radius|shadow)-/.test(name));
@@ -52,9 +55,9 @@ export default function nativewind3(ctx, options) {
 @tailwind utilities;
 
 @layer base {
-${cssBlock(':root', ctx.semLight, { ...ctx.shape, styleShape: ctx.shape, textStyles: ctx.textStyles, extras: ctx.extras }, 'light', ctx.colors)}
+${cssBlock(':root', ctx.semLight, { ...ctx.shape, styleShape: ctx.shape, textStyles: ctx.textStyles, extras: ctx.extras, components: ctx.components }, 'light', ctx.colors)}
 
-${cssBlock('.dark:root', ctx.semDark, { styleShape: ctx.shape, extras: ctx.extras }, 'dark', ctx.colors)}
+${cssBlock('.dark:root', ctx.semDark, { styleShape: ctx.shape, extras: ctx.extras, components: ctx.components }, 'dark', ctx.colors)}
 }
 `;
   const colors = Object.fromEntries(ctx.colors.map((c) => [c.name, `hsl(var(--${c.name}))`]));
@@ -94,6 +97,24 @@ ${cssBlock('.dark:root', ctx.semDark, { styleShape: ctx.shape, extras: ctx.extra
   }
   const letterSpacing = Object.fromEntries(Object.keys(ctx.textStyles).map((name) => [`type-${name}`, `var(--type-${name}-tracking)`]));
   const fontWeight = Object.fromEntries(Object.keys(ctx.textStyles).map((name) => [`type-${name}`, `var(--type-${name}-weight)`]));
+  // The component layer: bg-button-primary-bg, rounded-button, h-button-md, px-button-x, text-type-button,
+  // border-button-primary-w… Each colour carries its opacity (--button-primary-bg-a).
+  Object.assign(colors, componentColors(ctx.components, (key, alpha) => (alpha ? `hsl(var(--${key}) / var(--${key}-a))` : `hsl(var(--${key}))`)));
+  for (const name of COMPONENT_NAMES) {
+    const c = ctx.components[name];
+    const p = COMPONENTS[name].prefix;
+    if (name !== 'input') borderRadius[p] = `var(--${p}-radius)`;
+    for (const size of Object.keys(c.h)) height[`${p}-${size}`] = `var(--${p}-h-${size})`;
+    if (name !== 'input') spacing[`${p}-x`] = `var(--${p}-x)`;
+    fontSize[`type-${p}`] = `var(--${p}-text-size)`;
+    lineHeight[`type-${p}`] = `var(--${p}-text-leading)`;
+    letterSpacing[`type-${p}`] = `var(--${p}-text-tracking)`;
+  }
+  Object.assign(spacing, { 'button-x-sm': 'var(--button-x-sm)', 'button-x-lg': 'var(--button-x-lg)' });
+  for (const variant of Object.keys(ctx.components.button.variants)) {
+    borderWidth[`button-${variant}-w`] = `var(--button-${variant}-border-w)`;
+    borderWidth[`button-${variant}-edge-w`] = `var(--button-${variant}-edge-w)`;
+  }
   // A system's extras: bg-<name>, rounded-<name>, shadow-<name>, border-<name> (its width), text-type-<name>…
   const extras = ctx.extras ?? { color: [], text: [], radius: [], shadow: [], border: [] };
   for (const c of extras.color) colors[c.name] = `hsl(var(--${c.name}))`;
