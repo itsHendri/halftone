@@ -60,6 +60,7 @@ npm run registry:build    # after editing registry/components.ts or a component'
 npm run tokens:check && npm run registry:build -- --check   # what CI checks
 npm run registry:drift    # after `shadcn add`: which components/ui files differ from shadcn (network)
 npm run registry:dist && npm run registry:roundtrip         # build the shadcn registry and prove it reinstalls
+npm run setup             # first run: project name, samples, theme (asks; `-- --help` for flags)
 npm run eject-samples     # delete the dashboard, landing, assistant, shop and habits samples and every reference
 npm run eject-samples -- shop   # just the ones named (northwind = dashboard, landing, assistant); `-- --status` shows what is left
 ```
@@ -99,13 +100,18 @@ npm run eject-samples -- shop   # just the ones named (northwind = dashboard, la
 - **Static export:** `KIT_WEB_EXPORT=1 KIT_WEB_BASE_PATH=/w npm run build` writes `out/` under a sub-path
   (how the docs site embeds the kit).
 - **Share a link:** deploy to any Next host (Vercel, Cloudflare via OpenNext) or a static export.
+- **First-run setup:** `npm run setup` sets the project's name (`name` in `package.json`, the page title in
+  `app/layout.tsx`), and offers `eject-samples` and `theme apply`. It plans everything, prints the plan and asks
+  before writing; `--dry-run` stops at the plan. For an agent or CI, answer with flags and `--yes`
+  (`npm run setup -- --help`), e.g. `--yes --name "Acme" --eject all --theme <code>`. Inside the monorepo it
+  refuses `--theme` (themes go through the root's `npm run theme:apply`).
 - **Re-brand:** make or pick a system in Studio on the docs site (`/studio`, or the theme pill on any docs page)
   and apply it with the `apply-theme` skill: `npx halftone-tokens theme apply <theme-code|preset|file.halftone.json>`
   (in the monorepo, `npm run theme:apply -- <code|file>` at the root, so both kits stay one brand). **Use system**
   gives the code, or the system's `.halftone.json` once it has edits a code can't carry. Editing tokens.json by hand still works (in the monorepo:
   `apps/mobile/tokens/tokens.json`, then `npm run tokens:sync`), then `npm run tokens:build`. The logo and
   favicons come from Studio too (**Use system › Brand assets**, a zip): the `apply-theme` skill's "Brand assets"
-  steps unzip it.
+  steps unzip it. On a new project, `npm run setup -- --theme <code>` applies the theme with the rest of the setup.
 
 ## Gotchas
 

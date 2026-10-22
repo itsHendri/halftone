@@ -5,6 +5,16 @@ description: What changed, newest first.
 
 ## October 2026
 
+### Set up a project in one command
+
+`npm run setup` does a new project's first steps in either kit. In the Native kit it asks for the app's name,
+slug, URL scheme and bundle identifier and writes them to `app.json`, `package.json` and `.env.local`; it can also
+run `eas init` and put the owner and project id it returns into `.env.local`, which `eas init` can't do itself
+with the kit's dynamic config. In both kits it offers to remove the samples and apply a theme from Studio. It
+prints the plan and writes nothing until you say yes (`--dry-run` stops at the plan), never replaces a value
+already in `.env.local` without asking, and takes every answer as a flag with `--yes` for agents and CI. CI runs
+it that way on a copy of each kit, then typechecks and lints the result.
+
 ### Remove the samples one at a time
 
 `npm run eject-samples` still removes every sample, and now takes names too: `npm run eject-samples -- shop habits`

@@ -22,6 +22,7 @@
     "clean": "rm -rf .expo node_modules",
     "tokens:build": "halftone-tokens build",
     "eject-samples": "node scripts/eject-samples.mjs",
+    "setup": "node scripts/setup.mjs",
     "share": "bash scripts/share.sh",
     "export:web": "expo export --platform web",
     "tokens:figma": "halftone-tokens figma",

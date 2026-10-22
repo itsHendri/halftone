@@ -22,17 +22,22 @@ Then open **Components** in the app.
 
 ## Start a real project
 
-1. Rename: `name`, `slug`, `scheme` in `app.json`; `name` in `package.json`. Copy `.env.example` to `.env.local`
-   and set `APP_ID` (bundle identifier and Android package).
-2. Brand: edit `tokens/tokens.json` (brand ramp + semantic colours + radius), run `npm run tokens:build`.
-   Add a font with the `expo-font` config plugin and set `primitive.font.family.sans`.
-3. Logo, app icon, splash and favicon: add your logo in Studio (halftonedesignsystem.com/studio), download
-   **Use system › Brand assets › Mobile kit** and unzip it here (the `apply-theme` skill's "Brand assets" steps).
-4. Delete the samples: `npm run eject-samples` (removes `app/shop`, `app/habits`, `app/northwind`, their data and every reference).
-   To keep one as a reference for now, name the others: `npm run eject-samples -- shop habits`. `npm run eject-samples -- --status` shows what is left.
-5. `eas init` under your account, then put the owner and project id it prints into `.env.local`
-   (`EAS_OWNER`, `EAS_PROJECT_ID`) and into your EAS environment variables for cloud builds.
-6. Build your prototype as its own named segment, `app/<slug>/` (see `AGENTS.md › Building a prototype`).
+1. `npm run setup`. It asks for the app's name, slug, URL scheme and bundle id (`APP_ID`), sets them in
+   `app.json`, `package.json` and `.env.local` (from `.env.example`), and offers to run `eas init`, remove the
+   samples and apply a theme. It prints the plan and writes nothing until you say yes; `--dry-run` stops at the
+   plan. A value already in `.env.local` is only replaced if you say so. `eas init` can't write to the dynamic
+   `app.config.ts`, so setup puts the owner and project id it returns into `.env.local` for you; without the
+   `eas` CLI, or logged out, it skips that step. Set the same names as EAS environment variables for cloud builds.
+   Every question has a flag (`npm run setup -- --help`), so it also runs without questions:
+   `npm run setup -- --yes --name "Acme Field" --eject all --theme calm`.
+2. Brand: the theme comes from Studio (halftonedesignsystem.com/studio): pass its code or `.halftone.json` to
+   setup, or later to `npx halftone-tokens theme apply`. Editing `tokens/tokens.json` by hand works too; run
+   `npm run tokens:build` after.
+3. Logo, app icon, splash and favicon: add your logo in Studio, download **Use system › Brand assets › Mobile kit**
+   and unzip it here (the `apply-theme` skill's "Brand assets" steps).
+4. The samples one at a time, later: `npm run eject-samples -- shop habits`; `npm run eject-samples -- --status`
+   shows what is left.
+5. Build your prototype as its own named segment, `app/<slug>/` (see `AGENTS.md › Building a prototype`).
 
 ## Figma
 

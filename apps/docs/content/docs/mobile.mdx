@@ -24,10 +24,20 @@ development build (`eas build --profile development`) works for anyone you send 
 <Steps>
 <Step>
 
-### Name it
+### Set it up
 
-Set `name`, `slug` and `scheme` in `app.json`, and the bundle identifier as `APP_ID` in `.env.local` (copy
-`.env.example`). Account values never go into the repo.
+```bash
+npm run setup
+```
+
+Asks for the app's name, slug, URL scheme and bundle identifier, then offers to link an EAS project
+(`eas init`), remove the samples and apply a theme. It prints the plan and writes nothing until you say yes.
+The names go into `app.json` and `package.json`; the bundle identifier (`APP_ID`) and the EAS owner and project
+id go into `.env.local`, so account values never reach the repo. A value already in `.env.local` is only
+replaced if you say so. Without the `eas` CLI, or logged out, the EAS step is skipped and the rest still runs.
+
+`--dry-run` prints the plan and stops. Every question has a flag, so an agent or CI can run it without
+questions: `npm run setup -- --yes --name "Acme Field" --eject all --theme calm` (`-- --help` lists them).
 
 </Step>
 <Step>
@@ -40,7 +50,8 @@ Pick a theme on this site (the bar at the bottom, or [Studio](/studio)), then ap
 npx halftone-tokens theme apply ht1-XXXXXXXXXXXX
 ```
 
-It rewrites the theme's part of `tokens/tokens.json`, installs its fonts and rebuilds. See [Themes](/docs/themes).
+It rewrites the theme's part of `tokens/tokens.json`, installs its fonts and rebuilds (setup does the same
+with `--theme`). See [Themes](/docs/themes).
 To edit `tokens/tokens.json` by hand instead, run `npm run tokens:build` after: it names any pairing that
 falls below WCAG AA, with its ratio (`--strict` fails on it).
 

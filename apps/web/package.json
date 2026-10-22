@@ -26,7 +26,8 @@
     "registry:drift": "node scripts/shadcn-drift.mjs",
     "registry:dist": "npx -y shadcn@4.21.3 build registry.json --output dist/r/web",
     "registry:roundtrip": "node scripts/registry-roundtrip.mjs",
-    "eject-samples": "node scripts/eject-samples.mjs"
+    "eject-samples": "node scripts/eject-samples.mjs",
+    "setup": "node scripts/setup.mjs"
   },
   "dependencies": {
     "class-variance-authority": "^0.7.1",
