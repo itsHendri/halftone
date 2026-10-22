@@ -24,9 +24,17 @@ a landing page and an AI assistant; and a shop and a habit tracker, the same app
 <Steps>
 <Step>
 
-### Name it
+### Set it up
 
-Set `name` in `package.json`, and the title and description in `app/layout.tsx`.
+```bash
+npm run setup
+```
+
+Asks for the project's name and sets it as `name` in `package.json` and the page title in `app/layout.tsx`,
+then offers to remove the samples and apply a theme. It prints the plan and writes nothing until you say yes;
+`--dry-run` stops at the plan. Every question has a flag:
+`npm run setup -- --yes --name "Acme Portal" --eject all --theme calm` (`-- --help` lists them). Write your
+own description in `app/layout.tsx`.
 
 </Step>
 <Step>

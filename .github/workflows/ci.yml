@@ -148,18 +148,22 @@ jobs:
         include:
           - app: mobile
             tokens: pack
+            setup: --yes --name "Acme Field" --app-id com.acme.field --theme calm --no-eas-init
             checks: npm run tokens:check && npm run registry:build -- --check && npm run typecheck && npm run lint -- --max-warnings 0 && npm run lint:rules && npm run export:web
             after-eject: npm run typecheck && npm run lint -- --max-warnings 0
           - app: web
             tokens: pack
+            setup: --yes --name "Acme Portal" --theme calm
             checks: npm run tokens:check && npm run registry:build -- --check && npm run typecheck && npm run lint && npm run lint:rules && npm run build
             after-eject: npm run typecheck && npm run lint
           - app: mobile
             tokens: published
+            setup: --yes --name "Acme Field" --app-id com.acme.field --theme calm --no-eas-init
             checks: npm run tokens:check && npm run typecheck && npm run lint -- --max-warnings 0 && npm run lint:rules
             after-eject: npm run typecheck && npm run lint -- --max-warnings 0
           - app: web
             tokens: published
+            setup: --yes --name "Acme Portal" --theme calm
             checks: npm run tokens:check && npm run typecheck && npm run lint && npm run lint:rules
             after-eject: npm run typecheck && npm run lint
     steps:
@@ -200,7 +204,13 @@ jobs:
         working-directory: ${{ runner.temp }}/app
         run: ${{ matrix.checks }}
 
-      # The first thing a real project does. Runs on the throwaway copy, so it can be destructive.
+      # The first things a real project does, on the throwaway copy so they can be destructive: setup without
+      # questions (rename, .env.local, a theme with its fonts; no eas init), then the samples go, then the gates.
+      - name: Setup runs without questions
+        if: steps.pending.outputs.skip != 'true'
+        working-directory: ${{ runner.temp }}/app
+        run: npm run setup -- ${{ matrix.setup }}
+
       - name: Samples eject cleanly
         if: steps.pending.outputs.skip != 'true'
         working-directory: ${{ runner.temp }}/app
@@ -240,8 +250,9 @@ jobs:
       - run: npm ci
         working-directory: .
 
+      # Through setup, as a new project does it (its --eject runs eject-samples; no theme in the monorepo, no eas init).
       - name: Eject ${{ matrix.samples }}
-        run: npm run eject-samples -- ${{ matrix.samples != 'all' && matrix.samples || '' }} && npm run eject-samples -- --status
+        run: npm run setup -- --yes --name "Acme Test" --eject "${{ matrix.samples }}" ${{ matrix.app == 'mobile' && '--no-eas-init' || '' }} && npm run eject-samples -- --status
 
       - name: Gates pass on what is left
         run: |

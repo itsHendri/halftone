@@ -49,6 +49,7 @@ npm run typecheck && npm run lint -- --max-warnings 0   # CI runs these plus tok
 npm run tokens:build   # after editing tokens/tokens.json (names any pairing below WCAG AA; --strict fails on it)
 npm run registry:build # after editing registry/components.ts or a component's classes: DESIGN_SYSTEM.md tables, llms.txt, index, token-usage.json
 npm run tokens:check && npm run registry:build -- --check   # what CI checks (plus the halftone-tokens tests in the monorepo)
+npm run setup          # first run: name, slug, scheme, APP_ID, eas init, samples, theme (asks; `-- --help` for flags)
 npm run eject-samples  # delete the shop, habits and Northwind samples, their stores and every reference
 npm run eject-samples -- shop   # just the ones named; `-- --status` shows what is left (CI ejects each one and runs the gates)
 npm run share -- "msg" # EAS Update to the main channel, prints the links
@@ -89,10 +90,17 @@ npx expo run:ios       # build + install the dev client on the simulator (needs 
 - **Dev client:** `LANG=en_US.UTF-8 npx expo run:ios --no-bundler` builds `Halftone` for the simulator; then
   `xcrun simctl openurl booted "exp+halftone://expo-development-client/?url=http%3A%2F%2Flocalhost%3A8091"`.
   For phones: `eas build --profile development` (needs Apple credentials, interactive).
+- **First-run setup:** `npm run setup` names the app (`name`/`slug`/`scheme` in `app.json`, `name` in
+  `package.json`, `APP_ID` in `.env.local`), and offers `eas init`, `eject-samples` and `theme apply`. It plans
+  everything, prints the plan and asks before writing; `--dry-run` stops at the plan. For an agent or CI, answer
+  with flags and `--yes` (`npm run setup -- --help`), e.g. `--yes --name "Acme" --eject all --theme <code>`;
+  `--eas-init` only when the person asked for an EAS project (it creates one on their account). It never replaces
+  a value already in `.env.local` without a yes or `--overwrite`. Inside the monorepo it refuses `--theme`
+  (themes go through the root's `npm run theme:apply`).
 - **Account config:** `app.config.ts` reads `APP_ID`, `EAS_OWNER`, `EAS_PROJECT_ID` and `KIT_WEB_BASE_URL` from
   `.env.local` (gitignored, see `.env.example`) or the environment, so the repo carries no account. EAS cloud
   builds and workflows need the same names as EAS environment variables. `eas init` cannot write to a dynamic
-  config: copy the id it prints into `.env.local`.
+  config, so `npm run setup -- --eas-init` runs it with `--json` and writes the owner and project id into `.env.local`.
 - **Share:** `npm run share -- "what changed"` publishes to the `main` channel. Recipients need the dev build
   installed, or Expo Go signed into the owning account/org (Expo Go on iOS requires login since SDK 57).
 - **Web link for clients:** `npm run export:web && eas deploy` → immutable preview URL. `web.output` is `single`
@@ -104,8 +112,8 @@ npx expo run:ios       # build + install the dev client on the simulator (needs 
   `tokens/tokens.json` (colours, radius, fonts, depth, density, border, icon stroke, typeset, plus a system's hand
   edits), fixes contrast itself and records the recipe or system (`halftone-tokens theme show`). Editing tokens.json by hand
   still works: `tokens:build` names any pairing below 4.5:1 with its ratio (treat that as a bug unless the person
-  chose the colour knowingly; `--strict` makes it an error). Then set `name`/`slug`/`scheme`
-  in `app.json` and `APP_ID` in `.env.local`. The logo, app icon and splash come from Studio too (**Use system ›
+  chose the colour knowingly; `--strict` makes it an error). The names come from `npm run setup` (above), which
+  also takes the theme (`--theme <code>`). The logo, app icon and splash come from Studio too (**Use system ›
   Brand assets**, a zip): the `apply-theme` skill's "Brand assets" steps unzip it; don't hand-edit `assets/images/*`.
 
 ## Agent tooling

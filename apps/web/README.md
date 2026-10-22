@@ -22,9 +22,14 @@ npm run dev        # http://localhost:3100
 
 ## Start a real project
 
-1. Rename `name` in `package.json`, and remove the samples: `npm run eject-samples` (or name some:
-   `npm run eject-samples -- shop habits`; `-- --status` shows what is left).
-2. Brand: edit `tokens/tokens.json` (brand ramp, semantic colours, radius), run `npm run tokens:build`.
+1. `npm run setup`. It asks for the project's name (the page title in `app/layout.tsx`, and `name` in
+   `package.json`), and offers to remove the samples and apply a theme. It prints the plan and writes nothing
+   until you say yes; `--dry-run` stops at the plan. Every question has a flag (`npm run setup -- --help`):
+   `npm run setup -- --yes --name "Acme Portal" --eject all --theme calm`. The samples can also go one at a
+   time later: `npm run eject-samples -- shop habits` (`-- --status` shows what is left).
+2. Brand: the theme comes from Studio (halftonedesignsystem.com/studio): pass its code or `.halftone.json` to
+   setup, or later to `npx halftone-tokens theme apply`. Editing `tokens/tokens.json` by hand works too; run
+   `npm run tokens:build` after.
 3. Logo and favicons: add your logo in Studio (halftonedesignsystem.com/studio), download
    **Use system › Brand assets › Web kit** and unzip it here (the `apply-theme` skill's "Brand assets" steps).
 4. Build your prototype in its own folder, `app/<slug>/` (see `AGENTS.md › Building a prototype`), or hand
