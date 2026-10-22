@@ -14,9 +14,10 @@
  * apply), app.json, package.json and .env.local are written, and `eas init` runs last. A value already
  * in .env.local is only replaced when you say so (or pass --overwrite).
  *
- * `eas init` cannot write to app.config.ts (it is dynamic), which is why its owner and project id
- * used to be copied by hand: this runs it with --json and puts both into .env.local. Without the eas
- * CLI, or logged out, that step is skipped with a note; it never blocks the rest.
+ * `eas init` writes the owner and project id into app.json (app.config.ts spreads it), which is committed,
+ * so a project's account would end up in the repo. This runs it with --json, puts both into .env.local
+ * (app.config.ts reads them from there) and takes them back out of app.json. Without the eas CLI, or
+ * logged out, that step is skipped with a note; it never blocks the rest.
  */
 import { spawnSync } from 'node:child_process';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
@@ -380,7 +381,19 @@ if (registry) step('npm run registry:build', 'npm', ['run', '-s', 'registry:buil
 let easDone = false;
 if (eas) {
   console.log(`\n→ eas init --account ${eas.owner}`);
+  const before = JSON.parse(readFileSync(rel('app.json'), 'utf8')).expo;
   const r = run('eas', ['init', '--json', '--non-interactive', '--force', '--account', eas.owner], { stdio: ['inherit', 'pipe', 'inherit'] });
+  // What eas init wrote into app.json goes back to what it was: the account lives in .env.local, not the repo.
+  const after = JSON.parse(readFileSync(rel('app.json'), 'utf8'));
+  const same = (a, b) => JSON.stringify(a) === JSON.stringify(b);
+  if (!same(after.expo.owner, before.owner) || !same(after.expo.extra?.eas, before.extra?.eas)) {
+    if (before.owner === undefined) delete after.expo.owner;
+    else after.expo.owner = before.owner;
+    if (before.extra?.eas === undefined) delete after.expo.extra?.eas;
+    else after.expo.extra = { ...after.expo.extra, eas: before.extra.eas };
+    writeFileSync(rel('app.json'), JSON.stringify(after, null, 2) + '\n');
+    console.log('  took the owner and project id eas init wrote back out of app.json.');
+  }
   let out = null;
   try {
     const stdout = r.stdout ?? '';

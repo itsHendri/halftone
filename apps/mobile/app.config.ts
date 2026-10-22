@@ -48,7 +48,7 @@ function withBrand(config: Partial<ExpoConfig>, projectRoot: string): Partial<Ex
 // Account-specific values come from the environment, so a fresh clone carries none of them.
 // Locally: `.env.local` (gitignored; see `.env.example`). EAS Build / Update / Workflows: the same
 // names as EAS environment variables. Leave them unset and the kit still runs everywhere except
-// EAS (run `eas init` and set them once you have a project).
+// EAS (`npm run setup -- --eas-init` creates the project and writes them).
 //   APP_ID            bundle identifier + Android package (default com.halftonedesignsystem.app)
 //   EAS_OWNER         Expo account or org that owns the project
 //   EAS_PROJECT_ID    EAS project id; also sets the update URL

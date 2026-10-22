@@ -17,7 +17,7 @@ read -r OWNER SLUG PROJECT_ID < <(node -e '
 ' <<<"$CONFIG")
 
 if [[ -z "$PROJECT_ID" || -z "$OWNER" ]]; then
-  echo "No EAS project configured. Run \`eas init\`, then set EAS_OWNER and EAS_PROJECT_ID (see .env.example)." >&2
+  echo "No EAS project configured. Run \`npm run setup -- --eas-init\`: it links one and sets EAS_OWNER and EAS_PROJECT_ID in .env.local." >&2
   exit 1
 fi
 

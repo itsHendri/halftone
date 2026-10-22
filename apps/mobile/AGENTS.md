@@ -99,8 +99,9 @@ npx expo run:ios       # build + install the dev client on the simulator (needs 
   (themes go through the root's `npm run theme:apply`).
 - **Account config:** `app.config.ts` reads `APP_ID`, `EAS_OWNER`, `EAS_PROJECT_ID` and `KIT_WEB_BASE_URL` from
   `.env.local` (gitignored, see `.env.example`) or the environment, so the repo carries no account. EAS cloud
-  builds and workflows need the same names as EAS environment variables. `eas init` cannot write to a dynamic
-  config, so `npm run setup -- --eas-init` runs it with `--json` and writes the owner and project id into `.env.local`.
+  builds and workflows need the same names as EAS environment variables. `eas init` on its own writes `owner` and
+  `extra.eas.projectId` into `app.json`, which is committed: run it through `npm run setup -- --eas-init`, which
+  puts both into `.env.local` and takes them back out of `app.json`. Never commit an `owner` or `extra.eas` there.
 - **Share:** `npm run share -- "what changed"` publishes to the `main` channel. Recipients need the dev build
   installed, or Expo Go signed into the owning account/org (Expo Go on iOS requires login since SDK 57).
 - **Web link for clients:** `npm run export:web && eas deploy` → immutable preview URL. `web.output` is `single`
