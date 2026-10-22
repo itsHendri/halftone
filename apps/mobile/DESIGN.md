@@ -168,12 +168,12 @@ components:
   button-primary:
     backgroundColor: "{colors.primary}"
     textColor: "{colors.primary-foreground}"
-    rounded: "{rounded.control}"
+    rounded: "{rounded.full}"
     height: 48px
   button-secondary:
     backgroundColor: "{colors.secondary}"
     textColor: "{colors.secondary-foreground}"
-    rounded: "{rounded.control}"
+    rounded: "{rounded.full}"
     height: 48px
   card:
     backgroundColor: "{colors.card}"
@@ -183,7 +183,7 @@ components:
   input:
     backgroundColor: "{colors.background}"
     textColor: "{colors.foreground}"
-    rounded: "{rounded.md}"
+    rounded: 8px
     height: 48px
 ---
 
@@ -250,8 +250,9 @@ Buttons are pills. Inputs 8px, cards 10px, larger surfaces 16px, sheet tops
 
 ## Components
 
-Only components listed in the registry in `DESIGN_SYSTEM.md` exist. Controls are 48px tall (small
-40, large 56). The primary button is a solid brand fill. Text fields are outlined boxes. Selected chips and segments are neutral (inverted foreground), never the brand colour.
+Only components listed in the registry in `DESIGN_SYSTEM.md` exist. The primary button is a solid brand fill. Text fields are outlined boxes.
+Button, Chip, Badge and Input draw the theme's component tokens, the same in both kits: Button 48px tall (small 40, large 56), 20px padding, pill, 16px text; Chip 36px, pill; selected is foreground with background text; Badge pill, 14px text; Input, Textarea and Select 48px, 8px corners.
+Never restyle them by hand. Phones raise any tap target under 44px to 44.
 Motion: 150ms for micro-feedback, 200ms for most transitions, 300ms for sheets, and
 nothing moves when the OS asks for reduced motion.
 

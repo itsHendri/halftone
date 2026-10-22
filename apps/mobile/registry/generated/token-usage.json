@@ -10,7 +10,6 @@
       "approval-card",
       "attachment-chip",
       "badge",
-      "button",
       "calendar",
       "card",
       "chat-composer",
@@ -28,7 +27,6 @@
       "option-sheet",
       "otp-input",
       "popover",
-      "pricing-card",
       "radio-group",
       "select",
       "selectable-card",
@@ -38,6 +36,7 @@
       "stepper",
       "sticky-bottom-bar",
       "switch",
+      "tab-bar",
       "tabs",
       "toggle",
       "toggle-group",
@@ -47,6 +46,7 @@
       "action-sheet",
       "attachment-chip",
       "badge",
+      "button",
       "calendar",
       "chat-composer",
       "chat-thread-list",
@@ -68,7 +68,6 @@
       "toggle-group"
     ],
     "color.accent-foreground": [
-      "badge",
       "chat-thread-list",
       "context-menu",
       "dialog",
@@ -82,6 +81,8 @@
       "action-grid",
       "alert-dialog",
       "avatar-group",
+      "badge",
+      "button",
       "code-scanner",
       "date-picker",
       "dialog",
@@ -95,7 +96,9 @@
       "promo-card",
       "range-selector",
       "sticky-bottom-bar",
+      "tab-bar",
       "timeline",
+      "toast",
       "tooltip"
     ],
     "color.border": [
@@ -106,6 +109,7 @@
       "amount-input",
       "attachment-chip",
       "badge",
+      "button",
       "card",
       "context-menu",
       "dialog",
@@ -127,6 +131,7 @@
       "selectable-card",
       "separator",
       "sheet",
+      "sources",
       "stat-tile",
       "stepper",
       "sticky-bottom-bar",
@@ -134,7 +139,14 @@
       "timeline",
       "tool-call-card"
     ],
+    "color.button": [
+      "button"
+    ],
+    "color.button-edge": [
+      "button"
+    ],
     "color.button-foreground": [
+      "button",
       "spinner"
     ],
     "color.card": [
@@ -151,9 +163,12 @@
       "segmented-control",
       "selectable-card",
       "sheet",
+      "slider",
       "sources",
       "stat-tile",
-      "tabs"
+      "switch",
+      "tabs",
+      "tool-call-card"
     ],
     "color.card-foreground": [
       "card"
@@ -193,33 +208,44 @@
       "radio-group",
       "select",
       "sheet",
+      "slider",
       "spot",
       "status-dot",
       "swipe-to-confirm",
+      "textarea",
+      "toast",
       "toggle",
+      "tool-call-card",
       "value-header"
     ],
     "color.destructive-foreground": [
       "action-grid",
       "badge",
+      "button",
       "icon-badge",
       "spot",
-      "swipe-to-confirm"
+      "swipe-to-confirm",
+      "toast"
     ],
     "color.field": [
       "input",
-      "select"
+      "select",
+      "textarea"
     ],
     "color.field-edge": [
       "input",
-      "select"
+      "select",
+      "textarea"
     ],
     "color.foreground": [
+      "action-grid",
       "action-sheet",
       "alert",
       "alert-dialog",
       "amount-input",
       "badge",
+      "button",
+      "chat-composer",
       "code-scanner",
       "context-menu",
       "dialog",
@@ -244,8 +270,11 @@
       "spinner",
       "stepper",
       "streaming-text",
+      "switch",
       "tabs",
       "text",
+      "textarea",
+      "toast",
       "toggle",
       "toggle-group",
       "tooltip"
@@ -262,6 +291,7 @@
       "spot"
     ],
     "color.input": [
+      "button",
       "chat-composer",
       "checkbox",
       "date-picker",
@@ -272,10 +302,12 @@
       "toggle"
     ],
     "color.muted": [
+      "action-grid",
       "action-sheet",
       "amount-input",
       "avatar",
       "avatar-group",
+      "chat-message",
       "code-scanner",
       "donut-chart",
       "icon-circle",
@@ -292,6 +324,7 @@
       "range-selector",
       "segmented-control",
       "sheet",
+      "slider",
       "sources",
       "spot",
       "stepper",
@@ -300,6 +333,7 @@
       "tabs",
       "text",
       "toggle",
+      "tool-call-card",
       "value-header"
     ],
     "color.muted-foreground": [
@@ -348,6 +382,7 @@
       "select",
       "selectable-card",
       "sheet",
+      "sources",
       "spinner",
       "spot",
       "stat-tile",
@@ -359,10 +394,12 @@
       "tab-bar",
       "tabs",
       "text",
+      "textarea",
       "thinking-indicator",
       "timeline",
       "toggle",
       "toggle-group",
+      "tool-call-card",
       "value-header"
     ],
     "color.popover": [
@@ -386,21 +423,28 @@
       "amount-input",
       "badge",
       "bar-chart",
+      "button",
       "calendar",
+      "chat-composer",
+      "chat-message",
       "checkbox",
       "code-scanner",
       "empty-state",
+      "floating-button",
       "icon-circle",
       "input",
+      "logo",
       "option-sheet",
       "otp-input",
       "placeholder",
+      "pricing-card",
       "progress",
       "promo-card",
       "radio-group",
       "section-header",
       "selectable-card",
       "sheet",
+      "slider",
       "spinner",
       "spot",
       "status-dot",
@@ -415,7 +459,9 @@
       "badge",
       "calendar",
       "chat-composer",
+      "chat-message",
       "checkbox",
+      "floating-button",
       "input",
       "promo-card",
       "selectable-card",
@@ -437,14 +483,20 @@
       "select",
       "switch",
       "tabs",
+      "textarea",
       "toggle"
     ],
     "color.secondary": [
       "badge",
-      "chat-composer"
+      "button",
+      "chat-composer",
+      "floating-button"
     ],
     "color.secondary-foreground": [
-      "badge"
+      "badge",
+      "button",
+      "chat-composer",
+      "floating-button"
     ],
     "color.success": [
       "alert",
@@ -455,12 +507,15 @@
       "spot",
       "status-dot",
       "timeline",
+      "toast",
+      "tool-call-card",
       "value-header"
     ],
     "color.success-foreground": [
       "promo-card",
       "spot",
-      "timeline"
+      "timeline",
+      "toast"
     ],
     "color.warning": [
       "alert",
@@ -468,34 +523,61 @@
       "icon-circle",
       "promo-card",
       "rating",
+      "slider",
       "spot",
-      "status-dot"
+      "status-dot",
+      "toast"
     ],
     "color.warning-foreground": [
       "promo-card",
-      "spot"
+      "spot",
+      "toast"
+    ],
+    "component.badge": [
+      "badge"
+    ],
+    "component.button": [
+      "button"
+    ],
+    "component.chip": [
+      "filter-chip"
+    ],
+    "component.input": [
+      "input",
+      "select",
+      "textarea"
     ],
     "font.heading": [
       "action-sheet",
+      "badge",
+      "button",
       "card",
+      "filter-chip",
+      "input",
       "option-sheet",
       "sheet"
     ],
     "font.mono": [
-      "text"
+      "badge",
+      "button",
+      "filter-chip",
+      "input",
+      "text",
+      "tool-call-card"
     ],
     "radius.2xl": [
       "action-sheet",
       "chat-composer",
+      "chat-message",
       "code-scanner",
       "notify",
       "option-sheet",
       "promo-card",
-      "sheet"
+      "sheet",
+      "spot"
     ],
     "radius.control": [
-      "button",
-      "filter-chip",
+      "floating-button",
       "follow-up-suggestions",
       "swipe-to-confirm"
     ],
@@ -506,7 +588,6 @@
       "amount-input",
       "avatar",
       "avatar-group",
-      "badge",
       "calendar",
       "chat-composer",
       "code-scanner",
@@ -527,12 +608,16 @@
       "range-selector",
       "selectable-card",
       "sheet",
+      "slider",
+      "spot",
       "status-dot",
       "stepper",
       "success-screen",
       "switch",
+      "tab-bar",
       "thinking-indicator",
       "timeline",
+      "toast",
       "value-header"
     ],
     "radius.lg": [
@@ -564,6 +649,7 @@
       "dropdown-menu",
       "hover-card",
       "list-row",
+      "logo",
       "menubar",
       "popover",
       "segmented-control",
@@ -572,10 +658,12 @@
       "tabs",
       "toggle",
       "toggle-group",
+      "tool-call-card",
       "tooltip"
     ],
     "radius.sm": [
       "bar-chart",
+      "chat-message",
       "context-menu",
       "dropdown-menu",
       "menubar",
@@ -588,14 +676,17 @@
       "card",
       "dialog",
       "icon-circle",
-      "photo-capture"
+      "photo-capture",
+      "tool-call-card"
     ],
     "shadow.1": [
+      "button",
       "checkbox",
       "menubar",
       "radio-group",
       "segmented-control",
       "select",
+      "slider",
       "switch",
       "toggle",
       "toggle-group"
@@ -612,26 +703,52 @@
       "context-menu",
       "dialog",
       "dropdown-menu",
+      "floating-button",
       "menubar",
-      "notify"
+      "notify",
+      "toast"
+    ],
+    "type.blockquote": [
+      "text"
+    ],
+    "type.code": [
+      "text"
+    ],
+    "type.h1": [
+      "text"
+    ],
+    "type.h2": [
+      "text"
     ],
     "type.h3": [
-      "success-screen"
+      "success-screen",
+      "text"
     ],
     "type.h4": [
       "biometric-gate",
       "empty-state",
-      "permission-primer"
+      "permission-primer",
+      "text"
     ],
     "type.large": [
       "action-sheet",
       "list-group",
       "option-sheet",
       "section-header",
-      "sheet"
+      "sheet",
+      "text"
+    ],
+    "type.lead": [
+      "text"
+    ],
+    "type.muted": [
+      "text"
     ],
     "type.p": [
-      "prose"
+      "text"
+    ],
+    "type.small": [
+      "text"
     ]
   }
 }

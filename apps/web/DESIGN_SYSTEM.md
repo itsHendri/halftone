@@ -31,8 +31,9 @@ The shadcn vocabulary through Tailwind classes; each works as `bg-`, `text-`, `b
 | `secondary`, `muted`, `accent` (+ `-foreground`) | quieter fills, helper text, hover fills |
 | `destructive`, `success`, `warning`, `info` (+ `-foreground`) | status |
 | `border`, `input`, `ring` | hairlines, field borders, focus |
-| `button` / `button-foreground` / `button-edge` | the primary Button, in the theme's button style (Button uses them) |
-| `field` / `field-edge` | text fields, in the theme's field style (Input, Textarea, Select use them) |
+| `button` / `button-foreground` / `button-edge` | the theme's button style's colours (the primary Button's defaults) |
+| `field` / `field-edge` | the theme's field style's colours (Input, Textarea and Select's defaults) |
+| `button-<variant>-bg` / `-fg` / `-border` / `-pressed`, `chip-…`, `badge-…`, `field-<state>-…` | the component layer: each variant's colours, as the theme sets them (Button, FilterChip, Badge and the fields use them) |
 | `sidebar*` | the app shell's sidebar surface, its active item and border |
 | `chart-1` … `chart-5` | data series (through a ChartConfig) |
 
@@ -43,12 +44,15 @@ Rules:
 - Tint a surface with an alpha of a semantic colour: `bg-primary/10`, `bg-success/15`. Text on a tint stays
   `text-foreground`: a status colour as small text on its own tint measures under 4.5:1 (success 4.09,
   destructive 3.81). A status badge is an outline Badge with a coloured dot.
-- Selected / active states (tabs, segmented controls, nav items) are **neutral**, not the brand colour.
+- Selected / active states (tabs, segmented controls, nav items) are **neutral**, not the brand colour. A selected
+  FilterChip is the theme's Chip `selected` colour: inverted by default, and a system may make it a role such as
+  primary. Never colour one by hand.
 - **Styles are the theme's, not the screen's.** The theme picks the primary button (solid, soft, outline,
-  raised) and the text fields (outline, filled, underline); `Button`, `Input`, `Textarea` and `Select` already
-  draw them with `bg-button` / `bg-field` and their edge classes. Never restyle a primary button or a field
-  in a screen (no `bg-primary` on a `Button`, no `border-b` field): change the theme instead. Inside the
-  primary `Button`, a `Spinner` takes `tone="button-foreground"`; an `Icon` needs no colour.
+  raised), the text fields (outline, filled, underline), and each component's corner, size, text and variant
+  colours, the same as the mobile kit's; `Button`, `FilterChip`, `Badge`, `Input`, `Textarea` and `Select` already
+  draw them (`bg-button-primary-bg`, `rounded-button`, `h-(--button-h-md)`, `type-button`…). Never restyle one in
+  a page (no `bg-primary` on a `Button`, no `border-b` field, no `h-9` or `rounded-md` on a Button): change the
+  theme instead. Inside the primary `Button`, a `Spinner` takes `tone="button-foreground"`; an `Icon` needs no colour.
 - Light and dark are both required.
 
 ### Spacing
@@ -60,7 +64,7 @@ The theme's density scales the whole scale (`--spacing` × 0.875 compact, × 1.1
 ### Radius
 
 <!-- GENERATED:tokens:radius -->
-`rounded-sm` 6 · `rounded-md` 8 (inputs, buttons) · `rounded-lg` 10 (cards, dialogs) · `rounded-xl` 16 (panels, tables) · `rounded-2xl` 20 (hero surfaces) · `rounded-full` (avatars, pills).
+`rounded-sm` 6 · `rounded-md` 8 (inputs) · `rounded-lg` 10 (cards, dialogs) · `rounded-xl` 16 (panels, tables) · `rounded-2xl` 20 (hero surfaces) · `rounded-full` (avatars, pills).
 <!-- /GENERATED:tokens:radius -->
 
 ### Typography
@@ -77,7 +81,9 @@ from `--type-<style>-*`; `leading-*`, `tracking-*` and `font-*` still override).
 
 `shadow-xs`/`shadow-sm` (controls, cards), `shadow-md` (raised, popovers), `shadow-lg`/`shadow-xl` (menus,
 dialogs) are the theme's three elevation levels; `border` is its width; Lucide icons take its stroke.
-Buttons follow the radius scale (`rounded-md`); the theme's pill setting is for the mobile kit.
+Button, FilterChip, Badge, Input, Textarea and Select take their corners, heights, padding and text from the theme's
+component layer, the same as the mobile kit's (one theme for both kits): `rounded-button`, `rounded-chip`,
+`rounded-badge` (pills by default), `h-(--button-h-md)` (48 by default), `h-(--field-h-md)`, `type-button`.
 
 ### Motion
 
@@ -125,7 +131,7 @@ the tables. Text between `GENERATED` markers is overwritten.
 | DatePicker | `components/kit/date-picker.tsx` | one date in a form · field-styled button → Calendar in a Popover · `value onChange disabled?` |
 | Calendar / CalendarDayButton | `components/ui/calendar.tsx` | a month grid (react-day-picker) · `mode` single/range/multiple · use DatePicker for a form field |
 | Slider | `components/ui/slider.tsx` | a value on a range · two thumbs for a range |
-| FilterChip / FilterChipRow | `components/kit/filter-chip.tsx` | neutral-active chips in a scrolling row |
+| FilterChip / FilterChipRow | `components/kit/filter-chip.tsx` | filter chips in a scrolling row · selected is the theme's Chip colour (inverted by default) |
 | SegmentedControl | `components/kit/segmented-control.tsx` | 2–4 options, sliding thumb |
 | SearchField | `components/kit/search-field.tsx` | Input + search icon + clear |
 | QuantityStepper | `components/kit/quantity-stepper.tsx` | − value + · `min max step` |
@@ -285,7 +291,7 @@ form, settings and a guarded delete), `/landing` and `/assistant`.
 ## Anti-patterns
 
 - ✗ Cards inside cards. ✗ Identical icon + heading + body cards repeated as filler.
-- ✗ Brand colour on selected tabs, chips or nav items. ✗ Grey-on-grey text below 4.5:1.
+- ✗ Brand colour put on selected tabs, chips or nav items by hand (a chip's selected colour is the theme's). ✗ Grey-on-grey text below 4.5:1.
 - ✗ More than one primary button in view. ✗ “OK”/“Submit” as the label of a consequential action.
 - ✗ Modals as the default home for secondary content. ✗ Icon-only buttons without `aria-label`.
 - ✗ An assistant that acts without asking, or hides what it did.

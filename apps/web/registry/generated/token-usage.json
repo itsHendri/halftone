@@ -10,13 +10,14 @@
       "approval-card",
       "attachment-chip",
       "badge",
-      "button",
       "calendar",
       "card",
       "chart",
+      "chat-composer",
       "checkbox",
       "command",
       "context-menu",
+      "data-table",
       "dialog",
       "drawer",
       "dropdown-menu",
@@ -27,7 +28,6 @@
       "navigation-menu",
       "otp-input",
       "popover",
-      "pricing-card",
       "prose",
       "radio-group",
       "scroll-area",
@@ -57,6 +57,7 @@
       "dropdown-menu",
       "filter-chip",
       "icon-badge",
+      "list-row",
       "menubar",
       "navigation-menu",
       "quantity-stepper",
@@ -68,7 +69,6 @@
     ],
     "color.accent-foreground": [
       "badge",
-      "button",
       "calendar",
       "chat-thread-list",
       "command",
@@ -84,6 +84,7 @@
       "alert-dialog",
       "avatar",
       "avatar-group",
+      "badge",
       "button",
       "calendar",
       "chart",
@@ -109,9 +110,11 @@
       "app-shell",
       "attachment-chip",
       "badge",
+      "button",
       "chart",
       "command",
       "context-menu",
+      "data-table",
       "dropdown-menu",
       "filter-chip",
       "list-row",
@@ -139,7 +142,8 @@
       "button"
     ],
     "color.button-foreground": [
-      "button"
+      "button",
+      "spinner"
     ],
     "color.card": [
       "alert",
@@ -147,11 +151,13 @@
       "approval-card",
       "attachment-chip",
       "card",
+      "chat-composer",
       "otp-input",
       "segmented-control",
       "selectable-card",
       "slider",
-      "sources"
+      "sources",
+      "tool-call-card"
     ],
     "color.card-foreground": [
       "alert",
@@ -195,6 +201,7 @@
       "status-dot",
       "textarea",
       "toggle",
+      "tool-call-card",
       "value-header"
     ],
     "color.destructive-foreground": [
@@ -215,13 +222,16 @@
       "textarea"
     ],
     "color.foreground": [
+      "action-grid",
       "amount-input",
       "app-shell",
       "badge",
       "breadcrumb",
+      "button",
       "chart",
       "command",
       "context-menu",
+      "data-table",
       "drawer",
       "filter-chip",
       "icon-circle",
@@ -235,13 +245,16 @@
       "range-selector",
       "search-field",
       "segmented-control",
+      "select",
       "sheet",
       "sources",
+      "spinner",
       "stepper",
       "streaming-text",
       "switch",
       "table",
       "tabs",
+      "textarea",
       "tooltip",
       "value-header"
     ],
@@ -259,6 +272,7 @@
     "color.input": [
       "button",
       "calendar",
+      "chat-composer",
       "checkbox",
       "radio-group",
       "switch",
@@ -266,11 +280,13 @@
       "toggle"
     ],
     "color.muted": [
+      "action-grid",
       "alert-dialog",
       "amount-input",
       "avatar",
       "avatar-group",
       "chart",
+      "chat-message",
       "drawer",
       "empty-state",
       "icon-circle",
@@ -310,6 +326,7 @@
       "chat-thread-list",
       "command",
       "context-menu",
+      "date-picker",
       "dialog",
       "drawer",
       "dropdown-menu",
@@ -339,6 +356,7 @@
       "selectable-card",
       "sheet",
       "sources",
+      "spinner",
       "spot",
       "stat-tile",
       "status-dot",
@@ -383,13 +401,17 @@
       "badge",
       "button",
       "calendar",
+      "chat-composer",
+      "chat-message",
       "checkbox",
       "feature-grid",
+      "floating-button",
       "hero",
       "icon-circle",
       "input",
       "logo",
       "placeholder",
+      "pricing-card",
       "progress",
       "progress-ring",
       "promo-card",
@@ -398,6 +420,7 @@
       "section-header",
       "selectable-card",
       "slider",
+      "spinner",
       "spot",
       "status-dot",
       "stepper",
@@ -409,10 +432,13 @@
       "avatar",
       "badge",
       "calendar",
+      "chat-message",
       "checkbox",
+      "floating-button",
       "input",
       "promo-card",
       "selectable-card",
+      "spinner",
       "spot",
       "stepper",
       "switch",
@@ -420,18 +446,22 @@
     ],
     "color.ring": [
       "accordion",
+      "action-grid",
       "amount-input",
       "badge",
       "button",
       "calendar",
+      "chat-composer",
       "chat-thread-list",
       "checkbox",
       "dialog",
       "filter-chip",
+      "floating-button",
       "footnote",
       "horizontal-pager",
       "icon-badge",
       "input",
+      "list-row",
       "navigation-menu",
       "otp-input",
       "password-input",
@@ -459,11 +489,13 @@
     "color.secondary": [
       "badge",
       "button",
+      "floating-button",
       "sheet"
     ],
     "color.secondary-foreground": [
       "badge",
-      "button"
+      "button",
+      "floating-button"
     ],
     "color.sidebar": [
       "app-shell"
@@ -490,6 +522,7 @@
       "stat-tile",
       "status-dot",
       "timeline",
+      "tool-call-card",
       "value-header"
     ],
     "color.success-foreground": [
@@ -510,6 +543,20 @@
       "promo-card",
       "spot"
     ],
+    "component.badge": [
+      "badge"
+    ],
+    "component.button": [
+      "button"
+    ],
+    "component.chip": [
+      "filter-chip"
+    ],
+    "component.input": [
+      "input",
+      "select",
+      "textarea"
+    ],
     "font.heading": [
       "prose"
     ],
@@ -518,12 +565,16 @@
       "prose",
       "tool-call-card"
     ],
+    "radius.2xl": [
+      "chat-composer",
+      "chat-message",
+      "spot"
+    ],
     "radius.full": [
       "action-grid",
       "amount-input",
       "avatar",
       "avatar-group",
-      "badge",
       "chat-composer",
       "drawer",
       "empty-state",
@@ -538,6 +589,7 @@
       "scroll-area",
       "selectable-card",
       "slider",
+      "spot",
       "status-dot",
       "stepper",
       "success-screen",
@@ -547,6 +599,7 @@
       "value-header"
     ],
     "radius.lg": [
+      "action-grid",
       "alert",
       "alert-dialog",
       "amount-input",
@@ -571,13 +624,11 @@
       "accordion",
       "alert-dialog",
       "app-shell",
-      "button",
       "calendar",
       "chat-thread-list",
       "command",
       "context-menu",
       "dropdown-menu",
-      "filter-chip",
       "hover-card",
       "icon-badge",
       "logo",
@@ -599,6 +650,7 @@
       "tooltip"
     ],
     "radius.sm": [
+      "chat-message",
       "command",
       "context-menu",
       "dropdown-menu",
@@ -616,8 +668,11 @@
       "action-grid",
       "approval-card",
       "card",
+      "data-table",
+      "floating-button",
       "icon-circle",
-      "promo-card"
+      "promo-card",
+      "tool-call-card"
     ],
     "shadow.1": [
       "button",
@@ -650,6 +705,7 @@
       "context-menu",
       "dialog",
       "dropdown-menu",
+      "floating-button",
       "menubar",
       "sheet"
     ],

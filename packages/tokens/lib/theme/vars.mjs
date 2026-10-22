@@ -5,6 +5,7 @@
  *   'oklch'  Tailwind 4 / shadcn web (`oklch(0.546 0.2152 262.88)`) — the web kit and the docs site
  */
 import { hexToHslTriplet, hexToOklch } from '../color.mjs';
+import { componentVars } from './components.mjs';
 import { extraList, extraTextStyles } from './extras.mjs';
 import { resolveTextStyles, shadowCss, textEdits } from './recipe.mjs';
 
@@ -52,8 +53,9 @@ export function textStyleVars(styles, format, font = (role) => `var(--kit-font-$
 
 /**
  * The button and field styles' variables (both formats), from a theme's or a token file's { button, field }
- * (generate.mjs, resolve.mjs). Widths and radii are numbers on the light block; the field's fill opacity is
- * per mode. A field's inner padding is the kit's own: 1rem on mobile (hsl), px-3 on the web (oklch).
+ * (generate.mjs, resolve.mjs). Widths are numbers on the light block; the field's fill opacity is per mode. A
+ * field's corners and padding are the component layer's (componentVars: --field-radius, --field-radius-b,
+ * --field-x).
  */
 export function styleVars({ button, field }, format) {
   return {
@@ -64,9 +66,6 @@ export function styleVars({ button, field }, format) {
       '--field-alpha': String(field.alpha.light),
       '--field-border-w': `${field.border}px`,
       '--field-edge-w': `${field.edge}px`,
-      '--field-radius': rem(field.radius),
-      '--field-radius-b': rem(field.radiusBottom),
-      '--field-x': field.inset ? (format === 'hsl' ? '1rem' : 'calc(var(--spacing) * 3)') : '0px',
       // Web: a boxed field keeps shadcn's shadow-xs; a filled or underline field has none.
       ...(format === 'hsl' ? {} : { '--field-shadow': field.border ? 'var(--shadow-1)' : '0 0 #0000' }),
     },
@@ -111,6 +110,7 @@ export function themeVars(theme, format) {
       Object.assign(vars, typeVars(theme.type), textStyleVars(themeTextStyles(theme), format));
     }
     Object.assign(vars, styleVars(theme, format)[m]);
+    if (theme.components) Object.assign(vars, componentVars(theme.components, format, convert)[m]);
     for (const [level, value] of Object.entries(theme.semantic.shadow)) vars[`--shadow-${level}`] = shadowCss(value[m]);
     if (theme.extra) Object.assign(vars, extraVars(extraList(theme.extra), format)[m]);
     return vars;

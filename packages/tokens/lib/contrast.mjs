@@ -5,6 +5,7 @@
  */
 import { apcaContrast } from './apca.mjs';
 import { blend, contrast } from './color.mjs';
+import { componentPairs } from './theme/components.mjs';
 
 export const AA = 4.5; // WCAG 2.1 AA, normal text. Kit labels are 16px — not "large text".
 export const AA_NON_TEXT = 3; // WCAG 1.4.11, icons and other meaningful non-text.
@@ -124,4 +125,36 @@ export const describeTintLimits = (limits) =>
 export function checkContrast(colors, options) {
   const of = (mode) => Object.fromEntries(colors.map((c) => [c.name, c[mode]]));
   return [...contrastFailures(of('light'), 'light', options), ...contrastFailures(of('dark'), 'dark', options)];
+}
+
+/**
+ * The component layer's label-on-fill pairings (lib/theme/components.mjs), in both modes, as rows like contrastReport's:
+ * { mode, label, fgName, bgName, fg, bg, threshold, ratio, component, variant }. `bgName` is the fill's role.
+ */
+export function componentContrast(components, background) {
+  return ['light', 'dark'].flatMap((mode) =>
+    componentPairs(components, mode, background[mode], blend).map((p) => ({
+      mode,
+      label: p.label,
+      fgName: p.fgRole,
+      bgName: p.bgRole,
+      fg: p.fg,
+      bg: p.bg,
+      threshold: AA,
+      ratio: contrast(p.fg, p.bg),
+      component: p.component,
+      variant: p.variant,
+    }))
+  );
+}
+
+/** The failing component pairings as report lines, leaving out any colour pair `seen` already reports ('mode fg bg'). */
+export function componentFailures(components, colors, seen = new Set()) {
+  const background = Object.fromEntries(['light', 'dark'].map((mode) => [mode, colors.find((c) => c.name === 'background')?.[mode] ?? '#ffffff']));
+  const lines = new Set();
+  for (const r of componentContrast(components, background)) {
+    if (r.ratio >= r.threshold || seen.has(`${r.mode} ${r.fg} ${r.bg}`)) continue;
+    lines.add(`  ${r.mode.padEnd(5)} ${r.label.padEnd(36)} ${r.ratio.toFixed(2)} / ${r.threshold}  (${r.fg} on ${r.bg})`);
+  }
+  return [...lines];
 }

@@ -1,6 +1,7 @@
 import { Icon } from '@/components/ui/icon';
 import { NativeOnlyAnimatedView } from '@/components/ui/native-only-animated-view';
 import { TextClassContext } from '@/components/ui/text';
+import { TOKENS } from '@/lib/theme';
 import { cn } from '@/lib/utils';
 import * as SelectPrimitive from '@rn-primitives/select';
 import { Check, ChevronDown, ChevronDownIcon, ChevronUpIcon } from 'lucide-react-native';
@@ -36,6 +37,13 @@ function SelectValue({
   );
 }
 
+/** Phones raise a tap target under 44pt to 44 (hitSlop): the trigger keeps its drawn height. */
+function selectSlop(size: 'default' | 'sm') {
+  if (Platform.OS === 'web') return undefined;
+  const y = Math.max(0, Math.ceil((44 - TOKENS.components.input.height[size === 'sm' ? 'sm' : 'md']) / 2));
+  return y ? { top: y, bottom: y } : undefined;
+}
+
 function SelectTrigger({
   ref,
   className,
@@ -50,17 +58,19 @@ function SelectTrigger({
     <SelectPrimitive.Trigger
       ref={ref}
       className={cn(
-        'bg-field border-field-edge border-field-w border-b-field-edge-w rounded-t-field rounded-b-field-b px-field-x active:opacity-80 flex h-control w-full flex-row items-center justify-between gap-2 py-2 shadow-sm sm:h-9',
+        // The theme's Input (semantic.component.input, --field-*), as Input draws it.
+        'bg-field-default-bg border-field-default-border border-field-w border-b-field-edge-w rounded-t-field rounded-b-field-b px-field-x active:opacity-80 flex h-field-md w-full flex-row items-center justify-between gap-2 py-2 shadow-sm',
         Platform.select({
-          web: 'focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive dark:hover:bg-input/50 w-fit whitespace-nowrap text-sm outline-none transition-[color,box-shadow] focus-visible:ring-[3px] disabled:cursor-not-allowed [&_svg]:pointer-events-none [&_svg]:shrink-0',
+          web: 'focus-visible:border-field-focus-border focus-visible:ring-field-focus-ring aria-invalid:ring-field-error-ring aria-invalid:border-field-error-border dark:hover:bg-input/50 w-fit whitespace-nowrap text-sm outline-none transition-[color,box-shadow] focus-visible:ring-[3px] disabled:cursor-not-allowed [&_svg]:pointer-events-none [&_svg]:shrink-0',
         }),
-        props.disabled && 'opacity-50',
-        size === 'sm' && 'h-8 py-2 sm:py-1.5',
+        props.disabled && 'bg-field-disabled-bg border-field-disabled-border opacity-50',
+        size === 'sm' && 'h-field-sm py-2 sm:py-1.5',
         className
       )}
       // Radix sets aria-autocomplete for its combobox role, but rn-primitives renders role="button",
       // where the attribute is not allowed. Clearing it here wins the Slot prop merge.
       {...Platform.select({ web: { 'aria-autocomplete': undefined } })}
+      hitSlop={selectSlop(size)}
       {...props}>
       <>{children}</>
       <Icon as={ChevronDown} aria-hidden={true} className="text-muted-foreground size-4" />

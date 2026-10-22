@@ -178,9 +178,9 @@ export const COMPONENTS: ComponentMeta[] = [
     exports: ['FilterChip', 'FilterChipRow'],
     category: 'inputs',
     files: ['components/kit/filter-chip.tsx'],
-    notes: 'neutral-active chips in a scrolling row',
+    notes: 'filter chips in a scrolling row · selected is the theme\'s Chip colour (inverted by default)',
     api: '<FilterChipRow><FilterChip label selected onClick icon? /></FilterChipRow>',
-    caption: 'Selected is inverted neutral, never the brand colour. For one choice among a few, use SegmentedControl.',
+    caption: 'Selected is the theme\'s Chip selected colour: inverted neutral by default. For one choice among a few, use SegmentedControl.',
     aliases: ['chips', 'tags', 'filters'],
   },
   {

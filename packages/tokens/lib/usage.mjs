@@ -13,10 +13,14 @@
  *   type.<style>   type-h2 (web), text-type-h2 (mobile), or a Text variant ("h2")
  *   font.<role>    font-heading, font-sans (body), font-mono
  *   border.width   border, border-x…, the theme's width
+ *   component.<name>  the component layer (button, chip, badge, input): its classes (bg-button-primary-bg,
+ *                  rounded-chip, type-badge) and variables (--field-*). A variant colour also counts as the role
+ *                  tokens.json points it at (bg-chip-selected-bg → color.foreground), so a role's usage still finds it
  * A static read of class strings: a class built at runtime from parts is not seen.
  */
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
+import { COMPONENT_NAMES, COMPONENTS, SLOT_VAR } from './theme/components.mjs';
 
 const TEXT_STYLES = ['h1', 'h2', 'h3', 'h4', 'lead', 'p', 'large', 'small', 'muted', 'code', 'blockquote'];
 const COLOR_UTILITY =
@@ -49,9 +53,38 @@ export function colourNames(tokens) {
   return names;
 }
 
-/** The token keys one source file uses. */
-export function usageIn(source, colours) {
+/** The prefix each component's classes and variables use (Input's are field-*). */
+const PREFIX = Object.fromEntries(COMPONENT_NAMES.map((name) => [COMPONENTS[name].prefix, name]));
+const COMPONENT_CLASS = new RegExp(`(?:^|[-(])(${Object.keys(PREFIX).join('|')})-`);
+
+/**
+ * The component layer's colour classes and the roles tokens.json points them at, both modes:
+ * { 'chip-selected-bg': ['foreground'], … }.
+ */
+export function componentColourRoles(tokens) {
+  const out = {};
+  for (const name of COMPONENT_NAMES) {
+    const group = tokens.semantic?.component?.[name];
+    if (!group) continue;
+    for (const [variant, slots] of Object.entries(group)) {
+      if (!slots || typeof slots !== 'object' || '$value' in slots) continue;
+      for (const [slot, key] of Object.entries(SLOT_VAR)) {
+        const value = slots[slot]?.$value;
+        if (!value) continue;
+        const refs = typeof value === 'object' ? [value.light, value.dark] : [value];
+        const roles = [...new Set(refs.map((r) => /^\{semantic\.color\.([a-z0-9-]+)\}$/.exec(String(r))?.[1]).filter(Boolean))];
+        out[`${COMPONENTS[name].prefix}-${variant}-${key}`] = roles;
+      }
+    }
+  }
+  return out;
+}
+
+/** The token keys one source file uses. `roles`: componentColourRoles. */
+export function usageIn(code, colours, roles = {}) {
   const keys = new Set();
+  // Comments go first: an apostrophe in one ("the theme's") would pair with a quote in the code.
+  const source = code.replace(/\/\*[\s\S]*?\*\//g, '').replace(/(^|\s)\/\/.*$/gm, '$1');
   const byCamel = new Map([...colours].map((n) => [camel(n), n]));
   for (const m of source.matchAll(/(["'`])((?:(?!\1)[^\\]|\\.)*)\1/g)) {
     for (const token of m[2].split(/\s+/)) {
@@ -59,6 +92,9 @@ export function usageIn(source, colours) {
       const cls = baseClass(token);
       const colour = COLOR_UTILITY.exec(cls);
       if (colour && colours.has(colour[1])) keys.add(`color.${colour[1]}`);
+      if (colour && roles[colour[1]]) for (const role of roles[colour[1]]) keys.add(`color.${role}`);
+      const component = COMPONENT_CLASS.exec(cls);
+      if (component && (roles[colour?.[1]] || /^(rounded|h|w|size|px|type|text-type|leading-type|tracking-type|border(-b)?)-/.test(cls))) keys.add(`component.${PREFIX[component[1]]}`);
       const radius = RADIUS.exec(cls);
       if (radius) keys.add(`radius.${radius[1]}`);
       if (SHADOW[cls]) keys.add(`shadow.${SHADOW[cls]}`);
@@ -69,6 +105,7 @@ export function usageIn(source, colours) {
     }
   }
   for (const m of source.matchAll(/var\(--([a-z0-9-]+)\)/g)) if (colours.has(m[1])) keys.add(`color.${m[1]}`);
+  for (const m of source.matchAll(/--(button|chip|badge|field)-[a-z0-9-]+/g)) if (!/^--(button|field)(-(foreground|edge))?$/.test(m[0])) keys.add(`component.${PREFIX[m[1]]}`);
   for (const m of source.matchAll(/\b(?:palette|colors|colours)\.([a-z][A-Za-z0-9]*)\b/g)) if (byCamel.has(m[1])) keys.add(`color.${byCamel.get(m[1])}`);
   for (const m of source.matchAll(/\bvariant(?:=|:\s*)\{?["']([a-z0-9]+)["']/g)) if (TEXT_STYLES.includes(m[1])) keys.add(`type.${m[1]}`);
   return keys;
@@ -76,6 +113,7 @@ export function usageIn(source, colours) {
 
 export function tokenUsage({ root, components, tokens }) {
   const colours = colourNames(tokens);
+  const roles = componentColourRoles(tokens);
   const usage = {};
   for (const { id, files } of components) {
     const keys = new Set();
@@ -86,7 +124,7 @@ export function tokenUsage({ root, components, tokens }) {
       } catch {
         continue;
       }
-      for (const key of usageIn(source, colours)) keys.add(key);
+      for (const key of usageIn(source, colours, roles)) keys.add(key);
     }
     for (const key of keys) (usage[key] ??= []).push(id);
   }

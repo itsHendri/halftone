@@ -1,12 +1,13 @@
 /**
  * The tokens section of llms.txt: a compact Markdown fragment that registry-build stitches into the
  * app's llms.txt (and the docs site into /llms.txt).
- *   options: { out: 'tokens/generated/llms-tokens.md' }
+ *   options: { out: 'tokens/generated/llms-tokens.md', platform?: 'mobile' | 'web' }
  */
 import { group } from '../lib/resolve.mjs';
 import { AA, describeTintLimits, textOnTintLimits } from '../lib/contrast.mjs';
 import { themeStatus } from '../lib/theme/index.mjs';
 import { themeFonts } from './fonts.mjs';
+import { describeComponents } from '../lib/theme/components.mjs';
 import { describeExtras } from '../lib/theme/extras.mjs';
 
 export default function llms(ctx, options) {
@@ -17,7 +18,7 @@ export default function llms(ctx, options) {
       .join(' · ');
   const fonts = themeFonts(ctx);
   const theme = themeStatus(ctx.source);
-  const extras = describeExtras(ctx.extras ?? { color: [], text: [], radius: [], shadow: [], border: [] }, { platform: options.controlRadius === false ? 'web' : 'mobile' });
+  const extras = describeExtras(ctx.extras ?? { color: [], text: [], radius: [], shadow: [], border: [] }, { platform: options.platform ?? 'mobile' });
   const contents = `<!-- ${ctx.header} -->
 ## Tokens
 
@@ -33,10 +34,11 @@ ${describeTintLimits(textOnTintLimits(ctx.colors))}.
 ${rows}
 
 - Spacing (4-pt grid, Tailwind numeric scale): ${steps(['space'])}
-- Radius (\`rounded-*\`): ${ctx.radius.steps.map((s) => `${s.name} ${s.px}px`).join(' · ')} (multiples of \`--radius\` = ${ctx.radius.base}px)${options.controlRadius === false ? '; buttons use \`rounded-md\`' : `; \`rounded-control\` (buttons, chips) ${ctx.shape.control >= 9999 ? 'pill' : `${ctx.shape.control}px`}`}
+- Radius (\`rounded-*\`): ${ctx.radius.steps.map((s) => `${s.name} ${s.px}px`).join(' · ')} (multiples of \`--radius\` = ${ctx.radius.base}px); \`rounded-control\` ${ctx.shape.control >= 9999 ? 'pill' : `${ctx.shape.control}px`}
 - Depth: \`shadow-sm\` (controls, cards), \`shadow-md\` (raised, popovers), \`shadow-lg\` (menus, dialogs) are the theme's three elevation levels; no shadow colour modifiers on surfaces (thumbs and floating elements may add \`shadow-black/20\`)
 - Border \`border\` ${ctx.shape.borderWidth}px · icon stroke ${ctx.shape.stroke} (an Icon's \`strokeWidth\` is relative to 2)
-- Styles: ${ctx.styles.button} buttons, ${ctx.styles.field} fields. Button and the text fields already draw them (\`bg-button\`, \`bg-field\`); never restyle a primary button or a field by hand
+- Styles: ${ctx.styles.button} buttons, ${ctx.styles.field} fields
+- Components (one theme for both kits; never restyle them by hand): ${describeComponents(ctx.components).join('; ')}. Phones raise any tap target under 44px to 44
 - Fonts: headings ${fonts.heading?.family ?? 'system'}, body ${fonts.body?.family ?? 'system'}, mono ${fonts.mono?.family ?? 'system'} (applied by Text; \`font-heading\` makes any Text a heading, \`font-mono\` code and figures)
 - Typeset: body ${ctx.type.size}px, leading ${ctx.type.leading}; every \`text-*\` size below scales by ${ctx.type.scale}${theme.applied ? `\n- Theme: \`${theme.code}\` (\`npx halftone-tokens theme show\`)` : ''}
 - Font sizes (\`text-*\`): ${steps(['font', 'size'])}

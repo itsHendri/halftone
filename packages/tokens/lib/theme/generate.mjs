@@ -16,7 +16,8 @@
 import { fixContrast } from './fix.mjs';
 import { encodeRecipe } from './codec.mjs';
 import { fontById } from './fonts.mjs';
-import { BORDER, BUTTON, DENSITY, DEPTH, FIELD, fieldWidth, FLOW, LEADING, normalizeRecipe, RADIUS, STROKE, typeScale } from './recipe.mjs';
+import { componentLayer } from './components.mjs';
+import { BORDER, BUTTON, DENSITY, DEPTH, FIELD, fieldWidth, FLOW, LEADING, normalizeRecipe, RADIUS, resolveTextStyles, STROKE, textEdits, typeScale } from './recipe.mjs';
 import { anchorStep, brandRamp, neutralRamp } from './ramp.mjs';
 import { resolvedMap } from './refs.mjs';
 import { BRAND_LINKED, semanticColors, styleColors } from './semantic.mjs';
@@ -117,13 +118,10 @@ export function generateTheme(input, base, { fix = true, colors: system } = {}) 
   const fld = FIELD[recipe.field];
   const button = { alpha: btn.alpha, border: btn.border, edge: btn.edge };
   const field = { alpha: fld.alpha, border: fieldWidth(fld.border, borderWidth), edge: fieldWidth(fld.edge, borderWidth), inset: fld.inset };
-  // As tokens: widths named apart from the colours (semantic.color.button-edge is a colour).
-  const buttonTokens = { alpha: button.alpha, 'border-width': button.border, 'edge-width': button.edge };
-  const fieldTokens = { alpha: field.alpha, 'border-width': field.border, 'edge-width': field.edge, round: fld.round, 'round-bottom': fld.roundBottom, inset: field.inset };
   // rounded-md is the radius × md / lg (resolve.mjs); a field's radius is that or square.
   const md = lookup('{primitive.radius.md}') / lookup('{primitive.radius.lg}');
 
-  return {
+  const theme = {
     recipe,
     code: encodeRecipe(recipe),
     primitives: { brand, neutral, ...status },
@@ -136,8 +134,6 @@ export function generateTheme(input, base, { fix = true, colors: system } = {}) 
       shadow: DEPTH[recipe.depth],
       density: { scale: density.scale, control: { sm: density.sm, md: density.md, lg: density.lg, x: density.x } },
       type,
-      button: buttonTokens,
-      field: fieldTokens,
     },
     density,
     type: typeScale(type),
@@ -151,4 +147,38 @@ export function generateTheme(input, base, { fix = true, colors: system } = {}) 
     adjustments,
     warnings,
   };
+  return withComponents(theme, base);
+}
+
+/**
+ * The theme with its component layer (lib/theme/components.mjs): semantic.component (the tokens) and `components`
+ * (resolved). Built from the theme's own corners, density, border, styles, text styles and colours, so
+ * generateSystem calls it again once a system's edits are in, with the system's `components` as `overrides`.
+ */
+export function withComponents(theme, base, overrides = {}) {
+  const primitive = { ...base.primitive, color: { ...base.primitive.color, ...Object.fromEntries(Object.entries(theme.primitives).map(([name, values]) => [name, ramp(values)])) } };
+  const prim = resolvedMap({ primitive }, 'light');
+  const lg = prim['primitive.radius.lg'];
+  const edited = theme.semantic.radius;
+  const fld = FIELD[theme.recipe.field];
+  const { tokens, shape } = componentLayer({
+    styles: { button: theme.recipe.button, field: theme.recipe.field },
+    controls: theme.recipe.controls,
+    corner: (name) => (typeof edited[name] === 'number' ? edited[name] : (theme.radius * prim[`primitive.radius.${name}`]) / lg),
+    density: theme.density,
+    borderWidth: theme.borderWidth,
+    button: theme.button,
+    field: { ...theme.field, round: fld.round, roundBottom: fld.roundBottom },
+    textStyles: resolveTextStyles(theme.type, textEdits(theme.semantic.type)),
+    type: theme.type,
+    hex: (ref, mode) => {
+      const name = /^\{semantic\.color\.(.+)\}$/.exec(ref)?.[1];
+      if (name) return theme.resolved[mode][name];
+      const value = prim[ref.slice(1, -1)];
+      if (value === undefined) throw new Error(`generateTheme: ${ref} is not in the base tokens`);
+      return value;
+    },
+    overrides,
+  });
+  return { ...theme, semantic: { ...theme.semantic, component: tokens }, components: shape };
 }

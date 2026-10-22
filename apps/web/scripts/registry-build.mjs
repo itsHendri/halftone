@@ -95,7 +95,7 @@ for (const cat of CATEGORY_META) {
 }
 
 const tokens = JSON.parse(read('tokens/tokens.json'));
-const RADIUS_USE = { md: 'inputs, buttons', lg: 'cards, dialogs', xl: 'panels, tables', '2xl': 'hero surfaces', full: 'avatars, pills' };
+const RADIUS_USE = { md: 'inputs', lg: 'cards, dialogs', xl: 'panels, tables', '2xl': 'hero surfaces', full: 'avatars, pills' };
 // The theme's radius: rounded-* are multiples of its base (rounded-lg).
 const prim = Object.fromEntries(
   Object.entries(tokens.primitive.radius)

@@ -12,7 +12,10 @@ type ChipProps = {
   className?: string;
 };
 
-/** Neutral-active filter chip. Selected = inverted (foreground on background), never the brand colour. */
+/**
+ * A filter chip, drawn from the theme's Chip (semantic.component.chip, --chip-*). Selected is a role: inverted
+ * (foreground on background) by default, so it reads as a filter rather than an action.
+ */
 export function FilterChip({ label, selected, onClick, icon: Icon, disabled, className }: ChipProps) {
   return (
     <button
@@ -21,8 +24,10 @@ export function FilterChip({ label, selected, onClick, icon: Icon, disabled, cla
       disabled={disabled}
       onClick={onClick}
       className={cn(
-        'focus-visible:ring-ring/50 inline-flex h-8 shrink-0 items-center gap-1.5 rounded-md border px-3 text-sm font-medium transition-colors outline-none focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50',
-        selected ? 'bg-foreground border-foreground text-background' : 'bg-background border-border text-foreground hover:bg-accent',
+        'focus-visible:ring-ring/50 type-chip inline-flex h-(--chip-h-md) shrink-0 items-center gap-1.5 rounded-chip border px-(--chip-x) font-medium transition-colors outline-none focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50',
+        selected
+          ? 'bg-chip-selected-bg border-chip-selected-border text-chip-selected-fg hover:bg-chip-selected-pressed active:bg-chip-selected-pressed'
+          : 'bg-chip-unselected-bg border-chip-unselected-border text-chip-unselected-fg hover:bg-chip-unselected-pressed active:bg-chip-unselected-pressed',
         className
       )}>
       {Icon ? <Icon className="size-3.5" aria-hidden /> : null}

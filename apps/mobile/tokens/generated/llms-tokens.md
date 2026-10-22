@@ -55,10 +55,11 @@ primary up to /5, success up to /5, warning up to /5, info up to /15, destructiv
 | `field-edge` | #e4e4e7 | #27272a |
 
 - Spacing (4-pt grid, Tailwind numeric scale): 0 0px · 1 4px · 2 8px · 3 12px · 4 16px · 5 20px · 6 24px · 8 32px · 10 40px · 12 48px · 16 64px
-- Radius (`rounded-*`): sm 6px · md 8px · lg 10px · xl 16px · 2xl 20px (multiples of `--radius` = 10px); `rounded-control` (buttons, chips) pill
+- Radius (`rounded-*`): sm 6px · md 8px · lg 10px · xl 16px · 2xl 20px (multiples of `--radius` = 10px); `rounded-control` pill
 - Depth: `shadow-sm` (controls, cards), `shadow-md` (raised, popovers), `shadow-lg` (menus, dialogs) are the theme's three elevation levels; no shadow colour modifiers on surfaces (thumbs and floating elements may add `shadow-black/20`)
 - Border `border` 1px · icon stroke 2 (an Icon's `strokeWidth` is relative to 2)
-- Styles: solid buttons, outline fields. Button and the text fields already draw them (`bg-button`, `bg-field`); never restyle a primary button or a field by hand
+- Styles: solid buttons, outline fields
+- Components (one theme for both kits; never restyle them by hand): Button 48px tall (small 40, large 56), 20px padding, pill, 16px text; Chip 36px, pill; selected is foreground with background text; Badge pill, 14px text; Input, Textarea and Select 48px, 8px corners. Phones raise any tap target under 44px to 44
 - Fonts: headings system, body system, mono system (applied by Text; `font-heading` makes any Text a heading, `font-mono` code and figures)
 - Typeset: body 16px, leading 1.75; every `text-*` size below scales by 1
 - Theme: `ht1-29B3XC60003T` (`npx halftone-tokens theme show`)

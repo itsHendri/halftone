@@ -5,6 +5,7 @@
  */
 import StyleDictionary from 'style-dictionary';
 import { readFileSync } from 'node:fs';
+import { componentLayer, readComponents } from './theme/components.mjs';
 import { extraList } from './theme/extras.mjs';
 import { BUTTON, DEFAULT_RECIPE, DENSITY, DEPTH, FIELD, fieldWidth, resolveTextStyles, shadowCss, textEdits, TYPE, typeScale } from './theme/recipe.mjs';
 
@@ -72,7 +73,8 @@ export function radiusCss(step) {
 
 /**
  * Everything a target needs:
- *   semLight / semDark   semantic tokens per mode (colours + radius), in tokens.json order
+ *   semLight / semDark   semantic tokens per mode (colours + radius), in tokens.json order, but the component layer
+ *   compLight / compDark the component layer's tokens per mode (semantic.component.*; read as `components` below)
  *   prim                 primitive tokens (mode-independent)
  *   colors               [{ name, light, dark }] semantic colours as hex
  *   radius               { base: px, steps: [{ name, scale, px, fixed }] } (fixed: set by a system, not scaled)
@@ -87,12 +89,17 @@ export function radiusCss(step) {
  *                          before the styles gets solid buttons and outline fields, and colours to match
  *   styles               { button, field }: the style names, from the recorded theme (or the defaults)
  *   extras               a system's own tokens (tokens.json `extra.*`) as lists (lib/theme/extras.mjs extraList)
+ *   components           the component layer (semantic.component.*: Button, Chip, Badge, Input) resolved, as
+ *                          lib/theme/components.mjs componentLayer returns it; a file from before it gets the defaults
  */
 export async function loadTokens(sourcePath) {
   const source = JSON.parse(readFileSync(sourcePath, 'utf8'));
   const [light, dark] = await Promise.all(MODES.map((m) => resolveMode(source, m)));
-  const semLight = light.filter((t) => t.path[0] === 'semantic');
-  const semDark = dark.filter((t) => t.path[0] === 'semantic');
+  // The component layer (semantic.component.*) is read on its own (ctx.components), not as plain tokens.
+  const compLight = light.filter((t) => t.path[0] === 'semantic' && t.path[1] === 'component');
+  const compDark = dark.filter((t) => t.path[0] === 'semantic' && t.path[1] === 'component');
+  const semLight = light.filter((t) => t.path[0] === 'semantic' && t.path[1] !== 'component');
+  const semDark = dark.filter((t) => t.path[0] === 'semantic' && t.path[1] !== 'component');
   const prim = light.filter((t) => t.path[0] === 'primitive');
   const darkHex = Object.fromEntries(semDark.filter(isColor).map((t) => [cssName(t), t.$value.toLowerCase()]));
   const colors = semLight
@@ -104,6 +111,14 @@ export async function loadTokens(sourcePath) {
     steps: radiusScales(prim, semLight, radiusBase),
   };
   const find = (list, name) => list.find((t) => cssName(t) === name)?.$value;
+  // The style numbers live in the component layer (semantic.component.button / .input); older files had
+  // semantic.button / semantic.field.
+  const LEGACY = { 'button-': 'component-button-', 'field-': 'component-input-' };
+  const style = (list, name) => {
+    const prefix = Object.keys(LEGACY).find((p) => name.startsWith(p));
+    const comp = list === semDark ? compDark : compLight;
+    return find(comp, LEGACY[prefix] + name.slice(prefix.length)) ?? find(list, name);
+  };
   // Style colours a token file from before the styles doesn't have: what the components drew before.
   const byName = Object.fromEntries(colors.map((c) => [c.name, c]));
   const STYLE_FALLBACK = { button: 'primary', 'button-foreground': 'primary-foreground', 'button-edge': 'primary', field: 'input', 'field-edge': 'input' };
@@ -114,21 +129,21 @@ export async function loadTokens(sourcePath) {
   const md = radius.steps.find((s) => s.name === 'md')?.scale ?? 0.8;
   const solid = BUTTON.solid;
   const outline = FIELD.outline;
-  const fieldRound = find(semLight, 'field-round') ?? outline.round;
-  const fieldRoundBottom = find(semLight, 'field-round-bottom') ?? outline.roundBottom;
+  const fieldRound = style(semLight, 'field-round') ?? outline.round;
+  const fieldRoundBottom = style(semLight, 'field-round-bottom') ?? outline.roundBottom;
   const shape = {
     control: find(semLight, 'radius-control') ?? 9999,
     borderWidth,
     button: {
-      alpha: find(semLight, 'button-alpha') ?? solid.alpha,
-      border: find(semLight, 'button-border-width') ?? solid.border,
-      edge: find(semLight, 'button-edge-width') ?? solid.edge,
+      alpha: style(semLight, 'button-alpha') ?? solid.alpha,
+      border: style(semLight, 'button-border-width') ?? solid.border,
+      edge: style(semLight, 'button-edge-width') ?? solid.edge,
     },
     field: {
-      alpha: { light: find(semLight, 'field-alpha') ?? outline.alpha.light, dark: find(semDark, 'field-alpha') ?? outline.alpha.dark },
-      border: find(semLight, 'field-border-width') ?? fieldWidth(outline.border, borderWidth),
-      edge: find(semLight, 'field-edge-width') ?? fieldWidth(outline.edge, borderWidth),
-      inset: find(semLight, 'field-inset') ?? outline.inset,
+      alpha: { light: style(semLight, 'field-alpha') ?? outline.alpha.light, dark: style(semDark, 'field-alpha') ?? outline.alpha.dark },
+      border: style(semLight, 'field-border-width') ?? fieldWidth(outline.border, borderWidth),
+      edge: style(semLight, 'field-edge-width') ?? fieldWidth(outline.edge, borderWidth),
+      inset: style(semLight, 'field-inset') ?? outline.inset,
       radius: Number((radius.base * md * fieldRound).toFixed(4)),
       radiusBottom: Number((radius.base * md * fieldRoundBottom).toFixed(4)),
     },
@@ -144,7 +159,33 @@ export async function loadTokens(sourcePath) {
   const recorded = source.$extensions?.['com.halftonedesignsystem.theme']?.recipe ?? {};
   const styles = { button: recorded.button ?? DEFAULT_RECIPE.button, field: recorded.field ?? DEFAULT_RECIPE.field };
   const extras = extraList(source.extra);
-  return { source, semLight, semDark, prim, colors, radius, shape, type, textStyles, styles, extras };
+  const components = loadComponents({ source, compLight, compDark, prim, colors, radius, shape, type, textStyles, styles, recorded });
+  return { source, semLight, semDark, compLight, compDark, prim, colors, radius, shape, type, textStyles, styles, extras, components };
+}
+
+/** The component layer from the file, or (a file from before it) the defaults on the file's colours and shape. */
+function loadComponents({ source, compLight, compDark, prim, colors, radius, shape, type, textStyles, styles, recorded }) {
+  const flat = (list) => Object.fromEntries(list.map((t) => [t.path.join('.'), t.$value]));
+  const read = readComponents(flat(compLight), flat(compDark), source.semantic?.component);
+  if (read) return read;
+  const byName = Object.fromEntries(colors.map((c) => [c.name, c]));
+  const primMap = Object.fromEntries(prim.map((t) => [t.path.join('.'), t.$value]));
+  const outline = FIELD[styles.field] ?? FIELD.outline;
+  return componentLayer({
+    styles,
+    controls: recorded.controls ?? (shape.control >= 9999 ? 'pill' : 'match'),
+    corner: (name) => radius.steps.find((s) => s.name === name)?.px ?? radius.base,
+    density: shape.density,
+    borderWidth: shape.borderWidth,
+    button: shape.button,
+    field: { ...shape.field, round: outline.round, roundBottom: outline.roundBottom },
+    textStyles,
+    type,
+    hex: (ref, mode) => {
+      const name = /^\{semantic\.color\.(.+)\}$/.exec(ref)?.[1];
+      return String(name ? byName[name]?.[mode] : primMap[ref.slice(1, -1)]).toLowerCase();
+    },
+  }).shape;
 }
 
 /** Primitive tokens under a path prefix, e.g. group(prim, ['font', 'size']) → [{ key: 'xs', value: 12 }, …]. */

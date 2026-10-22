@@ -22,11 +22,11 @@
     "design-md": {
       "out": "DESIGN.md",
       "name": "Halftone (web)",
-      "buttonRadius": "md"
+      "platform": "web"
     },
     "llms": {
       "out": "tokens/generated/llms-tokens.md",
-      "controlRadius": false
+      "platform": "web"
     },
     "fonts": {
       "platform": "next",

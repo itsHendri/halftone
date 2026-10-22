@@ -55,10 +55,11 @@ export function fontsHref(theme: Theme) {
 }
 
 /**
- * Variables that shape components (radius, border, stroke, density, type, depth, and the button and field
- * styles' numbers): never the site's. The styles' colours (--button, --field-edge…) are colours like any other.
+ * Variables that shape components (radius, border, stroke, density, type, depth, and the component layer: Button,
+ * Chip, Badge and Input, their variants' colours included): never the site's. The button and field styles' own
+ * colours (--button, --button-foreground, --button-edge, --field, --field-edge) are colours like any other.
  */
-const SHAPE = /^--(radius|border-width|icon-stroke|density|control-|type-|leading-|typeset-|shadow-|button-(alpha|border-w|edge-w)$|field-(alpha|border-w|edge-w|radius|radius-b|x|shadow)$)/;
+const SHAPE = /^--(radius|border-width|icon-stroke|density|control-|type-|leading-|typeset-|shadow-|(button|chip|badge|field)-(?!(foreground|edge)$))/;
 type Modes = Record<'light' | 'dark', Record<string, string>>;
 const pick = (vars: Modes, keep: (k: string) => boolean): Modes => ({
   light: Object.fromEntries(Object.entries(vars.light).filter(([k]) => keep(k))),

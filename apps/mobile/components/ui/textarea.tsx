@@ -1,4 +1,5 @@
 import { useFontStyle } from '@/components/ui/text';
+import { TOKENS } from '@/lib/theme';
 import { cn } from '@/lib/utils';
 import { Platform, TextInput } from 'react-native';
 
@@ -14,11 +15,13 @@ function Textarea({
   return (
     <TextInput
       className={cn(
-        'text-foreground bg-field border-field-edge border-field-w border-b-field-edge-w rounded-t-field rounded-b-field-b px-field-x flex min-h-24 w-full flex-row py-2 text-base md:text-sm',
+        // The theme's Input (semantic.component.input, --field-*), as Input draws it.
+        'text-field-default-fg bg-field-default-bg border-field-default-border border-field-w border-b-field-edge-w rounded-t-field rounded-b-field-b px-field-x flex min-h-24 w-full flex-row py-2 text-type-field leading-type-field',
+        (Platform.OS === 'web' || TOKENS.components.input.text.tracking !== 0) && 'tracking-type-field',
         Platform.select({
-          web: 'placeholder:text-muted-foreground placeholder-shown:text-muted-foreground focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive field-sizing-content resize-y outline-none transition-[color,box-shadow] focus-visible:ring-[3px] disabled:cursor-not-allowed',
+          web: 'placeholder:text-muted-foreground placeholder-shown:text-muted-foreground focus-visible:border-field-focus-border focus-visible:ring-field-focus-ring aria-invalid:ring-field-error-ring aria-invalid:border-field-error-border field-sizing-content resize-y outline-none transition-[color,box-shadow] focus-visible:ring-[3px] disabled:cursor-not-allowed',
         }),
-        props.editable === false && 'opacity-50',
+        props.editable === false && 'bg-field-disabled-bg border-field-disabled-border text-field-disabled-fg opacity-50',
         className
       )}
       placeholderClassName={cn('text-muted-foreground', placeholderClassName)}

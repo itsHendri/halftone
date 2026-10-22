@@ -162,9 +162,9 @@ export const COMPONENTS: ComponentMeta[] = [
     exports: ['FilterChip', 'FilterChipRow'],
     category: 'inputs',
     files: ['components/kit/filter-chip.tsx'],
-    notes: 'neutral-active chips',
+    notes: 'filter chips · selected is the theme\'s Chip colour (inverted by default)',
     api: '<FilterChipRow><FilterChip label selected onPress icon? /></FilterChipRow>',
-    caption: 'Selected state is inverted neutral, never the brand colour.',
+    caption: 'Selected is the theme\'s Chip selected colour: inverted neutral by default.',
     aliases: ['chip', 'tag filter', 'pill'],
   },
   {
