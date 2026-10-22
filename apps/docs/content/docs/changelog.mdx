@@ -5,6 +5,15 @@ description: What changed, newest first.
 
 ## October 2026
 
+### Remove the samples one at a time
+
+`npm run eject-samples` still removes every sample, and now takes names too: `npm run eject-samples -- shop habits`
+removes just those and keeps the rest as a reference (in the web kit, `northwind` names the dashboard, landing page
+and assistant). `-- --status` lists what is still here and what each sample would take with it. A sample another
+kept sample links to is refused with the command that removes both, and every edit is checked before anything is
+deleted. CI ejects each sample on its own in both kits and runs typecheck, lint, the registry check and the build
+on what is left.
+
 ### Components in Studio
 
 Foundations in [Studio](/studio) ends with **Components**: Button, Chip, Badge and Input, each a card. Its header holds

@@ -54,7 +54,7 @@ export default function KitHome() {
             Sample apps
           </h2>
           <p className="text-muted-foreground text-sm">
-            Northwind, a made-up invoicing product, three ways; and the Shop and Habits apps the native kit has too. Delete them
+            Made-up products, built only from the kit. Remove one with npm run eject-samples -- &lt;name&gt;, or every one
             with npm run eject-samples.
           </p>
         </div>

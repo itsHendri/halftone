@@ -22,7 +22,8 @@ npm run dev        # http://localhost:3100
 
 ## Start a real project
 
-1. Rename `name` in `package.json`, and remove the samples: `npm run eject-samples`.
+1. Rename `name` in `package.json`, and remove the samples: `npm run eject-samples` (or name some:
+   `npm run eject-samples -- shop habits`; `-- --status` shows what is left).
 2. Brand: edit `tokens/tokens.json` (brand ramp, semantic colours, radius), run `npm run tokens:build`.
 3. Logo and favicons: add your logo in Studio (halftonedesignsystem.com/studio), download
    **Use system › Brand assets › Web kit** and unzip it here (the `apply-theme` skill's "Brand assets" steps).

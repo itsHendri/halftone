@@ -25,7 +25,8 @@ app/<slug>/             a prototype: its own folder with its own layout.tsx (App
 app/dashboard/, app/landing/, app/assistant/   Northwind, three ways (worked examples)
 app/shop/, app/habits/  the web halves of the native kit's Shop and Habits samples (same data, web layouts).
                         `npm run eject-samples` removes all five, their data in components/<sample>/ and the kit
-                        home's links.
+                        home's links; `-- shop` removes one, `-- northwind` the first three, `-- --status` lists them.
+                        The dashboard and landing page link to each other, so they go together.
 app/showcase/           the showcase: registry components in a masonry, and /showcase/typeset (long-form Prose
                         beside components). The docs home page and Studio frame it; not a sample to copy.
 components/showcase/    its mock data, cards and typeset fixtures (kept by eject-samples)
@@ -60,6 +61,7 @@ npm run tokens:check && npm run registry:build -- --check   # what CI checks
 npm run registry:drift    # after `shadcn add`: which components/ui files differ from shadcn (network)
 npm run registry:dist && npm run registry:roundtrip         # build the shadcn registry and prove it reinstalls
 npm run eject-samples     # delete the dashboard, landing, assistant, shop and habits samples and every reference
+npm run eject-samples -- shop   # just the ones named (northwind = dashboard, landing, assistant); `-- --status` shows what is left
 ```
 
 ## Building a prototype (the rules)
