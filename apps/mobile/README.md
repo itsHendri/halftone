@@ -25,9 +25,10 @@ Then open **Components** in the app.
 1. `npm run setup`. It asks for the app's name, slug, URL scheme and bundle id (`APP_ID`), sets them in
    `app.json`, `package.json` and `.env.local` (from `.env.example`), and offers to run `eas init`, remove the
    samples and apply a theme. It prints the plan and writes nothing until you say yes; `--dry-run` stops at the
-   plan. A value already in `.env.local` is only replaced if you say so. `eas init` can't write to the dynamic
-   `app.config.ts`, so setup puts the owner and project id it returns into `.env.local` for you; without the
-   `eas` CLI, or logged out, it skips that step. Set the same names as EAS environment variables for cloud builds.
+   plan. A value already in `.env.local` is only replaced if you say so. `eas init` on its own would write your
+   account's owner and project id into the committed `app.json`; setup puts them into `.env.local` instead and
+   leaves `app.json` without them. Without the `eas` CLI, or logged out, it skips that step. Set the same names as
+   EAS environment variables for cloud builds.
    Every question has a flag (`npm run setup -- --help`), so it also runs without questions:
    `npm run setup -- --yes --name "Acme Field" --eject all --theme calm`.
 2. Brand: the theme comes from Studio (halftonedesignsystem.com/studio): pass its code or `.halftone.json` to
