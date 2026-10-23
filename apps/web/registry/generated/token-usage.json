@@ -451,6 +451,7 @@
       "badge",
       "button",
       "calendar",
+      "chart",
       "chat-composer",
       "chat-thread-list",
       "checkbox",
@@ -650,6 +651,7 @@
       "tooltip"
     ],
     "radius.sm": [
+      "chart",
       "chat-message",
       "command",
       "context-menu",

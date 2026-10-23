@@ -577,7 +577,7 @@
       ],
       "notes": "switch views of the same thing in place; not page navigation",
       "api": "<Tabs defaultValue><TabsList><TabsTrigger value /></TabsList><TabsContent value /></Tabs>",
-      "install": "tabs"
+      "install": "@halftone-web/tabs"
     },
     {
       "id": "navigation-menu",
@@ -867,7 +867,7 @@
         "line chart",
         "recharts"
       ],
-      "install": "chart"
+      "install": "@halftone-web/chart"
     },
     {
       "id": "badge",
