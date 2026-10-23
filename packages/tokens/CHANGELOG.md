@@ -1,5 +1,17 @@
 # @halftone-ds/tokens
 
+## 1.3.1
+
+### Patch Changes
+
+- adbfaba: `theme apply` also runs the app's `registry:build` when it has one: which components draw a colour follows the roles
+  a system maps, so the registry's token usage (and its `--check`) went stale after applying a `.halftone.json`. The
+  apply and `theme show` summaries name a system's own fonts (they showed the recipe's), and the colour-vision warning
+  counts pairs of tones as the Studio does ("4 pairs, in 6 views").
+- 634bae6: `ts-theme`: `ThemeInfo.code` is `string | null`. A system (`.halftone.json`) with overrides has no theme code, so
+  `theme apply` wrote `"code": null` into `lib/theme.ts` against a `code: string` type, and the kit's typecheck (and
+  the web kit's `next build`) failed. `THEME_INFO.name` is now the system's name when a system is applied.
+
 ## 1.3.0
 
 ### Minor Changes
