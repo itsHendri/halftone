@@ -1,5 +1,71 @@
 # @halftone-ds/tokens
 
+## 1.3.0
+
+### Minor Changes
+
+- 155eb03: A component layer: Button, Chip, Badge and Input as tokens both kits read (`semantic.component.<name>.*`). Each has a
+  corner, heights and padding, a text style (the component keeps its own weight) and fixed variants (Input: states)
+  whose fill, label, border and pressed colours are roles. Pressed is derived from the fill unless set; Input's focus
+  and error rings from their borders. The defaults are what the mobile kit drew.
+
+  - The HalftoneSystem document's `components` key is now validated: `{ button|chip|badge|input: { style, radius,
+size, text, variants } }`, overrides only. Button and Input styles fold into `recipe.button` / `recipe.field`;
+    Chip (outline, soft, solid) and Badge (pill, square, soft) styles are overrides. `systemOverrides` lists them.
+  - `generateTheme` and `generateSystem` return `semantic.component` and `components` (resolved). The style numbers
+    that were `semantic.button.*` and `semantic.field.*` live there now (`semantic.component.button.alpha`,
+    `semantic.component.input.border-width`…); `theme apply` moves them, and an older file still builds.
+  - CSS variables in nativewind3, shadcn-web and `themeVars`: `--button-radius`, `--button-h-md`, `--button-x`,
+    `--button-text-size`, `--button-primary-bg` (+ `-a`), `--chip-selected-bg`, `--badge-radius`, `--field-focus-border`…
+    with Tailwind keys (`bg-button-primary-bg`, `rounded-button`, `h-button-md`, `text-type-button`) and, on Tailwind
+    4, `type-button`/`type-chip`/`type-badge`/`type-field` utilities. `--field-radius`, `--field-radius-b` and
+    `--field-x` come from the layer (16px of padding in both kits).
+  - ts-theme writes `TOKENS.components` (sizes, corner, the text's font role) and `COMPONENT_VARS`.
+  - The contrast gate checks every variant's label on its fill (`componentContrast`, `componentPairs`).
+  - `tokenUsage` counts component classes as `component.<name>` and as the role each colour points at, and skips
+    comments (an apostrophe in one hid a file's classes).
+  - DESIGN.md and llms describe the layer; design-md's `buttonRadius` and llms' `controlRadius` options are gone
+    (use `platform: 'web'`).
+  - New from `/theme`: `COMPONENTS`, `COMPONENT_NAMES`, `CORNERS`, `SLOTS`, `SLOT_VAR`, `TOUCH_TARGET`,
+    `componentVars`, `componentVarNames`, `componentColors`, `componentPairs`, `componentContrast`, `defaultCorner`,
+    `defaultStyle`, `fittedLeading`.
+
+- a523d18: Halftone systems. A system (`name.halftone.json`) is a theme recipe plus what was edited by hand on top of it, the document the Studio will keep: a seed for every colour role (brand, neutral, danger, success, warning, info) with steps edited by hand, the role mapping for light and dark, text styles, any Google Fonts family, corners, shadows, borders, named extras and the brand.
+
+  - `@halftone-ds/tokens/system` (also re-exported from `/theme`): `normalizeSystem`, `validateSystem`, `createSystem`, `migrate`, `systemToRecipe`, `generateSystem`, `systemRamps`, `textStyles`, `systemRadii`, `systemCode`, `systemOverrides` and `applySystem`, with types. A system with no overrides generates exactly what `generateTheme` does for its recipe.
+  - `theme apply ./name.halftone.json` writes it into `tokens.json` and records the document (without brand images) in `$extensions`; `theme show` lists its overrides and warnings. `theme encode` and `theme resolve` give its `ht-` code when it has no overrides, and say why when it has.
+  - Contrast: generated colours are fixed as before. A colour chosen by hand (a mapped role, an edited step) is never moved; a pairing it fails is reported in the new `theme.warnings`.
+  - The status ramps can be themed from a seed, and their tones follow the step the seed sits on. `brandRamp(seed, { anchor })` pins a seed to any step, and `neutralSeedRamp` makes a neutral from any colour.
+  - Fonts: the `fonts` target and `theme apply` accept any Google Fonts family (`fontByFamily`), not only the curated list.
+  - New tokens a system can write: `semantic.type.<style>.*`, `semantic.radius.<step>` (built as fixed px instead of a multiple of the base), `semantic.border.style` and the `extra` group. Shadows take `inset`. Existing themes and codes build exactly as before.
+  - `components` is reserved in the document for component-level edits later (Button, Chip, Tag…): it is checked to be an object of objects, kept as given, and not generated from yet.
+
+- 9783182: A system's extras reach every output, and the kits can say which components draw which token.
+
+  - Extras (`extra.*` in tokens.json, from a `.halftone.json`) are now emitted by every target, and no kit component reads them:
+    - `shadcn-web`: `--<name>` variables in `:root` and `.dark` (a ramp's `--<name>-<step>`), `bg-` / `text-` / `border-<name>` and `rounded-<name>` through `@theme`, and `shadow-`, `border-` and `type-<name>` utilities.
+    - `nativewind3`: the variables in `global.css` and the classes in `tailwind.theme.js` (colours, corners, shadows, border widths, text styles).
+    - `design-md` and `llms`: an "Extras (this brand's own)" section naming each one, its classes, and that screens may use them.
+    - `themeVars` (the live theme) carries them too. `extraList` and `describeExtras` are in `lib/theme/extras.mjs`.
+  - An extra can't take a name its token or class would collide with: a built-in slot, a Tailwind colour (`red`, `white`), a theme variable (`radius`, `type-…`), or a Tailwind corner, shadow or border class (`none`, `lg`, `dashed`). `extraNameProblem(kind, name, taken)` says why, as `normalizeSystem` does.
+  - `lib/usage.mjs` `tokenUsage({ root, components, tokens })` maps each token (`color.primary`, `radius.md`, `shadow.2`, `type.h2`, `font.heading`, `border.width`) to the registry components that draw it. The kits' `registry:build` writes it to `registry/generated/token-usage.json`.
+  - `theme apply` takes an absolute path to a `.halftone.json`.
+
+- 4ad1328: Per-style text tokens: every Text variant (`h1 h2 h3 h4 lead p large small muted code blockquote`) is built as
+  `--type-<style>-{size,leading,weight,tracking}` variables (`-font` on Tailwind 4), with
+  `text-/leading-/tracking-/font-type-<style>` keys in nativewind3, `type-<style>` utilities in shadcn-web and
+  `TOKENS.textStyles` in ts-theme. A system's edited styles (`semantic.type.<style>`) change just their variables.
+  With none, the output draws exactly what the `text-*` classes did, except that tracking is em on native too: it
+  scales with the style's size, where NativeWind's own `tracking-tight` was a fixed -0.25px. `themeVars` carries the
+  styles to live previews. New: `resolveTextStyles`, `textEdits`, `textStyleVars`, `themeTextStyles`, `TEXT_STYLES`
+  and `TEXT_DEFAULTS` from `/theme`.
+
+### Patch Changes
+
+- efa3f71: The theme pages moved to Studio: a `theme shadcn` item's default description links to
+  `halftonedesignsystem.com/studio/?t=<code>` (was `/themes/?t=`, which now redirects), and the generated
+  `DESIGN.md` says codes and `.halftone.json` files come from Studio.
+
 ## 1.2.0
 
 ### Minor Changes
