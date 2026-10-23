@@ -825,6 +825,38 @@
       }
     },
     {
+      "name": "tabs",
+      "type": "registry:ui",
+      "title": "Tabs",
+      "description": "switch views of the same thing in place; not page navigation",
+      "dependencies": [
+        "class-variance-authority@^0.7.1",
+        "cn@^0.4.0",
+        "radix-ui@^1.7.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/ui/tabs.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/tabs.tsx"
+        }
+      ],
+      "categories": [
+        "navigation"
+      ],
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "Tabs",
+          "TabsList",
+          "TabsTrigger",
+          "TabsContent"
+        ],
+        "api": "<Tabs defaultValue><TabsList><TabsTrigger value /></TabsList><TabsContent value /></Tabs>"
+      }
+    },
+    {
       "name": "menubar",
       "type": "registry:ui",
       "title": "Menubar",
@@ -1029,6 +1061,38 @@
           "StatTile"
         ],
         "api": "<StatTile label value delta? deltaLabel? invert? />"
+      }
+    },
+    {
+      "name": "chart",
+      "type": "registry:ui",
+      "title": "Chart",
+      "description": "Recharts with the theme · series colours from `var(--chart-1)`…`--chart-5`",
+      "dependencies": [
+        "cn@^0.4.0",
+        "recharts@^3.8.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/ui/chart.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/chart.tsx"
+        }
+      ],
+      "categories": [
+        "data"
+      ],
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "ChartContainer",
+          "ChartTooltip",
+          "ChartTooltipContent",
+          "ChartLegend",
+          "ChartLegendContent"
+        ],
+        "api": "<ChartContainer config={{ key: { label, color: \"var(--chart-1)\" } }}><BarChart data>…</BarChart></ChartContainer>"
       }
     },
     {
