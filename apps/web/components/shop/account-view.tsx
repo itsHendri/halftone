@@ -17,7 +17,7 @@ export function AccountView() {
           <AvatarFallback>JD</AvatarFallback>
         </Avatar>
         <div>
-          <h1 className="text-xl font-semibold">Jane Doe</h1>
+          <h1 className="type-h4">Jane Doe</h1>
           <p className="text-muted-foreground text-sm">jane@example.com</p>
         </div>
       </div>

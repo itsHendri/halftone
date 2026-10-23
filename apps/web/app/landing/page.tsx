@@ -86,7 +86,7 @@ export default function Landing() {
 
         <section id="features" aria-labelledby="features-title" className="flex scroll-mt-20 flex-col gap-10">
           <div className="flex max-w-2xl flex-col gap-3">
-            <h2 id="features-title" className="text-3xl font-semibold tracking-tight">
+            <h2 id="features-title" className="type-h2">
               The admin, handled
             </h2>
             <p className="text-muted-foreground text-lg leading-8">Three jobs nobody started a studio to do.</p>
@@ -96,7 +96,7 @@ export default function Landing() {
 
         <section id="pricing" aria-labelledby="pricing-title" className="flex scroll-mt-20 flex-col gap-10">
           <div className="flex max-w-2xl flex-col gap-3">
-            <h2 id="pricing-title" className="text-3xl font-semibold tracking-tight">
+            <h2 id="pricing-title" className="type-h2">
               Simple pricing
             </h2>
             <p className="text-muted-foreground text-lg leading-8">Start free. Pay when it’s saving you time.</p>
@@ -117,7 +117,7 @@ export default function Landing() {
         </section>
 
         <section id="faq" aria-labelledby="faq-title" className="grid scroll-mt-20 gap-10 lg:grid-cols-[1fr_2fr]">
-          <h2 id="faq-title" className="text-3xl font-semibold tracking-tight">
+          <h2 id="faq-title" className="type-h2">
             Questions
           </h2>
           <Accordion type="single" collapsible>
@@ -131,7 +131,7 @@ export default function Landing() {
         </section>
 
         <section aria-labelledby="cta-title" className="bg-muted/60 flex flex-col items-center gap-5 rounded-2xl px-6 py-16 text-center">
-          <h2 id="cta-title" className="text-3xl font-semibold tracking-tight text-balance">
+          <h2 id="cta-title" className="type-h2 text-balance">
             Your next invoice could chase itself
           </h2>
           <p className="text-muted-foreground max-w-xl text-lg">Free for 30 days. No card, no setup call.</p>

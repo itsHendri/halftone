@@ -146,7 +146,7 @@ export function ComponentList({ embedded }: { embedded?: boolean }) {
           {CATEGORY_META.map((cat) => (
             <section key={cat.id} id={`cat-${cat.id}`} aria-labelledby={`cat-${cat.id}-title`} className="flex scroll-mt-20 flex-col gap-4">
               <div>
-                <h2 id={`cat-${cat.id}-title`} className="text-xl font-semibold">
+                <h2 id={`cat-${cat.id}-title`} className="type-h4">
                   {cat.label}
                 </h2>
                 <p className="text-muted-foreground text-sm">{cat.blurb}</p>

@@ -21,7 +21,7 @@ export function TodayView() {
   return (
     <>
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-semibold tracking-tight">Today</h1>
+        <h1 className="type-h3">Today</h1>
         <NewHabitDialog />
       </div>
       <div className="grid grid-cols-2 gap-4 md:grid-cols-[1.4fr_1fr_1fr]">

@@ -66,7 +66,7 @@ export default function Overview() {
 
       <section aria-labelledby="recent" className="flex flex-col gap-3">
         <div className="flex items-center justify-between gap-4">
-          <h2 id="recent" className="text-lg font-semibold">
+          <h2 id="recent" className="type-large">
             Recent invoices
           </h2>
           <Button asChild variant="ghost" size="sm">

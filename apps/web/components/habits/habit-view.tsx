@@ -38,7 +38,7 @@ export function HabitView() {
         </Link>
       </Button>
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-semibold tracking-tight">{h.name}</h1>
+        <h1 className="type-h3">{h.name}</h1>
         <div className="flex gap-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>

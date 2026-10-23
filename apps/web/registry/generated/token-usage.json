@@ -711,6 +711,17 @@
       "menubar",
       "sheet"
     ],
+    "type.h2": [
+      "page-header"
+    ],
+    "type.h3": [
+      "page-header",
+      "success-screen"
+    ],
+    "type.large": [
+      "list-group",
+      "section-header"
+    ],
     "type.p": [
       "prose"
     ]

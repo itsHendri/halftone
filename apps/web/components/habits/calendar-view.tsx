@@ -20,7 +20,7 @@ export function CalendarView() {
 
   return (
     <>
-      <h1 className="text-2xl font-semibold tracking-tight">Calendar</h1>
+      <h1 className="type-h3">Calendar</h1>
       <div className="grid items-start gap-4 md:grid-cols-[auto_1fr]">
         <Card className="items-center p-3">
           <Calendar

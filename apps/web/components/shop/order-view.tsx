@@ -40,7 +40,7 @@ export function OrderView() {
         </Link>
       </Button>
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-semibold tracking-tight">Order {o.id}</h1>
+        <h1 className="type-h3">Order {o.id}</h1>
         <OrderBadge status={o.status} />
       </div>
       <div className="grid items-start gap-6 md:grid-cols-2">

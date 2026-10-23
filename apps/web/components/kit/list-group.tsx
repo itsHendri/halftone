@@ -19,7 +19,7 @@ export function ListGroup({ title, footnote, variant = 'card', children, classNa
   const rows = items.map((child, i) => (i === items.length - 1 ? React.cloneElement(child as React.ReactElement<{ last?: boolean }>, { last: true }) : child));
   return (
     <section className={cn('flex flex-col gap-3', className)}>
-      {title ? <h3 className="text-lg font-semibold">{title}</h3> : null}
+      {title ? <h3 className="type-large">{title}</h3> : null}
       {variant === 'card' ? <Card className="w-full gap-0 px-4 py-0">{rows}</Card> : <div className="w-full">{rows}</div>}
       {footnote ? <p className="text-muted-foreground text-xs leading-5">{footnote}</p> : null}
     </section>

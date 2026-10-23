@@ -17,7 +17,7 @@ export function Browse() {
   return (
     <>
       <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-        <h1 className="text-2xl font-semibold tracking-tight">Things for your desk and home</h1>
+        <h1 className="type-h3">Things for your desk and home</h1>
         <SearchField aria-label="Search products" placeholder="Search products" value={query} onChangeText={setQuery} containerClassName="sm:w-72" />
       </div>
       <FilterChipRow>
