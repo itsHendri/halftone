@@ -9,6 +9,7 @@ import { LABELS } from '@/components/theme/studio/parts';
 import { FoundationSection, NewMenu, Segmented } from '@/components/theme/studio/section';
 import {
   addExtra,
+  checkExtraName,
   contrast,
   deleteExtra,
   extraLabel,
@@ -433,7 +434,7 @@ function ExtraColourPopover({ item, trigger, className }: { item: ExtraColor; tr
       <ItemPopover
         id={id}
         title={extraLabel(name)}
-        extra={{ name: extraLabel(name), token: name, onRename: (typed) => renameExtra(doc, 'color', name, typed), onDelete: () => deleteExtra('color', name) }}
+        extra={{ name: extraLabel(name), token: name, onRename: (typed) => renameExtra(doc, 'color', name, typed), check: (typed) => checkExtraName(doc, 'color', name, typed), onDelete: () => deleteExtra('color', name) }}
         trigger={trigger}
         preview={
           item.seed && ramp ? (

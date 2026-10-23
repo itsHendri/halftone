@@ -24,10 +24,14 @@ export type BrandState = {
 };
 export type BrandSlot = 'logo' | 'logoDark' | 'mark' | 'markDark';
 
-/** What the kits get (lib/brand.ts's Brand): null until there's a logo. */
-export function kitBrand(s: BrandState = systemsState().doc.brand as BrandState) {
+/**
+ * What the kits get (lib/brand.ts's Brand): null until there's a logo. With no brand name it's the system's name,
+ * as the Studio's placeholder shows it.
+ */
+export function kitBrand(s: BrandState = systemsState().doc.brand as BrandState, systemName = systemsState().doc.name) {
   if (!s.logo) return null;
-  return { name: s.name.trim() || 'Your brand', logo: s.logo, logoDark: s.logoDark, mark: s.mark, markDark: s.markDark };
+  const name = s.name.trim() || systemName.trim() || 'Your brand';
+  return { name, logo: s.logo, logoDark: s.logoDark, mark: s.mark, markDark: s.markDark };
 }
 
 /** Change the active system's brand (undoable; `coalesce` folds typing a name into one step). */

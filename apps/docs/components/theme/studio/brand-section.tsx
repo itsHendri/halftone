@@ -30,13 +30,26 @@ const SLOTS: Slot[] = [
 /** The name the placeholder sets: the brand's name, or the system's. */
 const brandName = (brand: BrandState, systemName: string) => brand.name.trim() || systemName;
 
-/** What a slot draws: its own image, the one it falls back to (a dark slot shows the light one), or null. */
-function slotImage(brand: BrandState, slot: Slot): BrandImage | null {
+/**
+ * What a slot draws: its own image, or the one it falls back to (a dark slot shows the light one; a mark shows the
+ * logo, as the app icon and the kits do, lib/brand/icon.ts squareImages), or null. `from` names the fallback.
+ */
+function slotSource(brand: BrandState, slot: Slot): { image: BrandImage; from: string | null } | null {
   if (slot.id === 'icon') return null;
-  if (slot.id === 'logoDark') return brand.logoDark ?? brand.logo ?? null;
-  if (slot.id === 'markDark') return brand.markDark ?? brand.mark ?? null;
-  return brand[slot.id] ?? null;
+  const chain: [BrandImage | undefined, string][] =
+    slot.id === 'logo'
+      ? [[brand.logo, '']]
+      : slot.id === 'logoDark'
+        ? [[brand.logoDark, ''], [brand.logo, 'logo']]
+        : slot.id === 'mark'
+          ? [[brand.mark, ''], [brand.logo, 'logo']]
+          : [[brand.markDark, ''], [brand.mark, 'mark'], [brand.logoDark, 'logo dark'], [brand.logo, 'logo']];
+  const hit = chain.find(([image]) => image);
+  return hit ? { image: hit[0]!, from: hit[1] || null } : null;
 }
+const slotImage = (brand: BrandState, slot: Slot) => slotSource(brand, slot)?.image ?? null;
+/** A square slot's image height: a wide logo standing in for the mark is sized to fit across the square. */
+const squareHeight = (image: BrandImage, box: number) => (image.aspect > 1 ? Math.round(Math.min(box, (box * 1.4) / image.aspect)) : box);
 
 /** A slot as drawn on the page and in its popover's preview. */
 function SlotArt({ slot, size }: { slot: Slot; size: 'tile' | 'preview' }) {
@@ -68,7 +81,7 @@ function SlotArt({ slot, size }: { slot: Slot; size: 'tile' | 'preview' }) {
   return (
     <div className={`border-border flex ${h} items-center justify-center overflow-hidden rounded-lg border px-3`} style={{ background: c.background, color: c.foreground }}>
       {image ? (
-        <BrandImageView image={image} height={slot.square ? (size === 'tile' ? 40 : 56) : size === 'tile' ? 28 : 40} label="" className="max-w-full" />
+        <BrandImageView image={image} height={slot.square ? squareHeight(image, size === 'tile' ? 40 : 56) : size === 'tile' ? 28 : 40} label="" className="max-w-full" />
       ) : (
         <span className={`truncate ${size === 'tile' ? 'text-2xl' : 'text-3xl'}`} style={font}>
           {slot.square ? name.slice(0, 1) : name}
@@ -166,14 +179,15 @@ function SlotPopover({ slot }: { slot: Slot }) {
   const id = `brand.${slot.tag}`;
   const own = slot.id === 'icon' ? null : (brand[slot.id] ?? null);
   const blocked = slot.needs && !brand[slot.needs];
+  const from = slotSource(brand, slot)?.from ?? null;
   const nameId = React.useId();
   const status =
     slot.id === 'icon'
       ? 'The mark on the icon colour; the logo without a mark; the placeholder without either.'
       : own
         ? `${own.svg ? 'SVG' : 'PNG'}${own.mono ? ' · one colour, follows light and dark' : ''}`
-        : slot.dark && !blocked
-          ? `Shows the ${slot.needs} until you upload a dark version.`
+        : from
+          ? `Shows the ${from} until you upload ${slot.dark ? 'a dark version' : 'a mark'}.`
           : 'Placeholder · the system name in its heading font';
   return (
     <ItemPopover
@@ -183,12 +197,12 @@ function SlotPopover({ slot }: { slot: Slot }) {
       trigger={
         <button
           type="button"
-          aria-label={`${slot.label}: ${own ? 'uploaded' : slot.id === 'icon' ? 'app icon' : slotImage(brand, slot) ? `same as ${slot.needs}` : 'placeholder'}. Edit`}
+          aria-label={`${slot.label}: ${own ? 'uploaded' : slot.id === 'icon' ? 'app icon' : from ? `same as ${from}` : 'placeholder'}. Edit`}
           className="hover:bg-accent/60 focus-visible:ring-ring flex min-w-0 flex-col gap-1.5 rounded-lg p-1 text-left focus-visible:outline-none focus-visible:ring-2">
           <SlotArt slot={slot} size="tile" />
           <span className="text-muted-foreground px-0.5 text-xs">
             {slot.label}
-            {own || slot.id === 'icon' ? null : <span> · {slotImage(brand, slot) ? `as ${slot.needs}` : 'placeholder'}</span>}
+            {own || slot.id === 'icon' ? null : <span> · {from ? `as ${from}` : 'placeholder'}</span>}
           </span>
         </button>
       }

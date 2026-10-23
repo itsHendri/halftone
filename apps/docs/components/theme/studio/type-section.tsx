@@ -7,8 +7,8 @@ import { ItemMenu } from '@/components/theme/studio/item-menu';
 import { EditedDot, Field, inputClass, ItemPopover, openItem } from '@/components/theme/studio/item-popover';
 import { LABELS, ORDER } from '@/components/theme/studio/parts';
 import { FoundationSection, KnobLock, NewMenu } from '@/components/theme/studio/section';
-import { addExtra, deleteExtra, extraLabel, extrasOf, freeName, renameExtra, setFont, setTextStyle, TEXT_LABELS, TEXT_STYLE_NAMES, updateExtra, type TextStyleName } from '@/lib/studio/foundations';
-import { familyCss, isPick, picksFor, previewHref, useGoogleFonts, weightRange, weightsOf, type FontRole } from '@/lib/studio/fonts';
+import { addExtra, checkExtraName, deleteExtra, extraLabel, extrasOf, freeName, renameExtra, setFont, setTextStyle, TEXT_LABELS, TEXT_STYLE_NAMES, updateExtra, type TextStyleName } from '@/lib/studio/foundations';
+import { drawnWeight, familyCss, isPick, loadedWeights, picksFor, previewHref, useGoogleFonts, weightRange, type FontRole } from '@/lib/studio/fonts';
 import { setRecipe, useLiveTheme } from '@/lib/theme/store';
 
 /**
@@ -92,7 +92,12 @@ function FontList({ role, current, onPick }: { role: FontRole; current: string; 
   const q = query.trim().toLowerCase();
   const picks = picksFor(role).filter((f) => !q || f.family.toLowerCase().includes(q));
   const pickNames = new Set(picksFor(role).map((f) => f.family));
-  const rest = (google ?? []).filter((f) => !pickNames.has(f.family) && (!q || f.family.toLowerCase().includes(q))).slice(0, q ? 60 : 30);
+  // The list is in popularity order; a search puts the exact name first, then names that start with it.
+  const rank = (family: string) => (family.toLowerCase() === q ? 0 : family.toLowerCase().startsWith(q) ? 1 : 2);
+  const rest = (google ?? [])
+    .filter((f) => !pickNames.has(f.family) && (!q || f.family.toLowerCase().includes(q)))
+    .sort((a, b) => (q ? rank(a.family) - rank(b.family) : 0))
+    .slice(0, q ? 60 : 30);
   const options = [
     ...picks.map((f) => ({ family: f.system ? '' : f.family, label: f.system ? (role === 'mono' ? 'System mono' : 'System') : f.family, weights: f.weights, group: 'Halftone picks' })),
     ...rest.map((f) => ({ family: f.family, label: f.family, weights: f.weights, group: 'All Google Fonts' })),
@@ -170,7 +175,8 @@ function FontCard({ role }: { role: FontRole }) {
   const family = useFamily()(role);
   const pick = !family || isPick(family);
   const edited = !!doc.fonts[role];
-  const styles = weightsOf(family).length;
+  // The weights the kits load, not every weight the family has: those are what a text style can draw.
+  const loaded = loadedWeights(family);
   return (
     <ItemMenu
       id={`font.${role}`}
@@ -193,7 +199,7 @@ function FontCard({ role }: { role: FontRole }) {
               {edited ? <EditedDot /> : null}
             </span>
             <span className="text-muted-foreground text-xs">
-              {ROLE_LABEL[role]} · {pick ? 'Halftone pick' : 'Google Font'} · {styles} style{styles === 1 ? '' : 's'}
+              {ROLE_LABEL[role]} · {pick ? 'Halftone pick' : 'Google Font'} · {loaded ? `loads ${weightRange(loaded)}` : 'every weight'}
             </span>
           </button>
         }
@@ -216,7 +222,6 @@ function FontCard({ role }: { role: FontRole }) {
 
 function StyleFields({ style, family, onChange, edited, onReset }: { style: Style; family: (r: FontRole) => string; onChange: (patch: Partial<Style>, coalesce?: string) => void; edited: string[]; onReset?: (key: keyof Style) => void }) {
   const ids = { font: React.useId(), weight: React.useId(), size: React.useId(), leading: React.useId(), tracking: React.useId() };
-  const weights = weightsOf(family(style.font));
   const mark = (key: keyof Style) =>
     edited.includes(key) && onReset ? (
       <button type="button" onClick={() => onReset(key)} aria-label={`Reset ${key} to the scale`} className="text-muted-foreground hover:text-foreground inline-flex shrink-0 items-center gap-1 text-xs underline underline-offset-2">
@@ -254,12 +259,16 @@ function StyleFields({ style, family, onChange, edited, onReset }: { style: Styl
       </Field>
       <Field label="Weight" htmlFor={ids.weight}>
         <select id={ids.weight} value={style.weight} onChange={(e) => onChange({ weight: Number(e.target.value) })} className={`${inputClass} w-full`}>
-          {[100, 200, 300, 400, 500, 600, 700, 800, 900].map((w) => (
-            <option key={w} value={w}>
-              {w}
-              {weights.includes(w) ? '' : ' (not in this font)'}
-            </option>
-          ))}
+          {[100, 200, 300, 400, 500, 600, 700, 800, 900].map((w) => {
+            // The kits load a few weights of a font; another draws as the nearest one, here and in both kits.
+            const drawn = drawnWeight(family(style.font), w);
+            return (
+              <option key={w} value={w}>
+                {w}
+                {drawn !== w ? ` (draws as ${drawn})` : ''}
+              </option>
+            );
+          })}
         </select>
         {mark('weight')}
       </Field>
@@ -349,7 +358,7 @@ function ExtraTextRow({ item }: { item: Style & { name: string } }) {
       <ItemPopover
         id={id}
         title={extraLabel(name)}
-        extra={{ name: extraLabel(name), token: name, onRename: (typed) => renameExtra(doc, 'text', name, typed), onDelete: () => deleteExtra('text', name) }}
+        extra={{ name: extraLabel(name), token: name, onRename: (typed) => renameExtra(doc, 'text', name, typed), check: (typed) => checkExtraName(doc, 'text', name, typed), onDelete: () => deleteExtra('text', name) }}
         trigger={
           <button
             type="button"

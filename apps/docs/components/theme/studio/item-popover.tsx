@@ -3,6 +3,7 @@ import { Popover, PopoverContent, PopoverTrigger } from 'fumadocs-ui/components/
 import { LockIcon, Trash2Icon, XIcon } from 'lucide-react';
 import * as React from 'react';
 import { createPortal } from 'react-dom';
+import { kebab } from '@/lib/studio/foundations';
 
 /**
  * The Foundations popover (apps/docs/design/studio-wireframes.md › Popovers, wireframe 2). One shape for every item:
@@ -47,6 +48,13 @@ export function usePhone() {
   );
 }
 
+/** Where the page shows under the sticky chrome: the site header (48px) and the Studio bar (--studio-bar). */
+function chromeBottom() {
+  const studio = document.querySelector<HTMLElement>('[data-studio]');
+  const bar = (studio && parseFloat(getComputedStyle(studio).getPropertyValue('--studio-bar'))) || 0;
+  return 48 + bar;
+}
+
 // ---- the popover ----------------------------------------------------------------------------------------
 
 export type Extra = {
@@ -55,6 +63,8 @@ export type Extra = {
   token: string;
   /** Returns an error to show inline (a taken name), or null once renamed. */
   onRename: (name: string) => string | null;
+  /** The same check without renaming, as you type. */
+  check?: (name: string) => string | null;
   onDelete: () => void;
 };
 
@@ -90,6 +100,26 @@ export function ItemPopover({ id, title, slot, extra, trigger, preview, children
   const phone = usePhone();
   const titleId = React.useId();
   const footer = status && (status.edited || status.contrast || status.usedBy || status.note);
+  // Open beside an item that's in view: one under the bar or below the window ("+ New" puts its extra at the end
+  // of the section) is scrolled to first, since the open popover locks the page's scroll. The top collision padding
+  // keeps the popover off the sticky header and bar.
+  const triggerRef = React.useRef<HTMLButtonElement>(null);
+  const [topPadding, setTopPadding] = React.useState(12);
+  React.useLayoutEffect(() => {
+    if (!open || phone) return;
+    const top = chromeBottom();
+    setTopPadding(top + 8);
+    const r = triggerRef.current?.getBoundingClientRect();
+    if (r && (r.top < top || r.bottom > window.innerHeight)) triggerRef.current?.scrollIntoView({ block: 'center' });
+    // Once it has measured itself: a popover taller than the room on either side (a shadow's layers) gets the most
+    // room there is, below its item with the item just under the bar, instead of a short inner scroll.
+    const frame = requestAnimationFrame(() => {
+      const content = document.querySelector<HTMLElement>(`[data-studio-popover][data-item="${CSS.escape(id)}"]`);
+      const item = triggerRef.current?.getBoundingClientRect();
+      if (content && item && content.scrollHeight > content.clientHeight + 1) window.scrollBy({ top: item.top - top - 8 });
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [open, phone, id]);
   // A renamed extra gets a new id: stay open under it.
   const previous = React.useRef(id);
   React.useEffect(() => {
@@ -99,15 +129,18 @@ export function ItemPopover({ id, title, slot, extra, trigger, preview, children
   }, [id]);
   return (
     <Popover modal open={open} onOpenChange={(next) => openItem(next ? id : current === id ? null : current)}>
-      <PopoverTrigger asChild>{trigger}</PopoverTrigger>
+      <PopoverTrigger asChild ref={triggerRef}>
+        {trigger}
+      </PopoverTrigger>
       {open && phone ? createPortal(<div className="fixed inset-0 z-40 bg-black/40" aria-hidden />, document.body) : null}
       <PopoverContent
         side={side}
         align={align}
         sideOffset={6}
-        collisionPadding={12}
+        collisionPadding={{ top: topPadding, right: 12, bottom: 12, left: 12 }}
         aria-labelledby={titleId}
         data-studio-popover=""
+        data-item={id}
         data-sheet={phone ? '' : undefined}
         onOpenAutoFocus={(e) => {
           // A new extra opens with its name selected; otherwise the first value's control takes focus (not Close).
@@ -117,7 +150,8 @@ export function ItemPopover({ id, title, slot, extra, trigger, preview, children
             root?.querySelector<HTMLElement>('[data-values] :is(input, select, textarea, button, [tabindex="0"]):not(:disabled)');
           if (target) {
             e.preventDefault();
-            target.focus();
+            // Without preventScroll, focusing a field near the edge scrolls the page under the pointer.
+            target.focus({ preventScroll: true });
             if (target instanceof HTMLInputElement) target.select();
           }
         }}
@@ -176,7 +210,11 @@ export function ItemPopover({ id, title, slot, extra, trigger, preview, children
 /** An extra's name: edited in place; its token name under it; a taken name is refused inline. */
 function ExtraName({ extra, titleId }: { extra: Extra; titleId: string }) {
   const [value, setValue] = React.useState(extra.name);
-  const [error, setError] = React.useState<string | null>(null);
+  const [committed, setError] = React.useState<string | null>(null);
+  // The token and any problem follow what's typed; Enter or leaving the field renames.
+  const typed = value.trim() === extra.name ? null : (extra.check?.(value) ?? null);
+  const error = committed ?? typed;
+  const token = kebab(value) || extra.token;
   const errorId = React.useId();
   const commit = () => {
     if (value.trim() === extra.name) return setError(null);
@@ -192,7 +230,10 @@ function ExtraName({ extra, titleId }: { extra: Extra; titleId: string }) {
           aria-label="Name"
           aria-invalid={!!error}
           aria-describedby={errorId}
-          onChange={(e) => setValue(e.target.value)}
+          onChange={(e) => {
+            setValue(e.target.value);
+            setError(null);
+          }}
           onBlur={commit}
           onKeyDown={(e) => {
             if (e.key === 'Enter') commit();
@@ -202,7 +243,7 @@ function ExtraName({ extra, titleId }: { extra: Extra; titleId: string }) {
         <p id={errorId} className={`text-xs ${error ? 'text-destructive' : 'text-muted-foreground'}`}>
           {error ?? (
             <>
-              Token <code className="font-mono">{extra.token}</code>
+              Token <code className="font-mono">{token}</code>
             </>
           )}
         </p>

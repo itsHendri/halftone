@@ -183,9 +183,10 @@ function Menu({ spec, onUsage }: { spec: MenuSpec; onUsage: () => void }) {
 
 /**
  * Wraps an item (its ItemPopover trigger) with the menu: right-click, the ⋯ that shows on hover or focus, or a long
- * press. `id` is the item's popover id; the menu's is `menu:<id>`.
+ * press. `id` is the item's popover id; the menu's is `menu:<id>`. The ⋯ sits in the item's corner (`compact`: a
+ * small one on the corner), or `above` it, for a small chip whose middle it would otherwise cover.
  */
-export function ItemMenu({ id, spec, children, className = '', compact }: { id: string; spec: MenuSpec; children: React.ReactNode; className?: string; compact?: boolean }) {
+export function ItemMenu({ id, spec, children, className = '', compact, above }: { id: string; spec: MenuSpec; children: React.ReactNode; className?: string; compact?: boolean; above?: boolean }) {
   const menuId = `menu:${id}`;
   const open = useOpenItem() === menuId;
   const [view, setView] = React.useState<'menu' | 'usage'>('menu');
@@ -232,7 +233,7 @@ export function ItemMenu({ id, spec, children, className = '', compact }: { id: 
           aria-haspopup="menu"
           title="More (right-click, or Shift+F10)"
           className={`bg-background/90 border-border text-muted-foreground hover:text-foreground focus-visible:ring-ring absolute z-10 inline-flex items-center justify-center rounded-md border opacity-0 shadow-sm focus-visible:opacity-100 focus-visible:outline-none focus-visible:ring-2 group-hover/item:opacity-100 data-[state=open]:opacity-100 [@media(hover:none)]:pointer-events-none ${
-            compact ? '-right-1.5 -top-1.5 size-5' : 'right-1 top-1 size-6'
+            above ? '-top-5 right-0 size-5' : compact ? '-right-1.5 -top-1.5 size-5' : 'right-1 top-1 size-6'
           }`}>
           <EllipsisIcon className="size-3.5" aria-hidden />
         </PopoverTrigger>

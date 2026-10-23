@@ -387,11 +387,18 @@ export function updateExtra(kind: ExtraKind, name: string, change: (item: ExtraI
   }, coalesce);
 }
 
+/** What's wrong with renaming an extra to what was typed, or null: shown as you type, refused on commit. */
+export function checkExtraName(doc: HalftoneSystem, kind: ExtraKind, from: string, typed: string) {
+  const to = kebab(typed);
+  if (to === from) return null;
+  return extraNameProblem(kind, to, extrasOf(doc, kind).map((e) => e.name).filter((n) => n !== from));
+}
+
 /** Rename an extra from what was typed ("Trendy green"); returns the problem to show, or null. */
 export function renameExtra(doc: HalftoneSystem, kind: ExtraKind, from: string, typed: string) {
   const to = kebab(typed);
   if (to === from) return null;
-  const problem = extraNameProblem(kind, to, extrasOf(doc, kind).map((e) => e.name).filter((n) => n !== from));
+  const problem = checkExtraName(doc, kind, from, typed);
   if (problem) return problem;
   updateExtra(kind, from, (e) => ({ ...e, name: to }));
   return null;
