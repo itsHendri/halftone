@@ -26,7 +26,7 @@ export function InsightsView() {
   return (
     <>
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-2xl font-semibold tracking-tight">Insights</h1>
+        <h1 className="type-h3">Insights</h1>
         <SegmentedControl aria-label="Range" segments={RANGES} value={range} onChange={setRange} className="w-48" />
       </div>
       <div className="grid gap-4 sm:grid-cols-2">

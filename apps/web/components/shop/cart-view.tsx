@@ -33,7 +33,7 @@ export function CartView() {
 
   return (
     <>
-      <h1 className="text-2xl font-semibold tracking-tight">Cart</h1>
+      <h1 className="type-h3">Cart</h1>
       <div className="grid items-start gap-6 lg:grid-cols-[1fr_22rem]">
         <ListGroup>
           {cart.map((line) => {

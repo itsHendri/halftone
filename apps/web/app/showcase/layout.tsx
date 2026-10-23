@@ -11,7 +11,7 @@ export default function ShowcaseLayout({ children }: LayoutProps<'/showcase'>) {
     <div data-autosize className="bg-muted/50 min-h-full">
       <div className="mx-auto w-full max-w-[1600px] p-4 sm:p-6">
         <div className="kit-chrome mb-4 flex items-center justify-between gap-4">
-          <h1 className="text-lg font-semibold">Showcase</h1>
+          <h1 className="type-large">Showcase</h1>
           <KitChip />
         </div>
         {children}

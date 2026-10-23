@@ -47,7 +47,7 @@ export function CheckoutView() {
 
   return (
     <div className="mx-auto flex w-full max-w-xl flex-col gap-8">
-      <h1 className="text-2xl font-semibold tracking-tight">Checkout</h1>
+      <h1 className="type-h3">Checkout</h1>
       <Stepper current={STEPS.indexOf(step) + 1} total={3} labels={['Address', 'Delivery', 'Review']} />
       <form
         className="flex flex-col gap-6"

@@ -29,7 +29,7 @@ export function SuccessScreen({ title, body, amount, amountSubtitle, loading, ch
         <>
           <Spot icon={CheckIcon} size="xl" tone="success" className="mb-7" />
           <div role="status" className="flex w-full max-w-sm flex-col items-center gap-2">
-            <h2 className="text-2xl font-semibold tracking-tight">{title}</h2>
+            <h2 className="type-h3">{title}</h2>
             {amount ? <p className="text-primary text-4xl font-bold tabular-nums">{amount}</p> : null}
             {amountSubtitle ? <p className="text-muted-foreground">{amountSubtitle}</p> : null}
             {body ? <p className="text-muted-foreground">{body}</p> : null}

@@ -15,6 +15,20 @@ const radiusPx = (k: string) =>
       ? 'pill'
       : `${TOKENS.radius.control}px`
     : `${Math.round(((TOKENS.radius.base * TOKENS.radius[k as 'sm']) / TOKENS.radius.lg) * 10) / 10}px`;
+/** The theme's text styles (the mobile kit's Text variants), literal for Tailwind. Studio edits them in both kits. */
+const TEXT_STYLE_CLASS = {
+  h1: 'type-h1',
+  h2: 'type-h2',
+  h3: 'type-h3',
+  h4: 'type-h4',
+  lead: 'type-lead',
+  large: 'type-large',
+  p: 'type-p',
+  small: 'type-small',
+  muted: 'type-muted',
+  blockquote: 'type-blockquote',
+  code: 'type-code',
+} as const;
 const DEPTH: [string, string][] = [
   ['shadow-sm', 'Controls and cards'],
   ['shadow-md', 'Raised cards, popovers'],
@@ -72,21 +86,21 @@ export default function FoundationsPage() {
   return (
     <div className="flex flex-col gap-12">
       <header className="flex flex-col gap-2">
-        <h1 className="text-3xl font-semibold tracking-tight">Foundations</h1>
+        <h1 className="type-h2">Foundations</h1>
         <p className="text-muted-foreground max-w-2xl">
           From tokens/tokens.json. Use the class names (<code>bg-primary</code>, <code>p-4</code>, <code>rounded-lg</code>), never the values.
         </p>
       </header>
 
       <section aria-labelledby="theme" className="flex flex-col gap-4">
-        <h2 id="theme" className="text-xl font-semibold">
+        <h2 id="theme" className="type-h4">
           Theme
         </h2>
         <ThemeSummary />
       </section>
 
       <section aria-labelledby="colour" className="flex flex-col gap-4">
-        <h2 id="colour" className="text-xl font-semibold">
+        <h2 id="colour" className="type-h4">
           Colour
         </h2>
         <ul className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4">
@@ -108,7 +122,7 @@ export default function FoundationsPage() {
       </section>
 
       <section aria-labelledby="radius" className="flex flex-col gap-4">
-        <h2 id="radius" className="text-xl font-semibold">
+        <h2 id="radius" className="type-h4">
           Radius
         </h2>
         <ul className="flex flex-wrap gap-4">
@@ -124,7 +138,7 @@ export default function FoundationsPage() {
       </section>
 
       <section aria-labelledby="depth" className="flex flex-col gap-4">
-        <h2 id="depth" className="text-xl font-semibold">
+        <h2 id="depth" className="type-h4">
           Depth and borders
         </h2>
         <ul className="grid max-w-2xl grid-cols-1 gap-4 sm:grid-cols-3">
@@ -142,7 +156,7 @@ export default function FoundationsPage() {
       </section>
 
       <section aria-labelledby="spacing" className="flex flex-col gap-4">
-        <h2 id="spacing" className="text-xl font-semibold">
+        <h2 id="spacing" className="type-h4">
           Spacing
         </h2>
         <ul className="flex flex-col gap-2">
@@ -156,8 +170,31 @@ export default function FoundationsPage() {
         </ul>
       </section>
 
+      <section aria-labelledby="text-styles" className="flex flex-col gap-4">
+        <h2 id="text-styles" className="type-h4">
+          Text styles
+        </h2>
+        <p className="text-muted-foreground text-sm">
+          The mobile kit&rsquo;s Text variants, as utilities: headings and labels use these, so a style edited in Studio changes
+          them in both kits.
+        </p>
+        <ul className="flex flex-col gap-3">
+          {(Object.keys(TEXT_STYLE_CLASS) as (keyof typeof TEXT_STYLE_CLASS)[]).map((k) => {
+            const t = TOKENS.textStyles[k];
+            return (
+              <li key={k} className="flex items-baseline gap-4">
+                <code className="text-muted-foreground w-40 shrink-0 text-xs">
+                  {TEXT_STYLE_CLASS[k]} · {t.size}/{t.lineHeight} · {t.weight}
+                </code>
+                <span className={`${TEXT_STYLE_CLASS[k]} min-w-0`}>The quick brown fox</span>
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+
       <section aria-labelledby="type" className="flex flex-col gap-4">
-        <h2 id="type" className="text-xl font-semibold">
+        <h2 id="type" className="type-h4">
           Type
         </h2>
         <ul className="flex flex-col gap-3">

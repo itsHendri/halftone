@@ -37,7 +37,7 @@ export default function KitHome() {
       </header>
 
       <section aria-labelledby="browse" className="flex flex-col gap-4">
-        <h2 id="browse" className="text-lg font-semibold">
+        <h2 id="browse" className="type-large">
           Browse
         </h2>
         <div className="grid gap-4 sm:grid-cols-2">
@@ -50,7 +50,7 @@ export default function KitHome() {
       {/* samples:start */}
       <section aria-labelledby="samples" className="flex flex-col gap-4">
         <div className="flex flex-col gap-1">
-          <h2 id="samples" className="text-lg font-semibold">
+          <h2 id="samples" className="type-large">
             Sample apps
           </h2>
           <p className="text-muted-foreground text-sm">
@@ -67,7 +67,7 @@ export default function KitHome() {
       {/* samples:end */}
 
       <section aria-labelledby="how" className="flex flex-col gap-4">
-        <h2 id="how" className="text-lg font-semibold">
+        <h2 id="how" className="type-large">
           How it works
         </h2>
         <ol className="grid gap-6 md:grid-cols-3">

@@ -42,7 +42,7 @@ export function ProductView({ product: p }: { product: Product }) {
               </Badge>
               <Rating value={p.rating} showValue count={120} size="sm" />
             </div>
-            <h1 className="text-3xl font-semibold tracking-tight">{p.name}</h1>
+            <h1 className="type-h2">{p.name}</h1>
             <p className="text-2xl font-semibold tabular-nums">{money(p.price)}</p>
             <p className="text-muted-foreground">{p.blurb}</p>
           </div>

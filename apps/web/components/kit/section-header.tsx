@@ -19,7 +19,7 @@ export function SectionHeader({ title, action, onAction, actionHref, level = 2, 
   const actionClass = 'text-primary focus-visible:ring-ring/50 rounded-sm text-sm font-medium outline-none hover:underline focus-visible:ring-[3px]';
   return (
     <div className={cn('flex items-end justify-between gap-4', className)}>
-      <Heading className="text-lg font-semibold">{title}</Heading>
+      <Heading className="type-large">{title}</Heading>
       {action ? (
         actionHref ? (
           <Link href={actionHref} className={actionClass}>

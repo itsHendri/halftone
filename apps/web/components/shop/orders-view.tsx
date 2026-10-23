@@ -25,7 +25,7 @@ export function OrdersView() {
   const { orders } = useShop();
   return (
     <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
-      <h1 className="text-2xl font-semibold tracking-tight">Orders</h1>
+      <h1 className="type-h3">Orders</h1>
       {orders.length ? (
         <ListGroup>
           {orders.map((o) => (

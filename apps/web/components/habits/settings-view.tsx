@@ -13,7 +13,7 @@ export function SettingsView() {
   const [start, setStart] = React.useState('mon');
   return (
     <>
-      <h1 className="text-2xl font-semibold tracking-tight">Settings</h1>
+      <h1 className="type-h3">Settings</h1>
       <ListGroup title="Preferences" footnote="Reminders go to this browser. Quiet hours hold them until morning.">
         <ListRow leading={<IconCircle as={BellIcon} />} title="Reminders" subtitle="Daily nudges for unfinished habits" trailing={<Switch aria-label="Reminders" checked={reminders} onCheckedChange={setReminders} />} />
         <ListRow leading={<IconCircle as={MoonIcon} />} title="Quiet hours" subtitle="No reminders after 21:00" trailing={<Switch aria-label="Quiet hours" checked={quiet} onCheckedChange={setQuiet} />} />
