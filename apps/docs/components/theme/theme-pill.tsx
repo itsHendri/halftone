@@ -1,15 +1,17 @@
 'use client';
-import { fontById, normalizeRecipe, PRESETS, sameRecipe, type Adjustment, type Recipe } from '@halftone-ds/tokens/theme';
+import { systemOverrides } from '@halftone-ds/tokens/system';
+import { fontById, normalizeRecipe, PRESETS, sameRecipe, type Adjustment, type Recipe, type RecipeInput } from '@halftone-ds/tokens/theme';
 import { Popover, PopoverContent, PopoverTrigger } from 'fumadocs-ui/components/ui/popover';
 import { ArrowRightIcon, CheckIcon, ChevronDownIcon, PauseIcon, PlayIcon } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import * as React from 'react';
 import { ExportPanel } from '@/components/theme/export-panel';
+import { toast, Toaster } from '@/components/theme/studio/toast';
 import { SWATCHES, swatchName } from '@/lib/theme/swatches';
 import { rovingKeyDown, rovingTabIndex } from '@/lib/roving';
 import { ambientBrand, pauseAmbient, playAmbient, useAmbient } from '@/lib/theme/ambient';
-import { resumeAmbient, setRecipe, themeFor, useLiveTheme } from '@/lib/theme/store';
+import { resumeAmbient, setRecipe, themeFor, undo, useLiveTheme } from '@/lib/theme/store';
 import { switchSystem, systemLabel, systemTheme, useSystems } from '@/lib/studio/systems';
 
 /** The preset a recipe came from, if it is still exactly that preset. */
@@ -99,10 +101,11 @@ function DriftChoice({ selected, tabIndex, close }: { selected: boolean; tabInde
  */
 export function ThemePill() {
   const pathname = usePathname();
-  const { recipe, theme, ambient } = useLiveTheme();
+  const { system, recipe, theme, ambient } = useLiveTheme();
   const systems = useSystems();
   const drift = useAmbient();
   const [colourOpen, setColourOpen] = React.useState(false);
+  const [systemOpen, setSystemOpen] = React.useState(false);
   const bar = React.useRef<HTMLDivElement>(null);
   const covering = useCoversAvoided(bar, pathname);
 
@@ -111,161 +114,179 @@ export function ThemePill() {
   const systemIndex = ambient || systems.shared ? -1 : systems.saved.findIndex((x) => x.id === systems.activeId);
   const label = ambient ? 'Drifting' : systemLabel(systems);
   const swatchIndex = ambient ? -1 : SWATCHES.findIndex((x) => x.hex === recipe.brand);
+  // A preset or a colour rewrites the recipe and keeps the hand edits (as the Studio's base knobs do), so the bar
+  // says so, and says what changed with an Undo: there's no undo button outside the Studio.
+  const edits = ambient ? 0 : systemOverrides(system).length;
+  const editsNote = edits ? `Your ${edits} edit${edits === 1 ? '' : 's'} stay.` : '';
+  const pick = (input: RecipeInput, message: string) => {
+    setRecipe(input);
+    if (!ambient) toast([message, editsNote].filter(Boolean).join(' '), { label: 'Undo', run: undo });
+  };
 
   return (
-    <div
-      className={`pointer-events-none fixed inset-x-0 bottom-4 z-30 flex justify-center px-4 transition-[translate,opacity] duration-200 motion-reduce:transition-none print:hidden ${
-        covering ? 'translate-y-[calc(100%+1rem)] opacity-0' : ''
-      }`}
-      inert={covering}>
+    <>
       <div
-        ref={bar}
-        role="toolbar"
-        aria-label="Theme"
-        className="border-border bg-background/85 text-foreground pointer-events-auto flex max-w-full items-center gap-1 rounded-full border p-1.5 shadow-[0_8px_30px_rgb(0_0_0/0.12)] backdrop-blur-xl">
-        <Popover>
-          <PopoverTrigger className={`${itemClass} hover:bg-accent px-3`} aria-label={ambient ? 'System: none, the colours drift' : `System: ${label}`}>
-            <span className="bg-primary size-3 shrink-0 rounded-full" aria-hidden />
-            {/* A fixed width: the bar keeps its size whatever the system is called. */}
-            <span className="hidden w-28 truncate text-left sm:inline">{label}</span>
-            <ChevronDownIcon className="text-muted-foreground size-3.5 shrink-0" aria-hidden />
-          </PopoverTrigger>
-          <PopoverContent side="top" align="start" sideOffset={10} className="max-h-[70vh] w-72 overflow-y-auto p-1.5">
-            <div role="radiogroup" aria-label="Systems" className="flex flex-col" onKeyDown={(e) => rovingKeyDown(e)}>
-              <DriftChoice selected={ambient} tabIndex={rovingTabIndex(0, ambient ? 0 : systemIndex + 1)} />
-              {systems.saved.map((doc, i) => {
-                const t = systemTheme(doc);
-                const selected = !ambient && !systems.shared && systems.activeId === doc.id;
-                return (
-                  <button
-                    key={doc.id}
-                    type="button"
-                    role="radio"
-                    aria-checked={selected}
-                    tabIndex={rovingTabIndex(i + 1, ambient ? 0 : systemIndex + 1)}
-                    onClick={() => switchSystem(doc.id)}
-                    className={rowClass}>
-                    <span className="flex shrink-0 -space-x-1" aria-hidden>
-                      <span className="ring-background size-4 rounded-full ring-2" style={{ background: t.resolved.light.primary }} />
-                      <span className="ring-background size-4 rounded-full ring-2" style={{ background: t.resolved.light.muted }} />
-                    </span>
-                    <span className="min-w-0 flex-1">
-                      <span className="block truncate text-sm font-medium">{doc.name}</span>
-                      <span className="text-muted-foreground block truncate text-xs">Saved in this browser</span>
-                    </span>
-                    {selected ? <CheckIcon className="size-4 shrink-0" aria-hidden /> : null}
-                  </button>
-                );
-              })}
-            </div>
-            <p className="text-muted-foreground px-2.5 pb-1 pt-3 text-xs font-medium">{ambient ? 'Start from a preset' : `Presets for ${label}`}</p>
-            <div role="radiogroup" aria-label="Presets" className="flex flex-col" onKeyDown={(e) => rovingKeyDown(e)}>
-              {PRESETS.map((p, i) => {
-                const t = themeFor(normalizeRecipe(p.recipe));
-                const selected = !ambient && sameRecipe(recipe, p.recipe);
-                return (
-                  <button
-                    key={p.id}
-                    type="button"
-                    role="radio"
-                    aria-checked={selected}
-                    tabIndex={rovingTabIndex(i, Math.max(0, presetIndex))}
-                    onClick={() => setRecipe({ ...p.recipe, preset: p.id })}
-                    className={rowClass}>
-                    <span className="flex shrink-0 -space-x-1" aria-hidden>
-                      <span className="ring-background size-4 rounded-full ring-2" style={{ background: t.resolved.light.primary }} />
-                      <span className="ring-background size-4 rounded-full ring-2" style={{ background: t.resolved.light.muted }} />
-                    </span>
-                    <span className="min-w-0 flex-1">
-                      <span className="block text-sm font-medium">{p.name}</span>
-                      <span className="text-muted-foreground block truncate text-xs">
-                        {fontById(t.recipe.font.heading)?.family} · {t.recipe.radius === 'none' ? 'square' : `radius ${t.recipe.radius}`}
-                      </span>
-                    </span>
-                    {selected ? <CheckIcon className="size-4 shrink-0" aria-hidden /> : null}
-                  </button>
-                );
-              })}
-            </div>
-            <div className="border-border mt-1.5 border-t pt-1.5">
-              <Link href="/studio" className={`${rowClass} text-sm font-medium`}>
-                <span className="flex-1">Open in Studio</span>
-                <ArrowRightIcon className="size-4 shrink-0" aria-hidden />
-              </Link>
-            </div>
-          </PopoverContent>
-        </Popover>
-
-        <Popover open={colourOpen} onOpenChange={setColourOpen}>
-          <PopoverTrigger className={`${itemClass} hover:bg-accent w-9`} aria-label={ambient ? 'Brand colour: drifting' : `Brand colour: ${swatchName(recipe.brand)}`}>
-            <span className="ring-border size-4 rounded-full ring-1" style={{ background: ambient ? DRIFT_SWATCH : recipe.brand }} aria-hidden />
-          </PopoverTrigger>
-          <PopoverContent side="top" sideOffset={10} className="w-72 p-1.5">
-            <div role="radiogroup" aria-label="Brand colour" className="flex flex-col gap-1" onKeyDown={(e) => rovingKeyDown(e)}>
-              <DriftChoice selected={ambient} tabIndex={rovingTabIndex(0, ambient ? 0 : swatchIndex + 1)} close={() => setColourOpen(false)} />
-              <div className="grid grid-cols-5 gap-2 px-2.5 pb-1.5 pt-1">
-                {SWATCHES.map((s, i) => {
-                  const selected = !ambient && recipe.brand === s.hex;
+        className={`pointer-events-none fixed inset-x-0 bottom-4 z-30 flex justify-center px-4 transition-[translate,opacity] duration-200 motion-reduce:transition-none print:hidden ${
+          covering ? 'translate-y-[calc(100%+1rem)] opacity-0' : ''
+        }`}
+        inert={covering}>
+        <div
+          ref={bar}
+          role="toolbar"
+          aria-label="Theme"
+          className="border-border bg-background/85 text-foreground pointer-events-auto flex max-w-full items-center gap-1 rounded-full border p-1.5 shadow-[0_8px_30px_rgb(0_0_0/0.12)] backdrop-blur-xl">
+          <Popover open={systemOpen} onOpenChange={setSystemOpen}>
+            <PopoverTrigger className={`${itemClass} hover:bg-accent px-3`} aria-label={ambient ? 'System: none, the colours drift' : `System: ${label}`}>
+              <span className="bg-primary size-3 shrink-0 rounded-full" aria-hidden />
+              {/* A fixed width: the bar keeps its size whatever the system is called. */}
+              <span className="hidden w-28 truncate text-left sm:inline">{label}</span>
+              <ChevronDownIcon className="text-muted-foreground size-3.5 shrink-0" aria-hidden />
+            </PopoverTrigger>
+            <PopoverContent side="top" align="start" sideOffset={10} className="max-h-[70vh] w-72 overflow-y-auto p-1.5">
+              <div role="radiogroup" aria-label="Systems" className="flex flex-col" onKeyDown={(e) => rovingKeyDown(e)}>
+                <DriftChoice selected={ambient} tabIndex={rovingTabIndex(0, ambient ? 0 : systemIndex + 1)} />
+                {systems.saved.map((doc, i) => {
+                  const t = systemTheme(doc);
+                  const selected = !ambient && !systems.shared && systems.activeId === doc.id;
                   return (
                     <button
-                      key={s.hex}
+                      key={doc.id}
                       type="button"
                       role="radio"
-                      tabIndex={rovingTabIndex(i + 1, ambient ? 0 : swatchIndex + 1)}
-                      aria-label={s.name}
                       aria-checked={selected}
-                      title={s.name}
-                      onClick={() => {
-                        setRecipe({ brand: s.hex });
-                        setColourOpen(false);
-                      }}
-                      className="focus-visible:ring-ring mx-auto size-8 rounded-full transition-transform hover:scale-110 focus-visible:outline-none focus-visible:ring-2 motion-reduce:transition-none"
-                      style={{ background: s.hex, boxShadow: selected ? `0 0 0 2px var(--background), 0 0 0 3.5px ${s.hex}` : undefined }}
-                    />
+                      tabIndex={rovingTabIndex(i + 1, ambient ? 0 : systemIndex + 1)}
+                      onClick={() => switchSystem(doc.id)}
+                      className={rowClass}>
+                      <span className="flex shrink-0 -space-x-1" aria-hidden>
+                        <span className="ring-background size-4 rounded-full ring-2" style={{ background: t.resolved.light.primary }} />
+                        <span className="ring-background size-4 rounded-full ring-2" style={{ background: t.resolved.light.muted }} />
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate text-sm font-medium">{doc.name}</span>
+                        <span className="text-muted-foreground block truncate text-xs">Saved in this browser</span>
+                      </span>
+                      {selected ? <CheckIcon className="size-4 shrink-0" aria-hidden /> : null}
+                    </button>
                   );
                 })}
-                <label
-                  className="relative mx-auto size-8 cursor-pointer rounded-full"
-                  style={{ background: 'conic-gradient(from 0deg, #ef4444, #f59e0b, #22c55e, #06b6d4, #6366f1, #d946ef, #ef4444)' }}
-                  title="Any colour">
-                  <span className="sr-only">Any colour</span>
-                  <input
-                    type="color"
-                    value={recipe.brand}
-                    onChange={(e) => setRecipe({ brand: e.target.value }, { coalesce: 'brand' })}
-                    className="absolute inset-0 size-full cursor-pointer opacity-0"
-                  />
-                </label>
               </div>
-            </div>
-          </PopoverContent>
-        </Popover>
+              <p className="text-muted-foreground px-2.5 pb-1 pt-3 text-xs font-medium">{ambient ? 'Start from a preset' : `Presets for ${label}`}</p>
+              {editsNote ? <p className="text-muted-foreground px-2.5 pb-1 text-xs">Changes {label}. {editsNote}</p> : null}
+              <div role="radiogroup" aria-label="Presets" className="flex flex-col" onKeyDown={(e) => rovingKeyDown(e)}>
+                {PRESETS.map((p, i) => {
+                  const t = themeFor(normalizeRecipe(p.recipe));
+                  const selected = !ambient && sameRecipe(recipe, p.recipe);
+                  return (
+                    <button
+                      key={p.id}
+                      type="button"
+                      role="radio"
+                      aria-checked={selected}
+                      tabIndex={rovingTabIndex(i, Math.max(0, presetIndex))}
+                      // The whole preset: a key it leaves out (button, field) goes back to its default, not the last one.
+                      onClick={() => {
+                        pick(normalizeRecipe({ ...p.recipe, preset: p.id }), `${label} now uses ${p.name}.`);
+                        // Closed, so the toast (and its Undo) isn't hidden behind the menu.
+                        setSystemOpen(false);
+                      }}
+                      className={rowClass}>
+                      <span className="flex shrink-0 -space-x-1" aria-hidden>
+                        <span className="ring-background size-4 rounded-full ring-2" style={{ background: t.resolved.light.primary }} />
+                        <span className="ring-background size-4 rounded-full ring-2" style={{ background: t.resolved.light.muted }} />
+                      </span>
+                      <span className="min-w-0 flex-1">
+                        <span className="block text-sm font-medium">{p.name}</span>
+                        <span className="text-muted-foreground block truncate text-xs">
+                          {fontById(t.recipe.font.heading)?.family} · {t.recipe.radius === 'none' ? 'square' : `radius ${t.recipe.radius}`}
+                        </span>
+                      </span>
+                      {selected ? <CheckIcon className="size-4 shrink-0" aria-hidden /> : null}
+                    </button>
+                  );
+                })}
+              </div>
+              <div className="border-border mt-1.5 border-t pt-1.5">
+                <Link href="/studio" className={`${rowClass} text-sm font-medium`}>
+                  <span className="flex-1">Open in Studio</span>
+                  <ArrowRightIcon className="size-4 shrink-0" aria-hidden />
+                </Link>
+              </div>
+            </PopoverContent>
+          </Popover>
 
-        {/* The drift moves for longer than five seconds, so it can be paused (WCAG 2.2.2). */}
-        {ambient && drift.active && !drift.reduced ? (
-          <button
-            type="button"
-            onClick={drift.paused ? playAmbient : pauseAmbient}
-            className={`${itemClass} text-muted-foreground hover:bg-accent hover:text-foreground w-9`}
-            aria-label={drift.paused ? 'Play the colour drift' : 'Pause the colour drift'}
-            title={drift.paused ? 'Play the colour drift' : 'Pause the colour drift'}>
-            {drift.paused ? <PlayIcon className="size-4" aria-hidden /> : <PauseIcon className="size-4" aria-hidden />}
-          </button>
-        ) : null}
+          <Popover open={colourOpen} onOpenChange={setColourOpen}>
+            <PopoverTrigger className={`${itemClass} hover:bg-accent w-9`} aria-label={ambient ? 'Brand colour: drifting' : `Brand colour: ${swatchName(recipe.brand)}`}>
+              <span className="ring-border size-4 rounded-full ring-1" style={{ background: ambient ? DRIFT_SWATCH : recipe.brand }} aria-hidden />
+            </PopoverTrigger>
+            <PopoverContent side="top" sideOffset={10} className="w-72 p-1.5">
+              <div role="radiogroup" aria-label="Brand colour" className="flex flex-col gap-1" onKeyDown={(e) => rovingKeyDown(e)}>
+                <DriftChoice selected={ambient} tabIndex={rovingTabIndex(0, ambient ? 0 : swatchIndex + 1)} close={() => setColourOpen(false)} />
+                <div className="grid grid-cols-5 gap-2 px-2.5 pb-1.5 pt-1">
+                  {SWATCHES.map((s, i) => {
+                    const selected = !ambient && recipe.brand === s.hex;
+                    return (
+                      <button
+                        key={s.hex}
+                        type="button"
+                        role="radio"
+                        tabIndex={rovingTabIndex(i + 1, ambient ? 0 : swatchIndex + 1)}
+                        aria-label={s.name}
+                        aria-checked={selected}
+                        title={s.name}
+                        onClick={() => {
+                          pick({ brand: s.hex }, `${label}'s brand colour is now ${s.name}.`);
+                          setColourOpen(false);
+                        }}
+                        className="focus-visible:ring-ring mx-auto size-8 rounded-full transition-transform hover:scale-110 focus-visible:outline-none focus-visible:ring-2 motion-reduce:transition-none"
+                        style={{ background: s.hex, boxShadow: selected ? `0 0 0 2px var(--background), 0 0 0 3.5px ${s.hex}` : undefined }}
+                      />
+                    );
+                  })}
+                  <label
+                    className="relative mx-auto size-8 cursor-pointer rounded-full"
+                    style={{ background: 'conic-gradient(from 0deg, #ef4444, #f59e0b, #22c55e, #06b6d4, #6366f1, #d946ef, #ef4444)' }}
+                    title="Any colour">
+                    <span className="sr-only">Any colour</span>
+                    <input
+                      type="color"
+                      value={recipe.brand}
+                      onChange={(e) => setRecipe({ brand: e.target.value }, { coalesce: 'brand' })}
+                      className="absolute inset-0 size-full cursor-pointer opacity-0"
+                    />
+                  </label>
+                </div>
+              </div>
+            </PopoverContent>
+          </Popover>
 
-        <Popover
-          onOpenChange={(open) => {
-            // Taking the theme while it drifts keeps the colour on screen.
-            const brand = ambientBrand();
-            if (open && ambient && brand) setRecipe({ brand });
-          }}>
-          <PopoverTrigger className={`${itemClass} bg-primary text-primary-foreground ml-1 px-4 hover:opacity-90`}>Use system</PopoverTrigger>
-          <PopoverContent side="top" align="end" sideOffset={10} className="max-h-[70vh] w-96 max-w-[calc(100vw-2rem)] overflow-y-auto p-4">
-            <ExportPanel theme={theme} />
-          </PopoverContent>
-        </Popover>
+          {/* The drift moves for longer than five seconds, so it can be paused (WCAG 2.2.2). */}
+          {ambient && drift.active && !drift.reduced ? (
+            <button
+              type="button"
+              onClick={drift.paused ? playAmbient : pauseAmbient}
+              className={`${itemClass} text-muted-foreground hover:bg-accent hover:text-foreground w-9`}
+              aria-label={drift.paused ? 'Play the colour drift' : 'Pause the colour drift'}
+              title={drift.paused ? 'Play the colour drift' : 'Pause the colour drift'}>
+              {drift.paused ? <PlayIcon className="size-4" aria-hidden /> : <PauseIcon className="size-4" aria-hidden />}
+            </button>
+          ) : null}
+
+          <Popover
+            onOpenChange={(open) => {
+              // Taking the theme while it drifts keeps the colour on screen.
+              const brand = ambientBrand();
+              if (open && ambient && brand) setRecipe({ brand });
+            }}>
+            <PopoverTrigger className={`${itemClass} bg-primary text-primary-foreground ml-1 px-4 hover:opacity-90`}>Use system</PopoverTrigger>
+            <PopoverContent side="top" align="end" sideOffset={10} className="max-h-[70vh] w-96 max-w-[calc(100vw-2rem)] overflow-y-auto p-4">
+              <ExportPanel theme={theme} />
+            </PopoverContent>
+          </Popover>
+        </div>
       </div>
-    </div>
+      {/* Above the bar, which sits at bottom-4. The Studio has its own (the bar isn't drawn there). */}
+      <Toaster className="bottom-20" />
+    </>
   );
 }
 

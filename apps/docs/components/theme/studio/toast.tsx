@@ -29,11 +29,12 @@ const subscribe = (l: () => void) => {
   };
 };
 
-export function Toaster() {
+/** `className` places the stack (the docs pages lift it above the theme bar). */
+export function Toaster({ className = 'bottom-4' }: { className?: string }) {
   const list = React.useSyncExternalStore(subscribe, () => toasts, () => toasts);
   return (
     // Always in the page, so a screen reader hears what is added to it.
-    <div role="status" aria-live="polite" className="pointer-events-none fixed inset-x-0 bottom-4 z-50 flex flex-col items-center gap-2 px-4">
+    <div role="status" aria-live="polite" className={`pointer-events-none fixed inset-x-0 z-50 flex flex-col items-center gap-2 px-4 ${className}`}>
       {list.map((t) => (
         <div key={t.id} className="bg-foreground text-background pointer-events-auto flex max-w-full items-center gap-3 rounded-full py-1.5 pl-4 pr-1.5 text-sm shadow-lg">
           <span className="min-w-0">{t.message}</span>
