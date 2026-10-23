@@ -32,7 +32,8 @@
     "registry:build": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON scripts/registry-build.mjs",
     "registry:drift": "node scripts/rnr-drift.mjs",
     "registry:dist": "npx -y shadcn@4.21.3 build registry.json --output dist/r/native",
-    "registry:roundtrip": "node scripts/registry-roundtrip.mjs"
+    "registry:roundtrip": "node scripts/registry-roundtrip.mjs",
+    "qc:look": "node scripts/qc-look.mjs"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "2.2.0",
@@ -97,6 +98,7 @@
     "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@babel/core": "^7.26.0",
     "@halftone-ds/tokens": "^1.3.0",
     "@types/node": "^26.6.4",
@@ -104,6 +106,7 @@
     "eslint": "^9.39.5",
     "eslint-config-expo": "^57.0.2",
     "expo-mcp": "~0.2.1",
+    "playwright": "^1.63.0",
     "prettier": "^3.8.3",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "typescript": "~6.0.3"
