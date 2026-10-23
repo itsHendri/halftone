@@ -467,7 +467,15 @@ function BorderItem({ role, label }: { role: 'border' | 'input'; label: string }
         }
         status={{
           edited: own.length ? { label: own.length > 1 ? `${own.length} edited` : 'edited', action: own.length > 1 ? 'reset all' : 'reset', onReset: reset } : null,
-          note: 'Width and style are one setting for every border (the kits draw one width).',
+          note: (
+            <>
+              Width and style are one setting for every border (the kits draw one width).
+              {/* A filled or underlined field draws its own, darker edge (field-edge, for 3:1), not this colour. */}
+              {role === 'input' && doc.recipe.field !== 'outline'
+                ? ` ${doc.recipe.field === 'filled' ? 'Filled' : 'Underlined'} fields draw their own darker edge; this colour is for checkboxes, toggles and the outline field style. A field's own edge is Components › Input › Default.`
+                : null}
+            </>
+          ),
           usedBy: <UsedBy keys={['border.width', `color.${role}`]} />,
         }}>
         <Field label="Style" htmlFor={styleId}>
