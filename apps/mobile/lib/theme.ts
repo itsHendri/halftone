@@ -230,7 +230,9 @@ export const THEME_INFO: ThemeInfo | null = {
 };
 
 export type ThemeInfo = {
-  code: string;
+  /** null for a system (`.halftone.json`) with overrides no theme code carries. */
+  code: string | null;
+  /** The preset's name, the system's name, or 'Custom'. */
   name: string;
   edited: boolean;
   recipe: {

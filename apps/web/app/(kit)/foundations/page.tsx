@@ -44,7 +44,12 @@ function ThemeSummary() {
             {THEME_INFO.name}
             {THEME_INFO.edited ? <span className="text-muted-foreground font-normal"> (edited by hand)</span> : null}
           </p>
-          <code className="text-muted-foreground text-xs">{THEME_INFO.code}</code>
+          {/* A system with overrides has no code. */}
+          {THEME_INFO.code ? (
+            <code className="text-muted-foreground text-xs">{THEME_INFO.code}</code>
+          ) : (
+            <p className="text-muted-foreground text-xs">A system with overrides (no theme code)</p>
+          )}
         </div>
       </div>
       <dl className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-1.5 text-sm">
