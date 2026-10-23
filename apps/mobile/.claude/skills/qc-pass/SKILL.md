@@ -1,6 +1,6 @@
 ---
 name: qc-pass
-description: Quality gate for the prototype kit — typecheck, lint (with the halftone/* guardrail rules), the token and registry checks, then a real look at the affected screens on the iOS simulator (and web) in light and dark. Use after adding or changing components, screens, tokens, or before committing/publishing. Never report "done" without running this.
+description: Quality gate for the prototype kit — typecheck, lint (with the halftone/* guardrail rules), the token and registry checks, an automated look at the web build (axe WCAG 2.1 AA, overflow, console, screenshots, before/after diffs), then a real look at the affected screens on the iOS simulator in light and dark. Use after adding or changing components, screens, tokens, or before committing/publishing. Never report "done" without running this.
 ---
 
 # QC pass
@@ -33,21 +33,53 @@ In the report, list every `halftone/` disable comment in the changed files with 
 required; `disable-needs-reason` enforces it). Registration is checked by `registry:build -- --check` in
 step 1 (helpers it skips are listed in `HELPERS` in `scripts/registry-build.mjs`).
 
-## 3. On-device look
+## 3. Automated look (web build)
 
-Start the servers with the `kit-ios` (Expo Go on the booted simulator) and `kit-web` launch
-configs. For each affected section:
+Start the web build (`kit-web` launch config, or `npm run web -- --port 8090`), then:
+
+```bash
+npm run qc:look -- /components?section=<id> /acme   # the affected screens; no paths = the kit's tabs and every prototype
+```
+
+Each screen is opened at 390px in light and dark. It **passes** only when:
+
+- axe-core finds no WCAG 2.1 A or AA violation (contrast, names, roles, labels);
+- nothing scrolls sideways;
+- the console has no errors and the page threw nothing;
+- the theme it rendered is the one asked for.
+
+A failure prints the rule, the element and axe's reason; fix it in the screen or the component, not by
+excluding it. React Native for Web renders `aria-*` props, not `accessibilityState`/`accessibilityValue`, so
+the kit's components set both; a missing name on web usually means a missing `accessibilityLabel`.
+
+**Before and after.** For a change to something that already exists, take screenshots before you edit and
+after, then compare:
+
+```bash
+npm run qc:look -- --label before /components?section=sheet    # before editing
+npm run qc:look -- --label after /components?section=sheet     # after
+npm run qc:look -- --compare before after                      # what changed, by pixel, with diff images
+```
+
+Look at every changed pair and its diff image (`.qc/diff-before-after/`, changed pixels in magenta). A change
+nobody asked for is a regression. Screenshots live in `.qc/` (gitignored).
+
+## 4. On-device look
+
+Start the `kit-ios` launch config (Expo Go on the booted simulator). For each affected section:
 
 1. Open it: `xcrun simctl openurl booted "exp://localhost:8091/--/components?open=<category>"`.
 2. Screenshot in the current scheme, flip the theme (header button), screenshot again.
 3. Tap the interactive parts: open overlays, toggle switches, type in inputs, long-press
    context menus. Confirm sheets clear the home indicator and nothing is clipped.
-4. On web (`http://localhost:8090/components?open=<category>`) confirm the same section renders
-   and the console has no errors.
 
 Expo Go note: haptics and blur render on the simulator; a physical device is only needed for
 feel, not layout.
 
-## 4. Report
+## 5. Report
 
-List: checks run, results, screenshots taken, anything deferred (and why) added to BACKLOG.md.
+**Done means:** every step 1 command passes, `qc:look` passes for the affected screens, and the simulator
+look found nothing clipped or broken in either theme.
+
+List: checks run, results, the `qc:look` summary line (and the `--compare` lines for a change), screenshots
+taken, anything deferred (and why) added to BACKLOG.md.
