@@ -12,7 +12,8 @@ function themeInfo(source) {
   const status = themeStatus(source);
   if (!status.applied) return 'null';
   const preset = presetById(status.recipe.preset ?? '');
-  const name = preset && sameRecipe(preset.recipe, status.recipe) ? preset.name : 'Custom';
+  // A system is named after itself; its code is null when it has overrides a code can't carry.
+  const name = status.system?.name ?? (preset && sameRecipe(preset.recipe, status.recipe) ? preset.name : 'Custom');
   return JSON.stringify({ code: status.code, name, edited: status.drift.length > 0, recipe: status.recipe }, null, 2);
 }
 
@@ -137,7 +138,9 @@ export const COMPONENT_VARS = ${JSON.stringify(componentVarNames())} as const;
 export const THEME_INFO: ThemeInfo | null = ${themeInfo(ctx.source)};
 
 export type ThemeInfo = {
-  code: string;
+  /** null for a system (\`.halftone.json\`) with overrides no theme code carries. */
+  code: string | null;
+  /** The preset's name, the system's name, or 'Custom'. */
   name: string;
   edited: boolean;
   recipe: {

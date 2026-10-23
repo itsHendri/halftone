@@ -35,14 +35,15 @@ function ThemeSummary() {
   ];
   return (
     <View className="w-full gap-3">
-      <Pressable onPress={() => copy('code', info.code)} className="flex-row items-center gap-3">
+      {/* A system with overrides has no code: there is nothing to copy, and the line says why. */}
+      <Pressable onPress={info.code ? () => copy('code', info.code!) : undefined} disabled={!info.code} className="flex-row items-center gap-3">
         <View className="border-border size-10 rounded-full border" style={{ backgroundColor: recipe.brand }} />
         <View className="flex-1">
           <Text className="font-semibold">
             {info.name}
             {info.edited ? ' (edited by hand)' : ''}
           </Text>
-          <Text className="text-muted-foreground font-mono text-xs">{copied === 'code' ? 'Copied ✓' : info.code}</Text>
+          <Text className="text-muted-foreground font-mono text-xs">{copied === 'code' ? 'Copied ✓' : (info.code ?? 'A system with overrides (no theme code)')}</Text>
         </View>
       </Pressable>
       <View className="border-border rounded-lg border">

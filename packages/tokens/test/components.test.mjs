@@ -220,6 +220,13 @@ test('the tokens reach tokens.json and come back as the build reads them, in bot
   assert.match(ts.contents, /export const COMPONENT_VARS = \[/);
 });
 
+test('ts-theme: a system with overrides has no code, and THEME_INFO says it may be null', async () => {
+  const { tokens } = applySystem(base, sys({ name: 'Acme', radius: { lg: 22 } }));
+  const [ts] = tsTheme(await built(tokens), { out: 'theme.ts' });
+  assert.match(ts.contents, /export const THEME_INFO: ThemeInfo \| null = \{\n {2}"code": null,\n {2}"name": "Acme",/);
+  assert.match(ts.contents, /\n {2}code: string \| null;\n/);
+});
+
 test('a token file from before the layer gets the defaults', async () => {
   const ctx = await built(base);
   assert.deepEqual(ctx.components.button.h, { sm: 40, md: 48, lg: 56 });
