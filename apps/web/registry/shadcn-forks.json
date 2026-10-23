@@ -44,7 +44,7 @@
     },
     "chart": {
       "upstream": true,
-      "forked": false
+      "forked": true
     },
     "checkbox": {
       "upstream": true,
@@ -148,7 +148,7 @@
     },
     "tabs": {
       "upstream": true,
-      "forked": false
+      "forked": true
     },
     "textarea": {
       "upstream": true,
