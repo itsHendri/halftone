@@ -35,8 +35,9 @@ and a registry entry, in the same change.
 ### A quality gate checks it
 
 The `qc-pass` skill runs typecheck and lint (with the kit's guardrail rules), the token and registry checks,
-then looks at the affected screens (the iOS simulator for mobile, a browser at 375px and 1280px for web)
-in light and dark.
+then `npm run qc:look`: every affected screen in light and dark, checked for WCAG 2.1 AA with axe-core, sideways
+scroll, console errors and (on the web) visible focus, with screenshots and a before/after diff of what changed.
+Last, a look on the iOS simulator for mobile, or a hands-on pass in the browser for web.
 
 </Step>
 </Steps>
@@ -65,3 +66,18 @@ registry tables in `DESIGN_SYSTEM.md`, the component list in `llms.txt`, this si
 [shadcn registry](https://ui.shadcn.com/docs/registry). Tokens work the same way: `tokens/tokens.json` builds
 the CSS variables, the TypeScript theme, Figma variables and `DESIGN.md`. Nothing that describes the kit is
 written twice, so the docs, the agent and the code cannot drift apart.
+
+## Is it for you?
+
+Halftone is for designers and product people who prototype with a coding agent (Claude Code, Cursor or
+similar) and want the result to run on a phone, in a browser, or both, on their brand. You run a few `npm`
+commands and read what the agent changed; the agent writes the code.
+
+It is not:
+
+- **A no-code tool.** There is no visual page builder. A prototype is a real Expo or Next.js app that you run
+  and change through your agent. [Studio](/studio) edits the theme, not the screens.
+- **A production starter.** No sign-in, backend, payments or real APIs: prototypes run on mock data, on
+  purpose. One can grow into a product, but the kits don't ship that plumbing.
+- **A Figma library.** Tokens export to Figma variables, but the components live in code.
+- **Something you pay for.** Both kits, the tokens package and this site are free and open source.

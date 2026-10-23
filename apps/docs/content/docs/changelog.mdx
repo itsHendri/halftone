@@ -5,6 +5,21 @@ description: What changed, newest first.
 
 ## October 2026
 
+### A QC look you can pass or fail
+
+`npm run qc:look`, in both kits, opens your pages in Chromium in light and dark (375px and 1280px on the web, 390px
+for the mobile kit's web build) and fails on a WCAG 2.1 AA violation found by axe-core, a page that scrolls sideways,
+a console error, or (web) a Tab stop with no focus ring. It saves screenshots, and `--label before` / `--label after`
+then `--compare before after` lists what changed, by pixel, with a diff image for each. The `qc-pass` skill runs it
+and says what counts as a pass. Its first run found two focus rings missing in the web kit, now fixed: tab panels
+and charts take keyboard focus and now show it.
+
+### Agents get the dev server
+
+Each kit ships a `.mcp.json`. The web kit's runs the Next.js DevTools MCP server, which reads the running dev
+server's errors and routes; the mobile kit's runs `expo-mcp` against the simulator's dev server for screenshots, taps
+and the route map. Claude Code started in a kit's folder picks it up after you approve it once.
+
 ### Set up a project in one command
 
 `npm run setup` does a new project's first steps in either kit. In the Native kit it asks for the app's name,

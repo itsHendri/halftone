@@ -44,6 +44,7 @@ registry/               components.ts: what the kit ships → DESIGN_SYSTEM.md t
 hooks/, lib/            use-reduced-motion · embed (docs iframe mode) · theme.ts (generated)
 DESIGN.md, llms.txt     GENERATED agent-facing summaries
 .claude/skills/         add-component, apply-theme, qc-pass, transcript-to-prototype
+.mcp.json               the Next.js DevTools MCP server, for Claude Code started here
 ```
 
 ## Commands
@@ -60,6 +61,7 @@ npm run registry:build    # after editing registry/components.ts or a component'
 npm run tokens:check && npm run registry:build -- --check   # what CI checks
 npm run registry:drift    # after `shadcn add`: which components/ui files differ from shadcn (network)
 npm run registry:dist && npm run registry:roundtrip         # build the shadcn registry and prove it reinstalls
+npm run qc:look -- /acme   # with npm run dev running: axe WCAG 2.1 AA, overflow, console, focus rings, screenshots
 npm run setup             # first run: project name, samples, theme (asks; `-- --help` for flags)
 npm run eject-samples     # delete the dashboard, landing, assistant, shop and habits samples and every reference
 npm run eject-samples -- shop   # just the ones named (northwind = dashboard, landing, assistant); `-- --status` shows what is left
@@ -80,8 +82,8 @@ npm run eject-samples -- shop   # just the ones named (northwind = dashboard, la
 3. Mock data lives beside the prototype (`app/<slug>/data.ts` or `components/<slug>/data.ts`). Never call
    real APIs; a route handler returning fixtures is fine when a flow needs one.
 4. New component needed? Use the `add-component` skill: it lands in the registry and the docs.
-5. Before saying "done": run the `qc-pass` skill (typecheck, lint, a browser look at 375px and
-   1280px in light and dark).
+5. Before saying "done": run the `qc-pass` skill (typecheck, lint, `npm run qc:look` at 375px and 1280px in
+   light and dark, then a hands-on pass).
 6. **Guardrails are lint errors** (`eslint/halftone.mjs`, `halftone/*` rules): raw colours, imports outside the
    registry, other UI libraries and `recharts` without `ChartContainer`. In Claude Code a hook
    (`.claude/settings.json`) lints each file you edit and hands the errors back. A real exception takes
@@ -112,6 +114,16 @@ npm run eject-samples -- shop   # just the ones named (northwind = dashboard, la
   `apps/mobile/tokens/tokens.json`, then `npm run tokens:sync`), then `npm run tokens:build`. The logo and
   favicons come from Studio too (**Use system › Brand assets**, a zip): the `apply-theme` skill's "Brand assets"
   steps unzip it. On a new project, `npm run setup -- --theme <code>` applies the theme with the rest of the setup.
+
+## Agent tooling
+
+- **Next.js DevTools MCP:** `.mcp.json` runs `next-devtools-mcp` (pinned), which finds the running `npm run dev`
+  and gives an agent its build and runtime errors, routes and the Next docs for the installed version. Claude
+  Code started in this folder has it after you approve the project's MCP server once.
+- **Automated look:** `npm run qc:look` (Playwright + axe-core, dev dependencies) opens pages at 375px and 1280px
+  in light and dark and fails on WCAG 2.1 AA violations, sideways scroll, console errors or a Tab stop without a
+  focus ring; `--label`/`--compare` give before/after screenshot diffs. Chromium once:
+  `npx playwright install chromium`.
 
 ## Gotchas
 
