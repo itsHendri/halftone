@@ -32,6 +32,7 @@ tokens/                 tokens.json (edit), tokens.config.json (outputs), genera
 DESIGN.md, llms.txt     GENERATED agent-facing summaries (tokens:build, registry:build)
 .claude/skills/         add-component, apply-theme, qc-pass, transcript-to-prototype
 .claude/launch.json     preview configs: kit-web (port 8090) and kit-ios (port 8091)
+.mcp.json               the Expo MCP server (expo-mcp, against kit-ios on 8091) for Claude Code started here
 ```
 
 ## Commands
@@ -52,6 +53,7 @@ npm run tokens:check && npm run registry:build -- --check   # what CI checks (pl
 npm run setup          # first run: name, slug, scheme, APP_ID, eas init, samples, theme (asks; `-- --help` for flags)
 npm run eject-samples  # delete the shop, habits and Northwind samples, their stores and every reference
 npm run eject-samples -- shop   # just the ones named; `-- --status` shows what is left (CI ejects each one and runs the gates)
+npm run qc:look -- /acme   # with kit-web running: axe WCAG 2.1 AA, overflow, console, screenshots (qc-pass step 3)
 npm run share -- "msg" # EAS Update to the main channel, prints the links
 npm run export:web && eas deploy   # hosted web preview URL
 npx expo run:ios       # build + install the dev client on the simulator (needs LANG=en_US.UTF-8, see gotchas)
@@ -68,7 +70,8 @@ npx expo run:ios       # build + install the dev client on the simulator (needs 
    are in `DESIGN_SYSTEM.md › Patterns`. The sample apps (`app/shop`, `app/habits`, `app/northwind`) are the worked examples; `KitChip` in their root layouts is the way back to the kit.
 3. Mock data lives beside the prototype (`components/<slug>/data.ts`). Never call real APIs.
 4. New component needed? Use the `add-component` skill — it must land in the registry and the docs.
-5. Before saying "done": run the `qc-pass` skill (typecheck, lint, simulator look in both themes).
+5. Before saying "done": run the `qc-pass` skill (typecheck, lint, `npm run qc:look` on the web build, simulator
+   look in both themes).
 6. **Guardrails are lint errors** (`eslint/halftone.mjs`, `halftone/*` rules): raw colours, imports outside the
    registry, other UI libraries and react-native `Text`/`TextInput`/`Pressable` in screens. In Claude Code a
    hook (`.claude/settings.json`) lints each file you edit and hands the errors back. A real exception takes
@@ -121,8 +124,12 @@ npx expo run:ios       # build + install the dev client on the simulator (needs 
 
 - **Expo skills + MCP for Claude Code:** `claude plugin install expo@claude-plugins-official` (run once, interactive).
   Remote MCP alternative: `claude mcp add --transport http expo https://mcp.expo.dev/mcp`.
-- **Local screenshots/taps from the dev server:** `expo-mcp` is a dev dependency. Start with
-  `EXPO_UNSTABLE_MCP_SERVER=1 npx expo start` and connect the MCP client to the printed URL.
+- **Local screenshots, taps and the route map:** `.mcp.json` runs `expo-mcp` (a dev dependency) against the
+  `kit-ios` dev server on port 8091, so Claude Code started in this folder has it after you approve the
+  project's MCP server once. Another port: change `--dev-server-url` there.
+- **Automated look:** `npm run qc:look` (Playwright + axe-core, dev dependencies) opens screens of the web build
+  at 390px in light and dark and fails on WCAG 2.1 AA violations, sideways scroll or console errors;
+  `--label`/`--compare` give before/after screenshot diffs. Chromium once: `npx playwright install chromium`.
 - **Simulator driving without Expo:** the iOS Simulator tools in Claude Code (screenshot, tap, inspect) are
   enough for `qc-pass`; `xcrun simctl openurl booted <deep link>` jumps to a screen.
 - Optional, experimental: `npx @expo/agent-cli@latest agents:setup` (status / dev / smoke commands).
