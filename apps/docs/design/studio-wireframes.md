@@ -175,9 +175,10 @@ Every section header has, in order: its name and count; its **base knob**; and *
   - The existing `halftone.theme` and `halftone.brand` move in once, silently, as "My system", with a
     dismissible banner.
   - A first-time visitor with nothing saved gets "Halftone" (the committed theme).
-- **Shared links** (`?t=` code, `?s=` JSON) open read-only as "<name> · shared", with Save as new system or
-  Discard. They never overwrite your work, which is a change from today. Links don't carry logos; copying a link
-  for a system with a logo says so.
+- **Shared links** (`?t=` code, `?s=` JSON) open as "<name> · shared", with Save as new system or Discard. They never
+  overwrite your work, which is a change from today. You can edit a shared system to try things; the edits stay in
+  that page and are kept only by Save as new system (decided 2026-10-23, replacing "read-only"). Links don't carry
+  logos; copying a link for a system with a logo says so.
 - **Delete** confirms once, then offers undo in a toast.
 
 ## Components tab (wireframe 4)

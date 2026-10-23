@@ -197,7 +197,7 @@ function StyleKnob({ name }: { name: ComponentName }) {
   const lock: LockKey[] = name === 'button' ? ['button'] : name === 'input' ? ['field'] : [];
   const id = `component.${name}.style`;
   return (
-    <ItemMenu id={id} spec={{ title: `${def.label} style`, copy: { value: style }, onReset: edited ? () => setStyle(name, null) : null, lock }}>
+    <ItemMenu above id={id} spec={{ title: `${def.label} style`, copy: { value: style }, onReset: edited ? () => setStyle(name, null) : null, lock }}>
       <ItemPopover
         id={id}
         title={`${def.label} style`}
@@ -231,7 +231,7 @@ function CornerKnob({ name }: { name: ComponentName }) {
   const pill = name === 'button' || name === 'chip';
   const reset = set !== undefined ? () => setCorner(name, null) : null;
   return (
-    <ItemMenu id={id} spec={{ title: `${def.label} corner`, copy: { variable: `--${prefixOf(name)}-radius`, value: px >= 9999 ? '9999px' : `${px}px` }, onReset: reset, lock: pill ? ['controls'] : [] }}>
+    <ItemMenu above id={id} spec={{ title: `${def.label} corner`, copy: { variable: `--${prefixOf(name)}-radius`, value: px >= 9999 ? '9999px' : `${px}px` }, onReset: reset, lock: pill ? ['controls'] : [] }}>
       <ItemPopover
         id={id}
         title={`${def.label} corner`}
@@ -291,7 +291,7 @@ function SizeKnob({ name }: { name: ComponentName }) {
   const md = shape.h.md;
   const summary = md !== undefined ? `${md}${md < TOUCH_TARGET ? ` (${TOUCH_TARGET} on phones)` : ''}` : `padding ${shape.x.md}`;
   return (
-    <ItemMenu id={id} spec={{ title: `${def.label} size`, copy: { variable: md !== undefined ? `--${prefixOf(name)}-h-md` : `--${prefixOf(name)}-x`, value: `${md ?? shape.x.md}px` }, onReset: edited ? () => resetSize(name) : null, lock: name === 'button' || name === 'input' ? ['density'] : [] }}>
+    <ItemMenu above id={id} spec={{ title: `${def.label} size`, copy: { variable: md !== undefined ? `--${prefixOf(name)}-h-md` : `--${prefixOf(name)}-x`, value: `${md ?? shape.x.md}px` }, onReset: edited ? () => resetSize(name) : null, lock: name === 'button' || name === 'input' ? ['density'] : [] }}>
       <ItemPopover
         id={id}
         title={`${def.label} size`}
@@ -347,7 +347,7 @@ function TextKnob({ name }: { name: ComponentName }) {
   const label = TEXT_LABELS[style as keyof typeof TEXT_LABELS] ?? style;
   const reset = set ? () => setText(name, null) : null;
   return (
-    <ItemMenu id={id} spec={{ title: `${def.label} text`, copy: { variable: `--${prefixOf(name)}-text-size`, value: `${shape.text.size}px` }, onReset: reset }}>
+    <ItemMenu above id={id} spec={{ title: `${def.label} text`, copy: { variable: `--${prefixOf(name)}-text-size`, value: `${shape.text.size}px` }, onReset: reset }}>
       <ItemPopover
         id={id}
         title={`${def.label} text`}
@@ -478,8 +478,11 @@ function VariantItem({ name, variant }: { name: ComponentName; variant: string }
               ? 'Drawn at 50% opacity, over these colours.'
               : variant === 'focus' || variant === 'error'
                 ? `Its ring is the border at ${variant === 'focus' ? '50%' : '20% (40% in dark)'}.`
-                : slots.includes('pressed')
-                  ? 'Pressed (and hover) is the fill at 90% until you set it.'
+                : slots.includes('pressed') && v.pressed && !edits.includes('pressed')
+                  ? // What it's derived from in this variant (the fill at 90%, or the accent for an outline or ghost).
+                    `${name === 'badge' ? 'Hover (a badge that is a link)' : 'Pressed (and hover)'} is ${roleName(v.pressed.role).toLowerCase()}${
+                      v.pressed.alpha[mode] < 1 ? ` at ${Math.round(v.pressed.alpha[mode] * 100)}%` : ''
+                    } until you set it.`
                   : undefined,
         }}>
         {slots.map((slot) => (

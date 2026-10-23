@@ -1,5 +1,5 @@
 'use client';
-import { Popover, PopoverContent, PopoverTrigger } from 'fumadocs-ui/components/ui/popover';
+import { Popover, PopoverClose, PopoverContent, PopoverTrigger } from 'fumadocs-ui/components/ui/popover';
 import { EllipsisIcon, LinkIcon, MoonIcon, Redo2Icon, ShuffleIcon, SparklesIcon, SunIcon, Undo2Icon, XIcon } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import * as React from 'react';
@@ -107,10 +107,13 @@ function Actions() {
             <ShuffleIcon className="size-4" aria-hidden />
             Shuffle
           </button>
-          <button type="button" className={menuRow} onClick={toggle}>
-            {dark ? <SunIcon className="size-4" aria-hidden /> : <MoonIcon className="size-4" aria-hidden />}
-            {dark ? 'Light mode' : 'Dark mode'}
-          </button>
+          {/* Undo, redo and shuffle keep the menu open for another go; a scheme is picked once, so it closes. */}
+          <PopoverClose asChild>
+            <button type="button" className={menuRow} onClick={toggle}>
+              {dark ? <SunIcon className="size-4" aria-hidden /> : <MoonIcon className="size-4" aria-hidden />}
+              {dark ? 'Light mode' : 'Dark mode'}
+            </button>
+          </PopoverClose>
         </PopoverContent>
       </Popover>
     </>
@@ -200,6 +203,7 @@ export function Studio() {
     // The hash is the group scrolled to; a new tab or a new filter starts at the top.
     url.hash = '';
     window.history.replaceState(window.history.state, '', url);
+    window.scrollTo({ top: 0 });
     setTab(t);
     setView(next);
   };
@@ -209,7 +213,6 @@ export function Studio() {
   const onShowUsage = React.useEffectEvent((e: Event) => {
     const { tab: t, uses } = (e as CustomEvent<{ tab: Tab; uses?: string }>).detail;
     go(t, { ...view, group: null, uses: uses ?? null });
-    window.scrollTo({ top: 0 });
   });
   React.useEffect(() => {
     window.addEventListener('studio:tab', onShowUsage);

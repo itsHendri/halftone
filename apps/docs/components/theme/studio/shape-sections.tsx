@@ -10,6 +10,7 @@ import { LABELS, ORDER } from '@/components/theme/studio/parts';
 import { FoundationSection, KnobLock, NewMenu, Segmented, type SectionId } from '@/components/theme/studio/section';
 import {
   addExtra,
+  checkExtraName,
   deleteExtra,
   extraLabel,
   extrasOf,
@@ -171,7 +172,7 @@ function ExtraCorner({ item }: { item: { name: string; value: number } }) {
       <ItemPopover
         id={`extra.radius.${name}`}
         title={extraLabel(name)}
-        extra={{ name: extraLabel(name), token: name, onRename: (t) => renameExtra(doc, 'radius', name, t), onDelete: () => deleteExtra('radius', name) }}
+        extra={{ name: extraLabel(name), token: name, onRename: (t) => renameExtra(doc, 'radius', name, t), check: (t) => checkExtraName(doc, 'radius', name, t), onDelete: () => deleteExtra('radius', name) }}
         trigger={
           <button type="button" aria-label={`${extraLabel(name)}, extra corner, ${item.value}px. Edit`} className="hover:bg-accent/60 focus-visible:ring-ring w-full rounded-lg focus-visible:outline-none focus-visible:ring-2">
             <CornerTile px={item.value} label={`${extraLabel(name)} · ${item.value}`} extra />
@@ -375,7 +376,7 @@ function ExtraShadow({ item }: { item: { name: string; light: Layer[]; dark: Lay
       <ItemPopover
         id={`extra.shadow.${name}`}
         title={extraLabel(name)}
-        extra={{ name: extraLabel(name), token: name, onRename: (t) => renameExtra(doc, 'shadow', name, t), onDelete: () => deleteExtra('shadow', name) }}
+        extra={{ name: extraLabel(name), token: name, onRename: (t) => renameExtra(doc, 'shadow', name, t), check: (t) => checkExtraName(doc, 'shadow', name, t), onDelete: () => deleteExtra('shadow', name) }}
         trigger={
           <button type="button" aria-label={`${extraLabel(name)}, extra shadow. Edit`} className="hover:bg-accent/60 focus-visible:ring-ring w-full rounded-lg text-left focus-visible:outline-none focus-visible:ring-2">
             <ShadowCard css={layerCss(item[site])} label={extraLabel(name)} meta={describeLayers(item[site])} extra />
@@ -513,7 +514,7 @@ function ExtraBorder({ item }: { item: { name: string; width: number; style?: st
       <ItemPopover
         id={`extra.border.${name}`}
         title={extraLabel(name)}
-        extra={{ name: extraLabel(name), token: name, onRename: (t) => renameExtra(doc, 'border', name, t), onDelete: () => deleteExtra('border', name) }}
+        extra={{ name: extraLabel(name), token: name, onRename: (t) => renameExtra(doc, 'border', name, t), check: (t) => checkExtraName(doc, 'border', name, t), onDelete: () => deleteExtra('border', name) }}
         trigger={
           <button type="button" aria-label={`${extraLabel(name)}, extra border. Edit`} className="hover:bg-accent/60 focus-visible:ring-ring w-full rounded-lg text-left focus-visible:outline-none focus-visible:ring-2">
             <BorderSample width={item.width} style={item.style ?? 'solid'} color={theme.resolved[mode].border} label={`${extraLabel(name)} · ${item.width}px`} extra />

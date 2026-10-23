@@ -4,7 +4,7 @@
  * theme code can carry), then every Google Fonts family. The full list is a static file (lib/studio/google-fonts.json,
  * refreshed by scripts/google-fonts.mjs), loaded only when the picker opens: no request beyond Google Fonts CSS.
  */
-import { FONTS } from '@halftone-ds/tokens/theme';
+import { fontByFamily, FONTS } from '@halftone-ds/tokens/theme';
 import * as React from 'react';
 
 export type FontRole = 'heading' | 'body' | 'mono';
@@ -48,6 +48,22 @@ export function weightsOf(family: string): number[] {
   const known = all?.find((f) => f.family === family);
   if (known) return known.weights;
   return FONTS.find((f) => f.family === family)?.weights ?? [400, 500, 600, 700];
+}
+
+/**
+ * The weights the kits (and the previews) load for a family: a pick's, else 400–700 (fontByFamily). null for the
+ * system font, which draws every weight itself. Another weight draws as the nearest of these.
+ */
+export function loadedWeights(family: string): number[] | null {
+  if (!family || FONTS.some((f) => f.system && f.family === family)) return null;
+  return fontByFamily(family).weights;
+}
+
+/** The weight a style draws at: its own when loaded, else the nearest loaded one (what both kits pick). */
+export function drawnWeight(family: string, weight: number) {
+  const loaded = loadedWeights(family);
+  if (!loaded || loaded.includes(weight)) return weight;
+  return loaded.reduce((best, w) => (Math.abs(w - weight) < Math.abs(best - weight) ? w : best), loaded[0]);
 }
 
 export const weightRange = (weights: number[]) => (weights.length > 1 ? `${weights[0]}–${weights.at(-1)}` : String(weights[0] ?? 400));

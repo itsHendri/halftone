@@ -27,7 +27,7 @@ export function ThemeRuntime() {
       try {
         // While ambient, lib/theme/ambient.ts writes the frames' payload (the drifting theme).
         if (!isPreviewing() && !isAmbient()) sessionStorage.setItem(EMBED_KEY, JSON.stringify(kitPayloads(theme, live)));
-        const brand = kitBrand(s.doc.brand);
+        const brand = kitBrand(s.doc.brand, s.doc.name);
         if (brand) sessionStorage.setItem(EMBED_BRAND_KEY, JSON.stringify(brand));
         else sessionStorage.removeItem(EMBED_BRAND_KEY);
       } catch {
