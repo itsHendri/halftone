@@ -50,6 +50,10 @@ system** gives.
 (`npm i -D @halftone-ds/tokens@^1.2.0`) and apply again. The styles show on every `Button`, `Input`, `Textarea`
 and `Select` with no code change; check the Components page's Actions and Inputs in both themes.
 
+**A `.halftone.json`** (a system with edits) needs `@halftone-ds/tokens` 1.3.1 or later: 1.3 brought systems, extras
+and the component layer, and 1.3.1 lets a kit typecheck once a system with overrides is applied. Update with
+`npm i -D @halftone-ds/tokens@^1.3.1`.
+
 ## 2. When it refuses
 
 - **"no theme recorded"**: tokens.json predates themes. Ask whether its colours were customised; if not (or
@@ -67,7 +71,9 @@ and `Select` with no code change; check the Components page's Actions and Inputs
 3. Run the **qc-pass** skill. Look at Foundations (colour, type, radius) and one sample page in light and
    dark, at 375px and 1280px.
 4. `git diff --stat`: only `tokens/tokens.json` and generated files (lib/theme.ts,
-   tokens/generated/*, DESIGN.md, app/tokens.css, app/fonts.ts) should change.
+   tokens/generated/*, DESIGN.md, app/tokens.css, app/fonts.ts) should change,
+   plus what `registry:build` writes (apply runs it: DESIGN_SYSTEM.md, llms.txt, registry.json,
+   registry/generated/token-usage.json), since which components draw a colour follows the roles a system maps.
 
 Never hand-edit the generated files to "tweak" a theme; change the system (in Studio, or another
 code) and apply again.

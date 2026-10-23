@@ -1,7 +1,7 @@
 // npm test -w packages/tokens — the HalftoneSystem document: schema, generator, migration, apply and the CLI.
 import assert from 'node:assert/strict';
 import { spawnSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { existsSync, mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { test } from 'node:test';
@@ -551,9 +551,12 @@ test('the CLI applies a .halftone.json, shows it, and refuses a code for one wit
     // An absolute path works as well as one relative to the app.
     const absolute = cli('apply', join(root, 'plain.halftone.json'));
     assert.equal(absolute.status, 0, absolute.stderr);
+    // An app with a registry:build gets it run too: its token usage follows the roles the system maps.
+    writeFileSync(join(root, 'package.json'), JSON.stringify({ scripts: { 'registry:build': `node -e "require('fs').writeFileSync('registry.ran', '1')"` } }));
     const applied = cli('apply', 'acme.halftone.json');
     assert.equal(applied.status, 0, applied.stderr);
     assert.match(applied.stdout, /System "Acme"/);
+    assert.ok(existsSync(join(root, 'registry.ran')), 'registry:build ran');
     assert.match(applied.stdout, /Overrides \(no theme code carries these/);
     const tokens = JSON.parse(readFileSync(join(root, 'tokens/tokens.json'), 'utf8'));
     assert.equal(tokens.$extensions['com.halftonedesignsystem.theme'].system.name, 'Acme');
@@ -568,6 +571,8 @@ test('the CLI applies a .halftone.json, shows it, and refuses a code for one wit
     assert.equal(shown.status, 0, shown.stderr);
     assert.match(shown.stdout, /System "Acme" \(no theme code: it has overrides\)/);
     assert.match(shown.stdout, /roles: primary\.dark/);
+    // The summary names the system's own fonts, not the recipe's.
+    assert.match(shown.stdout, /type [^\n]*Inter Tight/);
 
     const encoded = cli('encode', 'acme.halftone.json');
     assert.equal(encoded.status, 1);

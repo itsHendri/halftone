@@ -156,7 +156,9 @@ Every section header has, in order: its name and count; its **base knob**; and *
 
 - **tokens.json:** `extra.<kind>.<name>`.
 - **CSS:** a variable (`--trendy-green`; a ramp's `--sunset-500`), in light and dark. Corners `--radius-<name>`,
-  shadows `--shadow-<name>`, borders `--border-<name>-width`, text styles `--type-<name>-*`.
+  shadows `--shadow-<name>`, borders `--border-<name>-width`, text styles `--type-<name>-*`. The mobile kit
+  writes corners and shadows straight into its Tailwind theme instead, as it does its built-in ones, and its shadows
+  are the light ones (NativeWind draws one shadow in both schemes).
 - **Tailwind:** classes (`bg-trendy-green`, `text-trendy-green`, `rounded-<name>`, `shadow-<name>`,
   `border-<name>`, `type-<name>` on the web and `text-type-<name>`… on mobile).
 - **Agent docs:** an "Extras" section in DESIGN.md and llms.txt saying no kit component uses them and screens

@@ -126,17 +126,20 @@ function readRecipe(arg, root) {
   fail(`"${arg}" is not a theme code, a preset (${PRESETS.map((p) => p.id).join(', ')}), a recipe file or a shadcn preset code`, 2);
 }
 
-const describe = (input) => {
+/** A recipe in a few lines. `families`: a system's own fonts (any Google Fonts family), which win over the recipe's. */
+const describe = (input, families = {}) => {
   // A recipe recorded by an older halftone-tokens has no typeset or styles: it gets the defaults.
   const recipe = normalizeRecipe(input);
-  const font = (id) => {
+  const font = (role) => {
+    if (families[role]) return families[role];
+    const id = recipe.font[role];
     const f = fontById(id);
     return f?.system ? (f.category === 'mono' ? 'system mono' : 'system') : (f?.family ?? id);
   };
   return [
     `brand ${recipe.brand} · neutral ${recipe.neutral} · radius ${recipe.radius} · controls ${recipe.controls}`,
-    `type ${font(recipe.font.heading)} / ${font(recipe.font.body)} · stroke ${recipe.stroke} · depth ${recipe.depth} · density ${recipe.density} · border ${recipe.border}`,
-    `typeset ${recipe.size}px · leading ${recipe.leading} · flow ${recipe.flow} · measure ${recipe.measure}ch · mono ${font(recipe.font.mono)}`,
+    `type ${font('heading')} / ${font('body')} · stroke ${recipe.stroke} · depth ${recipe.depth} · density ${recipe.density} · border ${recipe.border}`,
+    `typeset ${recipe.size}px · leading ${recipe.leading} · flow ${recipe.flow} · measure ${recipe.measure}ch · mono ${font('mono')}`,
     `styles: ${recipe.button} buttons · ${recipe.field} fields`,
   ].join('\n  ');
 };
@@ -165,6 +168,18 @@ function installFonts(root, config, theme, flags) {
     }
   }
   if (unused.length) console.log(`\nNo longer used by the theme (remove when you like): npm uninstall ${unused.join(' ')}`);
+}
+
+/**
+ * A kit's registry:build writes which components draw which token (registry/generated/token-usage.json and the docs
+ * from it), and that follows the colour roles a system maps, so applying one rebuilds it: its --check stays green.
+ */
+function rebuildRegistry(root) {
+  const file = join(root, 'package.json');
+  if (!existsSync(file) || !JSON.parse(readFileSync(file, 'utf8')).scripts?.['registry:build']) return;
+  console.log('\nregistry:build (token usage follows the colour roles)…');
+  const r = spawnSync('npm', ['run', '--silent', 'registry:build'], { cwd: root, stdio: 'inherit' });
+  if (r.status !== 0) console.log('registry:build failed: run `npm run registry:build` yourself.');
 }
 
 export async function themeCommand({ positional, flags, root, sourcePath, config, build }) {
@@ -253,7 +268,7 @@ export async function themeCommand({ positional, flags, root, sourcePath, config
     if (status.system) {
       const { system } = status;
       const overrides = describeOverrides(system);
-      console.log(`System "${system.name}"${status.code ? ` ${status.code}` : ' (no theme code: it has overrides)'}\n  ${describe(status.recipe)}`);
+      console.log(`System "${system.name}"${status.code ? ` ${status.code}` : ' (no theme code: it has overrides)'}\n  ${describe(status.recipe, system.fonts)}`);
       if (overrides.length) console.log(`\nOverrides:\n${overrides.map((o) => `  ${o}`).join('\n')}`);
       printWarnings(tokens().$extensions?.[THEME_EXTENSION]?.warnings);
     } else {
@@ -282,7 +297,7 @@ export async function themeCommand({ positional, flags, root, sourcePath, config
     if (system) {
       const code = systemCode(system);
       const overrides = describeOverrides(system);
-      console.log(`System "${system.name}"${code ? ` ${code}` : ''}\n  ${describe(theme.recipe)}`);
+      console.log(`System "${system.name}"${code ? ` ${code}` : ''}\n  ${describe(theme.recipe, system.fonts)}`);
       if (overrides.length) console.log(`\nOverrides (no theme code carries these; tokens.json records the document):\n${overrides.map((o) => `  ${o}`).join('\n')}`);
     } else console.log(`Theme ${theme.code}${recipe.preset ? ` (${presetById(recipe.preset)?.name})` : ''}\n  ${describe(theme.recipe)}`);
     if (theme.adjustments.length) {
@@ -292,7 +307,9 @@ export async function themeCommand({ positional, flags, root, sourcePath, config
     printWarnings(theme.warnings);
     const cvd = cvdWarnings(theme.resolved);
     if (cvd.length) {
-      console.log(`\nColour vision: ${cvd.length} pair(s) of tones closer than ΔE ${MIN_DELTA_E} (a warning; give them an icon or a label as well):`);
+      // Counted as the Studio's Accessibility tab counts them: pairs of tones, each listed in every view it's close in.
+      const pairs = new Set(cvd.map((w) => `${w.a}/${w.b}`)).size;
+      console.log(`\nColour vision: ${pairs} pair(s) of tones close together, in ${cvd.length} view(s) below ΔE ${MIN_DELTA_E} (a warning; give them an icon or a label as well):`);
       console.log(describeCvdWarnings(cvd).join('\n'));
     }
     if (flags['dry-run']) {
@@ -303,6 +320,7 @@ export async function themeCommand({ positional, flags, root, sourcePath, config
     console.log(`\nWrote ${sourcePath.slice(root.length + 1)}.`);
     installFonts(root, config, theme, flags);
     await build();
+    rebuildRegistry(root);
     return;
   }
 

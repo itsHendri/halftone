@@ -3,7 +3,7 @@
  * Apply a theme to every kit in the monorepo: `npm run theme:apply -- <code|preset> [--force] [--dry-run]`.
  *
  *   1. halftone-tokens theme apply in apps/mobile (the source tokens.json), which rebuilds the mobile tokens
- *   2. tokens:sync: copy it to apps/web and rebuild there
+ *   2. tokens:sync: copy it to apps/web and rebuild there, then the web kit's registry (its token usage follows the roles)
  *   3. rebuild the docs site's tokens (it reads apps/mobile/tokens/tokens.json directly)
  *
  * Outside the monorepo, an app runs `npx halftone-tokens theme apply <code>` itself.
@@ -22,5 +22,6 @@ const run = (cmd, argv) => {
 run('npm', ['exec', '-w', 'apps/mobile', '--', 'halftone-tokens', 'theme', 'apply', ...args]);
 if (args.includes('--dry-run')) process.exit(0);
 run('npm', ['run', 'tokens:sync']);
+run('npm', ['run', 'registry:build', '-w', 'apps/web']);
 run('npm', ['exec', '-w', 'apps/docs', '--', 'halftone-tokens', 'build']);
 console.log('\nTheme applied to mobile, web and docs. Review with `git diff`, then run `npm run check`.');
