@@ -31,7 +31,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-node@v7
         with:
-          node-version: 24
+          node-version-file: .nvmrc
       - run: npm ci
       - id: select-mode
         uses: changesets/action/select-mode@v2
@@ -49,7 +49,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-node@v7
         with:
-          node-version: 24
+          node-version-file: .nvmrc
           package-manager-cache: false
       - run: npm ci
       - uses: changesets/action/version@v2
@@ -68,7 +68,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-node@v7
         with:
-          node-version: 24
+          node-version-file: .nvmrc
           package-manager-cache: false
       - run: npm ci
       - run: npm test -w packages/tokens
@@ -89,7 +89,7 @@ jobs:
           persist-credentials: false
       - uses: actions/setup-node@v7
         with:
-          node-version: 24
+          node-version-file: .nvmrc
           package-manager-cache: false
       - run: npm ci
       - uses: changesets/action/publish@v2

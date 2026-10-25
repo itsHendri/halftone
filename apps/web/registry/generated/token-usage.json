@@ -718,6 +718,9 @@
       "page-header",
       "success-screen"
     ],
+    "type.h4": [
+      "empty-state"
+    ],
     "type.large": [
       "list-group",
       "section-header"

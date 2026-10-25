@@ -73,6 +73,24 @@ Halftone is for designers and product people who prototype with a coding agent (
 similar) and want the result to run on a phone, in a browser, or both, on their brand. You run a few `npm`
 commands and read what the agent changed; the agent writes the code.
 
+### What you skip
+
+The work a prototype needs before its first real screen, and nobody quotes for. Rough hours, for one person who
+has done it before:
+
+| Already done | Roughly |
+| --- | --- |
+| One set of tokens building CSS variables, Tailwind and a TypeScript theme for phone and web, light and dark | 8 h |
+| A contrast check on every pairing, in both modes, that fixes generated colours and names your own | 4 h |
+| A theme from a brand colour: ramps, fonts loading on Expo and Next.js, radius, depth, button and field styles | 4 h |
+| Logo, app icon, splash screens and favicons in every size | 2 h |
+| A component set that looks the same on phone and web, with the same names in both | weeks |
+| What the agent reads first (`AGENTS.md`, `DESIGN_SYSTEM.md`, skills) and lint rules that keep it to the kit | 8 h |
+| Sample apps to copy a screen from, and a way to remove them | 6 h |
+| A look in the browser at two widths and both themes: accessibility, overflow, console, focus | 4 h |
+| A link to send: an EAS update for the phone, a static export for the web | 2 h |
+| And on every prompt, an agent that redesigns the system instead of using one | every time |
+
 It is not:
 
 - **A no-code tool.** There is no visual page builder. A prototype is a real Expo or Next.js app that you run
