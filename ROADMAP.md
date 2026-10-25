@@ -43,25 +43,34 @@ mobile. A one-colour SVG follows the theme's text colour; others can have a dark
 every size and downloads them as a zip laid out like each kit (`brand-mobile.zip`, `brand-web.zip`, `brand.zip`),
 which the `apply-theme` skill unzips. Still to come: brand assets in the CLI, iOS tinted and dark icons, OG images.
 
-## Now: looks beyond tokens
+## Done: looks beyond tokens
 
 Component styles in the recipe, for both kits: **buttons** (solid, soft, outline, raised) and **inputs**
 (outline, filled, underline), as theme tokens every Button, Input, Textarea and Select draws; two new presets with
 a mood each (Tactile, Studio) and three presets that use the styles. Themes with styles are `ht3-` codes (18
-characters, with room for more styles). Ships with `@halftone-ds/tokens` 1.2. Still to come: more styles (cards,
-chips, tabs) in the reserved bits.
+characters, with room for more styles). Shipped in `@halftone-ds/tokens` 1.2. Still to come: more styles (cards,
+tabs) in the reserved bits.
 
-## Next: Studio, a design system manager
+## Done: Studio, a design system manager
 
-`/themes` becomes `/studio`: a page you edit in place, like Subframe's Theme page, with several saved systems
-(say a portfolio and a client). Foundations, Components and Accessibility tabs:
-- Every role is a full 50–950 ramp from one colour, and any step can be edited.
-- Text styles, corners, shadows and borders are editable items, and "+ New" adds extras.
-- The logo slot always shows a placeholder.
+`/themes` became `/studio` (phases 0–6, #55–#71; the contract is `apps/docs/design/studio-wireframes.md`, the data
+layer the `HalftoneSystem` document in `@halftone-ds/tokens`, shipped in 1.3):
+- Several saved systems in the browser, with a switcher, shared `?s=` links and a `.halftone.json` export.
+- **Foundations** edited in place: every role a 50–950 ramp from one colour with any step editable, text styles,
+  fonts from all of Google Fonts, corners, shadows, borders, and "+ New" extras that reach every output.
+- **Components**: Button, Chip, Badge and Input edited as tokens both kits read, so one theme looks the same on
+  phone and web.
+- **Components** and **Accessibility** tabs: every catalogue tile live on the system, Show usage, and contrast with
+  fix and undo.
+- Tested end to end in both kits copied out (#76–#82, 1.3.1); CI now applies a system with every kind of override
+  to both kits (`system apply`).
 
-Saved in the browser first; accounts come later. After foundations comes component-level editing (Button, Chip,
-Tag). The contract is `apps/docs/design/studio-wireframes.md`; the data layer is the `HalftoneSystem` document
-in `@halftone-ds/tokens`.
+## Done: first run and agent tooling
+
+- `npm run setup` in both kits: name, app id, samples and theme, planned and confirmed (flags and `--yes` for an
+  agent or CI).
+- `npm run eject-samples` one sample at a time, with `--status`; CI ejects each one and runs the gates.
+- `npm run qc:look` (Playwright and axe) in both kits, and an `.mcp.json` per kit for its dev server.
 
 ## Later: agent reach
 
@@ -85,7 +94,14 @@ the Foundations summary for a system without a code (#76). Learned from contenta
   started as.
 - CI copies a kit out at an older release, updates it to this commit and runs the gates.
 
+## Later: accounts
+
+The Studio's phase 7, planned separately: accounts and cloud sync (a Worker with Hono, D1, Better Auth, R2 for
+logos, version history), then uploaded custom fonts and a "Your systems" library. It changes the "free, open"
+wording at the top.
+
 ## Parked
 
 - Expo SDK 58: on `chore/sdk-58`, until 58 is stable.
-- Package releases: changes to `@halftone-ds/tokens` collect in the Version Packages PR until a release is due.
+- Package releases: `RELEASES_ENABLED` is on, so changes to `@halftone-ds/tokens` collect in a Version Packages PR,
+  which publishes only when merged on the maintainer's go.
