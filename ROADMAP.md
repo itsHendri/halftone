@@ -72,6 +72,19 @@ in `@halftone-ds/tokens`.
 - Two or three theme variants side by side in the brief wizard, before the build.
 - An MCP server for the theme studio, so an agent changes the theme while you watch.
 
+## Later: kits that keep up
+
+A kit copied out with `npx giget` gets later fixes only through `@halftone-ds/tokens`. Fixes to the kit's own code
+(components, the kit pages, the samples) never reach it: the web headings that follow the text styles (#81), or
+the Foundations summary for a system without a code (#76). Learned from contentarchitecture.dev's `trim:update`.
+- `npm run setup` records the kit version the project started from (the Halftone commit), in a file the project
+  keeps.
+- `npm run kit:update` fetches the kit at a newer version, applies its changes to the files the project hasn't
+  edited since, and lists the ones it has, each with the upstream diff, instead of overwriting them.
+- `kit:update -- --status`: what changed upstream since, and which of the project's files differ from the kit they
+  started as.
+- CI copies a kit out at an older release, updates it to this commit and runs the gates.
+
 ## Parked
 
 - Expo SDK 58: on `chore/sdk-58`, until 58 is stable.

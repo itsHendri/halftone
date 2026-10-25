@@ -216,6 +216,50 @@ jobs:
         working-directory: ${{ runner.temp }}/app
         run: npm run eject-samples && ${{ matrix['after-eject'] }}
 
+  # A Studio system with an override of every kind (packages/tokens/test/fixtures/every-override.halftone.json: edited
+  # steps and seeds, roles, text styles, a Google font outside the picks, corners, shadows, borders, every kind of
+  # extra, all four components) applied to each kit copied out, then every gate. extract only applies a theme code;
+  # a system with overrides is what Studio's Use system hands most people, and it once broke typecheck (1.3.0).
+  system-apply:
+    name: system apply (${{ matrix.app }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - app: mobile
+            checks: npm run tokens:check && npm run registry:build -- --check && npm run typecheck && npm run lint -- --max-warnings 0 && npm run lint:rules && npm run export:web
+          - app: web
+            checks: npm run tokens:check && npm run registry:build -- --check && npm run typecheck && npm run lint && npm run lint:rules && npm run build
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+
+      - name: Copy apps/${{ matrix.app }} out, with this commit's halftone-tokens
+        run: |
+          mkdir -p "$RUNNER_TEMP/app"
+          git archive HEAD:apps/${{ matrix.app }} | tar -x -C "$RUNNER_TEMP/app"
+          npm pack -w packages/tokens --pack-destination "$RUNNER_TEMP"
+          cd "$RUNNER_TEMP/app"
+          npm pkg set "devDependencies.@halftone-ds/tokens=file:$(ls "$RUNNER_TEMP"/halftone-ds-tokens-*.tgz)"
+
+      - name: Install the standalone app
+        working-directory: ${{ runner.temp }}/app
+        run: npm install --no-audit --no-fund
+
+      # As the apply-theme skill does it: the CLI writes tokens.json, installs the fonts, rebuilds the tokens and
+      # the registry.
+      - name: Apply the every-override system
+        working-directory: ${{ runner.temp }}/app
+        run: npx halftone-tokens theme apply "$GITHUB_WORKSPACE/packages/tokens/test/fixtures/every-override.halftone.json"
+
+      - name: Every gate passes on it
+        working-directory: ${{ runner.temp }}/app
+        run: ${{ matrix.checks }}
+
   # The samples go one at a time on real projects, so each one ejects on its own (and all of them together),
   # and every gate that could notice a dangling reference runs on what is left, bundle included. The extract
   # job above ejects everything from a standalone copy; this one covers the partial ejects.

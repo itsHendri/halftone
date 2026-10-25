@@ -24,15 +24,19 @@ function componentsObject(components) {
   return COMPONENT_NAMES.map((name) => {
     const c = components[name];
     const text = { font: c.text.font, size: round(c.text.size), lineHeight: round(c.text.leading), tracking: c.text.tracking };
-    // The font role is typed as a role, so code can branch on it (the object is `as const`).
-    const json = JSON.stringify({ height: c.h, x: c.x, radius: c.radius, text }).replace(/"font":("\w+")/, `"font":$1 as 'heading' | 'body' | 'mono'`);
+    // The font role is typed as a role, so code can branch on it (the object is `as const`), and tracking as a
+    // number: a kit compares it with 0, which wouldn't typecheck against a system's literal 0.01.
+    const json = JSON.stringify({ height: c.h, x: c.x, radius: c.radius, text })
+      .replace(/"font":("\w+")/, `"font":$1 as 'heading' | 'body' | 'mono'`)
+      .replace(/"tracking":(-?[\d.e-]+)/, '"tracking":$1 as number');
     return `    ${name}: ${json},`;
   }).join('\n');
 }
 
 function textStylesObject(styles) {
   return Object.entries(styles)
-    .map(([name, s]) => `    ${name}: ${JSON.stringify({ font: s.font, weight: s.weight, size: round(s.size), lineHeight: round(s.lineHeight), tracking: s.tracking })},`)
+    // Tracking as a number, as the components' (a kit compares it with 0).
+    .map(([name, s]) => `    ${name}: ${JSON.stringify({ font: s.font, weight: s.weight, size: round(s.size), lineHeight: round(s.lineHeight), tracking: s.tracking }).replace(/"tracking":(-?[\d.e-]+)/, '"tracking":$1 as number')},`)
     .join('\n');
 }
 

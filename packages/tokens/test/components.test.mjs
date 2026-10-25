@@ -225,6 +225,9 @@ test('ts-theme: a system with overrides has no code, and THEME_INFO says it may 
   const [ts] = tsTheme(await built(tokens), { out: 'theme.ts' });
   assert.match(ts.contents, /export const THEME_INFO: ThemeInfo \| null = \{\n {2}"code": null,\n {2}"name": "Acme",/);
   assert.match(ts.contents, /\n {2}code: string \| null;\n/);
+  // Tracking is typed as a number (a kit compares it with 0, and a system can set any value).
+  assert.match(ts.contents, /chip: \{[^\n]*"tracking":0 as number/);
+  assert.match(ts.contents, /\n {4}h1: \{[^\n]*"tracking":-0\.025 as number\}/);
 });
 
 test('a token file from before the layer gets the defaults', async () => {
