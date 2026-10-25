@@ -1,0 +1,69 @@
+{
+  "kind": "halftone.system",
+  "v": 1,
+  "id": "every-override",
+  "name": "Every override",
+  "updatedAt": "2026-10-25T12:00:00.000Z",
+  "recipe": {
+    "v": 1,
+    "brand": "#0f766e",
+    "neutral": "stone",
+    "radius": "xl",
+    "controls": "match",
+    "font": { "heading": "nunito", "body": "nunito", "mono": "fira-code" },
+    "stroke": "bold",
+    "depth": "raised",
+    "density": "comfortable",
+    "border": "regular",
+    "size": "16",
+    "leading": "normal",
+    "flow": "normal",
+    "measure": "70",
+    "button": "soft",
+    "field": "filled"
+  },
+  "colors": {
+    "brand": { "steps": { "300": "#7de0d4" } },
+    "success": { "seed": "#15803d", "anchor": "500" }
+  },
+  "roles": {
+    "primary": { "light": "brand.800", "dark": "brand.300" },
+    "input": { "light": "neutral.400" }
+  },
+  "type": { "h2": { "size": 34 }, "small": { "weight": 600, "tracking": 0.01 } },
+  "fonts": { "heading": "Archivo" },
+  "radius": { "lg": 22 },
+  "shadow": {
+    "2": {
+      "light": [
+        { "x": 0, "y": 8, "blur": 32, "spread": -6, "color": "#000000", "alpha": 0.18 },
+        { "x": 0, "y": 4, "blur": 12, "spread": -2, "color": "#000000", "alpha": 0.08 }
+      ],
+      "dark": [{ "x": 0, "y": 8, "blur": 20, "spread": -6, "color": "#000000", "alpha": 0.5 }]
+    }
+  },
+  "border": { "width": 2, "style": "dashed" },
+  "extras": {
+    "color": [
+      { "name": "trendy-green", "value": { "light": "#22c55e", "dark": "#4ade80" } },
+      { "name": "sunset", "seed": "#f97316" }
+    ],
+    "text": [{ "name": "display", "font": "heading", "weight": 800, "size": 48, "leading": 1.1111, "tracking": -0.025 }],
+    "radius": [{ "name": "card", "value": 22 }],
+    "shadow": [
+      {
+        "name": "glow",
+        "light": [{ "x": 0, "y": 20, "blur": 40, "spread": -10, "color": "#000000", "alpha": 0.25 }],
+        "dark": [{ "x": 0, "y": 20, "blur": 40, "spread": -10, "color": "#000000", "alpha": 0.6 }]
+      }
+    ],
+    "border": [{ "name": "divider-bold", "width": 3, "style": "solid" }]
+  },
+  "brand": { "name": "Every override", "iconBackground": "brand" },
+  "components": {
+    "button": { "radius": "full", "size": { "md": 44 }, "variants": { "outline": { "border": "primary" } } },
+    "chip": { "radius": "sm", "variants": { "selected": { "fill": "primary" } } },
+    "badge": { "style": "square", "text": "p", "variants": { "secondary": { "label": "primary" } } },
+    "input": { "size": { "md": 52 }, "variants": { "focus": { "border": "foreground" } } }
+  }
+}

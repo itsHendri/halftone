@@ -610,3 +610,28 @@ test('an edited style\'s font role reaches the build from tokens.json', () => {
   assert.equal(textStyleVars(styles, 'hsl')['--type-code-tracking'], '0.05em');
   assert.equal(textStyleVars(styles, 'hsl')['--type-code-tracking-native'], undefined, 'one tracking, in em, on every platform');
 });
+
+test('the every-override fixture (CI applies it to both kits) has an override of every kind', async () => {
+  const { COMPONENT_NAMES } = await import('../lib/theme/components.mjs');
+  const { EXTRA_KINDS } = await import('../lib/system/schema.mjs');
+  const doc = normalizeSystem(JSON.parse(readFileSync(join(pkg, 'test/fixtures/every-override.halftone.json'), 'utf8')));
+  const paths = systemOverrides(doc);
+  const has = (prefix) => paths.some((p) => p.startsWith(prefix));
+  // A new kind of override should land here and in the fixture, so the kits are checked with it applied.
+  const kinds = [
+    'colors.brand.steps.',
+    'colors.success.seed',
+    'colors.success.anchor',
+    'roles.',
+    'type.',
+    'fonts.',
+    'radius.',
+    'shadow.',
+    'border.width',
+    'border.style',
+    ...EXTRA_KINDS.map((k) => `extras.${k}.`),
+    ...COMPONENT_NAMES.map((n) => `components.${n}.`),
+  ];
+  assert.deepEqual(kinds.filter((k) => !has(k)), [], 'kinds missing from the fixture');
+  assert.equal(systemCode(doc), null, 'it has overrides, so no theme code');
+});

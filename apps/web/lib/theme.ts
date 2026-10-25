@@ -139,10 +139,10 @@ export const TOKENS = {
    *  font role and tracking. The classes (h-button-md, rounded-button, text-type-button…) already follow them; this is
    *  for the touch-target floor (phones raise a height under 44 with hitSlop) and the font. */
   components: {
-    button: {"height":{"sm":40,"md":48,"lg":56},"x":{"sm":16,"md":20,"lg":24},"radius":9999,"text":{"font":"body" as 'heading' | 'body' | 'mono',"size":16,"lineHeight":24,"tracking":0}},
-    chip: {"height":{"md":36},"x":{"md":14},"radius":9999,"text":{"font":"body" as 'heading' | 'body' | 'mono',"size":14,"lineHeight":20,"tracking":0}},
-    badge: {"height":{},"x":{"md":8},"radius":9999,"text":{"font":"body" as 'heading' | 'body' | 'mono',"size":14,"lineHeight":20,"tracking":0}},
-    input: {"height":{"sm":32,"md":48,"lg":56},"x":{"md":16},"radius":8,"text":{"font":"body" as 'heading' | 'body' | 'mono',"size":16,"lineHeight":24,"tracking":0}},
+    button: {"height":{"sm":40,"md":48,"lg":56},"x":{"sm":16,"md":20,"lg":24},"radius":9999,"text":{"font":"body" as 'heading' | 'body' | 'mono',"size":16,"lineHeight":24,"tracking":0 as number}},
+    chip: {"height":{"md":36},"x":{"md":14},"radius":9999,"text":{"font":"body" as 'heading' | 'body' | 'mono',"size":14,"lineHeight":20,"tracking":0 as number}},
+    badge: {"height":{},"x":{"md":8},"radius":9999,"text":{"font":"body" as 'heading' | 'body' | 'mono',"size":14,"lineHeight":20,"tracking":0 as number}},
+    input: {"height":{"sm":32,"md":48,"lg":56},"x":{"md":16},"radius":8,"text":{"font":"body" as 'heading' | 'body' | 'mono',"size":16,"lineHeight":24,"tracking":0 as number}},
   },
   /** Control heights and padding (px) for the theme's density: h-control-sm, h-control, h-control-lg, px-control-x. */
   density: {"sm":40,"md":48,"lg":56,"x":20},
@@ -164,17 +164,17 @@ export const TOKENS = {
    *  (px), tracking (em). The classes (text-type-h1, leading-type-h1…) already follow them; this is for code
    *  that picks something per style, such as a font file per weight. */
   textStyles: {
-    h1: {"font":"heading","weight":800,"size":36,"lineHeight":40,"tracking":-0.025},
-    h2: {"font":"heading","weight":600,"size":30,"lineHeight":36,"tracking":-0.025},
-    h3: {"font":"heading","weight":600,"size":24,"lineHeight":32,"tracking":-0.025},
-    h4: {"font":"heading","weight":600,"size":20,"lineHeight":28,"tracking":-0.025},
-    lead: {"font":"body","weight":400,"size":20,"lineHeight":28,"tracking":0},
-    p: {"font":"body","weight":400,"size":16,"lineHeight":28,"tracking":0},
-    large: {"font":"body","weight":600,"size":18,"lineHeight":28,"tracking":0},
-    small: {"font":"body","weight":500,"size":14,"lineHeight":14,"tracking":0},
-    muted: {"font":"body","weight":400,"size":14,"lineHeight":20,"tracking":0},
-    code: {"font":"mono","weight":600,"size":14,"lineHeight":20,"tracking":0},
-    blockquote: {"font":"body","weight":400,"size":16,"lineHeight":24,"tracking":0},
+    h1: {"font":"heading","weight":800,"size":36,"lineHeight":40,"tracking":-0.025 as number},
+    h2: {"font":"heading","weight":600,"size":30,"lineHeight":36,"tracking":-0.025 as number},
+    h3: {"font":"heading","weight":600,"size":24,"lineHeight":32,"tracking":-0.025 as number},
+    h4: {"font":"heading","weight":600,"size":20,"lineHeight":28,"tracking":-0.025 as number},
+    lead: {"font":"body","weight":400,"size":20,"lineHeight":28,"tracking":0 as number},
+    p: {"font":"body","weight":400,"size":16,"lineHeight":28,"tracking":0 as number},
+    large: {"font":"body","weight":600,"size":18,"lineHeight":28,"tracking":0 as number},
+    small: {"font":"body","weight":500,"size":14,"lineHeight":14,"tracking":0 as number},
+    muted: {"font":"body","weight":400,"size":14,"lineHeight":20,"tracking":0 as number},
+    code: {"font":"mono","weight":600,"size":14,"lineHeight":20,"tracking":0 as number},
+    blockquote: {"font":"body","weight":400,"size":16,"lineHeight":24,"tracking":0 as number},
   },
   fontFamily: {
     sans: "",
