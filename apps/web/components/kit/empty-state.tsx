@@ -26,7 +26,8 @@ export function EmptyState({ icon: Icon, title, description, action, variant = '
         <Icon className={variant === 'default' ? 'size-6' : 'size-5'} aria-hidden />
       </span>
       <div className="flex max-w-sm flex-col gap-1">
-        <p className="font-semibold">{title}</p>
+        {/* As the mobile kit draws it: the H4 text style, or small muted text in a compact one. */}
+        <p className={variant === 'default' ? 'type-h4' : 'text-muted-foreground text-sm font-medium'}>{title}</p>
         {description ? <p className="text-muted-foreground text-sm">{description}</p> : null}
       </div>
       {action ? <div className="mt-1">{action}</div> : null}

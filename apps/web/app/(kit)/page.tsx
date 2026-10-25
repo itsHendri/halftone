@@ -29,7 +29,7 @@ export default function KitHome() {
   return (
     <div className="flex flex-col gap-12">
       <header className="flex max-w-3xl flex-col gap-3">
-        <h1 className="text-4xl font-semibold tracking-tight">Halftone · web</h1>
+        <h1 className="type-h1">Halftone · web</h1>
         <p className="text-muted-foreground text-lg leading-8">
           A themeable Next.js and shadcn/ui starter for web prototypes: dashboards, marketing pages and AI product
           interfaces. Everything a page needs is already here and previewed live.

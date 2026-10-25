@@ -1,5 +1,5 @@
 'use client';
-import { systemOverrides } from '@halftone-ds/tokens/system';
+import { migrate, systemOverrides } from '@halftone-ds/tokens/system';
 import { fontById, normalizeRecipe, PRESETS, sameRecipe, type Adjustment, type Recipe, type RecipeInput } from '@halftone-ds/tokens/theme';
 import { Popover, PopoverContent, PopoverTrigger } from 'fumadocs-ui/components/ui/popover';
 import { ArrowRightIcon, CheckIcon, ChevronDownIcon, PauseIcon, PlayIcon } from 'lucide-react';
@@ -12,7 +12,7 @@ import { SWATCHES, swatchName } from '@/lib/theme/swatches';
 import { rovingKeyDown, rovingTabIndex } from '@/lib/roving';
 import { ambientBrand, pauseAmbient, playAmbient, useAmbient } from '@/lib/theme/ambient';
 import { resumeAmbient, setRecipe, themeFor, undo, useLiveTheme } from '@/lib/theme/store';
-import { switchSystem, systemLabel, systemTheme, useSystems } from '@/lib/studio/systems';
+import { editSystem, switchSystem, systemLabel, systemTheme, useSystems } from '@/lib/studio/systems';
 
 /** The preset a recipe came from, if it is still exactly that preset. */
 export function presetLabel(recipe: Recipe) {
@@ -106,6 +106,8 @@ export function ThemePill() {
   const drift = useAmbient();
   const [colourOpen, setColourOpen] = React.useState(false);
   const [systemOpen, setSystemOpen] = React.useState(false);
+  // A preset picked for a system with hand edits waits here until the person says whether to keep them.
+  const [asking, setAsking] = React.useState<(typeof PRESETS)[number] | null>(null);
   const bar = React.useRef<HTMLDivElement>(null);
   const covering = useCoversAvoided(bar, pathname);
 
@@ -114,13 +116,26 @@ export function ThemePill() {
   const systemIndex = ambient || systems.shared ? -1 : systems.saved.findIndex((x) => x.id === systems.activeId);
   const label = ambient ? 'Drifting' : systemLabel(systems);
   const swatchIndex = ambient ? -1 : SWATCHES.findIndex((x) => x.hex === recipe.brand);
-  // A preset or a colour rewrites the recipe and keeps the hand edits (as the Studio's base knobs do), so the bar
-  // says so, and says what changed with an Undo: there's no undo button outside the Studio.
+  // A colour rewrites the recipe and keeps the hand edits (as the Studio's base knobs do); a preset asks first
+  // whether to keep them. Either way the bar says what changed, with an Undo: there's none outside the Studio.
   const edits = ambient ? 0 : systemOverrides(system).length;
-  const editsNote = edits ? `Your ${edits} edit${edits === 1 ? '' : 's'} stay.` : '';
+  const editsNote = edits ? (edits === 1 ? 'Your edit stays.' : `Your ${edits} edits stay.`) : '';
   const pick = (input: RecipeInput, message: string) => {
     setRecipe(input);
     if (!ambient) toast([message, editsNote].filter(Boolean).join(' '), { label: 'Undo', run: undo });
+  };
+  // The whole preset: a key it leaves out (button, field) goes back to its default, not the last one.
+  const presetRecipe = (p: (typeof PRESETS)[number]) => normalizeRecipe({ ...p.recipe, preset: p.id });
+  const applyPreset = (p: (typeof PRESETS)[number], keepEdits: boolean) => {
+    if (keepEdits) pick(presetRecipe(p), `${label} now uses ${p.name}.`);
+    else {
+      // Start fresh: the preset with no hand edits (extras go too), keeping the system's id, name and logo.
+      editSystem((doc) => ({ ...migrate(presetRecipe(p), doc.brand, { id: doc.id, name: doc.name, updatedAt: doc.updatedAt }) }));
+      toast(`${label} now uses ${p.name}, without its edits.`, { label: 'Undo', run: undo });
+    }
+    setAsking(null);
+    // Closed, so the toast (and its Undo) isn't hidden behind the menu.
+    setSystemOpen(false);
   };
 
   return (
@@ -135,7 +150,12 @@ export function ThemePill() {
           role="toolbar"
           aria-label="Theme"
           className="border-border bg-background/85 text-foreground pointer-events-auto flex max-w-full items-center gap-1 rounded-full border p-1.5 shadow-[0_8px_30px_rgb(0_0_0/0.12)] backdrop-blur-xl">
-          <Popover open={systemOpen} onOpenChange={setSystemOpen}>
+          <Popover
+            open={systemOpen}
+            onOpenChange={(open) => {
+              setSystemOpen(open);
+              if (!open) setAsking(null);
+            }}>
             <PopoverTrigger className={`${itemClass} hover:bg-accent px-3`} aria-label={ambient ? 'System: none, the colours drift' : `System: ${label}`}>
               <span className="bg-primary size-3 shrink-0 rounded-full" aria-hidden />
               {/* A fixed width: the bar keeps its size whatever the system is called. */}
@@ -171,7 +191,24 @@ export function ThemePill() {
                 })}
               </div>
               <p className="text-muted-foreground px-2.5 pb-1 pt-3 text-xs font-medium">{ambient ? 'Start from a preset' : `Presets for ${label}`}</p>
-              {editsNote ? <p className="text-muted-foreground px-2.5 pb-1 text-xs">Changes {label}. {editsNote}</p> : null}
+              {asking ? (
+                <div role="group" aria-label={`${asking.name} on ${label}`} className="bg-muted/60 mx-1 mb-1.5 flex flex-col gap-2 rounded-lg p-2.5">
+                  <p className="text-sm">
+                    <span className="font-medium">{asking.name}</span> on {label}, which has {edits} hand edit{edits === 1 ? '' : 's'}.
+                  </p>
+                  <div className="flex flex-wrap gap-1.5">
+                    <button type="button" autoFocus onClick={() => applyPreset(asking, true)} className="bg-primary text-primary-foreground focus-visible:ring-ring rounded-full px-3 py-1 text-xs font-medium focus-visible:outline-none focus-visible:ring-2">
+                      Keep my edits
+                    </button>
+                    <button type="button" onClick={() => applyPreset(asking, false)} className="border-border hover:bg-accent focus-visible:ring-ring rounded-full border px-3 py-1 text-xs font-medium focus-visible:outline-none focus-visible:ring-2">
+                      Start fresh
+                    </button>
+                    <button type="button" onClick={() => setAsking(null)} className="text-muted-foreground hover:text-foreground focus-visible:ring-ring rounded-full px-2 py-1 text-xs focus-visible:outline-none focus-visible:ring-2">
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              ) : null}
               <div role="radiogroup" aria-label="Presets" className="flex flex-col" onKeyDown={(e) => rovingKeyDown(e)}>
                 {PRESETS.map((p, i) => {
                   const t = themeFor(normalizeRecipe(p.recipe));
@@ -183,12 +220,8 @@ export function ThemePill() {
                       role="radio"
                       aria-checked={selected}
                       tabIndex={rovingTabIndex(i, Math.max(0, presetIndex))}
-                      // The whole preset: a key it leaves out (button, field) goes back to its default, not the last one.
-                      onClick={() => {
-                        pick(normalizeRecipe({ ...p.recipe, preset: p.id }), `${label} now uses ${p.name}.`);
-                        // Closed, so the toast (and its Undo) isn't hidden behind the menu.
-                        setSystemOpen(false);
-                      }}
+                      // With hand edits, ask first whether to keep them; without, there's nothing to lose.
+                      onClick={() => (edits ? setAsking(p) : applyPreset(p, true))}
                       className={rowClass}>
                       <span className="flex shrink-0 -space-x-1" aria-hidden>
                         <span className="ring-background size-4 rounded-full ring-2" style={{ background: t.resolved.light.primary }} />

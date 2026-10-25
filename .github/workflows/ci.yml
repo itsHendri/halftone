@@ -28,7 +28,7 @@ jobs:
 
       - uses: actions/setup-node@v7
         with:
-          node-version: 24
+          node-version-file: .nvmrc
           cache: npm
 
       # One install for the whole monorepo (npm workspaces, root lockfile).
@@ -77,7 +77,7 @@ jobs:
 
       - uses: actions/setup-node@v7
         with:
-          node-version: 24
+          node-version-file: .nvmrc
           cache: npm
 
       - run: npm ci
@@ -123,7 +123,7 @@ jobs:
 
       - uses: actions/setup-node@v7
         with:
-          node-version: 24
+          node-version-file: .nvmrc
           cache: npm
 
       - run: npm ci
@@ -181,7 +181,7 @@ jobs:
       - uses: actions/setup-node@v7
         if: steps.pending.outputs.skip != 'true'
         with:
-          node-version: 24
+          node-version-file: .nvmrc
 
       - name: Copy apps/${{ matrix.app }} out of the monorepo
         if: steps.pending.outputs.skip != 'true'
@@ -236,7 +236,7 @@ jobs:
 
       - uses: actions/setup-node@v7
         with:
-          node-version: 24
+          node-version-file: .nvmrc
 
       - name: Copy apps/${{ matrix.app }} out, with this commit's halftone-tokens
         run: |
@@ -288,7 +288,7 @@ jobs:
 
       - uses: actions/setup-node@v7
         with:
-          node-version: 24
+          node-version-file: .nvmrc
           cache: npm
 
       - run: npm ci
@@ -318,7 +318,7 @@ jobs:
 
       - uses: actions/setup-node@v7
         with:
-          node-version: 24
+          node-version-file: .nvmrc
           cache: npm
 
       - run: npm ci

@@ -23,6 +23,10 @@ section says which path to take and what to do after: plan first, and wait for a
 
 ## 1. Pick the path
 
+Both kits need Node.js 22.18 or later and are developed on the version in their \`.nvmrc\` (24): run \`nvm use\` (or
+your version manager's equivalent) in the project before \`npm install\`.
+
+
 **A. New mobile prototype**
 
 \`\`\`bash
