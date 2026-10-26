@@ -190,7 +190,7 @@ function FontCard({ role }: { role: FontRole }) {
           <button
             type="button"
             aria-label={`${ROLE_LABEL[role]} font: ${family || 'System'}. Change`}
-            className="border-border hover:bg-accent/60 focus-visible:ring-ring flex w-full min-w-0 flex-col gap-2 rounded-xl border p-3 text-left focus-visible:outline-none focus-visible:ring-2">
+            className="border-border hover:bg-accent focus-visible:ring-ring flex w-full min-w-0 flex-col gap-2 rounded-xl border p-3 text-left focus-visible:outline-none focus-visible:ring-2">
             <span className="text-4xl leading-none" style={{ fontFamily: familyCss(family, role) }} aria-hidden>
               Aa
             </span>
@@ -317,7 +317,7 @@ function TextStyleRow({ name }: { name: TextStyleName }) {
           <button
             type="button"
             aria-label={`${label}, ${meta(family(style.font), style)}${edited.length ? ', edited' : ''}. Edit`}
-            className="hover:bg-accent/60 focus-visible:ring-ring grid w-full min-w-0 grid-cols-[7rem_minmax(0,1fr)] items-center gap-x-3 gap-y-0.5 rounded-lg px-2 py-2 text-left focus-visible:outline-none focus-visible:ring-2 sm:grid-cols-[8rem_minmax(0,1fr)_auto]">
+            className="hover:bg-accent focus-visible:ring-ring grid w-full min-w-0 grid-cols-[7rem_minmax(0,1fr)] items-center gap-x-3 gap-y-0.5 rounded-lg px-2 py-2 text-left focus-visible:outline-none focus-visible:ring-2 sm:grid-cols-[8rem_minmax(0,1fr)_auto]">
             <span className="flex items-center gap-1.5 text-xs font-medium">
               {label}
               <code className="bg-muted text-muted-foreground rounded px-1 font-mono text-[10px]">{name}</code>
@@ -363,7 +363,7 @@ function ExtraTextRow({ item }: { item: Style & { name: string } }) {
           <button
             type="button"
             aria-label={`${extraLabel(name)}, extra text style. Edit`}
-            className="hover:bg-accent/60 focus-visible:ring-ring grid w-full min-w-0 grid-cols-[7rem_minmax(0,1fr)] items-center gap-x-3 gap-y-0.5 rounded-lg px-2 py-2 text-left focus-visible:outline-none focus-visible:ring-2 sm:grid-cols-[8rem_minmax(0,1fr)_auto]">
+            className="hover:bg-accent focus-visible:ring-ring grid w-full min-w-0 grid-cols-[7rem_minmax(0,1fr)] items-center gap-x-3 gap-y-0.5 rounded-lg px-2 py-2 text-left focus-visible:outline-none focus-visible:ring-2 sm:grid-cols-[8rem_minmax(0,1fr)_auto]">
             <span className="flex min-w-0 flex-col gap-0.5 text-xs font-medium">
               <span className="truncate">{extraLabel(name)}</span>
               <ExtraTag />

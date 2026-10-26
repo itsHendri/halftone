@@ -98,7 +98,7 @@ const RADIUS_LABEL: Record<string, string> = { sm: 'Small', md: 'Medium', lg: 'L
 function CornerTile({ px, label, extra }: { px: number; label: string; extra?: boolean }) {
   return (
     <span className="flex w-full flex-col items-center gap-1.5 p-1.5">
-      <span className="border-foreground/60 bg-muted size-12 border-l-2 border-t-2" style={{ borderTopLeftRadius: Math.min(px, 9999) }} aria-hidden />
+      <span className="border-muted-foreground bg-muted size-12 border-l-2 border-t-2" style={{ borderTopLeftRadius: Math.min(px, 9999) }} aria-hidden />
       <span className="text-muted-foreground text-xs">{label}</span>
       {extra ? <ExtraTag /> : null}
     </span>
@@ -131,12 +131,12 @@ function CornerItem({ step, px }: { step: string; px: number }) {
         title={RADIUS_LABEL[step]}
         slot={step}
         trigger={
-          <button type="button" aria-label={`Corner ${label}${edited ? ', edited' : ''}. Edit`} className="hover:bg-accent/60 focus-visible:ring-ring relative w-full rounded-lg focus-visible:outline-none focus-visible:ring-2">
+          <button type="button" aria-label={`Corner ${label}${edited ? ', edited' : ''}. Edit`} className="hover:bg-accent focus-visible:ring-ring relative w-full rounded-lg focus-visible:outline-none focus-visible:ring-2">
             <CornerTile px={full ? 9999 : px} label={label} />
             {edited ? <EditedDot className="absolute left-1.5 top-1.5" /> : null}
           </button>
         }
-        preview={<div className="bg-primary/15 border-primary h-14 border-2" style={{ borderRadius: full ? 9999 : px }} aria-hidden />}
+        preview={<div className="bg-primary-subtle border-primary h-14 border-2" style={{ borderRadius: full ? 9999 : px }} aria-hidden />}
         status={{
           edited: edited ? { onReset: () => setRadius(step, null) } : null,
           note: full ? 'Always a circle: rounded-full stays 9999px.' : edited ? 'Overridden: it no longer follows Base radius.' : `Follows Base radius (${theme.radius}px × its ratio).`,
@@ -174,11 +174,11 @@ function ExtraCorner({ item }: { item: { name: string; value: number } }) {
         title={extraLabel(name)}
         extra={{ name: extraLabel(name), token: name, onRename: (t) => renameExtra(doc, 'radius', name, t), check: (t) => checkExtraName(doc, 'radius', name, t), onDelete: () => deleteExtra('radius', name) }}
         trigger={
-          <button type="button" aria-label={`${extraLabel(name)}, extra corner, ${item.value}px. Edit`} className="hover:bg-accent/60 focus-visible:ring-ring w-full rounded-lg focus-visible:outline-none focus-visible:ring-2">
+          <button type="button" aria-label={`${extraLabel(name)}, extra corner, ${item.value}px. Edit`} className="hover:bg-accent focus-visible:ring-ring w-full rounded-lg focus-visible:outline-none focus-visible:ring-2">
             <CornerTile px={item.value} label={`${extraLabel(name)} · ${item.value}`} extra />
           </button>
         }
-        preview={<div className="bg-primary/15 border-primary h-14 border-2" style={{ borderRadius: item.value }} aria-hidden />}
+        preview={<div className="bg-primary-subtle border-primary h-14 border-2" style={{ borderRadius: item.value }} aria-hidden />}
         status={{ note: <span>Exported as <code className="font-mono">rounded-{name}</code>. No kit component reads it.</span> }}>
         <Field label="Radius px" htmlFor={id}>
           {num(item.value, (v) => updateExtra('radius', name, (e) => ({ ...e, value: v }), `extra.radius.${name}`), { id, min: 0, max: 9999 })}
@@ -341,7 +341,7 @@ function ShadowItem({ level }: { level: string }) {
         title={`Shadow ${level}`}
         slot={cls}
         trigger={
-          <button type="button" aria-label={`Shadow ${level}: ${describeLayers(value[mode])}${edited ? ', edited' : ''}. Edit`} className="hover:bg-accent/60 focus-visible:ring-ring relative w-full rounded-lg text-left focus-visible:outline-none focus-visible:ring-2">
+          <button type="button" aria-label={`Shadow ${level}: ${describeLayers(value[mode])}${edited ? ', edited' : ''}. Edit`} className="hover:bg-accent focus-visible:ring-ring relative w-full rounded-lg text-left focus-visible:outline-none focus-visible:ring-2">
             <ShadowCard css={layerCss(value[site])} label={`Shadow ${level}`} meta={describeLayers(value[site])} />
             {edited ? <EditedDot className="absolute right-2 top-2" /> : null}
           </button>
@@ -378,7 +378,7 @@ function ExtraShadow({ item }: { item: { name: string; light: Layer[]; dark: Lay
         title={extraLabel(name)}
         extra={{ name: extraLabel(name), token: name, onRename: (t) => renameExtra(doc, 'shadow', name, t), check: (t) => checkExtraName(doc, 'shadow', name, t), onDelete: () => deleteExtra('shadow', name) }}
         trigger={
-          <button type="button" aria-label={`${extraLabel(name)}, extra shadow. Edit`} className="hover:bg-accent/60 focus-visible:ring-ring w-full rounded-lg text-left focus-visible:outline-none focus-visible:ring-2">
+          <button type="button" aria-label={`${extraLabel(name)}, extra shadow. Edit`} className="hover:bg-accent focus-visible:ring-ring w-full rounded-lg text-left focus-visible:outline-none focus-visible:ring-2">
             <ShadowCard css={layerCss(item[site])} label={extraLabel(name)} meta={describeLayers(item[site])} extra />
           </button>
         }
@@ -460,7 +460,7 @@ function BorderItem({ role, label }: { role: 'border' | 'input'; label: string }
         title={label}
         slot={role === 'border' ? 'border' : 'border-input'}
         trigger={
-          <button type="button" aria-label={`${label} border: ${width}px ${style}${own.length ? ', edited' : ''}. Edit`} className="hover:bg-accent/60 focus-visible:ring-ring relative w-full rounded-lg text-left focus-visible:outline-none focus-visible:ring-2">
+          <button type="button" aria-label={`${label} border: ${width}px ${style}${own.length ? ', edited' : ''}. Edit`} className="hover:bg-accent focus-visible:ring-ring relative w-full rounded-lg text-left focus-visible:outline-none focus-visible:ring-2">
             <BorderSample width={width} style={style} color={theme.resolved[mode][role]} label={`${label} · ${width}px ${style}`} />
             {own.length ? <EditedDot className="absolute right-2 top-2" /> : null}
           </button>
@@ -524,7 +524,7 @@ function ExtraBorder({ item }: { item: { name: string; width: number; style?: st
         title={extraLabel(name)}
         extra={{ name: extraLabel(name), token: name, onRename: (t) => renameExtra(doc, 'border', name, t), check: (t) => checkExtraName(doc, 'border', name, t), onDelete: () => deleteExtra('border', name) }}
         trigger={
-          <button type="button" aria-label={`${extraLabel(name)}, extra border. Edit`} className="hover:bg-accent/60 focus-visible:ring-ring w-full rounded-lg text-left focus-visible:outline-none focus-visible:ring-2">
+          <button type="button" aria-label={`${extraLabel(name)}, extra border. Edit`} className="hover:bg-accent focus-visible:ring-ring w-full rounded-lg text-left focus-visible:outline-none focus-visible:ring-2">
             <BorderSample width={item.width} style={item.style ?? 'solid'} color={theme.resolved[mode].border} label={`${extraLabel(name)} · ${item.width}px`} extra />
           </button>
         }

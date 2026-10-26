@@ -21,7 +21,7 @@ export function CopyPrompt({ className }: { className?: string }) {
   return (
     // The theme bar slides away on phones while this is in its way (components/theme/theme-pill.tsx).
     <div data-theme-bar-avoid className={`border-border bg-card rounded-xl border ${className ?? ''}`}>
-      <p className="text-fd-foreground/90 p-4 font-mono text-sm leading-6">{prompt}</p>
+      <p className="text-fd-foreground p-4 font-mono text-sm leading-6">{prompt}</p>
       <div data-theme-bar-avoid className="border-border flex items-center justify-between gap-3 border-t px-4 py-2">
         <span className="text-muted-foreground text-xs">Paste into Claude Code, Cursor or any coding agent</span>
         <button

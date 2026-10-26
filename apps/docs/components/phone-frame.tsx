@@ -28,7 +28,7 @@ export function PhoneFrame({ path, title, width = 300, viewportHeight = VIEWPORT
 
   return (
     <div
-      className={`border-border bg-foreground/90 inline-block shrink-0 rounded-[2.75rem] border shadow-xl ${className ?? ''}`}
+      className={`border-border bg-foreground inline-block shrink-0 rounded-[2.75rem] border shadow-xl ${className ?? ''}`}
       style={{ padding: bezel, width: width + bezel * 2 }}>
       <div className="bg-background relative overflow-hidden rounded-[2.1rem]" style={{ width, height: viewportHeight * scale }}>
         {src ? (

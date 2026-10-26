@@ -153,7 +153,7 @@ export function ComponentsTab({ view, onView }: { view: ComponentsView; onView: 
               type="button"
               onClick={() => onView({ uses: null })}
               aria-label="Clear the filter: show every component"
-              className="hover:bg-background/60 focus-visible:ring-ring inline-flex items-center gap-1 rounded-full px-2 py-0.5 focus-visible:outline-none focus-visible:ring-2">
+              className="hover:bg-background focus-visible:ring-ring inline-flex items-center gap-1 rounded-full px-2 py-0.5 focus-visible:outline-none focus-visible:ring-2">
               clear
               <XIcon className="size-3.5" aria-hidden />
             </button>

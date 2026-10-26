@@ -650,7 +650,7 @@ function SpecimenGrid({ name, variant, onVariant, step, onStep, narrow }: { name
               <React.Fragment key={v}>
                 <VariantHeader name={name} variant={v} selected={v === variant} onSelect={() => onVariant(v)} />
                 {[false, ...(icon.length ? [true] : [])].map((withIcon) => (
-                  <span key={String(withIcon)} className={`flex rounded-lg p-1 ${v === variant ? 'bg-accent/60' : ''}`}>
+                  <span key={String(withIcon)} className={`flex rounded-lg p-1 ${v === variant ? 'bg-accent' : ''}`}>
                     <Specimen name={name} shape={shape} variant={v} mode={mode} step={at} icon={withIcon} label={specimenLabel(name, v)} value={valueOf(name, v)} className={fit} />
                   </span>
                 ))}
@@ -667,7 +667,7 @@ function SpecimenGrid({ name, variant, onVariant, step, onStep, narrow }: { name
               <React.Fragment key={r.key}>
                 <span className="text-muted-foreground text-xs">{r.title}</span>
                 {variants.map((v) => (
-                  <span key={v} className={`flex rounded-lg p-1 ${v === variant ? 'bg-accent/60' : ''}`}>
+                  <span key={v} className={`flex rounded-lg p-1 ${v === variant ? 'bg-accent' : ''}`}>
                     <Specimen name={name} shape={shape} variant={v} mode={mode} step={r.step} icon={r.icon} label={specimenLabel(name, v)} value={valueOf(name, v)} className={fit} />
                   </span>
                 ))}
@@ -721,7 +721,7 @@ function CollapsedCard({ name, onOpen, buttonRef }: { name: ComponentName; onOpe
         aria-label={`Open ${def.label}: ${text}${edits ? `, ${edits} edited` : ''}`}
         data-component-card={name}
         onClick={onOpen}
-        className="border-border hover:bg-accent/40 focus-visible:ring-ring flex w-full min-w-0 items-center gap-3 rounded-xl border p-3 pr-9 text-left focus-visible:outline-none focus-visible:ring-2">
+        className="border-border hover:bg-accent focus-visible:ring-ring flex w-full min-w-0 items-center gap-3 rounded-xl border p-3 pr-9 text-left focus-visible:outline-none focus-visible:ring-2">
         <span className="flex min-w-0 flex-1 flex-col gap-0.5">
           <span className="flex flex-wrap items-center gap-x-1.5 text-sm font-semibold">
             {def.label}

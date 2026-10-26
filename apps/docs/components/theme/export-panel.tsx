@@ -47,7 +47,7 @@ export function CopyRow({ label, value, mono = true }: { label: string; value: s
   return (
     <div className="flex flex-col gap-1.5">
       <span className="text-muted-foreground text-xs font-medium">{label}</span>
-      <div className="border-border bg-muted/40 flex items-start gap-2 rounded-lg border p-2 pl-3">
+      <div className="border-border bg-muted-subtle flex items-start gap-2 rounded-lg border p-2 pl-3">
         <span className={`text-foreground min-w-0 flex-1 break-words py-1 text-[13px] leading-5 ${mono ? 'font-mono' : ''}`}>{value}</span>
         <button
           type="button"

@@ -96,7 +96,7 @@ export function PresetCard({ name, recipe: input, selected, tabIndex, onPick }: 
       tabIndex={tabIndex}
       onClick={onPick}
       className={`focus-visible:ring-ring flex flex-col gap-2 rounded-xl border p-1.5 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 ${
-        selected ? 'border-foreground ring-foreground ring-1' : 'border-border hover:border-foreground/40'
+        selected ? 'border-foreground ring-foreground ring-1' : 'border-border hover:border-muted-foreground'
       }`}>
       <span className="flex h-12 items-end justify-between rounded-lg p-2" style={{ background: t.resolved.light.muted }} aria-hidden>
         <span className="text-xl leading-none" style={{ fontFamily: fontFamily(recipe.font.heading), color: t.resolved.light.foreground, fontWeight: 600 }}>

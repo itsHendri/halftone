@@ -32,7 +32,7 @@ function Section({ id, title, note, children }: { id: string; title: string; not
 
 function Metric({ href, label, value, note, warn }: { href: string; label: string; value: React.ReactNode; note: string; warn?: boolean }) {
   return (
-    <a href={href} className="border-border bg-card text-card-foreground hover:border-foreground/30 focus-visible:ring-ring flex flex-col gap-1 rounded-xl border p-4 focus-visible:outline-none focus-visible:ring-2">
+    <a href={href} className="border-border bg-card text-card-foreground hover:border-muted-foreground focus-visible:ring-ring flex flex-col gap-1 rounded-xl border p-4 focus-visible:outline-none focus-visible:ring-2">
       <span className="text-muted-foreground text-xs">{label}</span>
       <span className={`text-xl font-semibold tabular-nums ${warn ? 'text-destructive' : ''}`}>{value}</span>
       <span className="text-muted-foreground text-xs">{note}</span>

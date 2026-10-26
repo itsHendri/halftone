@@ -93,7 +93,7 @@ export default function HomePage() {
       {/* The kits, live: every card below is a real registry component, themed by the bar at the bottom. */}
       <section
         aria-labelledby="live"
-        className="border-border bg-muted/50 border-y"
+        className="border-border bg-muted-subtle border-y"
       >
         <h2 id="live" className="sr-only">
           Live components
@@ -127,7 +127,7 @@ export default function HomePage() {
           <ol className="grid gap-6 md:grid-cols-3">
             {STEPS.map((step, i) => (
               <li key={step.title} className="flex flex-col gap-3">
-                <span className="bg-primary/10 text-primary flex size-9 items-center justify-center rounded-full text-sm font-semibold">
+                <span className="bg-primary-subtle text-foreground flex size-9 items-center justify-center rounded-full text-sm font-semibold">
                   {i + 1}
                 </span>
                 <h3 className="text-lg font-semibold">{step.title}</h3>

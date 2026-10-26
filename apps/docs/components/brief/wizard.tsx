@@ -31,7 +31,7 @@ import { useLiveTheme } from '@/lib/theme/store';
 type Step = { id: string; title: string; section?: Section };
 
 const field =
-  'border-input bg-background text-foreground placeholder:text-muted-foreground/70 focus-visible:ring-ring w-full rounded-lg border px-3 py-2 text-sm leading-6 focus-visible:outline-none focus-visible:ring-2 disabled:opacity-50';
+  'border-input bg-background text-foreground placeholder:text-muted-foreground focus-visible:ring-ring w-full rounded-lg border px-3 py-2 text-sm leading-6 focus-visible:outline-none focus-visible:ring-2 disabled:opacity-50';
 const button =
   'focus-visible:ring-ring inline-flex h-9 items-center justify-center gap-2 rounded-full px-4 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 disabled:opacity-50';
 
@@ -232,7 +232,7 @@ function StartStep({ brief }: { brief: Brief }) {
   return (
     <div className="flex flex-col gap-8">
       {shared ? (
-        <p role="status" className="border-border bg-muted/50 rounded-lg border px-3 py-2 text-sm">
+        <p role="status" className="border-border bg-muted-subtle rounded-lg border px-3 py-2 text-sm">
           This brief came from a shared link. Change anything; it saves in this browser.
         </p>
       ) : null}
@@ -346,7 +346,7 @@ function ReviewStep({ brief, goTo }: { brief: Brief; goTo: (id: string) => void 
   return (
     <div className="flex flex-col gap-8">
       {!brief.platform ? (
-        <p role="status" className="border-border bg-muted/50 rounded-lg border px-3 py-2 text-sm">
+        <p role="status" className="border-border bg-muted-subtle rounded-lg border px-3 py-2 text-sm">
           No platform yet: the agent will ask.{' '}
           <button type="button" className="underline underline-offset-2" onClick={() => goTo('start')}>
             Choose phone, web or both
@@ -355,7 +355,7 @@ function ReviewStep({ brief, goTo }: { brief: Brief; goTo: (id: string) => void 
         </p>
       ) : null}
       {gaps === null ? (
-        <p role="status" className="border-border bg-muted/50 rounded-lg border px-3 py-2 text-sm">
+        <p role="status" className="border-border bg-muted-subtle rounded-lg border px-3 py-2 text-sm">
           The transcript is empty.{' '}
           <button type="button" className="underline underline-offset-2" onClick={() => goTo('transcript')}>
             Paste it
@@ -413,7 +413,7 @@ function ReviewStep({ brief, goTo }: { brief: Brief; goTo: (id: string) => void 
         <h2 id="brief-preview" className="text-base font-semibold">
           BRIEF.md
         </h2>
-        <pre tabIndex={0} aria-label="BRIEF.md preview" className="border-border bg-muted/40 max-h-[28rem] overflow-auto whitespace-pre-wrap rounded-xl border p-4 font-mono text-[13px] leading-6">
+        <pre tabIndex={0} aria-label="BRIEF.md preview" className="border-border bg-muted-subtle max-h-[28rem] overflow-auto whitespace-pre-wrap rounded-xl border p-4 font-mono text-[13px] leading-6">
           {markdown}
         </pre>
       </section>

@@ -48,7 +48,7 @@ export function ShowcaseFrame({ path = '/showcase', title, maxHeight: maxLarge =
           style={{ height: height ?? maxHeight }}
         />
       ) : null}
-      {height === null ? <div className="bg-muted/60 absolute inset-0 animate-pulse" aria-hidden /> : null}
+      {height === null ? <div className="bg-muted-subtle absolute inset-0 animate-pulse" aria-hidden /> : null}
     </div>
   );
 }
