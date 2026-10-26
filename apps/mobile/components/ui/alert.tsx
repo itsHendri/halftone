@@ -11,10 +11,10 @@ const alertVariants = cva('relative w-full rounded-lg border px-4 py-4', {
   variants: {
     variant: {
       default: 'bg-card border-border',
-      info: 'bg-info/10 border-info/40',
-      success: 'bg-success/10 border-success/40',
-      warning: 'bg-warning/15 border-warning/50',
-      destructive: 'bg-destructive/10 border-destructive/40',
+      info: 'bg-info-subtle border-info-border',
+      success: 'bg-success-subtle border-success-border',
+      warning: 'bg-warning-subtle border-warning-border',
+      destructive: 'bg-destructive-subtle border-destructive-border',
     },
   },
   defaultVariants: { variant: 'default' },

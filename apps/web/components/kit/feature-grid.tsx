@@ -20,7 +20,7 @@ export function FeatureGrid({ features, columns = 3, className }: Props) {
       {features.map(({ icon: Icon, title, description }) => (
         <li key={title} className="flex flex-col gap-3">
           {/* halftone-tokens-ignore tint-text: holds only an icon, which needs 3:1 (the token gate checks it) */}
-          <span className="bg-primary/10 text-primary flex size-10 items-center justify-center rounded-lg">
+          <span className="bg-primary-subtle text-primary flex size-10 items-center justify-center rounded-lg">
             <Icon className="size-5" aria-hidden />
           </span>
           <h3 className="font-semibold">{title}</h3>

@@ -41,7 +41,7 @@ export default function Overview() {
           <Text className="font-semibold">Paid by month</Text>
           <Text className="text-muted-foreground text-sm">January to June</Text>
         </View>
-        <BarChart data={MONTHLY.map((m, i) => ({ ...m, className: i === MONTHLY.length - 1 ? 'bg-primary' : 'bg-primary/40' }))} height={140} />
+        <BarChart data={MONTHLY.map((m, i) => ({ ...m, className: i === MONTHLY.length - 1 ? 'bg-primary' : 'bg-muted-foreground' }))} height={140} />
       </Card>
       <View className="gap-3">
         <SectionHeader title="Recent invoices" action="See all" onAction={() => router.navigate('/northwind/invoices')} />

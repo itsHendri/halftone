@@ -39,6 +39,8 @@ export default defineConfig([
         },
       ],
       'halftone/disable-needs-reason': 'error',
+      // The registry sources too: a see-through colour is wrong in a component as much as in a screen.
+      'halftone/no-alpha-colour': 'error',
     },
   },
   {

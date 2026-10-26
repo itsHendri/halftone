@@ -17,11 +17,11 @@ type Props = React.ComponentProps<typeof View> & {
 
 const WELL: Record<IconCircleTone, string> = {
   muted: 'bg-muted',
-  primary: 'bg-primary/15',
-  success: 'bg-success/15',
-  warning: 'bg-warning/15',
-  destructive: 'bg-destructive/15',
-  info: 'bg-info/15',
+  primary: 'bg-primary-subtle',
+  success: 'bg-success-subtle',
+  warning: 'bg-warning-subtle',
+  destructive: 'bg-destructive-subtle',
+  info: 'bg-info-subtle',
 };
 
 const GLYPH: Record<IconCircleTone, string> = {

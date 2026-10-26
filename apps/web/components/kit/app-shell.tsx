@@ -39,7 +39,7 @@ export function AppShell({ brand, nav, footer, topbar, children }: Props) {
             aria-current={active ? 'page' : undefined}
             className={cn(
               'flex h-9 items-center gap-3 rounded-md px-3 text-sm font-medium transition-colors',
-              active ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'text-muted-foreground hover:bg-sidebar-accent/60 hover:text-foreground'
+              active ? 'bg-sidebar-accent text-sidebar-accent-foreground' : 'text-muted-foreground hover:bg-sidebar-accent hover:text-foreground'
             )}>
             <Icon className="size-4" aria-hidden />
             {label}

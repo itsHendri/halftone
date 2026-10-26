@@ -31,7 +31,7 @@ export function KitChip({ label = 'Back to kit', className }: Props) {
           haptic('selection');
           router.replace('/(kit)');
         }}
-        className={cn('bg-foreground/90 h-10 flex-row items-center gap-2 rounded-full pl-3 pr-4 shadow-md shadow-black/20 active:opacity-80', className)}>
+        className={cn('bg-foreground h-10 flex-row items-center gap-2 rounded-full pl-3 pr-4 shadow-md shadow-black/20 active:opacity-80', className)}>
         <Icon as={ArrowLeftIcon} size={16} className="text-background" />
         <Text className="text-background text-sm font-semibold">{label}</Text>
       </Pressable>

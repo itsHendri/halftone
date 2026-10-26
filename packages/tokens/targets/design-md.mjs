@@ -5,7 +5,7 @@
  * The detailed rules stay in DESIGN_SYSTEM.md; this file points there instead of repeating them.
  *   options: { out: 'DESIGN.md', name?: string, description?: string, platform?: 'mobile' | 'web' }
  */
-import { describeTintLimits, textOnTintLimits } from '../lib/contrast.mjs';
+import { subtleLine, textOnSubtle } from '../lib/contrast.mjs';
 import { describeComponents } from '../lib/theme/components.mjs';
 import { describeExtras } from '../lib/theme/extras.mjs';
 import { themeFonts } from './fonts.mjs';
@@ -176,17 +176,18 @@ hex literal or a Tailwind palette colour in UI code. Keys ending in \`-dark\` ar
 - **Background (${hex.background}) and Card (${hex.card}):** the page canvas and raised surfaces.
 - **Muted foreground (${hex['muted-foreground']}):** helper text, captions, placeholders.
 - **Destructive, Success, Warning, Info:** status only, each with its own \`-foreground\`.
+- **Tints:** \`primary-subtle\`, \`success-subtle\`, \`warning-subtle\`, \`destructive-subtle\`, \`info-subtle\` (a tinted
+  surface: an alert, an icon well, a selected card), each with a \`-border\` (\`border-warning-border\`), and
+  \`muted-subtle\`, a surface a step off the page. Pressed fills: \`primary-pressed\`, \`secondary-pressed\`.
 - **Chart 1–5:** data series.
 
 ${contrastLine(ctx)}
 
-A tone's text on that tone's own tint (\`text-success\` on \`bg-success/15\`) is a weaker pairing. With
-this palette it clears AA only for:
-
-${describeTintLimits(textOnTintLimits(ctx.colors))}.
-
-On a stronger tint, the text stays \`text-foreground\` and the tint, an icon or a dot carries the
-colour. \`halftone-tokens check\` flags class strings that break this.
+Colours come from the ramps, not from opacity: a colour at partial opacity (\`bg-primary/15\`) takes on whatever
+is behind it, so its contrast changes with the surface. Tints are the roles above; transparency is for overlays
+only (the scrim behind a sheet, a frosted bar, a focus ring's halo). Text on a tint is \`text-foreground\` or
+\`text-muted-foreground\`; the tone itself goes on the icon or a dot. ${subtleLine(textOnSubtle(ctx.colors))}
+\`halftone-tokens check\` flags class strings that break this.
 ${extrasSection}
 ## Typography
 

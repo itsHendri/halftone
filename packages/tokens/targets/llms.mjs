@@ -4,7 +4,7 @@
  *   options: { out: 'tokens/generated/llms-tokens.md', platform?: 'mobile' | 'web' }
  */
 import { group } from '../lib/resolve.mjs';
-import { AA, describeTintLimits, textOnTintLimits } from '../lib/contrast.mjs';
+import { AA, subtleLine, textOnSubtle } from '../lib/contrast.mjs';
 import { themeStatus } from '../lib/theme/index.mjs';
 import { themeFonts } from './fonts.mjs';
 import { describeComponents } from '../lib/theme/components.mjs';
@@ -23,11 +23,11 @@ export default function llms(ctx, options) {
 ## Tokens
 
 Colours are semantic names only, used as Tailwind classes (\`bg-primary\`, \`text-muted-foreground\`,
-\`border-border\`, \`bg-success/15\`). Never hex, never Tailwind palette colours. Both themes are
+\`border-border\`, \`bg-success-subtle\`). Never hex, never Tailwind palette colours, never a colour at an
+opacity (\`bg-primary/15\`): tints are the \`-subtle\` roles (with \`-border\`), \`muted-subtle\` and the
+\`-pressed\` fills; only overlays (the \`bg-black/50\` scrim, a frosted bar, focus halos) are see-through. Both themes are
 required; ${ctx.contrastFailures?.length ? `${ctx.contrastFailures.length} pairing(s) in this palette fall below WCAG AA (${AA}:1): fix them (\`npm run tokens:build\` names them).` : `every fill/foreground pairing clears WCAG AA (${AA}:1); \`npm run tokens:build\` names any that falls short (\`--strict\` fails on it).`}
-A tone's own text on its own tint (\`text-success\` on \`bg-success/15\`) clears AA only for these
-tints; on a stronger one, put \`text-foreground\` on the tint:
-${describeTintLimits(textOnTintLimits(ctx.colors))}.
+Text on a tint is \`text-foreground\`; the tone goes on the icon or a dot. ${subtleLine(textOnSubtle(ctx.colors))}
 
 | Name | Light | Dark |
 |---|---|---|

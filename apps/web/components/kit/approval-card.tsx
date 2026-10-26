@@ -25,7 +25,7 @@ type Props = {
 export function ApprovalCard({ title, description, details, onApprove, onDeny, approveLabel = 'Approve', denyLabel = 'Not now', className }: Props) {
   const [decision, setDecision] = React.useState<'approved' | 'denied' | null>(null);
   return (
-    <div className={cn('border-warning/40 bg-warning/10 flex flex-col gap-3 rounded-xl border p-4', className)}>
+    <div className={cn('border-warning-border bg-warning-subtle flex flex-col gap-3 rounded-xl border p-4', className)}>
       <div className="flex gap-3">
         <ShieldAlertIcon className="text-warning mt-0.5 size-5 shrink-0" aria-hidden />
         <div className="flex flex-col gap-1">

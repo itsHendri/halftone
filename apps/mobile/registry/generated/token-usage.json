@@ -216,6 +216,9 @@
       "tool-call-card",
       "value-header"
     ],
+    "color.destructive-border": [
+      "alert"
+    ],
     "color.destructive-foreground": [
       "action-grid",
       "badge",
@@ -224,6 +227,12 @@
       "spot",
       "swipe-to-confirm",
       "toast"
+    ],
+    "color.destructive-subtle": [
+      "alert",
+      "icon-circle",
+      "spot",
+      "swipe-to-confirm"
     ],
     "color.field": [
       "input",
@@ -267,7 +276,6 @@
       "sheet",
       "spinner",
       "stepper",
-      "streaming-text",
       "switch",
       "tabs",
       "text",
@@ -284,7 +292,16 @@
       "spot",
       "status-dot"
     ],
+    "color.info-border": [
+      "alert"
+    ],
     "color.info-foreground": [
+      "promo-card",
+      "spot"
+    ],
+    "color.info-subtle": [
+      "alert",
+      "icon-circle",
       "promo-card",
       "spot"
     ],
@@ -294,9 +311,7 @@
       "checkbox",
       "date-picker",
       "radio-group",
-      "select",
       "switch",
-      "tabs",
       "toggle"
     ],
     "color.muted": [
@@ -385,6 +400,7 @@
       "stat-tile",
       "status-dot",
       "stepper",
+      "streaming-text",
       "success-screen",
       "summary-card",
       "swipe-to-confirm",
@@ -397,6 +413,9 @@
       "toggle-group",
       "tool-call-card",
       "value-header"
+    ],
+    "color.muted-subtle": [
+      "spot"
     ],
     "color.popover": [
       "context-menu",
@@ -467,6 +486,17 @@
       "swipe-to-confirm",
       "timeline"
     ],
+    "color.primary-pressed": [
+      "chat-composer"
+    ],
+    "color.primary-subtle": [
+      "icon-circle",
+      "promo-card",
+      "selectable-card",
+      "spot",
+      "stepper",
+      "swipe-to-confirm"
+    ],
     "color.ring": [
       "accordion",
       "badge",
@@ -494,6 +524,9 @@
       "chat-composer",
       "floating-button"
     ],
+    "color.secondary-pressed": [
+      "chat-composer"
+    ],
     "color.success": [
       "alert",
       "icon-circle",
@@ -507,11 +540,20 @@
       "tool-call-card",
       "value-header"
     ],
+    "color.success-border": [
+      "alert"
+    ],
     "color.success-foreground": [
       "promo-card",
       "spot",
       "timeline",
       "toast"
+    ],
+    "color.success-subtle": [
+      "alert",
+      "icon-circle",
+      "promo-card",
+      "spot"
     ],
     "color.warning": [
       "alert",
@@ -524,10 +566,21 @@
       "status-dot",
       "toast"
     ],
+    "color.warning-border": [
+      "alert",
+      "approval-card"
+    ],
     "color.warning-foreground": [
       "promo-card",
       "spot",
       "toast"
+    ],
+    "color.warning-subtle": [
+      "alert",
+      "approval-card",
+      "icon-circle",
+      "promo-card",
+      "spot"
     ],
     "component.badge": [
       "badge"

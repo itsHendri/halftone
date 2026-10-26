@@ -133,7 +133,7 @@ export function SettingsView() {
         </CardContent>
       </Card>
 
-      <Card className="border-destructive/40">
+      <Card className="border-destructive-border">
         <CardHeader>
           <CardTitle>Delete workspace</CardTitle>
           <CardDescription>Removes every invoice, customer and teammate. This can’t be undone.</CardDescription>

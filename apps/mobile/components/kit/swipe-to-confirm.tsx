@@ -99,7 +99,7 @@ export function SwipeToConfirm({ label, onConfirm, confirmLabel = 'Confirmed', t
       accessibilityLabel={label}
       accessibilityHint="Swipe right to confirm">
       <Animated.View pointerEvents="none" style={{ position: 'absolute', top: 0, bottom: 0, left: 0, width: fillWidth }}>
-        <View className={cn('h-full w-full rounded-control', tone === 'destructive' ? 'bg-destructive/15' : 'bg-primary/15')} />
+        <View className={cn('h-full w-full rounded-control', tone === 'destructive' ? 'bg-destructive-subtle' : 'bg-primary-subtle')} />
       </Animated.View>
       <Animated.View
         pointerEvents="none"

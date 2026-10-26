@@ -32,7 +32,7 @@ export function StreamingText({ text, onDone, className }: Props) {
   return (
     <p className={className} aria-live="polite" aria-busy={!done}>
       <span aria-hidden={!done}>{visible}</span>
-      {!done ? <span className="bg-foreground/70 ml-0.5 inline-block h-4 w-1.5 animate-pulse align-middle motion-reduce:animate-none" aria-hidden /> : null}
+      {!done ? <span className="bg-muted-foreground ml-0.5 inline-block h-4 w-1.5 animate-pulse align-middle motion-reduce:animate-none" aria-hidden /> : null}
       {!done ? <span className="sr-only">{text}</span> : null}
     </p>
   );

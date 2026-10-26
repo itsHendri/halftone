@@ -62,7 +62,7 @@ export function ListRow({ leading, select, title, subtitle, value, valueClassNam
   );
   const base = cn('flex min-h-14 w-full items-center gap-3 py-3 text-left', !last && 'border-border border-b', disabled && 'pointer-events-none opacity-50', className);
   // No side offset for the hover: the row's divider must line up with the rows around it.
-  const interactive = 'hover:bg-accent/50 focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:ring-inset';
+  const interactive = 'hover:bg-accent focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:ring-inset';
   if (href) {
     return (
       <Link href={href} aria-disabled={disabled} className={cn(base, interactive)}>

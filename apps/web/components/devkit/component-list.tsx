@@ -31,7 +31,7 @@ function Section({ c, highlighted, bare }: { c: ComponentMeta; highlighted?: boo
       id={c.id}
       aria-labelledby={bare ? undefined : `${c.id}-title`}
       aria-label={bare ? c.title : undefined}
-      className={cn('scroll-mt-20 rounded-xl transition-colors', !bare && 'border-border border p-5', highlighted && 'bg-primary/10')}>
+      className={cn('scroll-mt-20 rounded-xl transition-colors', !bare && 'border-border border p-5', highlighted && 'bg-primary-subtle')}>
       {bare ? null : (
         <div className="mb-4 flex flex-col gap-1">
           <h3 id={`${c.id}-title`} className="text-muted-foreground text-xs font-semibold uppercase tracking-widest">

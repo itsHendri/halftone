@@ -68,7 +68,7 @@ function SelectTrigger({
         // The field's shadow (native draws it as a boxShadow, below).
         fieldShadowClass(level),
         Platform.select({
-          web: 'focus-visible:border-field-focus-border focus-visible:bg-field-focus-bg focus-visible:ring-field-focus-ring aria-invalid:ring-field-error-ring aria-invalid:border-field-error-border aria-invalid:bg-field-error-bg dark:hover:bg-input/50 w-fit whitespace-nowrap text-sm outline-none transition-[color,box-shadow] focus-visible:ring-[length:var(--field-ring-w)] disabled:cursor-not-allowed [&_svg]:pointer-events-none [&_svg]:shrink-0',
+          web: 'focus-visible:border-field-focus-border focus-visible:bg-field-focus-bg focus-visible:ring-field-focus-ring aria-invalid:ring-field-error-ring aria-invalid:border-field-error-border aria-invalid:bg-field-error-bg dark:hover:bg-accent w-fit whitespace-nowrap text-sm outline-none transition-[color,box-shadow] focus-visible:ring-[length:var(--field-ring-w)] disabled:cursor-not-allowed [&_svg]:pointer-events-none [&_svg]:shrink-0',
         }),
         props.disabled && 'bg-field-disabled-bg border-field-disabled-border opacity-50',
         size === 'sm' && 'h-field-sm py-2 sm:py-1.5',

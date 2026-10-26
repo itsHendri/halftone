@@ -48,7 +48,7 @@ export function Stepper({ current, total, labels, variant = 'numbered', classNam
                 <View
                   className={cn(
                     'size-6 items-center justify-center rounded-full',
-                    done ? 'bg-primary' : active ? 'bg-primary/20 border-primary border' : 'bg-muted'
+                    done ? 'bg-primary' : active ? 'bg-primary-subtle border-primary border' : 'bg-muted'
                   )}>
                   <Text className={cn('text-xs font-semibold', done ? 'text-primary-foreground' : active ? 'text-primary' : 'text-muted-foreground')}>
                     {n}

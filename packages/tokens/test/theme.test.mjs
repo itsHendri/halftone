@@ -5,7 +5,7 @@ import { dirname, join } from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
-import { hexToOklchParts, inGamut } from '../lib/color.mjs';
+import { contrast, hexToOklchParts, inGamut } from '../lib/color.mjs';
 import { contrastFailures, contrastPairs } from '../lib/contrast.mjs';
 import { loadTokens } from '../lib/resolve.mjs';
 import { resolveTree } from '../lib/theme/refs.mjs';
@@ -29,7 +29,9 @@ import { textStyleVars } from '../lib/theme/vars.mjs';
 import { brandRamp, curatedRamp } from '../lib/theme/ramp.mjs';
 import nativewind3 from '../targets/nativewind3.mjs';
 import shadcnWeb from '../targets/shadcn-web.mjs';
-import { semanticColors } from '../lib/theme/semantic.mjs';
+import { isDerived, semanticColors, TINT_ROLES } from '../lib/theme/semantic.mjs';
+import { fixContrast } from '../lib/theme/fix.mjs';
+import { resolvedMap } from '../lib/theme/refs.mjs';
 
 const pkg = join(dirname(fileURLToPath(import.meta.url)), '..');
 const repo = join(pkg, '../..');
@@ -119,9 +121,13 @@ test('every preset and 500 random recipes pass the strict contrast gate after au
 test("the default recipe, before fixes, is exactly the kit's original semantic map", () => {
   const theme = generateTheme(DEFAULT_RECIPE, base, { fix: false });
   const original = Object.fromEntries(Object.entries(base.semantic.color).map(([k, v]) => [k, v.$value]));
-  const { button, 'button-foreground': buttonFg, 'button-edge': buttonEdge, field, 'field-edge': fieldEdge, ...rest } = theme.semantic.color;
+  const { button, 'button-foreground': buttonFg, 'button-edge': buttonEdge, field, 'field-edge': fieldEdge, ...all } = theme.semantic.color;
+  // The tints and pressed fills came after (the kit drew them with an alpha): new roles, listed last.
+  const added = (name) => isDerived(name) || TINT_ROLES.includes(name);
+  const rest = Object.fromEntries(Object.entries(all).filter(([name]) => !added(name)));
   assert.deepEqual(rest, original);
-  assert.deepEqual(Object.keys(semanticColors()), Object.keys(original), 'same tokens, same order');
+  assert.deepEqual(Object.keys(semanticColors()).filter((name) => !added(name)), Object.keys(original), 'same tokens, same order');
+  assert.deepEqual(Object.keys(semanticColors()).slice(Object.keys(original).length).filter((name) => !added(name)), []);
   // The default styles draw what the components always drew: a primary button, an input-coloured field.
   assert.deepEqual([button, buttonFg, buttonEdge], [original.primary, original['primary-foreground'], original.primary]);
   assert.deepEqual([field, fieldEdge], [original.input, original.input]);
@@ -356,4 +362,37 @@ test('theme variables match what the build writes for the same tokens', async ()
     const resolved = Object.fromEntries(resolveTree(tokens, mode).filter((t) => t.path[1] === 'color' && t.path[0] === 'semantic').map((t) => [t.path[2], t.$value]));
     assert.deepEqual(resolved, theme.resolved[mode]);
   }
+});
+
+test('tints are ramp steps per mode, and text and icons read on them in every preset', () => {
+  const colors = generateTheme(DEFAULT_RECIPE, base).semantic.color;
+  assert.deepEqual(colors['primary-subtle'], { light: '{primitive.color.brand.100}', dark: '{primitive.color.brand.950}' });
+  assert.deepEqual(colors['destructive-border'], { light: '{primitive.color.danger.300}', dark: '{primitive.color.danger.900}' });
+  assert.deepEqual(colors['muted-subtle'], { light: '{primitive.color.neutral.50}', dark: '{primitive.color.neutral.900}' });
+  assert.deepEqual(colors['primary-pressed'], { light: '{primitive.color.brand.700}', dark: '{primitive.color.brand.400}' });
+  for (const preset of PRESETS) {
+    const theme = generateTheme(preset.recipe, base);
+    for (const mode of ['light', 'dark']) {
+      const pairs = contrastPairs(theme.resolved[mode], mode, { strict: true }).filter((p) => /-(subtle|pressed)$/.test(p.bgName));
+      // Each tone's icon, foreground and muted text on its tint, muted-subtle's two, and two pressed labels.
+      assert.equal(pairs.length, 5 * 3 + 2 + 2, `${preset.id} ${mode}`);
+      for (const p of pairs) assert.ok(p.ratio >= p.threshold, `${preset.id} ${mode} ${p.label} ${p.ratio.toFixed(2)}`);
+    }
+  }
+});
+
+test('the fixer moves a tint that fails, never the ink on it', () => {
+  const prim = resolvedMap({ primitive: base.primitive }, 'light');
+  const lookup = (v) => (v.startsWith('{') ? prim[v.slice(1, -1)] : v);
+  const before = fixContrast(semanticColors(), lookup);
+  const semantic = semanticColors();
+  // A success tint as strong as its icon: the icon can't read on it.
+  semantic['success-subtle'] = { ...semantic['success-subtle'], light: '{primitive.color.success.400}' };
+  const { semantic: fixed, adjustments } = fixContrast(semantic, lookup);
+  const light = (list) => list.filter((a) => a.mode === 'light').map((a) => a.token);
+  assert.deepEqual(light(adjustments), [...light(before.adjustments), 'success-subtle'].sort((a, b) => Object.keys(semantic).indexOf(a) - Object.keys(semantic).indexOf(b)));
+  const { 'success-subtle': moved, ...rest } = fixed;
+  const { 'success-subtle': _, ...was } = before.semantic;
+  assert.deepEqual(rest, was, 'the icon and the text on the tint stay where they were');
+  assert.ok(contrast(lookup(fixed.success.light), moved.light) >= 3);
 });

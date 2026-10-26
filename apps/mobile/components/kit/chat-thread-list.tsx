@@ -60,7 +60,7 @@ export function ChatThreadList({ threads, activeId, onSelect, onNew, className }
                 accessibilityRole="button"
                 accessibilityState={{ selected: active }}
                 aria-current={active ? 'page' : undefined}
-                className={cn('min-h-11 justify-center gap-0.5 rounded-lg px-3 py-2', active ? 'bg-accent' : 'active:bg-accent/60')}>
+                className={cn('min-h-11 justify-center gap-0.5 rounded-lg px-3 py-2', active ? 'bg-accent' : 'active:bg-accent')}>
                 <Text numberOfLines={1} className={cn('text-sm font-medium', active && 'text-accent-foreground')}>
                   {t.title}
                 </Text>

@@ -73,7 +73,7 @@ export default function KitHome() {
         <ol className="grid gap-6 md:grid-cols-3">
           {STEPS.map(([title, body], i) => (
             <li key={title} className="flex flex-col gap-2">
-              <span className="bg-primary/10 text-foreground flex size-8 items-center justify-center rounded-full text-sm font-semibold">{i + 1}</span>
+              <span className="bg-primary-subtle text-foreground flex size-8 items-center justify-center rounded-full text-sm font-semibold">{i + 1}</span>
               <p className="font-semibold">{title}</p>
               <p className="text-muted-foreground text-sm leading-6">{body}</p>
             </li>

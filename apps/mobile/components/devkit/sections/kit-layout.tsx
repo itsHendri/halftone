@@ -11,7 +11,7 @@ import { View } from 'react-native';
 function StickyBottomBarDemo() {
   return (
     <View className="border-border w-full gap-3 overflow-hidden rounded-lg border">
-      <View className="bg-muted/40 h-16 items-center justify-center">
+      <View className="bg-muted-subtle h-16 items-center justify-center">
         <Text className="text-muted-foreground text-sm">scrolling content</Text>
       </View>
       <StickyBottomBar className="pb-3">

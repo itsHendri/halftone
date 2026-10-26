@@ -56,7 +56,7 @@ export function ChatThreadList({ threads, activeId, onSelect, onNew, className }
                     aria-current={active ? 'true' : undefined}
                     className={cn(
                       'focus-visible:ring-ring flex w-full flex-col gap-0.5 rounded-md px-2 py-1.5 text-left transition-colors focus-visible:ring-2 focus-visible:outline-none',
-                      active ? 'bg-accent text-accent-foreground' : 'hover:bg-accent/60'
+                      active ? 'bg-accent text-accent-foreground' : 'hover:bg-accent'
                     )}>
                     <span className="truncate text-sm font-medium">{t.title}</span>
                     {t.preview ? <span className="text-muted-foreground truncate text-xs">{t.preview}</span> : null}

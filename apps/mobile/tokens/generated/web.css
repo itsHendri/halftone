@@ -120,6 +120,19 @@
   --button-edge: oklch(0.5461 0.2152 262.88);
   --field: oklch(0.9197 0.004 286.32);
   --field-edge: oklch(0.9197 0.004 286.32);
+  --muted-subtle: oklch(0.9851 0 0);
+  --primary-subtle: oklch(0.9319 0.0316 255.59);
+  --primary-border: oklch(0.8091 0.0956 251.81);
+  --success-subtle: oklch(0.9624 0.0434 156.74);
+  --success-border: oklch(0.8712 0.1363 154.45);
+  --warning-subtle: oklch(0.9619 0.058 95.62);
+  --warning-border: oklch(0.879 0.1534 91.61);
+  --destructive-subtle: oklch(0.9356 0.0309 17.72);
+  --destructive-border: oklch(0.8077 0.1035 19.57);
+  --info-subtle: oklch(0.9514 0.025 236.82);
+  --info-border: oklch(0.8276 0.1013 230.32);
+  --primary-pressed: oklch(0.4882 0.2172 264.38);
+  --secondary-pressed: oklch(0.9197 0.004 286.32);
   /* Components: Button, Chip, Badge, Input (corners, sizes, text, each variant's colours). */
   --button-radius: 9999px;
   --button-h-sm: 40px;
@@ -355,6 +368,19 @@
   --button-edge: oklch(0.6507 0.1869 259.77);
   --field: oklch(0.2739 0.0055 286.03);
   --field-edge: oklch(0.2739 0.0055 286.03);
+  --muted-subtle: oklch(0.2103 0.0059 285.89);
+  --primary-subtle: oklch(0.2823 0.0874 267.94);
+  --primary-border: oklch(0.3791 0.1378 265.52);
+  --success-subtle: oklch(0.2664 0.0628 152.93);
+  --success-border: oklch(0.3925 0.0896 152.54);
+  --warning-subtle: oklch(0.2791 0.0742 45.64);
+  --warning-border: oklch(0.4137 0.1054 45.9);
+  --destructive-subtle: oklch(0.2575 0.0886 26.04);
+  --destructive-border: oklch(0.3958 0.1331 25.72);
+  --info-subtle: oklch(0.2935 0.0632 243.16);
+  --info-border: oklch(0.3912 0.0845 240.88);
+  --primary-pressed: oklch(0.7137 0.1434 254.62);
+  --secondary-pressed: oklch(0.3703 0.0119 285.81);
   /* Components */
   --button-focus-border: oklch(0.6507 0.1869 259.77);
   --button-primary-bg: oklch(0.6507 0.1869 259.77);
@@ -555,6 +581,19 @@
   --color-button-edge: var(--button-edge);
   --color-field: color-mix(in oklab, var(--field) calc(var(--field-alpha) * 100%), transparent);
   --color-field-edge: var(--field-edge);
+  --color-muted-subtle: var(--muted-subtle);
+  --color-primary-subtle: var(--primary-subtle);
+  --color-primary-border: var(--primary-border);
+  --color-success-subtle: var(--success-subtle);
+  --color-success-border: var(--success-border);
+  --color-warning-subtle: var(--warning-subtle);
+  --color-warning-border: var(--warning-border);
+  --color-destructive-subtle: var(--destructive-subtle);
+  --color-destructive-border: var(--destructive-border);
+  --color-info-subtle: var(--info-subtle);
+  --color-info-border: var(--info-border);
+  --color-primary-pressed: var(--primary-pressed);
+  --color-secondary-pressed: var(--secondary-pressed);
   /* Components: rounded-button, bg-button-primary-bg, border-field-focus-border… */
   --radius-button: var(--button-radius);
   --radius-chip: var(--chip-radius);

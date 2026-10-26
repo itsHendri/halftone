@@ -42,12 +42,12 @@ const GLYPH: Record<SpotTone, string> = {
 };
 
 const HALO: Record<SpotTone, string> = {
-  muted: 'bg-muted/50',
-  primary: 'bg-primary/15',
-  success: 'bg-success/15',
-  warning: 'bg-warning/15',
-  destructive: 'bg-destructive/15',
-  info: 'bg-info/15',
+  muted: 'bg-muted-subtle',
+  primary: 'bg-primary-subtle',
+  success: 'bg-success-subtle',
+  warning: 'bg-warning-subtle',
+  destructive: 'bg-destructive-subtle',
+  info: 'bg-info-subtle',
 };
 
 /**
