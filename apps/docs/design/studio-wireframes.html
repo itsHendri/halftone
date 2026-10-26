@@ -343,4 +343,42 @@ main{max-width:1100px;margin:0 auto}h1{font-size:24px;font-weight:600;margin:0 0
  <div class="card" style="font-family:var(--mono);font-size:12px;line-height:1.7">DESIGN.md / llms.txt<br>## Extras (this brand's own)<br>- trendy-green #7C881A: no kit component uses it; use it in screens.</div>
 </div>
 
+<h2>9 · The open card: component editor (Phase 6.1)</h2>
+<p class="cap">This replaces wireframe 7's chips and popovers for components. Click a card and it opens in place:
+on the left, every size and a states row with the component in context; on the right, an always-visible panel of
+real controls (Style · Shape · Size · Type · Icon · effects · Colours). Clicking a variant column picks the variant
+the Colours group edits. Collapsed cards show their settings as plain text. On a phone the card is full screen,
+with the specimen first and the panel groups as an accordion.</p>
+<div class="win"><div style="display:grid;grid-template-columns:minmax(0,1fr) 260px">
+ <div style="padding:16px">
+  <div style="display:flex;justify-content:space-between;margin-bottom:10px"><b>Button</b><span class="lbl">3 edited · reset all · collapse ▴</span></div>
+  <div style="display:grid;grid-template-columns:70px repeat(5,auto);gap:8px 10px;align-items:center;justify-items:start">
+   <span></span><span class="lbl">Primary</span><span class="lbl">Secondary</span><span class="lbl" style="background:var(--tint);color:var(--tint-fg);border-radius:6px;padding:0 6px">Outline</span><span class="lbl">Ghost</span><span class="lbl">Destructive</span>
+   <span class="lbl">Large</span><span class="kbtn" style="border-radius:99px;background:#2B7047;color:#F0F9F2;padding:9px 18px">Book a call</span><span class="kbtn" style="border-radius:99px;background:#E7E5E4;color:#1C1917;padding:9px 18px">Secondary</span><span class="kbtn" style="border-radius:99px;border:1px solid #2B7047;padding:9px 18px">Outline</span><span class="kbtn" style="border-radius:99px;padding:9px 18px">Ghost</span><span class="kbtn" style="border-radius:99px;background:#DC2626;color:#fff;padding:9px 18px">Delete</span>
+   <span class="lbl">Medium</span><span class="kbtn" style="border-radius:99px;background:#2B7047;color:#F0F9F2">+ New</span><span class="kbtn" style="border-radius:99px;background:#E7E5E4;color:#1C1917">Secondary</span><span class="kbtn" style="border-radius:99px;border:1px solid #2B7047">Outline</span><span class="kbtn" style="border-radius:99px;">Ghost</span><span class="kbtn" style="border-radius:99px;background:#DC2626;color:#fff">Delete</span>
+   <span class="lbl">Small</span><span class="kbtn" style="border-radius:99px;background:#2B7047;color:#F0F9F2;padding:3px 10px;font-size:12px">Save</span><span class="kbtn" style="border-radius:99px;background:#E7E5E4;color:#1C1917;padding:3px 10px;font-size:12px">Secondary</span><span class="kbtn" style="border-radius:99px;border:1px solid #2B7047;padding:3px 10px;font-size:12px">Outline</span><span class="kbtn" style="border-radius:99px;padding:3px 10px;font-size:12px">Ghost</span><span class="kbtn" style="border-radius:99px;background:#DC2626;color:#fff;padding:3px 10px;font-size:12px">Delete</span>
+   <span class="lbl">States</span><span class="kbtn" style="border-radius:99px;border:1px solid #2B7047;background:#F0F9F2;color:#1C1917">Hover</span><span class="kbtn" style="border-radius:99px;border:1px solid #2B7047;background:#DCEFE0;color:#1C1917">Pressed</span><span class="kbtn" style="border-radius:99px;border:1px solid #2B7047;box-shadow:0 0 0 3px #BBDFC4">Focus</span><span class="kbtn" style="border-radius:99px;border:1px solid #2B7047;opacity:.45">Disabled</span><span class="kbtn" style="border-radius:99px;border:1px solid #2B7047">◌ Saving</span>
+  </div>
+  <div style="display:flex;gap:12px;margin-top:14px;padding-top:14px;border-top:1px solid var(--border)">
+   <div class="card" style="flex:1;display:flex;flex-direction:column;gap:8px"><span>Book a discovery call</span><span style="border:1px solid #D6D3D1;border-radius:8px;padding:5px 10px;color:var(--fg3);background:var(--surface)">name@studio.com</span><span style="display:flex;gap:8px;justify-content:flex-end"><span class="kbtn" style="border-radius:99px;border:1px solid #2B7047">Cancel</span><span class="kbtn" style="border-radius:99px;background:#2B7047;color:#F0F9F2">Book a call</span></span></div>
+   <div class="card" style="flex:1;display:flex;justify-content:space-between;align-items:center"><span>Northwind rebrand</span><span class="kbtn" style="border-radius:99px;">Share</span></div>
+  </div>
+  <p class="note">In context: a form footer and a card toolbar, live on the system.</p>
+ </div>
+ <div style="border-left:1px solid var(--border);padding:14px;display:flex;flex-direction:column;gap:6px;font-size:12px">
+  <span class="lbl3">Style</span><div class="f"><b>Solid</b><em>Soft · Outline · Raised</em></div>
+  <span class="lbl3">Shape</span><div class="f">Corner <em>full</em></div><div class="f">Border <em>1</em></div>
+  <span class="lbl3">Size · edited</span><div class="f"><span>S 32 · <b>M 40</b> · L 48</span></div><div class="f">Padding <em>16</em></div><div class="f">Gap <em>6</em></div>
+  <span class="lbl3">Type</span><div class="f">Large <em>500 · Aa</em></div>
+  <span class="lbl3">Icon · effects</span><div class="f">Icon <em>16</em></div><div class="f">Shadow <em>none</em></div><div class="f">Focus ring <em>2 · ring</em></div>
+  <span class="lbl3">Colours · Outline · edited</span><div class="f">Fill <em>none</em></div><div class="f">Label <em>foreground</em></div><div class="f">Border <em>primary</em></div><div class="f">Hover <em>derived · override</em></div>
+  <span class="lbl">Label on fill 15.8 AA · Show usage</span>
+ </div>
+</div></div>
+<div class="card" style="margin-top:10px;display:flex;flex-direction:column;gap:6px">
+ <div style="display:flex;justify-content:space-between"><span>Chip <span class="lbl3">Outline · Full · M 36 · Small 500</span></span><span class="lbl">collapsed</span></div>
+ <div style="display:flex;justify-content:space-between"><span>Badge <span class="lbl3">Pill · Full · Small 500 · AA</span></span><span class="lbl">collapsed</span></div>
+ <div style="display:flex;justify-content:space-between"><span>Input <span class="lbl3">Outline · Medium · M 40 · Body</span></span><span class="lbl">collapsed</span></div>
+</div>
+
 </main></body></html>

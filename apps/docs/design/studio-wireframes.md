@@ -293,6 +293,54 @@ Decided while building (2026-10-22): the size scale is mobile's (the wireframe's
 is a touch target, not a drawn height; the Text knob keeps the component's weight. The Select's value text stays
 14px (it isn't the Text knob's). A border that is the fill by default (a selected chip) follows an edited fill.
 
+### The open card (wireframe 9, Phase 6.1)
+
+Workshopped on 2026-10-26 after using the built editor. **This replaces Direction B's header-chip and popover
+editing for components.** The card stays in the one Foundations scroll, but opens in place to edit. The user asked
+to see components properly, get more properties, and have clearer controls.
+
+What was wrong with B:
+- **One example per variant:** a single size, with no states and no icon.
+- **The popover covered the card** it was editing, and showed a copy of the button instead.
+- **The header chips were cryptic** ("Size · 48").
+- **Too few properties.**
+
+**Collapsed card.**
+- The name, the settings as plain text ("Outline · Full · M 36 · Small 500"), and a small specimen.
+- Click anywhere on the card to open it. Only one card is open at a time.
+
+**Open card.** The card goes full width, with the specimen on the left and the panel on the right.
+- **Specimen:**
+  - A grid of variants by size: Large, Medium, Small, plus a Medium with an icon.
+  - A **states row**: hover, pressed, focus, disabled, loading. Loading is display-only, showing how a spinner sits.
+  - Clicking a **variant column header** selects that variant for the Colours group; the header is highlighted.
+- **In-context strip** under the specimen, live:
+  - Button: a form footer and a card toolbar.
+  - Chip: a filter row.
+  - Badge: a list row.
+  - Input: a short form.
+- **The panel** is always visible, with real controls (segmented pickers, sliders with values) and no popovers.
+  - The groups are always in this order: **Style · Shape · Size · Type · Icon · effects · Colours**. A group
+    appears only if the component has it.
+  - "edited · reset" works per group, and "N edited · reset all" sits in the card header.
+- **Phone:** the open card is full screen. The specimen comes first, showing one size at a time with an S/M/L
+  switcher. The panel groups follow as an accordion. Colours edits the variant you tapped.
+
+| Component | Style | Shape | Size | Type | Icon · effects | Colours |
+| --- | --- | --- | --- | --- | --- | --- |
+| Button | solid · soft · outline · raised | corner, border width | S/M/L height, padding, gap | text style, weight, case | icon size, shadow (none, 1–3), focus ring (width + role) | per variant: fill, label, border; hover/pressed derived with override |
+| Chip | outline · soft · solid | corner, border width | S/M/L height, padding, gap | text style, weight | icon size | Unselected and Selected: fill, label, border; hover derived |
+| Badge | pill · square · soft | corner, border width | S/M height, padding, gap | text style, weight, case | dot/icon size | per variant: fill, label, border (no pressed) |
+| Input (+ Textarea, Select) | outline · filled · underline | corner, border width | S/M/L height, padding | text style, placeholder role | shadow, focus ring | Default, Focus, Error, Disabled: fill, text, border |
+
+Rules:
+- **Size:** the steps are S/M/L. The selected step's height can be fine-tuned, while padding and gap are shared
+  across sizes. The 44px phone floor still applies.
+- **Defaults:** every new property defaults to today's look. Nothing changes until it's edited.
+- **New data:** the new properties (border width, gap, weight, case, icon size, shadow, focus ring, placeholder,
+  Badge S/M) extend the `components` key and the `semantic.component.*` tokens in both kits. That's a tokens minor
+  release.
+
 ## Explicitly deferred
 
 - **Accounts and cloud sync:** a Worker with Hono, D1, Better Auth, R2 for logos, version history. Planned
@@ -320,4 +368,5 @@ is a touch target, not a drawn height; the Text knob keeps the component's weigh
 | 4 | Foundations sections and popovers: 4a the popover, Brand and Colours; 4b the other sections, "+ New", the item menu, locks, extras in every output | 4a PR #65, 4b PR #66 |
 | 5 | Components and Accessibility tabs | PR #67 |
 | 6 | Component-level editing: Button, Chip, Badge, Input (wireframe 7); one theme for both kits: 6a the component-token layer and the kits, 6b the Studio editor | 6a PR #70, 6b PR #71 |
-| 7 | Accounts | later, planned separately |
+| 6.1 | The open-card component editor (wireframe 9): full specimen with states and context, an always-visible property panel, and new properties in tokens and kits | next |
+| 7 | Accounts | not yet: get the builder working well first (user, 2026-10-25) |
