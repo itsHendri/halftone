@@ -336,7 +336,19 @@ What was wrong with B:
 Rules:
 - **Size:** the steps are S/M/L. The selected step's height can be fine-tuned, while padding and gap are shared
   across sizes. The 44px phone floor still applies.
-- **Defaults:** every new property defaults to today's look. Nothing changes until it's edited.
+- **Defaults:** every new property defaults to today's look. Nothing changes until it's edited. Where the two kits
+  differed, the system holds one value for both (user, 2026-10-26): Button icons 16 and Badge icons 12; Shadow 1
+  on every Button but Ghost; Shadow 1 on a boxed Input, none on a filled or underline one.
+- **Colours come from the ramps, not from opacity** (user, 2026-10-26). A colour at partial opacity takes on
+  whatever is behind it, so its contrast changes with the surface (white, a grey card). A component's fill, label,
+  border and pressed colour are roles or ramp steps. Derived hover/pressed is the next step of the fill's ramp away
+  from the page whose label still reads at AA, not the fill at 90%. A default that drew at partial opacity is the
+  nearest step. Transparency is for overlays only: a scrim, a focus ring's halo. The kits' surface tints
+  (`bg-primary/15`) are the one remaining exception until they have tint roles from the ramps.
+- **Decided while building (2026-10-26):**
+  - Badge S/M heights are exact, never shorter than the text and its border.
+  - Input takes S/M/L in both kits: `size` on mobile, `inputSize` on the web.
+  - When the sizes don't fit side by side, the specimen shows one at a time, a row per variant.
 - **New data:** the new properties (border width, gap, weight, case, icon size, shadow, focus ring, placeholder,
   Badge S/M) extend the `components` key and the `semantic.component.*` tokens in both kits. That's a tokens minor
   release.
@@ -368,5 +380,5 @@ Rules:
 | 4 | Foundations sections and popovers: 4a the popover, Brand and Colours; 4b the other sections, "+ New", the item menu, locks, extras in every output | 4a PR #65, 4b PR #66 |
 | 5 | Components and Accessibility tabs | PR #67 |
 | 6 | Component-level editing: Button, Chip, Badge, Input (wireframe 7); one theme for both kits: 6a the component-token layer and the kits, 6b the Studio editor | 6a PR #70, 6b PR #71 |
-| 6.1 | The open-card component editor (wireframe 9): full specimen with states and context, an always-visible property panel, and new properties in tokens and kits | next |
+| 6.1 | The open-card component editor (wireframe 9): full specimen with states and context, an always-visible property panel, and new properties in tokens and kits; 6.1a the properties and the colour rule in tokens and kits, 6.1b the Studio editor | 6.1a PR #87, 6.1b PR #88 |
 | 7 | Accounts | not yet: get the builder working well first (user, 2026-10-25) |
