@@ -2,16 +2,19 @@
  * What the docs site sends each embedded kit for a theme, in that kit's own variable format (the format
  * its tokens:build writes), text styles included (--type-<style>-*). Shared contract: apps/mobile/lib/embed-theme.ts and apps/web/lib/embed-theme.ts.
  */
-import { FONTS, fontByFamily, googleFontsHref, themeHex, themeTextStyles, themeVars, type Theme } from '@halftone-ds/tokens/theme';
+import { COMPONENTS, FONTS, fontByFamily, googleFontsHref, themeHex, themeTextStyles, themeVars, type Theme } from '@halftone-ds/tokens/theme';
 
 type FontRole = 'heading' | 'body' | 'mono';
 /** `roles`: each text style's font role, for the mobile kit, which picks fonts in JS (the web's are variables). */
 type Fonts = { heading?: string; body?: string; mono?: string; roles?: Record<string, FontRole> };
+/** What the mobile kit picks in JS from TOKENS.components (weight, case, shadow, icon size), sent so a live theme reaches it. */
+type Look = { weight?: number; case?: string; shadow?: string | null; icon?: number | null };
 export type KitPayload = {
   code: string | null;
   vars?: Record<'light' | 'dark', Record<string, string>>;
   hex?: Record<'light' | 'dark', Record<string, string>>;
   fonts?: Fonts;
+  components?: Record<string, Look>;
 };
 export type KitPayloads = { code: string | null; mobile: KitPayload; web: KitPayload };
 
@@ -25,9 +28,24 @@ export function kitPayloads(theme: Theme, live: boolean): KitPayloads {
   const roles = Object.fromEntries(Object.entries(themeTextStyles(theme)).map(([name, style]) => [name, style.font]));
   return {
     code: theme.code,
-    mobile: { code: theme.code, vars: themeVars(theme, 'hsl'), hex: themeHex(theme), fonts: { ...fonts, roles } },
+    mobile: { code: theme.code, vars: themeVars(theme, 'hsl'), hex: themeHex(theme), fonts: { ...fonts, roles }, components: componentLooks(theme) },
     web: { code: theme.code, vars: themeVars(theme, 'oklch'), fonts },
   };
+}
+
+/** Each component's look as the mobile kit's lib/embed-theme.ts reads it (the properties it has). */
+function componentLooks(theme: Theme): Record<string, Look> {
+  return Object.fromEntries(
+    Object.entries(theme.components).map(([name, c]) => {
+      const props = COMPONENTS[name as keyof typeof COMPONENTS].props as string[];
+      const look: Look = {};
+      if (props.includes('weight')) look.weight = c.text.weight;
+      if (props.includes('case')) look.case = c.text.case;
+      if (props.includes('shadow')) look.shadow = c.shadow ?? null;
+      if (props.includes('icon')) look.icon = c.icon ?? null;
+      return [name, look];
+    })
+  );
 }
 
 const SANS = "ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif";

@@ -7,8 +7,10 @@
 /** A weight as the font-* class Text reads. */
 export const WEIGHT_CLASS: Record<number, string> = { 400: 'font-normal', 500: 'font-medium', 600: 'font-semibold', 700: 'font-bold' };
 
-/** A label's weight and case: the component's own until a system sets them. */
-export const labelClass = (text: { weight: number; case: string }) => [WEIGHT_CLASS[text.weight] ?? 'font-medium', text.case === 'uppercase' ? 'uppercase' : ''].join(' ');
+/** A label's weight and case: the component's own until a system sets them. `live`: a live theme's, which must also
+ *  undo a committed uppercase. */
+export const labelClass = (text: { weight?: number; case?: string }, live = false) =>
+  [text.weight ? (WEIGHT_CLASS[text.weight] ?? 'font-medium') : '', text.case === 'uppercase' ? 'uppercase' : live && text.case ? 'normal-case' : ''].join(' ').trim();
 
 /** A shadow level (the theme's shadow-sm / md / lg), or `fallback` (the kit's own) while the system sets none. */
 export const shadowClass = (shadow: 'none' | '1' | '2' | '3' | null, fallback: string) =>

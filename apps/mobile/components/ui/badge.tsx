@@ -1,6 +1,7 @@
 import { IconSizeContext } from '@/components/ui/icon';
 import { TextClassContext } from '@/components/ui/text';
 import { labelClass } from '@/lib/component-classes';
+import { useLiveComponent } from '@/lib/palette-context';
 import { TOKENS } from '@/lib/theme';
 import { cn } from '@/lib/utils';
 import { Slot } from '@rn-primitives/slot';
@@ -70,8 +71,9 @@ type BadgeProps = React.ComponentProps<typeof View> & React.RefAttributes<View> 
 
 function Badge({ className, variant, size, asChild, ...props }: BadgeProps) {
   const Component = asChild ? Slot : View;
+  const live = useLiveComponent('badge');
   return (
-    <TextClassContext.Provider value={badgeTextVariants({ variant })}>
+    <TextClassContext.Provider value={cn(badgeTextVariants({ variant }), live && labelClass(live, true))}>
       <IconSizeContext.Provider value={badge.icon}>
         <Component className={cn(badgeVariants({ variant, size }), className)} {...props} />
       </IconSizeContext.Provider>

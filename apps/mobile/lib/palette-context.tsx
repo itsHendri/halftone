@@ -1,5 +1,5 @@
 import { useEmbedMessage } from '@/lib/embed';
-import { applyEmbedTokens, cachedEmbedTokens, parseEmbedTokens, reportApplied, type EmbedTokens } from '@/lib/embed-theme';
+import { applyEmbedTokens, cachedEmbedTokens, parseEmbedTokens, reportApplied, type ComponentLook, type EmbedTokens } from '@/lib/embed-theme';
 import { FONT_FAMILY } from '@/lib/fonts';
 import { NAV_THEME, THEME, TOKENS, type ThemeColorName } from '@/lib/theme';
 import { useKitTheme, type ColorScheme } from '@/lib/theme-context';
@@ -20,13 +20,13 @@ export type PaletteOverride = Partial<Record<ColorScheme, Partial<Palette>>>;
 
 const PaletteContext = React.createContext<Palette | null>(null);
 /** A live theme from the docs picker, when one is showing (embedded web only). */
-type LiveTheme = { code: string; stroke?: number; fonts?: EmbedTokens['fonts'] };
+type LiveTheme = { code: string; stroke?: number; fonts?: EmbedTokens['fonts']; components?: EmbedTokens['components'] };
 const LiveThemeContext = React.createContext<LiveTheme | null>(null);
 
 const liveTheme = (tokens: EmbedTokens | null): LiveTheme | null => {
   if (!tokens?.code) return null;
   const stroke = Number(tokens.vars?.light?.['--icon-stroke']);
-  return { code: tokens.code, stroke: stroke > 0 && stroke < 5 ? stroke : undefined, fonts: tokens.fonts ?? {} };
+  return { code: tokens.code, stroke: stroke > 0 && stroke < 5 ? stroke : undefined, fonts: tokens.fonts ?? {}, components: tokens.components ?? {} };
 };
 
 export function PaletteProvider({ children }: { children: React.ReactNode }) {
@@ -74,6 +74,12 @@ export const useLiveThemeCode = () => React.useContext(LiveThemeContext)?.code ?
 
 /** A live theme's Google fonts by role (embedded web only), or null. */
 export const useLiveFonts = () => React.useContext(LiveThemeContext)?.fonts ?? null;
+
+/**
+ * A live theme's look for one component (weight, case, shadow, icon size: what the kit picks in JS), or null
+ * while the committed theme shows. Components add its classes over their own (embedded web only).
+ */
+export const useLiveComponent = (name: keyof typeof TOKENS.components): ComponentLook | null => React.useContext(LiveThemeContext)?.components?.[name] ?? null;
 
 /** The theme's icon stroke width (Lucide), live override included. */
 export const useIconStroke = () => React.useContext(LiveThemeContext)?.stroke ?? TOKENS.iconStroke;
