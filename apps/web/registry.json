@@ -535,7 +535,7 @@
           "FilterChip",
           "FilterChipRow"
         ],
-        "api": "<FilterChipRow><FilterChip label selected onClick icon? /></FilterChipRow>"
+        "api": "<FilterChipRow><FilterChip label selected onClick icon? size?=\"sm|md|lg\" /></FilterChipRow>"
       }
     },
     {
@@ -1122,7 +1122,7 @@
           "Badge",
           "badgeVariants"
         ],
-        "api": "<Badge variant?>Label</Badge>"
+        "api": "<Badge variant? size?=\"sm|md\">Label</Badge>"
       }
     },
     {

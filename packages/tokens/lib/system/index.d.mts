@@ -82,9 +82,21 @@ export type ComponentEdit = {
   style?: string;
   /** A Foundations corner, or px. */
   radius?: 'sm' | 'md' | 'lg' | 'xl' | '2xl' | 'full' | number;
-  size?: Partial<Record<'sm' | 'md' | 'lg' | 'x', number>>;
+  /** Border width (px). */
+  border?: number;
+  /** Heights per step, then the padding and icon gap every step shares (px). */
+  size?: Partial<Record<'sm' | 'md' | 'lg' | 'x' | 'gap', number>>;
   /** A text style (h1…blockquote). */
   text?: string;
+  weight?: 400 | 500 | 600 | 700;
+  case?: 'none' | 'uppercase';
+  /** Icon size (px). */
+  icon?: number;
+  shadow?: 'none' | '1' | '2' | '3';
+  /** The focus ring: width (px) and a role. */
+  ring?: { width?: number; role?: string };
+  /** Input: the placeholder's role. */
+  placeholder?: string;
   variants?: Record<string, Partial<Record<'fill' | 'label' | 'border' | 'pressed', string>>>;
 };
 export type SystemComponents = Partial<Record<'button' | 'chip' | 'badge' | 'input', ComponentEdit>>;

@@ -94,7 +94,7 @@ export function usageIn(code, colours, roles = {}) {
       if (colour && colours.has(colour[1])) keys.add(`color.${colour[1]}`);
       if (colour && roles[colour[1]]) for (const role of roles[colour[1]]) keys.add(`color.${role}`);
       const component = COMPONENT_CLASS.exec(cls);
-      if (component && (roles[colour?.[1]] || /^(rounded|h|w|size|px|type|text-type|leading-type|tracking-type|border(-b)?)-/.test(cls))) keys.add(`component.${PREFIX[component[1]]}`);
+      if (component && (roles[colour?.[1]] || /^(rounded|h|min-h|w|size|px|gap|type|text-type|leading-type|tracking-type|border(-b)?)-/.test(cls))) keys.add(`component.${PREFIX[component[1]]}`);
       const radius = RADIUS.exec(cls);
       if (radius) keys.add(`radius.${radius[1]}`);
       if (SHADOW[cls]) keys.add(`shadow.${SHADOW[cls]}`);

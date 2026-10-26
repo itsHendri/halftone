@@ -166,7 +166,7 @@ export async function loadTokens(sourcePath) {
 /** The component layer from the file, or (a file from before it) the defaults on the file's colours and shape. */
 function loadComponents({ source, compLight, compDark, prim, colors, radius, shape, type, textStyles, styles, recorded }) {
   const flat = (list) => Object.fromEntries(list.map((t) => [t.path.join('.'), t.$value]));
-  const read = readComponents(flat(compLight), flat(compDark), source.semantic?.component);
+  const read = readComponents(flat(compLight), flat(compDark), source.semantic?.component, { borderWidth: shape.borderWidth });
   if (read) return read;
   const byName = Object.fromEntries(colors.map((c) => [c.name, c]));
   const primMap = Object.fromEntries(prim.map((t) => [t.path.join('.'), t.$value]));

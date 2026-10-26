@@ -101,12 +101,15 @@ npx halftone-tokens theme encode ./acme.halftone.json  # its ht- code, when it h
   tracking is em on every platform, so on native it scales with the style's size (NativeWind's own `tracking-*`
   are fixed px there: `tracking-tight` is -0.25px). `themeVars` carries the styles to live previews
   (`textStyleVars`, `themeTextStyles`).
-- Every theme writes a component layer, `semantic.component.<button|chip|badge|input>`: a corner, heights and
-  padding, a text style and each variant's fill, label, border and pressed colours (references to semantic
-  colours). Both kits read it as `--button-*`, `--chip-*`, `--badge-*` and `--field-*` (`bg-button-primary-bg`,
-  `rounded-chip`, `h-button-md`, `text-type-button` in nativewind3; `type-button` and the same colours in
-  shadcn-web), so a Button looks the same in both. A system's `components` sets any of it (roles by name, a
-  Foundations corner or px). The build's contrast gate checks every variant's label on its fill.
+- Every theme writes a component layer, `semantic.component.<button|chip|badge|input>`: a corner, a border width,
+  heights per size step (Badge S/M, the others S/M/L), padding and the icon gap, a text style with its weight and
+  case, an icon size, a shadow and focus ring (Button, Input), Input's placeholder, and each variant's fill, label,
+  border and pressed colours (references to semantic colours). Both kits read it as `--button-*`, `--chip-*`,
+  `--badge-*` and `--field-*` (`bg-button-primary-bg`, `rounded-chip`, `h-button-md`, `gap-button-gap`,
+  `text-type-button` in nativewind3; `type-button` and the same colours in shadcn-web), so a Button looks the same
+  in both. A system's `components` sets any of it (roles by name, a Foundations corner or px, `COMPONENTS[name].props`
+  lists what each has); until it does, every property draws what the kits always drew. The build's contrast gate
+  checks every variant's label on its fill and Input's placeholder.
 
 From code (`@halftone-ds/tokens/system`, also in `/theme`, browser-safe): `normalizeSystem` / `validateSystem`,
 `createSystem`, `migrate(recipe | code, brand)` and `systemToRecipe`, `generateSystem(system, tokens)` (the same

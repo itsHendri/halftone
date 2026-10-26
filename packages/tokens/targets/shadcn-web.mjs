@@ -95,12 +95,13 @@ function componentsCss(ctx) {
     ...COMPONENT_NAMES.filter((n) => n !== 'input').map((n) => `  --radius-${n}: var(--${n}-radius);`),
     ...Object.entries(colors).map(([key, css]) => `  --color-${key}: ${css};`),
   ];
-  const utilities = COMPONENT_NAMES.map((n) => COMPONENTS[n].prefix).map(
-    (p) => `@utility type-${p} {
+  // A label's weight and case are the component's (Button, Chip, Badge); a font-* or case class still wins.
+  const utilities = COMPONENT_NAMES.map((n) => [n, COMPONENTS[n].prefix]).map(
+    ([n, p]) => `@utility type-${p} {
   font-family: var(--${p}-text-font);
   font-size: var(--${p}-text-size);
   line-height: var(--tw-leading, var(--${p}-text-leading));
-  letter-spacing: var(--tw-tracking, var(--${p}-text-tracking));
+  letter-spacing: var(--tw-tracking, var(--${p}-text-tracking));${COMPONENTS[n].props.includes('weight') ? `\n  font-weight: var(--tw-font-weight, var(--${p}-text-weight));` : ''}${COMPONENTS[n].props.includes('case') ? `\n  text-transform: var(--${p}-text-case);` : ''}
 }`
   );
   return {

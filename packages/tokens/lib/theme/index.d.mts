@@ -106,16 +106,41 @@ export type ComponentShape = {
   h: Partial<Record<'sm' | 'md' | 'lg', number>>;
   /** Horizontal padding (px) by size. */
   x: Partial<Record<'sm' | 'md' | 'lg', number>>;
-  /** Font role, size and line height (px), tracking (em); `style` the text style it follows. */
-  text: { style?: string; font: 'heading' | 'body' | 'mono'; size: number; leading: number; tracking: number };
+  /** Font role, size and line height (px), tracking (em), the label's weight and case; `style` the text style it follows. */
+  text: { style?: string; font: 'heading' | 'body' | 'mono'; size: number; leading: number; tracking: number; weight: number; case: ComponentCase };
+  /** The border width set on the component (px), or null: as the style draws it. */
+  border?: number | null;
+  /** Chip, Badge and Input: the drawn border and bottom edge (px). Button's are per variant. */
+  borderWidth?: number;
+  edgeWidth?: number;
+  /** The gap between an icon and the label (px) by size; Input has none. */
+  gap?: Partial<Record<'sm' | 'md' | 'lg', number>>;
+  /** Icon size (px); null: each kit's own (ICON_DEFAULT on the web). */
+  icon?: number | null;
+  /** Button and Input: a Foundations shadow, 'none', or null: each kit's own. */
+  shadow?: ComponentShadow | null;
+  /** Button and Input: the focus ring's width (px) and role (null: derived). */
+  ring?: { width: number; role: string | null };
+  /** Button: the focused border (the ring's role). */
+  focusBorder?: ComponentColor;
+  /** Input: the placeholder's colour. */
+  placeholder?: ComponentColor;
   variants: Record<string, ComponentVariant>;
 };
+export type ComponentCase = 'none' | 'uppercase';
+export type ComponentShadow = 'none' | '1' | '2' | '3';
+export type ComponentProp = 'border' | 'weight' | 'case' | 'icon' | 'shadow' | 'ring' | 'placeholder';
 export type ComponentShapes = Record<ComponentName, ComponentShape>;
 export type ComponentDefinition = {
   prefix: string;
   label: string;
   styles: string[];
-  sizes: Array<'sm' | 'md' | 'lg' | 'x'>;
+  /** The size steps it has (heights). */
+  steps: Array<'sm' | 'md' | 'lg'>;
+  /** The size keys a system may set: the steps, padding and (not Input) the icon gap. */
+  sizes: Array<'sm' | 'md' | 'lg' | 'x' | 'gap'>;
+  /** The properties beyond style, corner, size and text it has. */
+  props: ComponentProp[];
   variants: Record<string, ComponentSlot[]>;
   text: string;
 };
@@ -124,6 +149,12 @@ export const COMPONENTS: Record<ComponentName, ComponentDefinition>;
 export const CORNERS: Corner[];
 export const SLOTS: ComponentSlot[];
 export const SLOT_VAR: Record<ComponentSlot | 'ring', string>;
+export const WEIGHTS: number[];
+export const CASES: ComponentCase[];
+export const SHADOWS: ComponentShadow[];
+/** The icon size (px) each component draws on the web until a system sets one. */
+export const ICON_DEFAULT: Record<'button' | 'chip' | 'badge', number>;
+export const RING_WIDTH: number;
 /** The touch-target floor (px) the mobile kit applies on phones. */
 export const TOUCH_TARGET: number;
 export function defaultCorner(name: ComponentName, options?: { controls?: string; style?: string }): Corner;

@@ -525,6 +525,9 @@ export const DEMOS: Record<string, ComponentType> = {
       <Badge variant="destructive">Destructive</Badge>
       <StatusBadge dot="bg-success">Paid</StatusBadge>
       <StatusBadge dot="bg-warning">Pending</StatusBadge>
+      <Badge size="sm" variant="secondary">
+        Small
+      </Badge>
     </Row>
   ),
   avatar: () => (

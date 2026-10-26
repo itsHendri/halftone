@@ -179,7 +179,7 @@ export const COMPONENTS: ComponentMeta[] = [
     category: 'inputs',
     files: ['components/kit/filter-chip.tsx'],
     notes: 'filter chips in a scrolling row · selected is the theme\'s Chip colour (inverted by default)',
-    api: '<FilterChipRow><FilterChip label selected onClick icon? /></FilterChipRow>',
+    api: '<FilterChipRow><FilterChip label selected onClick icon? size?="sm|md|lg" /></FilterChipRow>',
     caption: 'Selected is the theme\'s Chip selected colour: inverted neutral by default. For one choice among a few, use SegmentedControl.',
     aliases: ['chips', 'tags', 'filters'],
   },
@@ -448,7 +448,7 @@ export const COMPONENTS: ComponentMeta[] = [
     category: 'data',
     files: ['components/ui/badge.tsx'],
     notes: 'a status or tag · a status is an outline Badge with a coloured dot (`bg-success` …), the word in foreground text',
-    api: '<Badge variant?>Label</Badge>',
+    api: '<Badge variant? size?="sm|md">Label</Badge>',
     aliases: ['tag', 'pill', 'status'],
   },
   {

@@ -1,6 +1,7 @@
 import { Icon } from '@/components/ui/icon';
 import { NativeOnlyAnimatedView } from '@/components/ui/native-only-animated-view';
 import { TextClassContext } from '@/components/ui/text';
+import { shadowClass } from '@/lib/component-classes';
 import { TOKENS } from '@/lib/theme';
 import { cn } from '@/lib/utils';
 import * as SelectPrimitive from '@rn-primitives/select';
@@ -29,7 +30,7 @@ function SelectValue({
       ref={ref}
       className={cn(
         'text-foreground line-clamp-1 flex flex-row items-center gap-2 text-sm',
-        !value && 'text-muted-foreground',
+        !value && 'text-field-placeholder',
         className
       )}
       {...props}
@@ -59,9 +60,11 @@ function SelectTrigger({
       ref={ref}
       className={cn(
         // The theme's Input (semantic.component.input, --field-*), as Input draws it.
-        'bg-field-default-bg border-field-default-border border-field-w border-b-field-edge-w rounded-t-field rounded-b-field-b px-field-x active:opacity-80 flex h-field-md w-full flex-row items-center justify-between gap-2 py-2 shadow-sm',
+        'bg-field-default-bg border-field-default-border border-field-w border-b-field-edge-w rounded-t-field rounded-b-field-b px-field-x active:opacity-80 flex h-field-md w-full flex-row items-center justify-between gap-2 py-2',
+        // A trigger keeps shadow-sm until the system sets a shadow.
+        shadowClass(TOKENS.components.input.shadow, 'shadow-sm'),
         Platform.select({
-          web: 'focus-visible:border-field-focus-border focus-visible:ring-field-focus-ring aria-invalid:ring-field-error-ring aria-invalid:border-field-error-border dark:hover:bg-input/50 w-fit whitespace-nowrap text-sm outline-none transition-[color,box-shadow] focus-visible:ring-[3px] disabled:cursor-not-allowed [&_svg]:pointer-events-none [&_svg]:shrink-0',
+          web: 'focus-visible:border-field-focus-border focus-visible:bg-field-focus-bg focus-visible:ring-field-focus-ring aria-invalid:ring-field-error-ring aria-invalid:border-field-error-border aria-invalid:bg-field-error-bg dark:hover:bg-input/50 w-fit whitespace-nowrap text-sm outline-none transition-[color,box-shadow] focus-visible:ring-[length:var(--field-ring-w)] disabled:cursor-not-allowed [&_svg]:pointer-events-none [&_svg]:shrink-0',
         }),
         props.disabled && 'bg-field-disabled-bg border-field-disabled-border opacity-50',
         size === 'sm' && 'h-field-sm py-2 sm:py-1.5',

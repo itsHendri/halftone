@@ -27,13 +27,22 @@
  *   extras               { color: [], text: [], radius: [], shadow: [], border: [] } named tokens of your own,
  *                        exported (tokens.json `extra.*`) and never drawn by the kits
  *   brand                { name, iconBackground, logo?, logoDark?, mark?, markDark? } (the Studio's BrandState)
- *   components           { button|chip|badge|input: { style?, radius?, size?, text?, variants? } } component-level
- *                        edits (lib/theme/components.mjs), overrides only:
+ *   components           { button|chip|badge|input: { style?, radius?, border?, size?, text?, weight?, case?, icon?,
+ *                        shadow?, ring?, placeholder?, variants? } } component-level edits (lib/theme/components.mjs),
+ *                        overrides only, each where the component has it (COMPONENTS[name].props):
  *                          style     the component's look. Button and Input fold into recipe.button / recipe.field;
  *                                    Chip outline|soft|solid, Badge pill|square|soft
  *                          radius    a Foundations corner (sm…2xl, full) or px
- *                          size      { sm?, md?, lg?, x? } heights and horizontal padding, px (the keys it has)
- *                          text      a text style (h1…blockquote); the component keeps its own weight
+ *                          border    border width, px (Input: its field style's lines)
+ *                          size      { sm?, md?, lg?, x?, gap? } heights per step, then the horizontal padding and
+ *                                    the icon gap every step shares, px (the keys it has: Badge S/M, Input no gap)
+ *                          text      a text style (h1…blockquote): its font, size and tracking
+ *                          weight    400 | 500 | 600 | 700 (the label's; Button, Chip, Badge)
+ *                          case      'none' | 'uppercase' (Button, Badge)
+ *                          icon      icon size, px (Button, Chip, Badge)
+ *                          shadow    'none' | '1' | '2' | '3', a Foundations shadow (Button, Input)
+ *                          ring      { width?: px, role?: a role } the focus ring (Button, Input)
+ *                          placeholder  a role (Input)
  *                          variants  { <variant>: { fill?, label?, border?, pressed? } } roles (ROLE_NAMES), or
  *                                    'none' for a fill or border. Variants are fixed (Input: its states)
  *
@@ -43,7 +52,7 @@
 import { FONTS } from '../theme/fonts.mjs';
 import { STEPS } from '../theme/palettes.mjs';
 import { anchorStep, neutralAnchorStep } from '../theme/ramp.mjs';
-import { COMPONENT_NAMES, COMPONENTS, CORNERS } from '../theme/components.mjs';
+import { CASES, COMPONENT_NAMES, COMPONENTS, CORNERS, SHADOWS, WEIGHTS } from '../theme/components.mjs';
 import { normalizeRecipe, OPTIONS, TEXT_DEFAULTS, TEXT_STYLES } from '../theme/recipe.mjs';
 import { semanticColors } from '../theme/semantic.mjs';
 
@@ -346,7 +355,7 @@ function components(r, input, recipe) {
     const path = `components.${name}`;
     const def = COMPONENTS[name];
     const v = r.object(path, value);
-    r.keys(path, v, ['style', 'radius', 'size', 'text', 'variants']);
+    r.keys(path, v, ['style', 'radius', 'size', 'text', 'variants', ...def.props]);
     const entry = {};
     if (v.style !== undefined) {
       const style = r.oneOf(`${path}.style`, v.style, def.styles);
@@ -358,10 +367,28 @@ function components(r, input, recipe) {
     if (v.radius !== undefined) entry.radius = typeof v.radius === 'number' ? r.num(`${path}.radius`, v.radius, 0, 9999) : r.oneOf(`${path}.radius`, v.radius, CORNERS);
     if (v.size !== undefined) {
       const size = {};
-      for (const [key, px] of r.keys(`${path}.size`, r.object(`${path}.size`, v.size), def.sizes)) size[key] = key === 'x' ? r.num(`${path}.size.x`, px, 0, 64) : r.num(`${path}.size.${key}`, px, 16, 120);
+      for (const [key, px] of r.keys(`${path}.size`, r.object(`${path}.size`, v.size), def.sizes)) {
+        size[key] = key === 'x' ? r.num(`${path}.size.x`, px, 0, 64) : key === 'gap' ? r.num(`${path}.size.gap`, px, 0, 24) : r.num(`${path}.size.${key}`, px, 12, 120);
+      }
       if (Object.keys(size).length) entry.size = size;
     }
     if (v.text !== undefined) entry.text = r.oneOf(`${path}.text`, v.text, TEXT_STYLES);
+    if (v.border !== undefined) entry.border = r.num(`${path}.border`, v.border, 0, 8);
+    if (v.weight !== undefined) entry.weight = r.oneOf(`${path}.weight`, v.weight, WEIGHTS);
+    if (v.case !== undefined) entry.case = r.oneOf(`${path}.case`, v.case, CASES);
+    if (v.icon !== undefined) entry.icon = r.num(`${path}.icon`, v.icon, 8, 40);
+    if (v.shadow !== undefined) entry.shadow = r.oneOf(`${path}.shadow`, String(v.shadow), SHADOWS);
+    if (v.placeholder !== undefined) entry.placeholder = r.oneOf(`${path}.placeholder`, v.placeholder, ROLE_NAMES);
+    if (v.ring !== undefined) {
+      const ring = {};
+      const at = `${path}.ring`;
+      const value = r.object(at, v.ring);
+      r.keys(at, value, ['width', 'role']);
+      if (value.width !== undefined) ring.width = r.num(`${at}.width`, value.width, 0, 8);
+      if (value.role !== undefined) ring.role = r.oneOf(`${at}.role`, value.role, ROLE_NAMES);
+      for (const key of Object.keys(ring)) if (ring[key] === undefined) delete ring[key];
+      if (Object.keys(ring).length) entry.ring = ring;
+    }
     if (v.variants !== undefined) {
       const variants = {};
       for (const [variant, slots] of r.keys(`${path}.variants`, r.object(`${path}.variants`, v.variants), Object.keys(def.variants))) {
@@ -495,7 +522,8 @@ export function systemOverrides(input) {
   for (const section of ['fonts', 'radius', 'shadow', 'border']) for (const key of Object.keys(doc[section])) paths.push(`${section}.${key}`);
   for (const kind of EXTRA_KINDS) for (const item of doc.extras[kind]) paths.push(`extras.${kind}.${item.name}`);
   for (const [name, entry] of Object.entries(doc.components)) {
-    for (const key of ['style', 'radius', 'text']) if (entry[key] !== undefined) paths.push(`components.${name}.${key}`);
+    for (const key of ['style', 'radius', 'text', 'border', 'weight', 'case', 'icon', 'shadow', 'placeholder']) if (entry[key] !== undefined) paths.push(`components.${name}.${key}`);
+    for (const key of Object.keys(entry.ring ?? {})) paths.push(`components.${name}.ring.${key}`);
     for (const key of Object.keys(entry.size ?? {})) paths.push(`components.${name}.size.${key}`);
     for (const [variant, slots] of Object.entries(entry.variants ?? {})) for (const slot of Object.keys(slots)) paths.push(`components.${name}.variants.${variant}.${slot}`);
   }

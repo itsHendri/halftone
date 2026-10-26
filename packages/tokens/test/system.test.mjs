@@ -612,7 +612,7 @@ test('an edited style\'s font role reaches the build from tokens.json', () => {
 });
 
 test('the every-override fixture (CI applies it to both kits) has an override of every kind', async () => {
-  const { COMPONENT_NAMES } = await import('../lib/theme/components.mjs');
+  const { COMPONENT_NAMES, COMPONENTS } = await import('../lib/theme/components.mjs');
   const { EXTRA_KINDS } = await import('../lib/system/schema.mjs');
   const doc = normalizeSystem(JSON.parse(readFileSync(join(pkg, 'test/fixtures/every-override.halftone.json'), 'utf8')));
   const paths = systemOverrides(doc);
@@ -631,6 +631,9 @@ test('the every-override fixture (CI applies it to both kits) has an override of
     'border.style',
     ...EXTRA_KINDS.map((k) => `extras.${k}.`),
     ...COMPONENT_NAMES.map((n) => `components.${n}.`),
+    // Each component's own properties (COMPONENTS[name].props), its size steps, padding and gap.
+    ...COMPONENT_NAMES.flatMap((n) => COMPONENTS[n].props.map((prop) => `components.${n}.${prop}`)),
+    ...COMPONENT_NAMES.flatMap((n) => COMPONENTS[n].sizes.filter((k) => k !== 'md' && k !== 'x').map((k) => `components.${n}.size.${k}`)),
   ];
   assert.deepEqual(kinds.filter((k) => !has(k)), [], 'kinds missing from the fixture');
   assert.equal(systemCode(doc), null, 'it has overrides, so no theme code');

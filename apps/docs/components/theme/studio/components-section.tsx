@@ -287,7 +287,7 @@ function SizeKnob({ name }: { name: ComponentName }) {
   const size = editsOf(doc, name).size ?? {};
   const edited = Object.keys(size).length > 0;
   const id = `component.${name}.size`;
-  const value = (k: string) => (k === 'x' ? shape.x.md : shape.h[k as 'sm'])!;
+  const value = (k: string) => (k === 'x' ? shape.x.md : k === 'gap' ? shape.gap?.md : shape.h[k as 'sm'])!;
   const md = shape.h.md;
   const summary = md !== undefined ? `${md}${md < TOUCH_TARGET ? ` (${TOUCH_TARGET} on phones)` : ''}` : `padding ${shape.x.md}`;
   return (
@@ -319,12 +319,12 @@ function SizeKnob({ name }: { name: ComponentName }) {
   );
 }
 
-function SizeRow({ name, k, value, edited }: { name: ComponentName; k: 'sm' | 'md' | 'lg' | 'x'; value: number; edited: boolean }) {
+function SizeRow({ name, k, value, edited }: { name: ComponentName; k: 'sm' | 'md' | 'lg' | 'x' | 'gap'; value: number; edited: boolean }) {
   const id = React.useId();
   const label = name === 'chip' && k === 'md' ? 'Height' : SIZE_LABELS[k];
   return (
     <Field label={label} htmlFor={id}>
-      {num(value, (v) => setSize(name, k, v), { id, min: k === 'x' ? 0 : 16, max: k === 'x' ? 64 : 120 })}
+      {num(value, (v) => setSize(name, k, v), { id, min: k === 'x' || k === 'gap' ? 0 : 12, max: k === 'x' ? 64 : k === 'gap' ? 24 : 120 })}
       <span className="text-muted-foreground text-xs">px</span>
       {edited ? (
         <button type="button" onClick={() => setSize(name, k, null)} className="text-muted-foreground hover:text-foreground inline-flex items-center gap-1 text-xs underline underline-offset-2" aria-label={`Reset ${label}`}>

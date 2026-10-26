@@ -30,6 +30,11 @@ function FilterChipDemo() {
         ))}
         <FilterChip label="Disabled" disabled />
       </FilterChipRow>
+      <FilterChipRow className="mt-3">
+        <FilterChip size="sm" label="Small" />
+        <FilterChip label="Medium" />
+        <FilterChip size="lg" label="Large" />
+      </FilterChipRow>
     </View>
   );
 }

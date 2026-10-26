@@ -180,5 +180,6 @@ export function withComponents(theme, base, overrides = {}) {
     },
     overrides,
   });
-  return { ...theme, semantic: { ...theme.semantic, component: tokens }, components: shape };
+  // An Input border width set on the system is the field's (--field-border-w, --field-edge-w).
+  return { ...theme, field: { ...theme.field, border: shape.input.borderWidth, edge: shape.input.edgeWidth }, semantic: { ...theme.semantic, component: tokens }, components: shape };
 }

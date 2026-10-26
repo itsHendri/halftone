@@ -34,7 +34,9 @@ export const COMPONENTS = {
     prefix: 'button',
     label: 'Button',
     styles: OPTIONS.button,
-    sizes: ['sm', 'md', 'lg', 'x'],
+    steps: ['sm', 'md', 'lg'],
+    sizes: ['sm', 'md', 'lg', 'x', 'gap'],
+    props: ['border', 'weight', 'case', 'icon', 'shadow', 'ring'],
     variants: { primary: SLOTS, secondary: SLOTS, outline: SLOTS, ghost: SLOTS, destructive: SLOTS },
     text: 'p',
   },
@@ -42,7 +44,9 @@ export const COMPONENTS = {
     prefix: 'chip',
     label: 'Chip',
     styles: ['outline', 'soft', 'solid'],
-    sizes: ['md', 'x'],
+    steps: ['sm', 'md', 'lg'],
+    sizes: ['sm', 'md', 'lg', 'x', 'gap'],
+    props: ['border', 'weight', 'icon'],
     variants: { unselected: SLOTS, selected: SLOTS },
     text: 'small',
   },
@@ -50,7 +54,9 @@ export const COMPONENTS = {
     prefix: 'badge',
     label: 'Badge',
     styles: ['pill', 'square', 'soft'],
-    sizes: ['x'],
+    steps: ['sm', 'md'],
+    sizes: ['sm', 'md', 'x', 'gap'],
+    props: ['border', 'weight', 'case', 'icon'],
     variants: { default: SLOTS, secondary: SLOTS, destructive: SLOTS, outline: SLOTS },
     text: 'small',
   },
@@ -58,11 +64,26 @@ export const COMPONENTS = {
     prefix: 'field',
     label: 'Input',
     styles: OPTIONS.field,
+    steps: ['sm', 'md', 'lg'],
     sizes: ['sm', 'md', 'lg', 'x'],
-    variants: { default: ['fill', 'label', 'border'], focus: ['border'], error: ['border'], disabled: ['fill', 'label', 'border'] },
+    props: ['border', 'placeholder', 'shadow', 'ring'],
+    variants: { default: ['fill', 'label', 'border'], focus: ['fill', 'label', 'border'], error: ['fill', 'label', 'border'], disabled: ['fill', 'label', 'border'] },
     text: 'p',
   },
 };
+
+/** The weights a label can take, and its case (as written, or uppercase). */
+export const WEIGHTS = [400, 500, 600, 700];
+export const CASES = ['none', 'uppercase'];
+/** A component's shadow: none, or a Foundations shadow level. */
+export const SHADOWS = ['none', '1', '2', '3'];
+/**
+ * The icon size (px) the web builds draw until a system sets one: Button 16, Chip 14, Badge 12. Native icons in the
+ * mobile kit's Button and Badge stay at Icon's own 14 until then; the Chip's are 14 everywhere.
+ */
+export const ICON_DEFAULT = { button: 16, chip: 14, badge: 12 };
+/** The focus ring's width (px) until a system sets one: the kits' ring-[3px]. */
+export const RING_WIDTH = 3;
 
 /** The slots as the CSS variables name them. `ring` is the focus ring Input's focus and error states derive. */
 export const SLOT_VAR = { fill: 'bg', label: 'fg', border: 'border', pressed: 'pressed', ring: 'ring' };
@@ -192,7 +213,7 @@ export function componentLayer({ styles, controls, corner, density, borderWidth,
       Object.assign(x, size.x === undefined ? { sm: 16, md: density.x, lg: 24 } : { sm: Math.max(0, size.x - 4), md: size.x, lg: size.x + 4 });
     }
     if (name === 'chip') {
-      h.md = size.md ?? 36;
+      Object.assign(h, { sm: size.sm ?? 32, md: size.md ?? 36, lg: size.lg ?? 40 });
       x.md = size.x ?? 14;
     }
     if (name === 'badge') x.md = size.x ?? 8;
@@ -201,10 +222,29 @@ export function componentLayer({ styles, controls, corner, density, borderWidth,
       x.md = size.x ?? (field.inset ? 16 : 0);
     }
 
-    // Text: the style's font, size and tracking; the line height fits a control (Body → text-base's 24 on 16).
+    // Text: the style's font, size and tracking; the line height fits a control (Body → text-base's 24 on 16). The
+    // weight is the component's own (medium; an Input's regular) until set, and the case as written.
     const textName = o.text ?? def.text;
     const ts = textStyles[textName];
-    const text = { style: textName, font: ts.font, size: round(ts.size), leading: round(ts.size * fittedLeading(textName) * (type.leadingFactor ?? 1)), tracking: ts.tracking };
+    const text = {
+      style: textName,
+      font: ts.font,
+      size: round(ts.size),
+      leading: round(ts.size * fittedLeading(textName) * (type.leadingFactor ?? 1)),
+      tracking: ts.tracking,
+      weight: o.weight ?? (name === 'input' ? 400 : 500),
+      case: o.case ?? 'none',
+    };
+
+    // Border width: Chip and Badge draw the theme's border until set; Input its field style's (an outline box, or
+    // a filled or underline field's bottom line). Button's is per variant, below.
+    const line = o.border;
+    const borderWidthOf = name === 'input' ? (line === undefined ? field.border : field.border ? line : 0) : (line ?? borderWidth);
+    const edgeWidthOf = name === 'input' ? (line ?? field.edge) : borderWidthOf;
+    // A Badge is as tall as its text, padding and border until a height is set (S without the vertical padding).
+    if (name === 'badge') Object.assign(h, { sm: size.sm ?? round(text.leading + 2 * borderWidthOf), md: size.md ?? round(text.leading + 4 + 2 * borderWidthOf) });
+    // The gap between an icon and the label: Button's small size is tighter until the gap is set.
+    const gap = name === 'button' ? (size.gap === undefined ? { sm: 6, md: 8, lg: 8 } : { sm: size.gap, md: size.gap, lg: size.gap }) : name === 'input' ? null : { md: size.gap ?? (name === 'chip' ? 6 : 4) };
 
     // Variants.
     const defaults = variantDefaults(name, style, { button, field });
@@ -213,9 +253,14 @@ export function componentLayer({ styles, controls, corner, density, borderWidth,
       const edits = o.variants?.[variant] ?? {};
       const d = defaults[variant];
       const v = {};
-      if (name === 'input' && variant === 'disabled') {
-        // Disabled follows the default state (at 50% opacity) unless set.
-        for (const slot of slots) v[slot] = edits[slot] ? color(edits[slot], true) : { ...variants.default[slot], edited: false };
+      if (name === 'input' && variant !== 'default') {
+        // Focus, error and disabled follow the default state unless set (disabled at 50% opacity); focus and error
+        // have a border of their own.
+        for (const slot of slots) v[slot] = edits[slot] ? color(edits[slot], true) : d[slot] !== undefined ? color(d[slot]) : { ...variants.default[slot], edited: false };
+        // Their rings: the focus ring's role when one is set, otherwise the border at 50% (focus) or 20% / 40% in
+        // dark (error).
+        if (variant === 'focus') v.ring = o.ring?.role ? { ...color(o.ring.role, true), alpha: { light: 0.5, dark: 0.5 } } : { ...v.border, edited: false, derived: true, alpha: { light: 0.5, dark: 0.5 } };
+        if (variant === 'error') v.ring = { ...v.border, edited: false, derived: true, alpha: { light: 0.2, dark: 0.4 } };
       } else {
         // A border that is the fill by default (a selected chip, a primary button) follows an edited fill.
         const follows = edits.fill !== undefined && edits.border === undefined && JSON.stringify(roleOf(d.border ?? 'none')) === JSON.stringify(roleOf(d.fill ?? 'none')) && d.border !== 'none';
@@ -234,24 +279,45 @@ export function componentLayer({ styles, controls, corner, density, borderWidth,
           else if (d.pressed && edits.fill === undefined) v.pressed = { ...color(d.pressed), derived: true };
           else v.pressed = v.fill.alpha.light === 0 && v.fill.alpha.dark === 0 ? { ...color('accent'), derived: true } : faded(v.fill, 0.9);
         }
-        // Input's focus and error rings: the border at 50% (focus) or 20% / 40% in dark (error).
-        if (name === 'input' && (variant === 'focus' || variant === 'error')) {
-          const ring = variant === 'focus' ? { light: 0.5, dark: 0.5 } : { light: 0.2, dark: 0.4 };
-          v.ring = { ...v.border, edited: false, derived: true, alpha: ring };
-        }
       }
-      // Button borders: a width per variant (0 without a border), and the primary's bottom edge (raised).
+      // Button borders: a width per variant (0 without a border), and the primary's bottom edge (raised). A border
+      // width set on the component is every drawn border's; a raised edge stays at least as thick.
       if (name === 'button') {
         const none = v.border.role === 'none';
         const width = variant === 'primary' ? button.border : variant === 'outline' ? borderWidth : 0;
         const edge = variant === 'primary' ? button.edge : width;
-        v.borderWidth = none ? 0 : width || (edits.border !== undefined ? borderWidth : 0);
-        v.edgeWidth = none ? 0 : Math.max(edge, v.borderWidth);
+        if (line !== undefined) {
+          v.borderWidth = none ? 0 : line;
+          v.edgeWidth = none ? 0 : variant === 'primary' && button.edge > button.border ? Math.max(button.edge, line) : line;
+        } else {
+          v.borderWidth = none ? 0 : width || (edits.border !== undefined ? borderWidth : 0);
+          v.edgeWidth = none ? 0 : Math.max(edge, v.borderWidth);
+        }
+        // The focus ring: the ring role at 50% (Destructive: its own colour at 20%, 40% in dark) until a role is set.
+        v.ring = o.ring?.role
+          ? { ...color(o.ring.role, true), alpha: { light: 0.5, dark: 0.5 } }
+          : variant === 'destructive'
+            ? { ...color('destructive'), derived: true, alpha: { light: 0.2, dark: 0.4 } }
+            : { ...color('ring'), derived: true, alpha: { light: 0.5, dark: 0.5 } };
       }
       variants[variant] = v;
     }
 
     const out = { style, corner: typeof o.radius === 'number' ? null : cornerName, radius, h, x, text, variants };
+    // What every variant shares beyond the basics: the border set on the component (null: as the style draws it),
+    // the gap, the icon size (null: each kit's own), the shadow (null: each kit's own), the focus ring, and Input's
+    // placeholder.
+    out.border = line ?? null;
+    if (name !== 'button') Object.assign(out, { borderWidth: borderWidthOf, edgeWidth: edgeWidthOf });
+    if (gap) out.gap = gap;
+    if (def.props.includes('icon')) out.icon = o.icon ?? (name === 'chip' ? ICON_DEFAULT.chip : null);
+    if (def.props.includes('shadow')) out.shadow = o.shadow ?? null;
+    if (def.props.includes('ring')) {
+      out.ring = { width: o.ring?.width ?? RING_WIDTH, role: o.ring?.role ?? null };
+      // Button: the focused border is the ring's role, opaque.
+      if (name === 'button') out.focusBorder = { ...color(o.ring?.role ?? 'ring', !!o.ring?.role), alpha: { light: 1, dark: 1 } };
+    }
+    if (name === 'input') out.placeholder = { ...color(o.placeholder ?? 'muted-foreground', !!o.placeholder), alpha: { light: 1, dark: 1 } };
     if (name === 'input') {
       out.radiusBottom = round(radius * field.roundBottom, 4);
       out.radius = round(radius * field.round, 4);
@@ -271,19 +337,28 @@ function componentTokens(name, c, { button, field }) {
   if (name === 'input') t['radius-bottom'] = c.radiusBottom;
   if (Object.keys(c.h).length) t.height = { ...c.h };
   t.x = { ...c.x };
-  t.text = { size: c.text.size, leading: c.text.leading, tracking: c.text.tracking, font: `{primitive.font.family.${c.text.font}}` };
+  if (c.gap) t.gap = { ...c.gap };
+  t.text = { size: c.text.size, leading: c.text.leading, tracking: c.text.tracking, font: `{primitive.font.family.${c.text.font}}`, weight: c.text.weight };
+  if (c.text.case === 'uppercase') t.text.uppercase = 1;
   // The style numbers the button and field tokens used to hold (semantic.button.*, semantic.field.*).
   if (name === 'button') Object.assign(t, { alpha: button.alpha, 'border-width': button.border, 'edge-width': button.edge });
+  if (name === 'chip' || name === 'badge') t['border-width'] = c.borderWidth;
   if (name === 'input') {
     Object.assign(t, {
       alpha: moded(field.alpha.light, field.alpha.dark),
-      'border-width': field.border,
-      'edge-width': field.edge,
+      'border-width': c.borderWidth,
+      'edge-width': c.edgeWidth,
       round: field.round,
       'round-bottom': field.roundBottom,
       inset: field.inset,
     });
   }
+  // Set on the system only (a kit keeps its own until then): the icon size and the shadow (0 = none).
+  if (c.icon !== undefined && c.icon !== null) t.icon = c.icon;
+  if (c.shadow) t.shadow = c.shadow === 'none' ? 0 : Number(c.shadow);
+  if (c.ring) t['ring-width'] = c.ring.width;
+  if (c.focusBorder) t['focus-border'] = { light: c.focusBorder.ref.light, dark: c.focusBorder.ref.dark };
+  if (c.placeholder) t.placeholder = { light: c.placeholder.ref.light, dark: c.placeholder.ref.dark };
   for (const [variant, v] of Object.entries(c.variants)) {
     const group = {};
     for (const slot of ['fill', 'label', 'border', 'pressed', 'ring']) {
@@ -300,9 +375,10 @@ function componentTokens(name, c, { button, field }) {
 /**
  * The shape back from a token file's semantic.component group, as componentLayer returns it: `light` / `dark` are
  * the flat resolved maps ('semantic.component.button.radius' → value), `raw` the unresolved group (for the font role
- * and the roles the colours reference). Null when the file has no component tokens (a file from before them).
+ * and the roles the colours reference). Null when the file has no component tokens (a file from before them). A file
+ * from before a property gets its default (`borderWidth`: the theme's border, for Chip and Badge).
  */
-export function readComponents(light, dark, raw) {
+export function readComponents(light, dark, raw, { borderWidth = 1 } = {}) {
   if (!raw || !Object.keys(raw).length) return null;
   const shape = {};
   const at = (map, path) => map[`semantic.component.${path}`];
@@ -310,6 +386,19 @@ export function readComponents(light, dark, raw) {
     let node = raw;
     for (const key of path.split('.')) node = node?.[key];
     return node?.$value;
+  };
+  /** A colour token back as { role, light, dark, alpha }; undefined when the file doesn't have it. */
+  const readColor = (path) => {
+    const lightHex = at(light, path);
+    if (lightHex === undefined) return undefined;
+    const refs = rawValue(path);
+    const role = /\{semantic\.color\.([a-z0-9-]+)\}/.exec(String(isObject(refs) ? refs.light : refs))?.[1] ?? null;
+    return {
+      role,
+      light: String(lightHex).toLowerCase(),
+      dark: String(at(dark, path)).toLowerCase(),
+      alpha: { light: at(light, `${path}-alpha`) ?? 1, dark: at(dark, `${path}-alpha`) ?? 1 },
+    };
   };
   for (const name of COMPONENT_NAMES) {
     if (!raw[name]) return null;
@@ -321,34 +410,55 @@ export function readComponents(light, dark, raw) {
       radius: num('radius', 0),
       h: sizes('height'),
       x: sizes('x'),
-      text: { font, size: num('text.size', 16), leading: num('text.leading', 24), tracking: num('text.tracking', 0) },
+      text: {
+        font,
+        size: num('text.size', 16),
+        leading: num('text.leading', 24),
+        tracking: num('text.tracking', 0),
+        weight: num('text.weight', name === 'input' ? 400 : 500),
+        case: num('text.uppercase', 0) ? 'uppercase' : 'none',
+      },
       variants: {},
     };
     if (name === 'input') out.radiusBottom = num('radius-bottom', out.radius);
+    if (name === 'input') Object.assign(out, { borderWidth: num('border-width', 1), edgeWidth: num('edge-width', 1) });
+    if (name === 'chip' || name === 'badge') out.borderWidth = out.edgeWidth = num('border-width', borderWidth);
+    if (name === 'chip') out.h = { sm: out.h.sm ?? 32, md: out.h.md, lg: out.h.lg ?? 40 };
+    if (name === 'badge') out.h = { sm: out.h.sm ?? round(out.text.leading + 2 * out.borderWidth), md: out.h.md ?? round(out.text.leading + 4 + 2 * out.borderWidth) };
+    if (name !== 'input') {
+      const gap = sizes('gap');
+      out.gap = name === 'button' ? { sm: 6, md: 8, lg: 8, ...gap } : { md: name === 'chip' ? 6 : 4, ...gap };
+    }
+    if (def.props.includes('icon')) out.icon = num('icon', name === 'chip' ? ICON_DEFAULT.chip : null);
+    if (def.props.includes('shadow')) {
+      const level = num('shadow', null);
+      out.shadow = level === null ? null : level === 0 ? 'none' : String(level);
+    }
+    if (def.props.includes('ring')) out.ring = { width: num('ring-width', RING_WIDTH), role: null };
+    if (name === 'button') out.focusBorder = readColor('button.focus-border');
+    if (name === 'input') out.placeholder = readColor('input.placeholder');
     for (const variant of Object.keys(def.variants)) {
       const v = {};
       for (const slot of ['fill', 'label', 'border', 'pressed', 'ring']) {
-        const lightHex = at(light, `${name}.${variant}.${slot}`);
-        if (lightHex === undefined) continue;
-        const refs = rawValue(`${name}.${variant}.${slot}`);
-        const role = /\{semantic\.color\.([a-z0-9-]+)\}/.exec(String(isObject(refs) ? refs.light : refs))?.[1] ?? null;
-        v[slot] = {
-          role,
-          light: String(lightHex).toLowerCase(),
-          dark: String(at(dark, `${name}.${variant}.${slot}`)).toLowerCase(),
-          alpha: { light: at(light, `${name}.${variant}.${slot}-alpha`) ?? 1, dark: at(dark, `${name}.${variant}.${slot}-alpha`) ?? 1 },
-        };
+        const color = readColor(`${name}.${variant}.${slot}`);
+        if (color) v[slot] = color;
       }
+      // Input's focus and error states from before they had a fill and text: the default state's.
+      if (name === 'input' && variant !== 'default') for (const slot of ['fill', 'label']) v[slot] ??= out.variants.default[slot];
       if (at(light, `${name}.${variant}.border-width`) !== undefined) {
         v.borderWidth = at(light, `${name}.${variant}.border-width`);
         v.edgeWidth = at(light, `${name}.${variant}.edge-width`) ?? v.borderWidth;
       }
       out.variants[variant] = v;
     }
+    for (const key of ['focusBorder', 'placeholder']) if (out[key] === undefined) delete out[key];
     shape[name] = out;
   }
   return shape;
 }
+
+/** Colours a component holds beyond its variants: Button's focused border, Input's placeholder. */
+const OWN_COLORS = { button: { focusBorder: 'focus-border' }, input: { placeholder: 'placeholder' } };
 
 /** Every component variable name a shape produces, light block (what an embedded kit may accept). */
 export function componentVarNames() {
@@ -356,46 +466,74 @@ export function componentVarNames() {
   for (const name of COMPONENT_NAMES) {
     const def = COMPONENTS[name];
     const p = def.prefix;
-    names.push(`--${p}-radius`, `--${p}-text-size`, `--${p}-text-leading`, `--${p}-text-tracking`, `--${p}-text-font`);
-    if (name === 'input') names.push('--field-radius-b');
-    for (const s of def.sizes.filter((s) => s !== 'x')) names.push(`--${p}-h-${s}`);
+    names.push(`--${p}-radius`, `--${p}-text-size`, `--${p}-text-leading`, `--${p}-text-tracking`, `--${p}-text-font`, `--${p}-text-weight`);
+    if (def.props.includes('case')) names.push(`--${p}-text-case`);
+    if (name === 'input') names.push('--field-radius-b', '--field-shadow');
+    for (const s of def.steps) names.push(`--${p}-h-${s}`);
     names.push(`--${p}-x`);
-    if (name === 'button') names.push('--button-x-sm', '--button-x-lg');
+    if (name === 'button') names.push('--button-x-sm', '--button-x-lg', '--button-gap-sm');
+    if (name !== 'input') names.push(`--${p}-gap`);
+    if (name === 'chip' || name === 'badge') names.push(`--${p}-border-w`);
+    if (def.props.includes('icon')) names.push(`--${p}-icon`);
+    if (def.props.includes('ring')) names.push(`--${p}-ring-w`);
+    for (const key of Object.values(OWN_COLORS[name] ?? {})) names.push(`--${p}-${key}`);
     for (const [variant, slots] of Object.entries(def.variants)) {
-      const all = [...slots, ...(name === 'input' && (variant === 'focus' || variant === 'error') ? ['ring'] : [])];
+      const all = [...slots, ...(name === 'button' || variant === 'focus' || variant === 'error' ? ['ring'] : [])];
       for (const slot of all) {
         names.push(`--${p}-${variant}-${SLOT_VAR[slot]}`);
         if (ALPHA_SLOTS.has(slot)) names.push(`--${p}-${variant}-${SLOT_VAR[slot]}-a`);
       }
-      if (name === 'button') names.push(`--button-${variant}-border-w`, `--button-${variant}-edge-w`);
+      if (name === 'button') names.push(`--button-${variant}-border-w`, `--button-${variant}-edge-w`, `--button-${variant}-shadow`);
     }
   }
   return names;
 }
 
+const NO_SHADOW = '0 0 #0000';
+
 /**
  * A shape as CSS variables, { light, dark }, in a kit's format (vars.mjs):
- *   'hsl'    mobile: colours as triplets, lengths in px or rem (4 places); no font variable (the kit picks it in JS)
- *   'oklch'  web: oklch colours; `font(role)` writes the text's font family
+ *   'hsl'    mobile: colours as triplets, lengths in px or rem (4 places); no font variable (the kit picks it in JS),
+ *            and no shadow (the kit picks its shadow class from TOKENS)
+ *   'oklch'  web: oklch colours; `font(role)` writes the text's font family; shadows are var(--shadow-N)
  * Colours carry their opacity apart (--button-primary-bg and --button-primary-bg-a), as --button and --button-alpha do.
  */
 export function componentVars(shape, format, convert, font = (role) => `var(--kit-font-${role})`) {
   const light = {};
   const dark = {};
   const rem = (px) => (px >= 9999 ? '9999px' : `${round(px / 16)}rem`);
+  const shadow = (level) => (!level || level === 'none' ? NO_SHADOW : `var(--shadow-${level})`);
   for (const name of COMPONENT_NAMES) {
     const c = shape[name];
     if (!c) continue;
-    const p = COMPONENTS[name].prefix;
+    const def = COMPONENTS[name];
+    const p = def.prefix;
     light[`--${p}-radius`] = rem(c.radius);
     if (name === 'input') light['--field-radius-b'] = rem(c.radiusBottom);
     for (const [s, px] of Object.entries(c.h)) light[`--${p}-h-${s}`] = `${px}px`;
     light[`--${p}-x`] = `${c.x.md}px`;
     if (name === 'button') Object.assign(light, { '--button-x-sm': `${c.x.sm}px`, '--button-x-lg': `${c.x.lg}px` });
+    if (c.gap) {
+      light[`--${p}-gap`] = `${c.gap.md}px`;
+      if (name === 'button') light['--button-gap-sm'] = `${c.gap.sm}px`;
+    }
+    if ((name === 'chip' || name === 'badge') && c.borderWidth !== undefined) light[`--${p}-border-w`] = `${c.borderWidth}px`;
     light[`--${p}-text-size`] = rem(c.text.size);
     light[`--${p}-text-leading`] = rem(c.text.leading);
     light[`--${p}-text-tracking`] = `${c.text.tracking}em`;
+    light[`--${p}-text-weight`] = String(c.text.weight ?? (name === 'input' ? 400 : 500));
+    if (def.props.includes('case')) light[`--${p}-text-case`] = c.text.case ?? 'none';
     if (format !== 'hsl') light[`--${p}-text-font`] = font(c.text.font);
+    if (def.props.includes('icon')) light[`--${p}-icon`] = `${c.icon ?? ICON_DEFAULT[name]}px`;
+    if (c.ring) light[`--${p}-ring-w`] = `${c.ring.width}px`;
+    for (const [key, cssName] of Object.entries(OWN_COLORS[name] ?? {})) {
+      if (!c[key]) continue;
+      light[`--${p}-${cssName}`] = convert(c[key].light);
+      dark[`--${p}-${cssName}`] = convert(c[key].dark);
+    }
+    // Web shadows: Button's until set is the kit's own (Outline's shadow-xs); Input's the field style's (a boxed
+    // field has one). Ghost never has one.
+    if (format !== 'hsl' && name === 'input') light['--field-shadow'] = c.shadow ? shadow(c.shadow) : c.borderWidth ? 'var(--shadow-1)' : NO_SHADOW;
     for (const [variant, v] of Object.entries(c.variants)) {
       for (const [slot, col] of Object.entries(v)) {
         if (!SLOT_VAR[slot] || !col) continue;
@@ -408,6 +546,7 @@ export function componentVars(shape, format, convert, font = (role) => `var(--ki
         }
       }
       if (v.borderWidth !== undefined) Object.assign(light, { [`--button-${variant}-border-w`]: `${v.borderWidth}px`, [`--button-${variant}-edge-w`]: `${v.edgeWidth}px` });
+      if (format !== 'hsl' && name === 'button') light[`--button-${variant}-shadow`] = variant === 'ghost' ? NO_SHADOW : c.shadow ? shadow(c.shadow) : variant === 'outline' ? 'var(--shadow-1)' : NO_SHADOW;
     }
   }
   return { light, dark };
@@ -420,6 +559,7 @@ export function componentColors(shape, css) {
     const c = shape[name];
     if (!c) continue;
     const p = COMPONENTS[name].prefix;
+    for (const [key, cssName] of Object.entries(OWN_COLORS[name] ?? {})) if (c[key]) out[`${p}-${cssName}`] = css(`${p}-${cssName}`, false);
     for (const [variant, v] of Object.entries(c.variants)) {
       for (const slot of Object.keys(v)) {
         if (!SLOT_VAR[slot]) continue;
@@ -446,6 +586,13 @@ export function componentPairs(shape, mode, background, blend) {
       const alpha = v.fill.alpha[mode];
       const bg = alpha >= 1 ? v.fill[mode] : alpha <= 0 ? background : blend(v.fill[mode], background, alpha);
       out.push({ component: name, variant, label: `${COMPONENTS[name].label} ${variant}: label on fill`, fg: v.label[mode], bg, fgRole: v.label.role, bgRole: alpha <= 0 ? 'background' : v.fill.role });
+    }
+    // Input's placeholder, on the default state's fill.
+    if (c.placeholder) {
+      const fill = c.variants.default.fill;
+      const alpha = fill.alpha[mode];
+      const bg = alpha >= 1 ? fill[mode] : alpha <= 0 ? background : blend(fill[mode], background, alpha);
+      out.push({ component: name, variant: 'placeholder', label: 'Input placeholder on fill', fg: c.placeholder[mode], bg, fgRole: c.placeholder.role, bgRole: alpha <= 0 ? 'background' : fill.role });
     }
   }
   return out;
