@@ -55,8 +55,9 @@ export const RAMP_LABELS: Record<ColorRole, string> = {
 };
 
 /**
- * The roles row: 21 semantic colours, the first seven shown and the rest under "more" (wireframe 1). A role's
- * foreground (`primary-foreground`) is edited in the role's own popover.
+ * The roles row: 35 semantic colours, the first seven shown and the rest under "more" (wireframe 1). A role's
+ * foreground (`primary-foreground`) is edited in the role's own popover. The tints (`-subtle`, their `-border`) and
+ * pressed fills are roles like any other: each a ramp step per mode, which a system may move.
  */
 export const ROLES = [
   'primary',
@@ -74,6 +75,19 @@ export const ROLES = [
   'success',
   'warning',
   'info',
+  'primary-subtle',
+  'primary-border',
+  'success-subtle',
+  'success-border',
+  'warning-subtle',
+  'warning-border',
+  'destructive-subtle',
+  'destructive-border',
+  'info-subtle',
+  'info-border',
+  'muted-subtle',
+  'primary-pressed',
+  'secondary-pressed',
   'sidebar',
   'chart-1',
   'chart-2',
@@ -120,6 +134,11 @@ export function rolePair(name: string): { other: string; on: boolean; threshold:
   if (name === 'background') return { other: 'foreground', on: true, threshold: 4.5 };
   if (name === 'foreground') return { other: 'background', on: false, threshold: 4.5 };
   if (['border', 'input', 'ring'].includes(name) || name.startsWith('chart-')) return { other: 'background', on: false, threshold: 3 };
+  // A tint carries foreground text (the gate also checks muted text and the tone's icon); its edge is decoration.
+  if (name.endsWith('-subtle')) return { other: 'foreground', on: true, threshold: 4.5 };
+  if (/^(primary|success|warning|destructive|info)-border$/.test(name)) return null;
+  // A pressed fill keeps its fill's label.
+  if (name.endsWith('-pressed')) return { other: `${name.replace(/-pressed$/, '')}-foreground`, on: true, threshold: 4.5 };
   return { other: `${name}-foreground`, on: true, threshold: 4.5 };
 }
 
