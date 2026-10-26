@@ -354,7 +354,7 @@
         "exports": [
           "Input"
         ],
-        "api": "<Label htmlFor=\"email\">Email</Label><Input id=\"email\" type=\"email\" />"
+        "api": "<Label htmlFor=\"email\">Email</Label><Input id=\"email\" type=\"email\" inputSize?=\"sm|md|lg\" />"
       }
     },
     {
@@ -414,7 +414,7 @@
           "SelectContent",
           "SelectItem"
         ],
-        "api": "<Select value onValueChange><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectItem value /></SelectContent></Select>"
+        "api": "<Select value onValueChange><SelectTrigger size?=\"sm|default|lg\"><SelectValue /></SelectTrigger><SelectContent><SelectItem value /></SelectContent></Select>"
       }
     },
     {

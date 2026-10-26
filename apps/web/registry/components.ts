@@ -81,7 +81,7 @@ export const COMPONENTS: ComponentMeta[] = [
     category: 'inputs',
     files: ['components/ui/input.tsx'],
     notes: 'always with a `Label` · `aria-invalid` for errors',
-    api: '<Label htmlFor="email">Email</Label><Input id="email" type="email" />',
+    api: '<Label htmlFor="email">Email</Label><Input id="email" type="email" inputSize?="sm|md|lg" />',
     aliases: ['text field', 'form field'],
   },
   {
@@ -137,7 +137,7 @@ export const COMPONENTS: ComponentMeta[] = [
     category: 'inputs',
     files: ['components/ui/select.tsx'],
     notes: 'one of 5–15 options in a form; fewer → RadioGroup, more → Command',
-    api: '<Select value onValueChange><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectItem value /></SelectContent></Select>',
+    api: '<Select value onValueChange><SelectTrigger size?="sm|default|lg"><SelectValue /></SelectTrigger><SelectContent><SelectItem value /></SelectContent></Select>',
     aliases: ['dropdown', 'picker'],
   },
   {

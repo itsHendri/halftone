@@ -150,6 +150,14 @@ export function generateTheme(input, base, { fix = true, colors: system } = {}) 
   return withComponents(theme, base);
 }
 
+/** Every ramp (a group of numbered steps) as { ramp: { step: hex } }; `value(path)` resolves a primitive. */
+export const rampsOf = (colors, value) =>
+  Object.fromEntries(
+    Object.entries(colors)
+      .filter(([, steps]) => steps && typeof steps === 'object' && Object.keys(steps).some((k) => /^\d+$/.test(k)))
+      .map(([name, steps]) => [name, Object.fromEntries(Object.keys(steps).filter((k) => /^\d+$/.test(k)).map((k) => [k, value(`primitive.color.${name}.${k}`)]))])
+  );
+
 /**
  * The theme with its component layer (lib/theme/components.mjs): semantic.component (the tokens) and `components`
  * (resolved). Built from the theme's own corners, density, border, styles, text styles and colours, so
@@ -178,6 +186,7 @@ export function withComponents(theme, base, overrides = {}) {
       if (value === undefined) throw new Error(`generateTheme: ${ref} is not in the base tokens`);
       return value;
     },
+    ramps: rampsOf(primitive.color, (path) => prim[path]),
     overrides,
   });
   // An Input border width set on the system is the field's (--field-border-w, --field-edge-w).

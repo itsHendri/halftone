@@ -6,7 +6,7 @@ import { dirname, join } from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
-import { blend } from '../lib/color.mjs';
+import { blend, contrast } from '../lib/color.mjs';
 import { componentPairs, componentVarNames, COMPONENTS, fittedLeading } from '../lib/theme/components.mjs';
 import { loadTokens } from '../lib/resolve.mjs';
 import {
@@ -73,11 +73,28 @@ test('the defaults are what the mobile kit drew: density heights, pill corners, 
   // The colours are roles: the button style's for Primary, the inverted chip, the field style's fill.
   const role = (c) => [c.role, c.light, c.dark, c.alpha.light, c.alpha.dark];
   assert.deepEqual(role(button.variants.primary.fill), ['button', theme.resolved.light.button, theme.resolved.dark.button, 1, 1]);
-  assert.deepEqual(role(button.variants.outline.fill), ['background', theme.resolved.light.background, theme.resolved.dark.input, 1, 0.3]);
-  assert.deepEqual(role(button.variants.secondary.pressed), ['secondary', theme.resolved.light.secondary, theme.resolved.dark.secondary, 0.8, 0.8]);
+  // Colours come from the ramps: Outline's dark fill (the kits' input at 30%) is the step nearest to what it drew.
+  const near = theme.primitives.neutral['900'];
+  assert.deepEqual(role(button.variants.outline.fill), ['background', theme.resolved.light.background, near, 1, 1]);
+  assert.deepEqual(button.variants.outline.fill.ref, { light: '{semantic.color.background}', dark: '{primitive.color.neutral.900}' });
+  // Pressed is the next step of the fill's ramp away from the page whose label still reads, opaque.
+  assert.deepEqual(button.variants.primary.pressed.ref.light, '{primitive.color.brand.700}');
+  assert.deepEqual(button.variants.secondary.pressed.ref, { light: '{primitive.color.neutral.200}', dark: '{primitive.color.neutral.700}' });
+  for (const name of ['button', 'chip', 'badge']) {
+    for (const v of Object.values(theme.components[name].variants)) {
+      for (const slot of ['fill', 'label', 'border', 'pressed']) {
+        const c = v[slot];
+        if (!c) continue;
+        for (const mode of ['light', 'dark']) assert.ok(c.alpha[mode] === 0 || c.alpha[mode] === 1, `${name} ${slot} ${mode} alpha ${c.alpha[mode]}`);
+      }
+      const p = v.pressed;
+      for (const mode of ['light', 'dark']) if (p && p.role !== 'accent') assert.ok(contrast(p[mode], v.label[mode]) >= Math.min(4.5, contrast(v.fill[mode], v.label[mode])), `${name} pressed, ${mode}, reads`);
+    }
+  }
   assert.deepEqual(role(chip.variants.selected.fill), ['foreground', theme.resolved.light.foreground, theme.resolved.dark.foreground, 1, 1]);
   assert.deepEqual(role(chip.variants.selected.label), ['background', theme.resolved.light.background, theme.resolved.dark.background, 1, 1]);
-  assert.deepEqual(role(input.variants.default.fill), ['field', theme.resolved.light.field, theme.resolved.dark.field, 0, 0.3]);
+  // The outline field: clear in light; in dark, the step nearest to the kits' field at 30%. Its ring is an overlay.
+  assert.deepEqual(role(input.variants.default.fill), ['field', theme.resolved.light.field, theme.primitives.neutral['900'], 0, 1]);
   assert.deepEqual(role(input.variants.focus.ring), ['ring', theme.resolved.light.ring, theme.resolved.dark.ring, 0.5, 0.5]);
   // Borders: none is clear (the fill's colour at no opacity); a Button without one has no width.
   assert.deepEqual([badge.variants.default.border.light, badge.variants.default.border.alpha.light], [badge.variants.default.fill.light, 0]);
@@ -195,7 +212,7 @@ test('a system without component edits is the recipe theme; edits change only wh
   // Secondary: the new fill, its pressed derived at 90%, a border that now has a width.
   const secondary = button.variants.secondary;
   assert.deepEqual([secondary.fill.role, secondary.fill.light, secondary.fill.edited], ['muted', t.resolved.light.muted, true]);
-  assert.deepEqual([secondary.pressed.role, secondary.pressed.alpha.light, secondary.pressed.derived], ['muted', 0.9, true]);
+  assert.deepEqual([secondary.pressed.ref.light, secondary.pressed.alpha.light, secondary.pressed.derived], ['{primitive.color.neutral.200}', 1, true]);
   assert.deepEqual([secondary.border.role, secondary.borderWidth], ['border', t.borderWidth]);
   assert.deepEqual([button.variants.primary.pressed.role, button.variants.primary.pressed.alpha.light], ['accent', 1]);
   // Chip selected is a role now; its border (the fill by default) follows the fill.
@@ -233,8 +250,8 @@ test('the open card’s properties: border, gap, weight, case, icon, shadow, foc
   assert.deepEqual([button.focusBorder.role, button.variants.destructive.ring.role, button.variants.ghost.ring.alpha.light], ['primary', 'primary', 0.5]);
   // Chip: S/M/L, no border, its own gap and icon.
   assert.deepEqual([chip.h, chip.borderWidth, chip.gap, chip.text.weight, chip.icon], [{ sm: 28, md: 36, lg: 44 }, 0, { md: 4 }, 700, 16]);
-  // Badge: S and M set, a thicker border.
-  assert.deepEqual([badge.h, badge.borderWidth, badge.gap, badge.text.case, badge.icon], [{ sm: 20, md: 30 }, 2, { md: 2 }, 'uppercase', 10]);
+  // Badge: S and M set (exact, but never shorter than the text's line and border: S 20 is 20 + 2 + 2), a thicker border.
+  assert.deepEqual([badge.h, badge.borderWidth, badge.gap, badge.text.case, badge.icon], [{ sm: 24, md: 30 }, 2, { md: 2 }, 'uppercase', 10]);
   // Input, filled: the border is its bottom line (a filled field has no box), no shadow, the ring and placeholder.
   assert.deepEqual([input.borderWidth, input.edgeWidth, input.shadow, input.ring], [0, 3, 'none', { width: 4, role: 'accent' }]);
   assert.deepEqual([input.placeholder.role, input.variants.focus.ring.role, input.variants.error.fill.role], ['foreground', 'accent', 'destructive']);
@@ -328,10 +345,10 @@ test('a token file from before the layer gets the defaults', async () => {
   assert.equal(ctx.components.chip.variants.selected.fill.light, ctx.colors.find((c) => c.name === 'foreground').light);
 });
 
-test('label-on-fill pairings blend a see-through fill over the page', () => {
+test('label-on-fill pairings: a clear fill is the page; fills are opaque ramp steps', () => {
   const pairs = componentPairs(theme.components, 'dark', theme.resolved.dark.background, blend);
   const outline = pairs.find((p) => p.component === 'button' && p.variant === 'outline');
-  assert.equal(outline.bg, blend(theme.resolved.dark.input, theme.resolved.dark.background, 0.3));
+  assert.equal(outline.bg, theme.primitives.neutral['900']);
   const ghost = pairs.find((p) => p.component === 'button' && p.variant === 'ghost');
   assert.equal(ghost.bg, theme.resolved.dark.background);
   // Input's states each have text on a fill now, and the placeholder sits on the default fill.

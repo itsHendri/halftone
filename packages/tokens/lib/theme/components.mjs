@@ -16,7 +16,12 @@
  * Phones raise anything under 44px to a 44px touch target (hitSlop) in the mobile kit; the tokens hold the
  * drawn sizes.
  */
+import { blend, contrast, deltaEOK, relativeLuminance } from '../color.mjs';
 import { OPTIONS, TEXT_DEFAULTS, TEXT_LINE_HEIGHT } from './recipe.mjs';
+
+/** WCAG AA for a label (contrast.mjs's AA; not imported, contrast.mjs reads this module). */
+const AA_TEXT = 4.5;
+const RAMP_REF = /^\{primitive\.color\.([a-z0-9-]+)\.(\d+)\}$/;
 
 export const COMPONENT_NAMES = ['button', 'chip', 'badge', 'input'];
 /** A Foundations corner a component can follow (rounded-sm…2xl, full); a number is an override in px. */
@@ -122,15 +127,15 @@ function variantDefaults(name, style, { button, field }) {
   if (name === 'button') {
     return {
       primary: { fill: a('button', button.alpha), label: 'button-foreground', border: 'button-edge' },
-      secondary: { fill: 'secondary', label: 'secondary-foreground', border: 'none', pressed: a('secondary', 0.8) },
-      outline: { fill: both('background', a('input', 0.3)), label: 'foreground', border: both('border', 'input'), pressed: both('accent', a('input', 0.5)) },
-      ghost: { fill: 'none', label: 'foreground', border: 'none', pressed: both('accent', a('accent', 0.5)) },
+      secondary: { fill: 'secondary', label: 'secondary-foreground', border: 'none' },
+      outline: { fill: both('background', a('input', 0.3)), label: 'foreground', border: both('border', 'input'), pressed: 'accent' },
+      ghost: { fill: 'none', label: 'foreground', border: 'none', pressed: 'accent' },
       destructive: { fill: 'destructive', label: 'destructive-foreground', border: 'none' },
     };
   }
   if (name === 'chip') {
     const unselected =
-      style === 'outline' ? { fill: 'background', label: 'foreground', border: 'border', pressed: 'accent' } : { fill: 'secondary', label: 'secondary-foreground', border: 'none', pressed: a('secondary', 0.8) };
+      style === 'outline' ? { fill: 'background', label: 'foreground', border: 'border', pressed: 'accent' } : { fill: 'secondary', label: 'secondary-foreground', border: 'none' };
     // Selected is inverted (foreground on background), whatever the style but solid, which fills it with the brand.
     const selected = style === 'solid' ? { fill: 'primary', label: 'primary-foreground', border: 'primary' } : { fill: 'foreground', label: 'background', border: 'foreground' };
     return { unselected, selected };
@@ -180,7 +185,7 @@ function roleOf(spec) {
  *   hex          (ref, mode) → '#rrggbb'
  *   overrides    a system's `components` (normalised; Button and Input styles already folded into the recipe)
  */
-export function componentLayer({ styles, controls, corner, density, borderWidth, button, field, textStyles, type, hex, overrides = {} }) {
+export function componentLayer({ styles, controls, corner, density, borderWidth, button, field, textStyles, type, hex, ramps = {}, overrides = {} }) {
   const tokens = {};
   const shape = {};
   const color = (spec, edited) => {
@@ -195,7 +200,72 @@ export function componentLayer({ styles, controls, corner, density, borderWidth,
       alpha: { light: round(light.alpha), dark: round(dark.alpha) },
     };
   };
-  const faded = (c, by) => ({ ...c, role: c.role, edited: false, derived: true, alpha: { light: round(c.alpha.light * by), dark: round(c.alpha.dark * by) } });
+  const page = (mode) => hex('{semantic.color.background}', mode);
+
+  // Colours come from the ramps (apps/docs/design/studio-wireframes.md › The open card): a fill, label, border or
+  // pressed colour is a role or a ramp step, never a colour at partial opacity, whose contrast would change with
+  // whatever is behind it. Only overlays (the focus rings' halos) are see-through.
+  const order = (r) => Object.keys(ramps[r]).sort((x, y) => Number(x) - Number(y));
+  /** The ramp and step a colour sits on: its own reference, or the nearest step of any ramp. */
+  const placeOf = (ref, value) => {
+    const m = RAMP_REF.exec(ref);
+    if (m && ramps[m[1]]?.[m[2]]) return [m[1], m[2]];
+    let best = null;
+    for (const r of Object.keys(ramps)) for (const st of order(r)) {
+      const d = deltaEOK(value, ramps[r][st]);
+      if (!best || d < best.d) best = { r, st, d };
+    }
+    return best ? [best.r, best.st] : null;
+  };
+  const piece = (spec, mode) => (isObject(spec) && 'light' in spec ? spec[mode] : spec);
+  /** A default drawn at partial opacity, as the step of its ramp nearest to what it drew over the page. */
+  const opaque = (spec) => {
+    const per = {};
+    for (const mode of ['light', 'dark']) {
+      const { ref, alpha } = specIn(spec, mode);
+      if (!(alpha > 0 && alpha < 1) || !Object.keys(ramps).length) {
+        per[mode] = piece(spec, mode);
+        continue;
+      }
+      const drawn = blend(hex(ref, mode), page(mode), alpha);
+      const place = placeOf(ref, hex(ref, mode));
+      const st = order(place[0]).reduce((b, x) => (deltaEOK(drawn, ramps[place[0]][x]) < deltaEOK(drawn, ramps[place[0]][b]) ? x : b));
+      per[mode] = `${place[0]}.${st}`;
+    }
+    return both(per.light, per.dark);
+  };
+  /**
+   * Hover and pressed: the next step of the fill's ramp away from the page (darker on a light page, lighter on a dark
+   * one) whose label still reads (AA, or the fill's own contrast when that is lower); the other way when none does.
+   */
+  const toward = (fill, label) => {
+    const per = {};
+    for (const mode of ['light', 'dark']) {
+      if (fill.alpha[mode] <= 0) {
+        per[mode] = 'accent';
+        continue;
+      }
+      const place = placeOf(fill.ref[mode], fill[mode]);
+      if (!place) {
+        per[mode] = fill.role ?? 'accent';
+        continue;
+      }
+      const list = order(place[0]);
+      const at = list.indexOf(place[1]);
+      const steps = ramps[place[0]];
+      const need = Math.min(AA_TEXT, contrast(fill[mode], label[mode]));
+      // Steps run light to dark: away from a light page is up the list.
+      const away = relativeLuminance(page(mode)) > 0.5 ? 1 : -1;
+      const reads = (j) => list[j] !== undefined && steps[list[j]].toLowerCase() !== fill[mode].toLowerCase() && contrast(steps[list[j]], label[mode]) >= need;
+      let pick = null;
+      for (const dir of [away, -away]) {
+        for (let j = at + dir; j >= 0 && j < list.length && pick === null; j += dir) if (reads(j)) pick = list[j];
+        if (pick !== null) break;
+      }
+      per[mode] = `${place[0]}.${pick ?? list[Math.min(list.length - 1, Math.max(0, at + away))]}`;
+    }
+    return both(per.light, per.dark);
+  };
 
   for (const name of COMPONENT_NAMES) {
     const def = COMPONENTS[name];
@@ -243,8 +313,12 @@ export function componentLayer({ styles, controls, corner, density, borderWidth,
     const line = o.border;
     const borderWidthOf = name === 'input' ? (line === undefined ? field.border : field.border ? line : 0) : (line ?? borderWidth);
     const edgeWidthOf = name === 'input' ? (line ?? field.edge) : borderWidthOf;
-    // A Badge is as tall as its text, padding and border until a height is set (S without the vertical padding).
-    if (name === 'badge') Object.assign(h, { sm: size.sm ?? round(text.leading + 2 * borderWidthOf), md: size.md ?? round(text.leading + 4 + 2 * borderWidthOf) });
+    // A Badge is as tall as its text, padding and border until a height is set (S without the vertical padding); a
+    // set height is exact, never shorter than its text and border.
+    if (name === 'badge') {
+      const least = round(text.leading + 2 * borderWidthOf);
+      Object.assign(h, { sm: Math.max(least, size.sm ?? least), md: Math.max(least, size.md ?? round(text.leading + 4 + 2 * borderWidthOf)) });
+    }
     // The gap between an icon and the label: Button's small size is tighter until the gap is set.
     const gap = name === 'button' ? (size.gap === undefined ? { sm: 6, md: 8, lg: 8 } : { sm: size.gap, md: size.gap, lg: size.gap }) : name === 'input' ? null : { md: size.gap ?? (name === 'chip' ? 6 : 4) };
 
@@ -253,7 +327,8 @@ export function componentLayer({ styles, controls, corner, density, borderWidth,
     const variants = {};
     for (const [variant, slots] of Object.entries(def.variants)) {
       const edits = o.variants?.[variant] ?? {};
-      const d = defaults[variant];
+      // A default drawn at partial opacity is its nearest ramp step (the ramp rule above).
+      const d = Object.fromEntries(Object.entries(defaults[variant]).map(([slot, spec]) => [slot, opaque(spec)]));
       const v = {};
       if (name === 'input' && variant !== 'default') {
         // Focus, error and disabled follow the default state unless set (disabled at 50% opacity); focus and error
@@ -277,9 +352,10 @@ export function componentLayer({ styles, controls, corner, density, borderWidth,
         if (v.border && roleOf(edits.border ?? d.border) === 'none' && v.fill) v.border = { ...v.fill, role: 'none', edited: edits.border !== undefined, alpha: { light: 0, dark: 0 } };
         if (slots.includes('pressed')) {
           if (edits.pressed !== undefined) v.pressed = { ...color(edits.pressed, true), alpha: { light: 1, dark: 1 } };
-          // Derived: the kit's own pressed colour until the fill changes, then the fill at 90% (a clear fill: accent).
+          // Derived: the kit's own pressed colour (Outline and Ghost: accent) until the fill changes; otherwise the
+          // fill's ramp step next to it with more contrast against the label (a clear fill: accent).
           else if (d.pressed && edits.fill === undefined) v.pressed = { ...color(d.pressed), derived: true };
-          else v.pressed = v.fill.alpha.light === 0 && v.fill.alpha.dark === 0 ? { ...color('accent'), derived: true } : faded(v.fill, 0.9);
+          else v.pressed = { ...color(toward(v.fill, v.label)), derived: true };
         }
       }
       // Button borders: a width per variant (0 without a border), and the primary's bottom edge (raised). A border

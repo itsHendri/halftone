@@ -11,3 +11,8 @@ case, icon size and shadow the mobile kit picks in JS (`TOKENS.shadows` draws a 
 property defaults to what the kits drew before, except where the two kits differed: one icon size (Button 16,
 Badge 12) and one shadow (Button: Shadow 1 but Ghost; Input: Shadow 1 on a boxed field) now hold in both. The
 contrast gate also checks the placeholder on the field.
+
+Component colours come from the ramps: a default drawn at partial opacity (an outline button's or field's dark fill)
+is now the nearest ramp step, and a derived hover/pressed colour is the next step of the fill's ramp away from the
+page whose label still reads at AA (it was the fill at 90%, whose contrast depended on the surface behind it). A
+Badge's S/M heights are exact (never shorter than its text and border), and Input and Select have an L size.

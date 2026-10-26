@@ -14,7 +14,15 @@ const TEXT = cn(
   text.font === 'mono' && 'font-mono'
 );
 
-function Input({ className, ...props }: React.ComponentProps<typeof TextInput> & React.RefAttributes<TextInput>) {
+const HEIGHT = { sm: 'h-field-sm', md: 'h-field-md', lg: 'h-field-lg' } as const;
+
+type InputProps = React.ComponentProps<typeof TextInput> &
+  React.RefAttributes<TextInput> & {
+    /** S, M or L (h-field-*); M by default. A phone draws any of them at least 44pt tall. */
+    size?: keyof typeof HEIGHT;
+  };
+
+function Input({ className, size = 'md', ...props }: InputProps) {
   // The theme's body font, like Text (a custom font is one family per weight on native).
   const font = useFontStyle(className ?? '');
   const live = useLiveComponent('input');
@@ -26,7 +34,8 @@ function Input({ className, ...props }: React.ComponentProps<typeof TextInput> &
       className={cn(
         // The theme's Input (semantic.component.input, --field-*): the field style's fill, line, corners and inset,
         // its height and text, and each state's colours.
-        'bg-field-default-bg border-field-default-border border-field-w border-b-field-edge-w rounded-t-field rounded-b-field-b px-field-x text-field-default-fg flex h-field-md w-full min-w-0 flex-row items-center py-1 text-type-field leading-5',
+        'bg-field-default-bg border-field-default-border border-field-w border-b-field-edge-w rounded-t-field rounded-b-field-b px-field-x text-field-default-fg flex w-full min-w-0 flex-row items-center py-1 text-type-field leading-5',
+        HEIGHT[size],
         TEXT,
         fieldShadowClass(level),
         props.editable === false &&
@@ -43,7 +52,7 @@ function Input({ className, ...props }: React.ComponentProps<typeof TextInput> &
             'aria-invalid:ring-field-error-ring aria-invalid:border-field-error-border aria-invalid:bg-field-error-bg aria-invalid:text-field-error-fg'
           ),
           // A text field has no hitSlop: phones draw it at least 44pt tall.
-          native: 'placeholder:text-field-placeholder/50 min-h-11',
+          native: 'placeholder:text-field-placeholder min-h-11',
         }),
         className
       )}

@@ -111,6 +111,9 @@ npx halftone-tokens theme encode ./acme.halftone.json  # its ht- code, when it h
   lists what each has); until it does, every property draws what the kits always drew, and the icon size and shadow
   (where the kits differed) are one value for both: `ICON_DEFAULT`, `defaultShadow`. The build's contrast gate
   checks every variant's label on its fill and Input's placeholder.
+- Component colours come from the ramps: a default drawn at partial opacity becomes the ramp step nearest to what it
+  drew, and a derived hover/pressed colour is the next step of the fill's ramp away from the page whose label still
+  reads at AA. Only the focus rings' halos are see-through.
 
 From code (`@halftone-ds/tokens/system`, also in `/theme`, browser-safe): `normalizeSystem` / `validateSystem`,
 `createSystem`, `migrate(recipe | code, brand)` and `systemToRecipe`, `generateSystem(system, tokens)` (the same
