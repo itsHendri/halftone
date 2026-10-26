@@ -108,7 +108,8 @@ npx halftone-tokens theme encode ./acme.halftone.json  # its ht- code, when it h
   `--badge-*` and `--field-*` (`bg-button-primary-bg`, `rounded-chip`, `h-button-md`, `gap-button-gap`,
   `text-type-button` in nativewind3; `type-button` and the same colours in shadcn-web), so a Button looks the same
   in both. A system's `components` sets any of it (roles by name, a Foundations corner or px, `COMPONENTS[name].props`
-  lists what each has); until it does, every property draws what the kits always drew. The build's contrast gate
+  lists what each has); until it does, every property draws what the kits always drew, and the icon size and shadow
+  (where the kits differed) are one value for both: `ICON_DEFAULT`, `defaultShadow`. The build's contrast gate
   checks every variant's label on its fill and Input's placeholder.
 
 From code (`@halftone-ds/tokens/system`, also in `/theme`, browser-safe): `normalizeSystem` / `validateSystem`,

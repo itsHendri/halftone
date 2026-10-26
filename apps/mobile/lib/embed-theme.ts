@@ -18,7 +18,7 @@ import { Platform } from 'react-native';
  */
 export type ThemeHex = Partial<Record<keyof typeof THEME.light, string>>;
 /** What the component layer picks in JS (lib/component-classes.ts), sent along so a live theme reaches it. */
-export type ComponentLook = { weight?: number; case?: 'none' | 'uppercase'; shadow?: 'none' | '1' | '2' | '3' | null; icon?: number | null };
+export type ComponentLook = { weight?: number; case?: 'none' | 'uppercase'; shadow?: 'none' | '1' | '2' | '3'; icon?: number };
 export type EmbedTokens = {
   code: string | null;
   /** Google Fonts family names by role; loaded from fonts.googleapis.com while the theme is live. `roles`: each
@@ -83,8 +83,8 @@ function cleanComponents(map: unknown): EmbedTokens['components'] {
     const look: ComponentLook = {};
     if (WEIGHTS.includes(v.weight as number)) look.weight = v.weight as number;
     if (v.case === 'none' || v.case === 'uppercase') look.case = v.case;
-    if (v.shadow === null || SHADOWS.includes(v.shadow as string)) look.shadow = v.shadow as ComponentLook['shadow'];
-    if (v.icon === null || (typeof v.icon === 'number' && v.icon >= 8 && v.icon <= 40)) look.icon = v.icon as number | null;
+    if (SHADOWS.includes(v.shadow as string)) look.shadow = v.shadow as ComponentLook['shadow'];
+    if (typeof v.icon === 'number' && v.icon >= 8 && v.icon <= 40) look.icon = v.icon;
     out[name as keyof typeof TOKENS.components] = look;
   }
   return out;

@@ -54,10 +54,13 @@ test('the defaults are what the mobile kit drew: density heights, pill corners, 
   assert.deepEqual([chip.radius, chip.h, chip.x, chip.text.size, chip.text.leading], [9999, { sm: 32, md: 36, lg: 40 }, { md: 14 }, 14, 20]);
   // A badge is as tall as its text, padding (2 + 2; none at S) and border.
   assert.deepEqual([badge.radius, badge.h, badge.x, badge.text.size, badge.text.leading], [9999, { sm: 22, md: 26 }, { md: 8 }, 14, 20]);
-  // What every variant shares: the kits' gaps (Button S tighter), the theme's border, kit icons and shadows, a 3px ring.
+  // What every variant shares: the kits' gaps (Button S tighter), the theme's border, one icon size and shadow for
+  // both kits (a boxed field has Shadow 1), a 3px ring.
   assert.deepEqual([button.gap, chip.gap, badge.gap, input.gap], [{ sm: 6, md: 8, lg: 8 }, { md: 6 }, { md: 4 }, undefined]);
   assert.deepEqual([button.border, chip.borderWidth, badge.borderWidth, input.borderWidth, input.edgeWidth], [null, 1, 1, 1, 1]);
-  assert.deepEqual([button.icon, chip.icon, badge.icon, button.shadow, input.shadow], [null, 14, null, null, null]);
+  assert.deepEqual([button.icon, chip.icon, badge.icon, button.shadow, input.shadow], [16, 14, 12, '1', '1']);
+  const filled = generateTheme({ ...DEFAULT_RECIPE, field: 'filled' }, base).components.input;
+  assert.equal(filled.shadow, 'none');
   assert.deepEqual([button.ring, input.ring], [{ width: 3, role: null }, { width: 3, role: null }]);
   assert.deepEqual([button.focusBorder.role, input.placeholder.role, input.text.weight], ['ring', 'muted-foreground', 400]);
   // Button rings: the ring role at 50%, Destructive its own at 20% (40% in dark).

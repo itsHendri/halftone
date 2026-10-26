@@ -115,10 +115,10 @@ export type ComponentShape = {
   edgeWidth?: number;
   /** The gap between an icon and the label (px) by size; Input has none. */
   gap?: Partial<Record<'sm' | 'md' | 'lg', number>>;
-  /** Icon size (px); null: each kit's own (ICON_DEFAULT on the web). */
-  icon?: number | null;
-  /** Button and Input: a Foundations shadow, 'none', or null: each kit's own. */
-  shadow?: ComponentShadow | null;
+  /** Icon size (px): ICON_DEFAULT until a system sets one. */
+  icon?: number;
+  /** Button and Input: a Foundations shadow level, or 'none' (defaultShadow until a system sets one). */
+  shadow?: ComponentShadow;
   /** Button and Input: the focus ring's width (px) and role (null: derived). */
   ring?: { width: number; role: string | null };
   /** Button: the focused border (the ring's role). */
@@ -155,6 +155,8 @@ export const SHADOWS: ComponentShadow[];
 /** The icon size (px) each component draws on the web until a system sets one. */
 export const ICON_DEFAULT: Record<'button' | 'chip' | 'badge', number>;
 export const RING_WIDTH: number;
+/** A component's shadow until a system sets one: Button '1'; Input '1' for a boxed field (a border), else 'none'. */
+export function defaultShadow(name: ComponentName, borderWidth?: number): ComponentShadow;
 /** The touch-target floor (px) the mobile kit applies on phones. */
 export const TOUCH_TARGET: number;
 export function defaultCorner(name: ComponentName, options?: { controls?: string; style?: string }): Corner;

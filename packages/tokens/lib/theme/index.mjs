@@ -36,6 +36,7 @@ export {
   componentVars,
   CORNERS,
   defaultCorner,
+  defaultShadow,
   defaultStyle,
   fittedLeading,
   ICON_DEFAULT,
