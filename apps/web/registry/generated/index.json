@@ -239,7 +239,7 @@
       "notes": "`checked onCheckedChange` · pick any",
       "api": "<Checkbox id checked onCheckedChange /><Label htmlFor>…</Label>",
       "caption": "For picking any number of options. One-of-many is a RadioGroup; never mix the two in one group.",
-      "install": "checkbox"
+      "install": "@halftone-web/checkbox"
     },
     {
       "id": "radio-group",
@@ -254,7 +254,7 @@
       ],
       "notes": "pick exactly one · `RadioGroupItem value id`",
       "api": "<RadioGroup value onValueChange><RadioGroupItem value id /></RadioGroup>",
-      "install": "radio-group"
+      "install": "@halftone-web/radio-group"
     },
     {
       "id": "switch",
@@ -268,7 +268,7 @@
       ],
       "notes": "a setting that applies at once (no Save button)",
       "api": "<Switch id checked onCheckedChange />",
-      "install": "switch"
+      "install": "@halftone-web/switch"
     },
     {
       "id": "select",
@@ -603,7 +603,7 @@
         "top nav",
         "header menu"
       ],
-      "install": "navigation-menu"
+      "install": "@halftone-web/navigation-menu"
     },
     {
       "id": "breadcrumb",
@@ -822,7 +822,7 @@
         "components/ui/table.tsx"
       ],
       "notes": "the primitive under DataTable; use it directly for small static tables",
-      "install": "table"
+      "install": "@halftone-web/table"
     },
     {
       "id": "stat-tile",
@@ -1158,7 +1158,7 @@
       ],
       "notes": "determinate 0–100",
       "api": "<Progress value aria-label />",
-      "install": "progress"
+      "install": "@halftone-web/progress"
     },
     {
       "id": "skeleton",
