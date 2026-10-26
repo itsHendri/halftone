@@ -27,7 +27,7 @@ export function SelectableCard({ title, description, icon: Icon, detail, selecte
       onClick={onClick}
       className={cn(
         'focus-visible:ring-ring/50 flex min-h-14 w-full items-center gap-3 rounded-lg border p-4 text-left shadow-sm transition-colors outline-none focus-visible:ring-[3px] disabled:pointer-events-none disabled:opacity-50',
-        selected ? 'border-primary bg-primary/5' : 'border-border bg-card hover:bg-accent',
+        selected ? 'border-primary bg-primary-subtle' : 'border-border bg-card hover:bg-accent',
         className
       )}>
       {Icon ? <Icon className={cn('size-5 shrink-0', selected ? 'text-primary' : 'text-muted-foreground')} aria-hidden /> : null}
@@ -41,7 +41,7 @@ export function SelectableCard({ title, description, icon: Icon, detail, selecte
         className={cn(
           'flex size-5 shrink-0 items-center justify-center border-2',
           mode === 'radio' ? 'rounded-full' : 'rounded-sm',
-          selected ? 'border-primary bg-primary' : 'border-muted-foreground/50'
+          selected ? 'border-primary bg-primary' : 'border-muted-foreground'
         )}>
         {selected ? <CheckIcon className="text-primary-foreground size-3" strokeWidth={3} /> : null}
       </span>

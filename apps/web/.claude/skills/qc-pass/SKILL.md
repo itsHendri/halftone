@@ -24,6 +24,10 @@ outside `components/ui` and `components/kit`, as errors:
 
 - `halftone/no-raw-colour`: Tailwind palette classes (`bg-red-500`, `text-white`; the `bg-black/50` scrim is
   allowed), colour arbitrary values (`text-[#fff]`), and colour literals in style objects or colour props.
+- `halftone/no-alpha-colour` (everywhere, `components/ui` and `components/kit` too): a `bg-`, `text-` or `border-`
+  colour at an opacity (`bg-primary/15`, `text-foreground/60`). Use the tint roles (`bg-primary-subtle`,
+  `border-warning-border`, `bg-muted-subtle`) or a pressed fill (`bg-primary-pressed`); only the scrim and a
+  frosted bar (`bg-background/90` with `backdrop-blur`) may be see-through.
 - `halftone/registry-imports`: `@/components/ui|kit` imports must be files the registry lists.
 - `halftone/no-foreign-ui`: no other UI or icon libraries (MUI, Chakra, Mantine, antd, react-icons, …).
 - `halftone/no-raw-primitives`: `recharts` only alongside `ChartContainer` from `@/components/ui/chart`.

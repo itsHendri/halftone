@@ -89,7 +89,7 @@ export function ChatComposer({ onSend, busy, onStop, placeholder = 'Ask anything
           style={font}
         />
         {busy ? (
-          <Pressable onPress={onStop} accessibilityRole="button" accessibilityLabel="Stop answering" className="bg-secondary active:bg-secondary/80 size-10 items-center justify-center rounded-full">
+          <Pressable onPress={onStop} accessibilityRole="button" accessibilityLabel="Stop answering" className="bg-secondary active:bg-secondary-pressed size-10 items-center justify-center rounded-full">
             <Icon as={SquareIcon} size={14} className="text-secondary-foreground" />
           </Pressable>
         ) : (
@@ -99,7 +99,7 @@ export function ChatComposer({ onSend, busy, onStop, placeholder = 'Ask anything
             accessibilityRole="button"
             accessibilityLabel="Send"
             accessibilityState={{ disabled: !canSend }}
-            className={cn('bg-primary active:bg-primary/90 size-10 items-center justify-center rounded-full', !canSend && 'opacity-50')}>
+            className={cn('bg-primary active:bg-primary-pressed size-10 items-center justify-center rounded-full', !canSend && 'opacity-50')}>
             <Icon as={ArrowUpIcon} size={18} className="text-primary-foreground" />
           </Pressable>
         )}

@@ -51,6 +51,26 @@ tester.run('no-raw-colour', halftone.rules['no-raw-colour'], {
   ],
 });
 
+tester.run('no-alpha-colour', halftone.rules['no-alpha-colour'], {
+  valid: [
+    'const a = <div className="bg-primary-subtle border-warning-border text-muted-foreground" />;',
+    'const a = <div className="bg-black/50 shadow-black/20 ring-ring/50 aria-invalid:ring-destructive/20" />;',
+    'const a = <header className="bg-background/90 sticky top-0 backdrop-blur" />;',
+    'const a = <div className="supports-[backdrop-filter]:bg-background/80 backdrop-blur" />;',
+    'const a = <p className="text-sm/6 text-base/7" />;',
+    'const a = <div className="w-1/2 basis-1/3 translate-x-1/2" />;',
+    'const tone = (t) => `bg-${t}/15`;',
+  ],
+  invalid: [
+    { code: 'const a = <div className="bg-primary/15" />;', errors: [{ messageId: 'alpha', data: { cls: 'bg-primary/15', hint: 'bg-primary-subtle (a tint), or bg-primary-pressed (pressed)' } }] },
+    { code: 'const a = <div className="dark:hover:bg-input/50" />;', errors: [{ messageId: 'alpha' }] },
+    { code: 'const a = <div className="border-warning/40 bg-warning/10" />;', errors: [{ messageId: 'alpha' }, { messageId: 'alpha' }] },
+    { code: 'const a = <span className="text-foreground/60" />;', errors: [{ messageId: 'alpha' }] },
+    { code: 'const a = <div className="bg-background/90" />;', errors: [{ messageId: 'alpha' }] },
+    { code: "const v = { muted: 'bg-muted/50' };", errors: [{ messageId: 'alpha' }] },
+  ],
+});
+
 tester.run('registry-imports', halftone.rules['registry-imports'], {
   valid: [
     { code: "import { Button } from '@/components/ui/button';", filename: at('app/x.jsx'), options: [{ root: ROOT, files: ['components/ui/button.tsx'] }] },

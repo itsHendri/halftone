@@ -32,7 +32,7 @@ export function StreamingText({ text, onDone, className }: Props) {
   return (
     <Text className={className ?? 'leading-6'} accessibilityLabel={text} aria-busy={!done}>
       {visible}
-      {!done ? <Text className="text-foreground/70"> ▍</Text> : null}
+      {!done ? <Text className="text-muted-foreground"> ▍</Text> : null}
     </Text>
   );
 }

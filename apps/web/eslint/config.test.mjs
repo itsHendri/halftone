@@ -54,3 +54,9 @@ export const A = () => <div className="text-white" />;
 test('other UI libraries are rejected', async () => {
   assert.deepEqual(await halftone('app/acme/page.tsx', `import Button from '@mui/material/Button';\nexport const B = Button;\n`), ['halftone/no-foreign-ui']);
 });
+
+test('a colour at an opacity is caught everywhere, the registry sources included', async () => {
+  const tint = `export const T = () => <div className="bg-primary/15 border-warning/40" />;\n`;
+  for (const path of ['app/acme/page.tsx', 'components/ui/thing.tsx', 'components/kit/thing.tsx']) assert.deepEqual(await halftone(path, tint), ['halftone/no-alpha-colour']);
+  assert.deepEqual(await halftone('app/acme/page.tsx', `export const S = () => <div className="bg-black/50 bg-primary-subtle" />;\n`), []);
+});

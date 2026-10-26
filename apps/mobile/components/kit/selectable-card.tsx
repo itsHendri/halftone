@@ -36,7 +36,7 @@ export function SelectableCard({ title, description, icon, detail, selected, onP
       }}
       className={cn(
         'min-h-14 flex-row items-center gap-3 rounded-lg border p-4 shadow-md',
-        selected ? 'border-primary bg-primary/5' : 'border-border bg-card active:bg-accent',
+        selected ? 'border-primary bg-primary-subtle' : 'border-border bg-card active:bg-accent',
         disabled && 'opacity-50',
         className
       )}>
@@ -50,7 +50,7 @@ export function SelectableCard({ title, description, icon, detail, selected, onP
         className={cn(
           'size-5 items-center justify-center border-2',
           mode === 'radio' ? 'rounded-full' : 'rounded-sm',
-          selected ? 'border-primary bg-primary' : 'border-muted-foreground/50'
+          selected ? 'border-primary bg-primary' : 'border-muted-foreground'
         )}>
         {selected ? <Icon as={CheckIcon} size={12} className="text-primary-foreground" strokeWidth={3} /> : null}
       </View>

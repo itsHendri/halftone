@@ -30,6 +30,9 @@ The shadcn vocabulary through Tailwind classes; each works as `bg-`, `text-`, `b
 | `primary` / `primary-foreground` | the brand action colour and text on it |
 | `secondary`, `muted`, `accent` (+ `-foreground`) | quieter fills, helper text, hover fills |
 | `destructive`, `success`, `warning`, `info` (+ `-foreground`) | status |
+| `<tone>-subtle` / `<tone>-border` (primary, success, warning, destructive, info) | a tinted surface (Alert, IconCircle, Spot, PromoCard, a selected card) and its edge: ramp steps, not an alpha |
+| `muted-subtle` | a surface a step off the page (a placeholder, a quiet band, the showcase canvas) |
+| `primary-pressed`, `secondary-pressed` | the hover/pressed fill of a `bg-primary` / `bg-secondary` control that isn't a Button |
 | `border`, `input`, `ring` | hairlines, field borders, focus |
 | `button` / `button-foreground` / `button-edge` | the theme's button style's colours (the primary Button's defaults) |
 | `field` / `field-edge` | the theme's field style's colours (Input, Textarea and Select's defaults) |
@@ -45,10 +48,15 @@ Rules:
   so its contrast changes with the surface (white, a grey card). Fills, text and borders are roles or ramp steps;
   the component layer (Button, FilterChip, Badge and the fields) uses no opacity at all, and its hover and pressed
   colours are the next ramp step. Transparency is for overlays only: a scrim behind a sheet, a focus ring's halo.
-- Until the kits have tint roles from the ramps, a surface tint is the one other exception: `bg-primary/10`,
-  `bg-success/15`. Text on a tint stays
-  `text-foreground`: a status colour as small text on its own tint measures under 4.5:1 (success 4.09,
-  destructive 3.81). A status badge is an outline Badge with a coloured dot.
+- **Tints are roles:** `bg-primary-subtle`, `bg-success-subtle`, `bg-warning-subtle`, `bg-destructive-subtle`,
+  `bg-info-subtle` with `border-<tone>-border`, and `bg-muted-subtle`; each is a ramp step per theme (a light step on
+  a light page, a dark one on a dark page). Hover and pressed are `hover:bg-primary-pressed` / `hover:bg-secondary-pressed`
+  (the next step of the ramp), not `/90`. Text on a tint stays `text-foreground` (or `text-muted-foreground`): a
+  tone as small text on its own tint can measure under 4.5:1 (primary on `primary-subtle` 4.24, destructive 4.09).
+  The tone goes on the icon (3:1, checked) or a dot; a status badge is an outline Badge with a coloured dot. `tokens:build` checks every tint's text and icon.
+- Lint enforces it everywhere, `components/ui` and `components/kit` included (`halftone/no-alpha-colour`): a
+  `bg-`, `text-` or `border-` colour at an opacity is an error that names the role to use. The overlays it allows:
+  the scrim (`bg-black/50`) and a frosted bar (`bg-background/90` with `backdrop-blur`). Focus halos are `ring-*`.
 - Selected / active states (tabs, segmented controls, nav items) are **neutral**, not the brand colour. A selected
   FilterChip is the theme's Chip `selected` colour: inverted by default, and a system may make it a role such as
   primary. Never colour one by hand.

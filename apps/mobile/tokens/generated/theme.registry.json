@@ -45,7 +45,20 @@
         "button-foreground": "0 0% 100%",
         "button-edge": "221.2 83.2% 53.3%",
         "field": "240 5.9% 90%",
-        "field-edge": "240 5.9% 90%"
+        "field-edge": "240 5.9% 90%",
+        "muted-subtle": "0 0% 98%",
+        "primary-subtle": "214.3 94.6% 92.7%",
+        "primary-border": "211.7 96.4% 78.4%",
+        "success-subtle": "140.6 84.2% 92.5%",
+        "success-border": "141.7 76.6% 73.1%",
+        "warning-subtle": "48 96.5% 88.8%",
+        "warning-border": "45.9 96.7% 64.5%",
+        "destructive-subtle": "0 93.3% 94.1%",
+        "destructive-border": "0 93.5% 81.8%",
+        "info-subtle": "204 93.8% 93.7%",
+        "info-border": "199.4 95.5% 73.9%",
+        "primary-pressed": "224.3 76.3% 48%",
+        "secondary-pressed": "240 5.9% 90%"
       },
       "dark": {
         "background": "240 10% 3.9%",
@@ -90,7 +103,20 @@
         "button-foreground": "240 10% 3.9%",
         "button-edge": "217.2 100% 63.3%",
         "field": "240 3.7% 15.9%",
-        "field-edge": "240 3.7% 15.9%"
+        "field-edge": "240 3.7% 15.9%",
+        "muted-subtle": "240 5.9% 10%",
+        "primary-subtle": "226.2 57% 21%",
+        "primary-border": "224.4 64.3% 32.9%",
+        "success-subtle": "144.9 80.4% 10%",
+        "success-border": "143.8 61.2% 20.2%",
+        "warning-subtle": "20.9 91.7% 14.1%",
+        "warning-border": "21.7 77.8% 26.5%",
+        "destructive-subtle": "0 74.7% 15.5%",
+        "destructive-border": "0 62.8% 30.6%",
+        "info-subtle": "204 80.2% 15.9%",
+        "info-border": "202 80.3% 23.9%",
+        "primary-pressed": "213.1 93.9% 67.8%",
+        "secondary-pressed": "240 5.3% 26.1%"
       }
     },
     "tailwind": {
@@ -140,7 +166,20 @@
               "button-foreground": "hsl(var(--button-foreground))",
               "button-edge": "hsl(var(--button-edge))",
               "field": "hsl(var(--field))",
-              "field-edge": "hsl(var(--field-edge))"
+              "field-edge": "hsl(var(--field-edge))",
+              "muted-subtle": "hsl(var(--muted-subtle))",
+              "primary-subtle": "hsl(var(--primary-subtle))",
+              "primary-border": "hsl(var(--primary-border))",
+              "success-subtle": "hsl(var(--success-subtle))",
+              "success-border": "hsl(var(--success-border))",
+              "warning-subtle": "hsl(var(--warning-subtle))",
+              "warning-border": "hsl(var(--warning-border))",
+              "destructive-subtle": "hsl(var(--destructive-subtle))",
+              "destructive-border": "hsl(var(--destructive-border))",
+              "info-subtle": "hsl(var(--info-subtle))",
+              "info-border": "hsl(var(--info-border))",
+              "primary-pressed": "hsl(var(--primary-pressed))",
+              "secondary-pressed": "hsl(var(--secondary-pressed))"
             },
             "borderRadius": {
               "sm": "calc(var(--radius) * 0.6)",
@@ -207,7 +246,20 @@
         "button-foreground": "oklch(1 0 0)",
         "button-edge": "oklch(0.5461 0.2152 262.88)",
         "field": "oklch(0.9197 0.004 286.32)",
-        "field-edge": "oklch(0.9197 0.004 286.32)"
+        "field-edge": "oklch(0.9197 0.004 286.32)",
+        "muted-subtle": "oklch(0.9851 0 0)",
+        "primary-subtle": "oklch(0.9319 0.0316 255.59)",
+        "primary-border": "oklch(0.8091 0.0956 251.81)",
+        "success-subtle": "oklch(0.9624 0.0434 156.74)",
+        "success-border": "oklch(0.8712 0.1363 154.45)",
+        "warning-subtle": "oklch(0.9619 0.058 95.62)",
+        "warning-border": "oklch(0.879 0.1534 91.61)",
+        "destructive-subtle": "oklch(0.9356 0.0309 17.72)",
+        "destructive-border": "oklch(0.8077 0.1035 19.57)",
+        "info-subtle": "oklch(0.9514 0.025 236.82)",
+        "info-border": "oklch(0.8276 0.1013 230.32)",
+        "primary-pressed": "oklch(0.4882 0.2172 264.38)",
+        "secondary-pressed": "oklch(0.9197 0.004 286.32)"
       },
       "dark": {
         "background": "oklch(0.1408 0.0044 285.82)",
@@ -252,7 +304,20 @@
         "button-foreground": "oklch(0.1408 0.0044 285.82)",
         "button-edge": "oklch(0.6507 0.1869 259.77)",
         "field": "oklch(0.2739 0.0055 286.03)",
-        "field-edge": "oklch(0.2739 0.0055 286.03)"
+        "field-edge": "oklch(0.2739 0.0055 286.03)",
+        "muted-subtle": "oklch(0.2103 0.0059 285.89)",
+        "primary-subtle": "oklch(0.2823 0.0874 267.94)",
+        "primary-border": "oklch(0.3791 0.1378 265.52)",
+        "success-subtle": "oklch(0.2664 0.0628 152.93)",
+        "success-border": "oklch(0.3925 0.0896 152.54)",
+        "warning-subtle": "oklch(0.2791 0.0742 45.64)",
+        "warning-border": "oklch(0.4137 0.1054 45.9)",
+        "destructive-subtle": "oklch(0.2575 0.0886 26.04)",
+        "destructive-border": "oklch(0.3958 0.1331 25.72)",
+        "info-subtle": "oklch(0.2935 0.0632 243.16)",
+        "info-border": "oklch(0.3912 0.0845 240.88)",
+        "primary-pressed": "oklch(0.7137 0.1434 254.62)",
+        "secondary-pressed": "oklch(0.3703 0.0119 285.81)"
       }
     }
   }

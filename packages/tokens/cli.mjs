@@ -22,7 +22,7 @@ import { existsSync, mkdirSync, readFileSync, realpathSync, writeFileSync } from
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
-import { checkContrast, AA, componentFailures, describeTintLimits, textOnTintLimits } from './lib/contrast.mjs';
+import { checkContrast, AA, componentFailures, describeSubtle, describeTintLimits, textOnSubtle, textOnTintLimits } from './lib/contrast.mjs';
 import { scanTintText } from './lib/scan.mjs';
 import { loadTokens } from './lib/resolve.mjs';
 
@@ -107,13 +107,13 @@ export async function run(argv = process.argv.slice(2)) {
   // Then the source: a tone's text on its own tint, beyond what this palette allows.
   if (config.scan?.length) {
     const limits = textOnTintLimits(ctx.colors);
-    const problems = scanTintText(root, config.scan, limits);
+    const problems = scanTintText(root, config.scan, limits, textOnSubtle(ctx.colors));
     if (problems.length) {
       gate(
         'halftone-tokens',
         `${problems.length} class string(s) put a tone's text on its own tint below WCAG AA (${AA}:1):\n\n${problems.join('\n')}\n\n` +
-          `This palette allows: ${describeTintLimits(limits)}.\n` +
-          'Use text-foreground on the tint (let the tint, an icon or a dot carry the colour), or a lighter tint.\n' +
+          `This palette allows: ${describeTintLimits(limits)} on an alpha tint; tone text on its own -subtle tint: ${describeSubtle(textOnSubtle(ctx.colors))}.\n` +
+          'Use text-foreground on the tint (let the tint, an icon or a dot carry the colour).\n' +
           'An element that holds only an icon may keep its tone: add a `halftone-tokens-ignore tint-text` comment.\n'
       );
     }

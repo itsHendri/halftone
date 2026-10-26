@@ -171,6 +171,58 @@ export const COLORS = {
   "field-edge": {
     "light": "#e4e4e7",
     "dark": "#27272a"
+  },
+  "muted-subtle": {
+    "light": "#fafafa",
+    "dark": "#18181b"
+  },
+  "primary-subtle": {
+    "light": "#dbeafe",
+    "dark": "#172554"
+  },
+  "primary-border": {
+    "light": "#93c5fd",
+    "dark": "#1e3a8a"
+  },
+  "success-subtle": {
+    "light": "#dcfce7",
+    "dark": "#052e16"
+  },
+  "success-border": {
+    "light": "#86efac",
+    "dark": "#14532d"
+  },
+  "warning-subtle": {
+    "light": "#fef3c7",
+    "dark": "#451a03"
+  },
+  "warning-border": {
+    "light": "#fcd34d",
+    "dark": "#78350f"
+  },
+  "destructive-subtle": {
+    "light": "#fee2e2",
+    "dark": "#450a0a"
+  },
+  "destructive-border": {
+    "light": "#fca5a5",
+    "dark": "#7f1d1d"
+  },
+  "info-subtle": {
+    "light": "#e0f2fe",
+    "dark": "#082f49"
+  },
+  "info-border": {
+    "light": "#7dd3fc",
+    "dark": "#0c4a6e"
+  },
+  "primary-pressed": {
+    "light": "#1d4ed8",
+    "dark": "#60a5fa"
+  },
+  "secondary-pressed": {
+    "light": "#e4e4e7",
+    "dark": "#3f3f46"
   }
 };
 export const NUMBERS = {

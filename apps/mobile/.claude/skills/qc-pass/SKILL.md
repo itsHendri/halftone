@@ -25,6 +25,10 @@ component outside `components/ui` and `components/kit`, as errors:
 - `halftone/no-raw-colour`: Tailwind palette classes (`bg-red-500`, `text-white`), colour arbitrary values
   (`text-[#fff]`), and colour literals in style objects or colour props. Use semantic classes, or
   `usePalette()` for SVG fills and native props.
+- `halftone/no-alpha-colour` (everywhere, `components/ui` and `components/kit` too): a `bg-`, `text-` or `border-`
+  colour at an opacity (`bg-primary/15`, `text-foreground/60`). Use the tint roles (`bg-primary-subtle`,
+  `border-warning-border`, `bg-muted-subtle`) or a pressed fill (`bg-primary-pressed`); only the scrim and a
+  frosted bar (`bg-background/90` with `backdrop-blur`) may be see-through.
 - `halftone/registry-imports`: `@/components/ui|kit` imports must be files the registry lists.
 - `halftone/no-foreign-ui`: no other UI or icon libraries (`@expo/vector-icons`, react-native-paper, …).
 - `halftone/no-raw-primitives`: no `Text`, `TextInput` or `Pressable` from react-native in screens.

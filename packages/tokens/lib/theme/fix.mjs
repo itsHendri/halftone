@@ -7,6 +7,8 @@
  *   2. a tone as ink or an icon on its tint (`text-primary on muted`): move the tone away from the page
  *      (darker in light mode, lighter in dark), then re-check its label
  *   3. body or muted text on a surface: move the text away from the surface
+ *   4. anything on a derived role (a tint, `muted-subtle`, a pressed fill): move that role away from the ink on it,
+ *      never the ink, which every other surface shares
  *
  * It checks the STRICT set (tones on muted/accent too). A moved token becomes a literal hex for that
  * mode, and every move is reported as { token, mode, from, to } so the picker can show it.
@@ -22,7 +24,7 @@
 import { contrast, hexToOklchParts } from '../color.mjs';
 import { contrastPairs } from '../contrast.mjs';
 import { toGamutHex } from './ramp.mjs';
-import { BRAND_LINKED, FOREGROUND_CHOICES } from './semantic.mjs';
+import { BRAND_LINKED, FOREGROUND_CHOICES, isDerived } from './semantic.mjs';
 
 const MAX_PASSES = 24;
 const STEP = 0.004;
@@ -102,14 +104,35 @@ export function fixContrast(semantic, lookup, { locked, pinned } = {}) {
         continue;
       }
 
-      // 2 and 3: move the ink until every pairing it takes part in as ink passes.
+      // 4. A derived role moves away from its ink until every pairing on it passes.
+      if (isDerived(f.bgName)) {
+        const bg = f.bgName;
+        if (isFixed(bg)) {
+          accept(f);
+          continue;
+        }
+        const onIt = (candidate) =>
+          failing(contrastPairs({ ...hex, [bg]: candidate }, mode, { strict: true })).filter((p) => p.bgName === bg && !accepted.has(p.label)).length === 0;
+        // A light ink (it reads on black) needs a darker role; a dark ink a lighter one.
+        const dir = contrast(hex[f.fgName], '#000000') > contrast(hex[f.fgName], '#ffffff') ? -1 : 1;
+        const moved = nudge(hex[bg], dir, onIt);
+        if (!moved) {
+          cannot(f);
+          continue;
+        }
+        set(bg, moved);
+        pass++;
+        continue;
+      }
+
+      // 2 and 3: move the ink until every pairing it takes part in as ink passes (4 moves the derived roles).
       const ink = f.fgName;
       if (isFixed(ink)) {
         accept(f);
         continue;
       }
       const asInk = (candidate) =>
-        failing(contrastPairs({ ...hex, [ink]: candidate }, mode, { strict: true, fg: ink })).filter((p) => !accepted.has(p.label)).length === 0;
+        failing(contrastPairs({ ...hex, [ink]: candidate }, mode, { strict: true, fg: ink })).filter((p) => !accepted.has(p.label) && !isDerived(p.bgName)).length === 0;
       const moved = nudge(hex[ink], away, asInk);
       if (!moved) {
         cannot(f);

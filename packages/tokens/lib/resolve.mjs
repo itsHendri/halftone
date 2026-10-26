@@ -8,6 +8,7 @@ import { readFileSync } from 'node:fs';
 import { componentLayer, readComponents } from './theme/components.mjs';
 import { rampsOf } from './theme/generate.mjs';
 import { extraList } from './theme/extras.mjs';
+import { isDerived, semanticColors, TINT_ROLES } from './theme/semantic.mjs';
 import { BUTTON, DEFAULT_RECIPE, DENSITY, DEPTH, FIELD, fieldWidth, resolveTextStyles, shadowCss, textEdits, TYPE, typeScale } from './theme/recipe.mjs';
 
 export const MODES = ['light', 'dark'];
@@ -124,6 +125,15 @@ export async function loadTokens(sourcePath) {
   const byName = Object.fromEntries(colors.map((c) => [c.name, c]));
   const STYLE_FALLBACK = { button: 'primary', 'button-foreground': 'primary-foreground', 'button-edge': 'primary', field: 'input', 'field-edge': 'input' };
   for (const [name, from] of Object.entries(STYLE_FALLBACK)) if (!byName[name] && byName[from]) colors.push({ ...byName[from], name });
+  // The tints and pressed fills a token file from before them doesn't have: the theme's steps on the file's ramps.
+  const primHex = Object.fromEntries(prim.filter(isColor).map((t) => [t.path.join('.'), t.$value.toLowerCase()]));
+  const brandStep = Object.keys(source.primitive?.color?.brand ?? {}).find((step) => primHex[`primitive.color.brand.${step}`] === byName.primary?.light);
+  const derived = semanticColors(brandStep ?? '600');
+  for (const [name, refs] of Object.entries(derived)) {
+    if (byName[name] || !isDerived(name) && !TINT_ROLES.includes(name)) continue;
+    const hex = (mode) => primHex[refs[mode].slice(1, -1)];
+    if (hex('light') && hex('dark')) colors.push({ name, light: hex('light'), dark: hex('dark') });
+  }
   const shadows = (list, mode) =>
     Object.fromEntries(['1', '2', '3'].map((level) => [level, shadowCss(find(list, `shadow-${level}`) ?? DEPTH.soft[level][mode])]));
   const borderWidth = find(semLight, 'border-width') ?? 1;

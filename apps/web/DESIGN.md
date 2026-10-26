@@ -89,6 +89,32 @@ colors:
   field-dark: "#27272a"
   field-edge: "#e4e4e7"
   field-edge-dark: "#27272a"
+  muted-subtle: "#fafafa"
+  muted-subtle-dark: "#18181b"
+  primary-subtle: "#dbeafe"
+  primary-subtle-dark: "#172554"
+  primary-border: "#93c5fd"
+  primary-border-dark: "#1e3a8a"
+  success-subtle: "#dcfce7"
+  success-subtle-dark: "#052e16"
+  success-border: "#86efac"
+  success-border-dark: "#14532d"
+  warning-subtle: "#fef3c7"
+  warning-subtle-dark: "#451a03"
+  warning-border: "#fcd34d"
+  warning-border-dark: "#78350f"
+  destructive-subtle: "#fee2e2"
+  destructive-subtle-dark: "#450a0a"
+  destructive-border: "#fca5a5"
+  destructive-border-dark: "#7f1d1d"
+  info-subtle: "#e0f2fe"
+  info-subtle-dark: "#082f49"
+  info-border: "#7dd3fc"
+  info-border-dark: "#0c4a6e"
+  primary-pressed: "#1d4ed8"
+  primary-pressed-dark: "#60a5fa"
+  secondary-pressed: "#e4e4e7"
+  secondary-pressed-dark: "#3f3f46"
 typography:
   h1:
     fontFamily: "system-ui"
@@ -209,18 +235,19 @@ hex literal or a Tailwind palette colour in UI code. Keys ending in `-dark` are 
 - **Background (#ffffff) and Card (#ffffff):** the page canvas and raised surfaces.
 - **Muted foreground (#52525b):** helper text, captions, placeholders.
 - **Destructive, Success, Warning, Info:** status only, each with its own `-foreground`.
+- **Tints:** `primary-subtle`, `success-subtle`, `warning-subtle`, `destructive-subtle`, `info-subtle` (a tinted
+  surface: an alert, an icon well, a selected card), each with a `-border` (`border-warning-border`), and
+  `muted-subtle`, a surface a step off the page. Pressed fills: `primary-pressed`, `secondary-pressed`.
 - **Chart 1–5:** data series.
 
 Every `X` / `X-foreground` pairing, muted text on every surface, and every status tone used as text
 clears WCAG AA (4.5:1) in both themes; the build names any pairing that falls short, and `--strict` fails on it.
 
-A tone's text on that tone's own tint (`text-success` on `bg-success/15`) is a weaker pairing. With
-this palette it clears AA only for:
-
-primary up to /5, success up to /5, warning up to /5, info up to /15, destructive up to /5.
-
-On a stronger tint, the text stays `text-foreground` and the tint, an icon or a dot carries the
-colour. `halftone-tokens check` flags class strings that break this.
+Colours come from the ramps, not from opacity: a colour at partial opacity (`bg-primary/15`) takes on whatever
+is behind it, so its contrast changes with the surface. Tints are the roles above; transparency is for overlays
+only (the scrim behind a sheet, a frosted bar, a focus ring's halo). Text on a tint is `text-foreground` or
+`text-muted-foreground`; the tone itself goes on the icon or a dot. With this palette a tone's own text clears AA on its tint (`text-success` on `bg-success-subtle`) for success, warning and info only.
+`halftone-tokens check` flags class strings that break this.
 
 ## Typography
 

@@ -209,6 +209,10 @@
       "icon-badge",
       "spot"
     ],
+    "color.destructive-subtle": [
+      "icon-circle",
+      "spot"
+    ],
     "color.field": [
       "input",
       "select",
@@ -248,7 +252,6 @@
       "sources",
       "spinner",
       "stepper",
-      "streaming-text",
       "switch",
       "table",
       "tabs",
@@ -264,6 +267,11 @@
       "status-dot"
     ],
     "color.info-foreground": [
+      "promo-card",
+      "spot"
+    ],
+    "color.info-subtle": [
+      "icon-circle",
       "promo-card",
       "spot"
     ],
@@ -358,6 +366,7 @@
       "stat-tile",
       "status-dot",
       "stepper",
+      "streaming-text",
       "success-screen",
       "summary-card",
       "table",
@@ -367,6 +376,9 @@
       "toggle",
       "tool-call-card",
       "value-header"
+    ],
+    "color.muted-subtle": [
+      "spot"
     ],
     "color.popover": [
       "calendar",
@@ -440,6 +452,18 @@
       "switch",
       "timeline"
     ],
+    "color.primary-pressed": [
+      "floating-button"
+    ],
+    "color.primary-subtle": [
+      "feature-grid",
+      "icon-circle",
+      "pricing-card",
+      "progress",
+      "promo-card",
+      "selectable-card",
+      "spot"
+    ],
     "color.ring": [
       "accordion",
       "action-grid",
@@ -494,6 +518,9 @@
       "button",
       "floating-button"
     ],
+    "color.secondary-pressed": [
+      "floating-button"
+    ],
     "color.sidebar": [
       "app-shell"
     ],
@@ -527,6 +554,11 @@
       "spot",
       "timeline"
     ],
+    "color.success-subtle": [
+      "icon-circle",
+      "promo-card",
+      "spot"
+    ],
     "color.warning": [
       "approval-card",
       "icon-circle",
@@ -536,7 +568,16 @@
       "spot",
       "status-dot"
     ],
+    "color.warning-border": [
+      "approval-card"
+    ],
     "color.warning-foreground": [
+      "promo-card",
+      "spot"
+    ],
+    "color.warning-subtle": [
+      "approval-card",
+      "icon-circle",
       "promo-card",
       "spot"
     ],

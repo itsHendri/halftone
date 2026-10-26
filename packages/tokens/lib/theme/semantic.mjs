@@ -21,6 +21,29 @@ const STATUS_STEPS = { danger: [0, -1], success: [1, -1], warning: [1, -2], info
 const status = (ramp, anchor = '600') => ({ light: p(ramp, shift(anchor, STATUS_STEPS[ramp][0])), dark: p(ramp, shift(anchor, STATUS_STEPS[ramp][1])) });
 
 /**
+ * The tints: colours come from the ramps, not from opacity (a colour at partial opacity takes on whatever is
+ * behind it, so its contrast changes with the surface). `<tone>-subtle` is a tinted surface (an Alert, an
+ * IconCircle, a selected card), `<tone>-border` its edge: a light step on a light page, a dark one on a dark page.
+ * Text on a tint is `foreground`; the tone itself is an icon or a dot on it (contrast.mjs checks both).
+ */
+const TINT_TONES = { primary: 'brand', success: 'success', warning: 'warning', destructive: 'danger', info: 'info' };
+export const TINT_ROLES = Object.keys(TINT_TONES).flatMap((tone) => [`${tone}-subtle`, `${tone}-border`]);
+const tints = () =>
+  Object.fromEntries(
+    Object.entries(TINT_TONES).flatMap(([tone, ramp]) => [
+      [`${tone}-subtle`, { light: p(ramp, '100'), dark: p(ramp, '950') }],
+      [`${tone}-border`, { light: p(ramp, '300'), dark: p(ramp, '900') }],
+    ])
+  );
+
+/**
+ * Roles a theme derives from others rather than picking: the tints, `muted-subtle` (a surface a step off the
+ * page) and the pressed fills (the next step of the fill's ramp, away from the page). The fixer moves one of these,
+ * not the ink on it, when a pairing on it fails (fix.mjs).
+ */
+export const isDerived = (name) => /-(subtle|pressed)$/.test(name);
+
+/**
  * { name: { light: ref, dark: ref } } in the order the kit's tokens.json lists them. `anchors` holds the step
  * each status seed sits on (`{ danger: '500' }`); a status without one uses its 600, the curated ramps' seed.
  */
@@ -66,6 +89,10 @@ export function semanticColors(anchor = '600', anchors = {}) {
     'chart-3': { light: p('warning', 500), dark: p('warning', 400) },
     'chart-4': { light: p('danger', 500), dark: p('danger', 400) },
     'chart-5': { light: p('info', 500), dark: p('info', 400) },
+    'muted-subtle': { light: n(50), dark: n(900) },
+    ...tints(),
+    'primary-pressed': { light: b(shift(anchor, 1)), dark: b(shift(darkStep(anchor), -1)) },
+    'secondary-pressed': { light: n(200), dark: n(700) },
   };
 }
 

@@ -22,7 +22,7 @@ type Props = {
 /** One plan. Show 2–4 side by side; highlight one. */
 export function PricingCard({ name, price, period, description, features, action, highlighted, badge = 'Most popular', className }: Props) {
   return (
-    <Card className={cn('relative flex flex-col gap-6 p-6', highlighted && 'border-primary ring-primary/20 ring-4', className)}>
+    <Card className={cn('relative flex flex-col gap-6 p-6', highlighted && 'border-primary ring-primary-subtle ring-4', className)}>
       {highlighted ? <Badge className="absolute -top-3 left-6">{badge}</Badge> : null}
       <div className="flex flex-col gap-1">
         <h3 className="font-semibold">{name}</h3>

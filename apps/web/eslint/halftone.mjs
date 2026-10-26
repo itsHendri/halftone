@@ -1,10 +1,15 @@
 /**
  * halftone/* — the design system's guardrails as lint rules, so an agent hears about a raw colour or a
  * component that isn't in the registry while it writes, not in review. eslint.config.* turns them on for
- * screens (app/**, components/**), outside the registry sources (components/ui, components/kit).
+ * screens (app/**, components/**), outside the registry sources (components/ui, components/kit); no-alpha-colour
+ * reads the registry sources too.
  *
  *   no-raw-colour         Tailwind palette classes (bg-red-500, text-white), colour arbitrary values
  *                         (text-[#fff]) and colour literals in style objects or colour props
+ *   no-alpha-colour       a theme colour at partial opacity on a surface, text or border (bg-primary/15,
+ *                         text-foreground/60, border-warning/40): its contrast changes with what is behind it.
+ *                         Overlays may: the scrim (bg-black/50) and a frosted bar (bg-background/90 + backdrop-blur);
+ *                         focus halos are ring-*, which this rule doesn't read
  *   registry-imports      @/components/ui|kit imports must be files the registry lists
  *   no-foreign-ui         other UI and icon libraries
  *   no-raw-primitives     platform primitives a screen should get from the kit (options per app)
@@ -138,6 +143,64 @@ const noRawColour = {
           const value = staticString(node.init);
           if (value != null && COLOUR_VALUE.test(value)) context.report({ node: node.init, messageId: 'literal', data: { value: value.trim() } });
         }
+      },
+    };
+  },
+};
+
+/** A colour class at an opacity: `bg-primary/15`, `border-x-warning/40`, `text-foreground/[0.6]`. */
+const ALPHA_CLASS = /^(bg|text|border(?:-[xytrblse])?)-([a-z][a-z0-9-]*)\/(?:\d+|\[[^\]]+\])$/;
+/** `text-sm/6` is a size with a line height, not a colour. */
+const TEXT_SIZE = /^(?:xs|sm|base|lg|[2-9]?xl|type-[a-z0-9-]+)$/;
+const TONES = new Set(['primary', 'success', 'warning', 'destructive', 'info']);
+
+/** The ramp role that replaces `utility-colour/alpha` (DESIGN_SYSTEM.md › Colour). */
+function alphaHint(utility, colour) {
+  if (utility === 'text') return colour === 'foreground' ? 'text-muted-foreground' : `text-${colour} (opaque), or text-muted-foreground`;
+  if (utility.startsWith('border')) return TONES.has(colour) ? `${utility}-${colour}-border` : `${utility}-border or ${utility}-input`;
+  if (TONES.has(colour)) return `bg-${colour}-subtle (a tint)${colour === 'primary' ? ', or bg-primary-pressed (pressed)' : ''}`;
+  if (colour === 'secondary') return 'bg-secondary-pressed (pressed) or bg-secondary';
+  if (colour === 'muted' || colour === 'accent' || colour === 'input') return 'bg-muted-subtle (a step off the page), bg-muted or bg-accent';
+  return 'an opaque role (bg-card, bg-muted, bg-foreground)';
+}
+
+const noAlphaColour = {
+  meta: {
+    type: 'problem',
+    docs: { description: 'Colours come from the ramps, not from opacity: a see-through colour changes contrast with whatever is behind it.' },
+    messages: {
+      alpha:
+        '`{{cls}}` draws a colour at partial opacity, so its contrast changes with whatever is behind it. Use {{hint}} (DESIGN_SYSTEM.md › Colour). Only overlays are see-through: the scrim (bg-black/50), a frosted bar (bg-background/90 with backdrop-blur), a focus ring\'s halo.',
+    },
+    schema: [],
+  },
+  create(context) {
+    const checkClasses = (node, text) => {
+      const tokens = text.split(/\s+/).filter(Boolean);
+      // A frosted bar: the page shows through on purpose, blurred.
+      const frosted = tokens.some((t) => /^backdrop-blur/.test(baseClass(t)));
+      for (const token of tokens) {
+        const cls = baseClass(token);
+        const m = ALPHA_CLASS.exec(cls);
+        if (!m) continue;
+        const [, utility, colour] = m;
+        if (utility === 'text' && TEXT_SIZE.test(colour)) continue;
+        if (SCRIM.test(cls) || (frosted && utility === 'bg' && colour === 'background')) continue;
+        context.report({ node, messageId: 'alpha', data: { cls, hint: alphaHint(utility, colour) } });
+      }
+    };
+    return {
+      Literal(node) {
+        if (typeof node.value === 'string' && !isImportSource(node)) checkClasses(node, node.value);
+      },
+      TemplateElement(node) {
+        const text = node.value.cooked ?? '';
+        const tokens = text.split(/\s+/);
+        const parent = node.parent;
+        const index = parent.quasis.indexOf(node);
+        if (index > 0 && !/^\s/.test(text)) tokens.shift();
+        if (index < parent.quasis.length - 1 && !/\s$/.test(text)) tokens.pop();
+        checkClasses(node, tokens.join(' '));
       },
     };
   },
@@ -300,6 +363,7 @@ const plugin = {
   meta: { name: 'halftone' },
   rules: {
     'no-raw-colour': noRawColour,
+    'no-alpha-colour': noAlphaColour,
     'registry-imports': registryImports,
     'no-foreign-ui': noForeignUi,
     'no-raw-primitives': noRawPrimitives,

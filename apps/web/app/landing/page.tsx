@@ -130,7 +130,7 @@ export default function Landing() {
           </Accordion>
         </section>
 
-        <section aria-labelledby="cta-title" className="bg-muted/60 flex flex-col items-center gap-5 rounded-2xl px-6 py-16 text-center">
+        <section aria-labelledby="cta-title" className="bg-muted-subtle flex flex-col items-center gap-5 rounded-2xl px-6 py-16 text-center">
           <h2 id="cta-title" className="type-h2 text-balance">
             Your next invoice could chase itself
           </h2>

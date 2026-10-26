@@ -6,7 +6,7 @@ import { StatTile } from '@/components/kit/stat-tile';
 /** The hero's "product shot": the real components, so it follows the theme and stays honest. */
 export function ProductShot() {
   return (
-    <div className="bg-muted/60 border-border flex flex-col gap-4 rounded-2xl border p-4 sm:p-6">
+    <div className="bg-muted-subtle border-border flex flex-col gap-4 rounded-2xl border p-4 sm:p-6">
       <div className="grid gap-4 sm:grid-cols-2">
         <StatTile label="Paid this month" value="£9,800" delta={12.4} deltaLabel="vs May" />
         <StatTile label="Overdue" value="£4,410" delta={-21} deltaLabel="vs May" invert />

@@ -2,9 +2,10 @@
  * Source scan: a tone's text on that tone's own tint, beyond what the palette allows.
  *
  * The contrast gate proves the palette's pairings; it cannot see how components combine classes.
- * `bg-success/15 text-success` looks deliberate and fails AA (4.09:1 with the default palette), so this
- * reads every class string in the configured folders and flags that combination wherever the tint is
- * stronger than `textOnTintLimits` allows. Only unprefixed classes count (`hover:bg-…` is another state).
+ * `bg-success-subtle text-success` looks deliberate and can fail AA, so this reads every class string in the
+ * configured folders and flags that combination wherever the palette can't carry it: on a tint role when
+ * `textOnSubtle` says no, on an alpha tint (`bg-success/15`) stronger than `textOnTintLimits` allows. Only
+ * unprefixed classes count (`hover:bg-…` is another state).
  *
  * An element that holds only an icon may keep its tone (icons need 3:1, which the gate checks): put
  * `halftone-tokens-ignore tint-text` in a comment on that line or the line above.
@@ -31,8 +32,11 @@ function files(dir) {
   return out;
 }
 
-/** Returns one line per offending class string: `components/x.tsx:12  text-success on bg-success/15 (allowed: up to /5)`. */
-export function scanTintText(root, paths, limits) {
+/**
+ * Returns one line per offending class string: `components/x.tsx:12  text-success on bg-success/15 (allowed: up to /5)`.
+ * `limits` from textOnTintLimits, `subtle` from textOnSubtle.
+ */
+export function scanTintText(root, paths, limits, subtle = {}) {
   const problems = [];
   for (const path of paths) {
     let list;
@@ -49,15 +53,15 @@ export function scanTintText(root, paths, limits) {
         const texts = new Set(classes.map((c) => /^text-([a-z]+)$/.exec(c)?.[1]).filter((t) => TONES.includes(t)));
         if (!texts.size) continue;
         for (const c of classes) {
+          const role = /^bg-([a-z]+)-subtle$/.exec(c);
           const tint = /^bg-([a-z]+)\/(\d+)$/.exec(c);
-          if (!tint || !texts.has(tint[1])) continue;
-          const [, tone, pct] = tint;
-          const alpha = Number(pct) / 100;
-          if (alpha <= limits[tone]) continue;
+          const tone = (role ?? tint)?.[1];
+          if (!tone || !texts.has(tone)) continue;
+          if (role ? subtle[tone] !== false : Number(tint[2]) / 100 <= limits[tone]) continue;
           const lineNo = source.slice(0, m.index).split('\n').length;
           if (`${lines[lineNo - 1]}\n${lines[lineNo - 2] ?? ''}`.includes(PRAGMA)) continue;
-          const allowed = limits[tone] ? `up to /${Math.round(limits[tone] * 100)}` : 'never';
-          problems.push(`  ${relative(root, file)}:${lineNo}  text-${tone} on bg-${tone}/${pct} (allowed: ${allowed})`);
+          const allowed = role ? 'text-foreground on it' : limits[tone] ? `up to /${Math.round(limits[tone] * 100)}` : 'never';
+          problems.push(`  ${relative(root, file)}:${lineNo}  text-${tone} on ${c} (allowed: ${allowed})`);
         }
       }
     }

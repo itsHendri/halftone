@@ -84,6 +84,7 @@ export function CodeScanner({
             onPress={onClose}
             accessibilityRole="button"
             accessibilityLabel="Close the scanner"
+            // eslint-disable-next-line halftone/no-alpha-colour -- an overlay on the camera image, which no surface colour can match
             className="bg-foreground/60 absolute right-3 top-3 size-11 items-center justify-center rounded-full active:opacity-80">
             <Icon as={XIcon} size={20} className="text-background" />
           </Pressable>

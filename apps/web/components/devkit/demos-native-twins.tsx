@@ -354,7 +354,7 @@ export const TWIN_DEMOS: Record<string, ComponentType> = {
         <FloatingButton icon={PencilIcon} label="Compose" onClick={() => toast('Would compose')} />
         <FloatingButton icon={PlusIcon} variant="secondary" aria-label="Add" />
       </Row>
-      <div className="bg-muted/40 relative h-48 w-72 max-w-full overflow-hidden rounded-xl border">
+      <div className="bg-muted-subtle relative h-48 w-72 max-w-full overflow-hidden rounded-xl border">
         <div className="flex flex-col gap-2 p-4">
           {[1, 2, 3].map((i) => (
             <div key={i} className="bg-card h-10 rounded-md border" />

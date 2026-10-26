@@ -21,10 +21,10 @@ type Props = {
 };
 
 const SURFACE: Record<PromoTone, string> = {
-  primary: 'bg-primary/10',
-  success: 'bg-success/10',
-  info: 'bg-info/10',
-  warning: 'bg-warning/10',
+  primary: 'bg-primary-subtle',
+  success: 'bg-success-subtle',
+  info: 'bg-info-subtle',
+  warning: 'bg-warning-subtle',
   muted: 'bg-muted',
 };
 

@@ -22,7 +22,7 @@ export function DevKitSection({ section, highlighted, bare, onLayout }: Props) {
   return (
     <View
       onLayout={onLayout}
-      className={cn('gap-3 px-5 py-5', !bare && 'border-border border-t', highlighted && 'bg-primary/10')}>
+      className={cn('gap-3 px-5 py-5', !bare && 'border-border border-t', highlighted && 'bg-primary-subtle')}>
       {bare ? null : (
         <Text className="text-muted-foreground text-xs font-semibold uppercase tracking-widest">{section.title}</Text>
       )}

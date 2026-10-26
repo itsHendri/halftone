@@ -8,7 +8,7 @@ import { after, test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
 import { contrast, hexToOklch, hexToOklchParts, oklchPartsToHex } from '../lib/color.mjs';
-import { checkContrast, contrastFailures, textOnTintLimits } from '../lib/contrast.mjs';
+import { checkContrast, contrastFailures, textOnSubtle, textOnTintLimits } from '../lib/contrast.mjs';
 import { scanTintText } from '../lib/scan.mjs';
 import { group, loadTokens, radiusCalc } from '../lib/resolve.mjs';
 
@@ -119,6 +119,29 @@ test('the source scan flags tone text on a tint the palette cannot carry', () =>
   assert.match(problems[0], /bad\.tsx:1 {2}text-destructive on bg-destructive\/15 \(allowed: never\)/);
 });
 
+test('the source scan flags tone text on a -subtle tint the palette cannot carry', () => {
+  const root = mkdtempSync(join(tmpdir(), 'halftone-tokens-scan-'));
+  temps.push(root);
+  mkdirSync(join(root, 'components'), { recursive: true });
+  writeFileSync(
+    join(root, 'components', 'tints.tsx'),
+    [
+      `export const A = () => <span className="bg-destructive-subtle text-destructive">Overdue</span>;`,
+      `export const B = () => <span className="bg-success-subtle text-success">Paid</span>;`,
+      `export const C = () => <span className="bg-destructive-subtle text-foreground">Overdue</span>;`,
+    ].join('\n')
+  );
+  const subtle = textOnSubtle([
+    { name: 'destructive', light: '#dc2626', dark: '#ef4444' },
+    { name: 'destructive-subtle', light: '#fee2e2', dark: '#450a0a' },
+    { name: 'success', light: '#15803d', dark: '#4ade80' },
+    { name: 'success-subtle', light: '#dcfce7', dark: '#052e16' },
+  ]);
+  assert.deepEqual(subtle, { success: true, destructive: false });
+  const problems = scanTintText(root, ['components'], {}, subtle);
+  assert.deepEqual(problems, ['  components/tints.tsx:1  text-destructive on bg-destructive-subtle (allowed: text-foreground on it)']);
+});
+
 /** An app whose config scans components/, with one class string the palette can't carry. */
 const flaggedScan = () => {
   const root = appRoot();
@@ -201,8 +224,9 @@ test('build warns on a palette below AA, writes every target and names the pairi
   assert.match(build.stdout, /1 contrast warning\(s\), run with --strict to fail/);
   assert.ok(existsSync(join(root, 'global.css')));
   const design = readFileSync(join(root, 'DESIGN.md'), 'utf8');
-  assert.match(design, /1 pairing\(s\) in this palette fall below WCAG AA/);
-  assert.match(design, /primary-foreground on primary/);
+  // The pale label fails on the primary and on its pressed fill.
+  assert.match(design, /2 pairing\(s\) in this palette fall below WCAG AA/);
+  assert.match(build.stderr, /primary-foreground on primary-pressed/);
 });
 
 test('check without --strict passes on a below-AA palette whose outputs are current', () => {

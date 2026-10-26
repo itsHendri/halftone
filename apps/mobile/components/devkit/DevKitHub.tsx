@@ -119,7 +119,7 @@ export function DevKitHub<Id extends string>({ categories, sections, searchPlace
                 accessibilityRole="button"
                 aria-expanded={isOpen}
                 onPress={() => toggle(cat.id)}
-                className={cn('min-h-16 flex-row items-center gap-3 px-5 py-3 active:bg-accent', isOpen && 'bg-muted/40')}>
+                className={cn('min-h-16 flex-row items-center gap-3 px-5 py-3 active:bg-accent', isOpen && 'bg-muted-subtle')}>
                 <View className="bg-muted size-10 items-center justify-center rounded-lg">
                   <Icon as={cat.icon} size={20} />
                 </View>

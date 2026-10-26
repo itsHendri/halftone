@@ -163,7 +163,7 @@ export default function FoundationsPage() {
           {Object.entries(TOKENS.space).map(([k, v]) => (
             <li key={k} className="flex items-center gap-3">
               <code className="w-14 text-xs">p-{k}</code>
-              <span className="bg-primary/60 h-3 rounded-sm" style={{ width: v }} />
+              <span className="bg-primary h-3 rounded-sm" style={{ width: v }} />
               <span className="text-muted-foreground text-xs">{v}px</span>
             </li>
           ))}

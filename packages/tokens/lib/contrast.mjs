@@ -10,7 +10,7 @@ import { componentPairs } from './theme/components.mjs';
 export const AA = 4.5; // WCAG 2.1 AA, normal text. Kit labels are 16px — not "large text".
 export const AA_NON_TEXT = 3; // WCAG 1.4.11, icons and other meaningful non-text.
 
-/** The alpha values the kit actually tints with (bg-<tone>/10 etc). */
+/** The alpha tints a token file from before the tint roles (bg-<tone>/10 etc) is checked at. */
 const TINTS = [0.1, 0.15, 0.2];
 /** Tones that get used as ink — text-<tone> and coloured icons — not just as fills. */
 export const TONES = ['primary', 'success', 'warning', 'info', 'destructive'];
@@ -20,7 +20,8 @@ export const TONES = ['primary', 'success', 'warning', 'info', 'destructive'];
  *   1. a fill and its own -foreground label
  *   2. body and muted text on each surface
  *   3. a tone used as INK — text-<tone> and coloured icons — on the page and on a card
- *   4. a tone's icon sitting on that same tone's tint, as Alert and IconCircle do
+ *   4. a tone's icon sitting on that same tone's tint (`<tone>-subtle`), as Alert and IconCircle do
+ *   5. body and muted text on a tint (`<tone>-subtle`, `muted-subtle`), and a label on its pressed fill
  *
  * 3 and 4 are the ones that matter most for a re-brand: a colour can be a perfectly good
  * fill and still be unreadable as text, which is exactly how an amber warning gets in.
@@ -62,12 +63,29 @@ export function contrastPairs(hex, mode, { strict = false, fg: only } = {}) {
     }
   }
 
-  // A tone's icon on that tone's own tint — Alert, IconCircle, SwipeToConfirm.
+  // A tone's icon on that tone's own tint — Alert, IconCircle, SwipeToConfirm. A token file from before the tint
+  // roles tinted with an alpha (bg-<tone>/15): that blend over the page.
   for (const tone of TONES) {
-    if (!hex[tone] || !hex.background) continue;
-    for (const alpha of TINTS) {
-      add(`${tone} icon on ${tone}/${alpha * 100}`, tone, `${tone}/${alpha * 100}`, hex[tone], blend(hex[tone], hex.background, alpha), AA_NON_TEXT);
+    if (!hex[tone]) continue;
+    const tint = `${tone}-subtle`;
+    if (hex[tint]) add(`${tone} icon on ${tint}`, tone, tint, hex[tone], hex[tint], AA_NON_TEXT);
+    else if (hex.background) {
+      for (const alpha of TINTS) {
+        add(`${tone} icon on ${tone}/${alpha * 100}`, tone, `${tone}/${alpha * 100}`, hex[tone], blend(hex[tone], hex.background, alpha), AA_NON_TEXT);
+      }
     }
+  }
+
+  // Text on a tint: an Alert's title and description, a selected card, a promo.
+  for (const tint of [...TONES.map((tone) => `${tone}-subtle`), 'muted-subtle']) {
+    if (!hex[tint]) continue;
+    for (const ink of ['foreground', 'muted-foreground']) if (hex[ink]) add(`${ink} on ${tint}`, ink, tint, hex[ink], hex[tint], AA);
+  }
+  // A pressed fill keeps its label.
+  for (const name of ['primary', 'secondary']) {
+    const fill = `${name}-pressed`;
+    const fg = `${name}-foreground`;
+    if (hex[fill] && hex[fg]) add(`${fg} on ${fill}`, fg, fill, hex[fg], hex[fill], AA);
   }
   return out;
 }
@@ -114,6 +132,32 @@ export function textOnTintLimits(colors) {
   }
   return limits;
 }
+
+/**
+ * Which tones' TEXT reads on that tone's own tint role (`text-success` on `bg-success-subtle`) in both themes:
+ * `{ primary: false, info: true, … }`. A tone without the role (a token file from before it) is left out.
+ */
+export function textOnSubtle(colors) {
+  const modes = ['light', 'dark'].map((mode) => Object.fromEntries(colors.map((c) => [c.name, c[mode]])));
+  const out = {};
+  for (const tone of TONES) {
+    if (!modes.every((hex) => hex[tone] && hex[`${tone}-subtle`])) continue;
+    out[tone] = modes.every((hex) => contrast(hex[tone], hex[`${tone}-subtle`]) >= AA);
+  }
+  return out;
+}
+
+/** `{ primary: false, success: true, info: true }` → "success and info" (the tones whose text reads on their own -subtle). */
+export const describeSubtle = (subtle) => {
+  const ok = Object.entries(subtle).filter(([, reads]) => reads).map(([tone]) => tone);
+  return ok.length ? ok.join(', ').replace(/, ([^,]+)$/, ' and $1') : 'none';
+};
+
+/** One sentence for the generated guides: where a tone's own text may sit on its tint. */
+export const subtleLine = (subtle) =>
+  Object.keys(subtle).length
+    ? `With this palette a tone's own text clears AA on its tint (\`text-success\` on \`bg-success-subtle\`) for ${describeSubtle(subtle) === 'none' ? 'no tone' : `${describeSubtle(subtle)} only`}.`
+    : '';
 
 /** `{ primary: 0.05, destructive: 0 }` → "primary up to /5, destructive never". */
 export const describeTintLimits = (limits) =>

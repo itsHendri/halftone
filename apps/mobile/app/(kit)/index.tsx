@@ -66,8 +66,8 @@ export default function KitHome() {
 function Step({ n, title, body }: { n: number; title: string; body: string }) {
   return (
     <View className="flex-row gap-3">
-      <View className="bg-primary/15 size-6 items-center justify-center rounded-full">
-        <Text className="text-primary text-xs font-semibold">{n}</Text>
+      <View className="bg-primary-subtle size-6 items-center justify-center rounded-full">
+        <Text className="text-foreground text-xs font-semibold">{n}</Text>
       </View>
       <View className="flex-1 gap-0.5">
         <Text className="font-medium">{title}</Text>
