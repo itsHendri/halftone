@@ -73,7 +73,9 @@ export function Specimen({
   const iconPx = shape.icon ?? (name === 'input' ? 16 : ICON_DEFAULT[name]);
   const Icon = ICON[name];
   const focus = state === 'focus';
-  const faint = state === 'disabled' || state === 'loading';
+  // A state's label isn't read for contrast here (disabled is faint on purpose; hover and pressed are moments): the
+  // Colours group gives their ratios.
+  const faint = state !== 'rest' && state !== 'focus';
   const shadows = [shadowOf(name, shape, variant)];
 
   if (name === 'input') {

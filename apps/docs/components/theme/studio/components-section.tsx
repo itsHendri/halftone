@@ -34,6 +34,7 @@ import {
   STEP_SHORT,
   STYLE_LABELS,
   VARIANT_LABELS,
+  pressedContrast,
   variantContrast,
   WEIGHT_LABELS,
   type Group,
@@ -522,6 +523,9 @@ function ColoursGroup({ name, variant, onVariant }: { name: ComponentName; varia
         {pairs.map((r) => (
           <Ratio key={r.mode} fg={r.fg} bg={r.bg} label={`Label on fill, ${r.mode} ·`} />
         ))}
+        {name === 'button' || name === 'chip'
+          ? pressedContrast(theme, name, variant).map((r) => <Ratio key={`h-${r.mode}`} fg={r.fg} bg={r.bg} label={`On hover · pressed, ${r.mode} ·`} />)
+          : null}
         {name === 'input' && variant === 'default' ? variantContrast(theme, name, 'placeholder').map((r) => <Ratio key={`p-${r.mode}`} fg={r.fg} bg={r.bg} label={`Placeholder, ${r.mode} ·`} />) : null}
       </div>
       {usageOf([`component.${name}`]).length ? (
