@@ -34,6 +34,7 @@ import {
   STEP_SHORT,
   STYLE_LABELS,
   VARIANT_LABELS,
+  colourName,
   pressedContrast,
   variantContrast,
   WEIGHT_LABELS,
@@ -352,7 +353,7 @@ function SizeGroup({ name, step, onStep }: { name: ComponentName; step: Step; on
   const height = shape.h[at] ?? 0;
   const note =
     name === 'badge'
-      ? 'At least this tall: a badge grows with its text.'
+      ? 'Exact, and never shorter than its text and border.'
       : height < TOUCH_TARGET
         ? name === 'input'
           ? `At least ${TOUCH_TARGET} tall on phones.`
@@ -361,7 +362,16 @@ function SizeGroup({ name, step, onStep }: { name: ComponentName; step: Step; on
   return (
     <>
       <Choice label={`${def.label} size to tune`} value={at} options={def.steps.map((s) => ({ value: s, label: `${STEP_SHORT[s]} ${shape.h[s]}` }))} onChange={onStep} />
-      <Slider label={`${STEP_LABEL[at]} height`} value={height} min={name === 'badge' ? 12 : 20} max={name === 'badge' ? 40 : 80} note={note} edited={size[at] !== undefined} onChange={(v) => setSize(name, at, v)} onReset={() => setSize(name, at, null)} />
+      <Slider
+        label={`${STEP_LABEL[at]} height`}
+        value={height}
+        min={name === 'badge' ? Math.ceil(shape.text.leading + 2 * (shape.borderWidth ?? 0)) : 20}
+        max={name === 'badge' ? 40 : 80}
+        note={note}
+        edited={size[at] !== undefined}
+        onChange={(v) => setSize(name, at, v)}
+        onReset={() => setSize(name, at, null)}
+      />
       <Slider label="Padding" value={shape.x.md ?? 0} min={0} max={40} note={name === 'button' ? 'Small is 4 less, Large 4 more.' : 'Every size.'} edited={size.x !== undefined} onChange={(v) => setSize(name, 'x', v)} onReset={() => setSize(name, 'x', null)} />
       {shape.gap ? (
         <Slider
@@ -507,7 +517,7 @@ function ColoursGroup({ name, variant, onVariant }: { name: ComponentName; varia
                 label={`${title} ${what.toLowerCase()}`}
                 color={color}
                 none={slot === 'fill' || slot === 'border'}
-                display={(r) => (derived ? `Derived · ${roleName(color?.role ?? null).toLowerCase()}${color && color.alpha[mode] < 1 ? ` ${Math.round(color.alpha[mode] * 100)}%` : ''}` : roleName(r))}
+                display={(r) => (derived ? `Derived · ${colourName(color, mode).toLowerCase()}` : color && !color.role ? colourName(color, mode) : roleName(r))}
                 onPick={(r) => setVariant(name, variant, slot, r)}
               />
               {edited ? <ResetLink label={`Reset ${title} ${what.toLowerCase()}`} onReset={() => setVariant(name, variant, slot, null)} /> : null}
@@ -601,30 +611,70 @@ function SpecimenGrid({ name, variant, onVariant, step, onStep, narrow }: { name
   const variants = Object.keys(def.variants);
   const at = def.steps.includes(step) ? step : 'md';
   const steps = [...def.steps].reverse() as Step[];
-  const icon = name !== 'input' ? [{ key: 'icon', title: 'Icon', step: narrow ? at : ('md' as Step), icon: true }] : [];
-  const rows: { key: string; title: string; step: Step; icon?: boolean }[] = [...(narrow ? [at] : steps).map((s) => ({ key: s, title: STEP_LABEL[s], step: s })), ...icon];
+  // Every size side by side while they fit; one at a time, a row per variant (as on a phone), when they'd scroll
+  // sideways.
+  const box = React.useRef<HTMLDivElement>(null);
+  const grid = React.useRef<HTMLDivElement>(null);
+  const [width, setWidth] = React.useState(0);
+  const [needs, setNeeds] = React.useState<number | null>(null);
+  React.useEffect(() => {
+    const el = box.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => setWidth(el.clientWidth));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+  // A new look may fit again: measure the full grid afresh.
+  React.useLayoutEffect(() => setNeeds(null), [shape]);
+  const one = narrow || (needs !== null && width < needs);
+  React.useLayoutEffect(() => {
+    const g = grid.current;
+    if (one || !g || !width) return;
+    if (g.scrollWidth > width + 1) setNeeds(g.scrollWidth);
+  }, [one, width, shape]);
+  const icon = name !== 'input' ? [{ key: 'icon', title: 'Icon', step: 'md' as Step, icon: true }] : [];
+  const rows: { key: string; title: string; step: Step; icon?: boolean }[] = [...steps.map((s) => ({ key: s, title: STEP_LABEL[s], step: s })), ...icon];
   const states = STATES[name];
   const fit = name === 'input' ? 'w-[7.5rem]' : '';
   return (
     <div className="flex min-w-0 flex-col gap-4">
-      {narrow ? <Choice label={`${def.label} size shown`} value={at} options={def.steps.map((s) => ({ value: s, label: STEP_LABEL[s] }))} onChange={onStep} /> : null}
-      <div className="overflow-x-auto pb-1">
-        <div role="group" aria-label={`${def.label} by ${name === 'input' ? 'state' : 'variant'} and size; a column’s name picks what Colours edits`} className="grid w-max items-center gap-x-1 gap-y-1.5" style={{ gridTemplateColumns: `3.25rem repeat(${variants.length}, max-content)` }}>
-          <span />
-          {variants.map((v) => (
-            <VariantHeader key={v} name={name} variant={v} selected={v === variant} onSelect={() => onVariant(v)} />
-          ))}
-          {rows.map((r) => (
-            <React.Fragment key={r.key}>
-              <span className="text-muted-foreground text-xs">{r.title}</span>
-              {variants.map((v) => (
-                <span key={v} className={`flex rounded-lg p-1 ${v === variant ? 'bg-accent/60' : ''}`}>
-                  <Specimen name={name} shape={shape} variant={v} mode={mode} step={r.step} icon={r.icon} label={specimenLabel(name, v)} value={valueOf(name, v)} className={fit} />
-                </span>
-              ))}
-            </React.Fragment>
-          ))}
-        </div>
+      {one ? <Choice label={`${def.label} size shown`} value={at} options={def.steps.map((s) => ({ value: s, label: STEP_LABEL[s] }))} onChange={onStep} /> : null}
+      <div ref={box} className="overflow-x-auto pb-1">
+        {one ? (
+          // One size at a time: a row per variant (its name, the size, the icon example), so nothing scrolls sideways.
+          <div role="group" aria-label={`${def.label} by ${name === 'input' ? 'state' : 'variant'}, ${STEP_LABEL[at]}; a row’s name picks what Colours edits`} className="grid w-max items-center gap-x-2 gap-y-1.5" style={{ gridTemplateColumns: `max-content repeat(${icon.length + 1}, max-content)` }}>
+            <span />
+            <span className="text-muted-foreground text-xs">{STEP_LABEL[at]}</span>
+            {icon.length ? <span className="text-muted-foreground text-xs">Icon</span> : null}
+            {variants.map((v) => (
+              <React.Fragment key={v}>
+                <VariantHeader name={name} variant={v} selected={v === variant} onSelect={() => onVariant(v)} />
+                {[false, ...(icon.length ? [true] : [])].map((withIcon) => (
+                  <span key={String(withIcon)} className={`flex rounded-lg p-1 ${v === variant ? 'bg-accent/60' : ''}`}>
+                    <Specimen name={name} shape={shape} variant={v} mode={mode} step={at} icon={withIcon} label={specimenLabel(name, v)} value={valueOf(name, v)} className={fit} />
+                  </span>
+                ))}
+              </React.Fragment>
+            ))}
+          </div>
+        ) : (
+          <div ref={grid} role="group" aria-label={`${def.label} by ${name === 'input' ? 'state' : 'variant'} and size; a column’s name picks what Colours edits`} className="grid w-max items-center gap-x-1 gap-y-1.5" style={{ gridTemplateColumns: `3.25rem repeat(${variants.length}, max-content)` }}>
+            <span />
+            {variants.map((v) => (
+              <VariantHeader key={v} name={name} variant={v} selected={v === variant} onSelect={() => onVariant(v)} />
+            ))}
+            {rows.map((r) => (
+              <React.Fragment key={r.key}>
+                <span className="text-muted-foreground text-xs">{r.title}</span>
+                {variants.map((v) => (
+                  <span key={v} className={`flex rounded-lg p-1 ${v === variant ? 'bg-accent/60' : ''}`}>
+                    <Specimen name={name} shape={shape} variant={v} mode={mode} step={r.step} icon={r.icon} label={specimenLabel(name, v)} value={valueOf(name, v)} className={fit} />
+                  </span>
+                ))}
+              </React.Fragment>
+            ))}
+          </div>
+        )}
       </div>
       {states.length ? (
         <div className="flex flex-col gap-2">
@@ -634,7 +684,7 @@ function SpecimenGrid({ name, variant, onVariant, step, onStep, narrow }: { name
           <div className="flex flex-wrap items-end gap-3">
             {states.map((s) => (
               <span key={s} className="flex flex-col items-start gap-1">
-                <Specimen name={name} shape={shape} variant={variant} mode={mode} step={narrow ? at : 'md'} state={s} label={s === 'loading' ? 'Saving' : specimenLabel(name, variant)} />
+                <Specimen name={name} shape={shape} variant={variant} mode={mode} step={one ? at : 'md'} state={s} label={s === 'loading' ? 'Saving' : specimenLabel(name, variant)} />
                 <span className="text-muted-foreground text-[11px]">{STATE_LABEL[s]}</span>
               </span>
             ))}

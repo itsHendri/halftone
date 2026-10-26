@@ -253,6 +253,14 @@ export const roleName = (role: string | null) => {
   return s.charAt(0).toUpperCase() + s.slice(1);
 };
 
+/** A component colour's name: its role, or the ramp step it is ("Brand 700"), in one mode. */
+export const colourName = (c: ComponentColor | undefined, mode: Mode) => {
+  if (!c) return roleName(null);
+  if (c.role) return roleName(c.role);
+  const m = /primitive\.color\.([a-z0-9-]+)\.(\d+)/.exec(c.ref?.[mode] ?? '');
+  return m ? `${m[1].charAt(0).toUpperCase()}${m[1].slice(1)} ${m[2]}` : roleName(null);
+};
+
 /** Label on fill, light and dark, for one variant (the fill over the page at its opacity), or for every one (null). */
 export function variantContrast(theme: Theme, name: ComponentName, variant: string | null) {
   const rows = componentContrast(theme.components, { light: theme.resolved.light.background, dark: theme.resolved.dark.background });
