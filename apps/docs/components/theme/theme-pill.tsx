@@ -149,7 +149,7 @@ export function ThemePill() {
           ref={bar}
           role="toolbar"
           aria-label="Theme"
-          className="border-border bg-background/85 text-foreground pointer-events-auto flex max-w-full items-center gap-1 rounded-full border p-1.5 shadow-[0_8px_30px_rgb(0_0_0/0.12)] backdrop-blur-xl">
+          className="border-border bg-background/85 text-foreground pointer-events-auto flex max-w-full items-center gap-1 rounded-full border p-1.5 shadow-lg backdrop-blur-xl">
           <Popover
             open={systemOpen}
             onOpenChange={(open) => {
@@ -277,6 +277,7 @@ export function ThemePill() {
                   })}
                   <label
                     className="relative mx-auto size-8 cursor-pointer rounded-full"
+                    // eslint-disable-next-line halftone/no-raw-colour -- the hue wheel that stands for "any colour"
                     style={{ background: 'conic-gradient(from 0deg, #ef4444, #f59e0b, #22c55e, #06b6d4, #6366f1, #d946ef, #ef4444)' }}
                     title="Any colour">
                     <span className="sr-only">Any colour</span>

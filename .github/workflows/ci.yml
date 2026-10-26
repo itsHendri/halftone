@@ -340,5 +340,9 @@ jobs:
       - name: Typecheck
         run: npm run typecheck
 
+      # The kits' colour rules (apps/mobile/eslint/halftone.mjs): no raw colour, no colour at an opacity.
+      - name: Lint
+        run: npm run lint
+
       - name: Brand asset tests
         run: npm test

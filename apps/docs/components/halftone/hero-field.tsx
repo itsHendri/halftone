@@ -118,6 +118,7 @@ export function HeroField() {
     <canvas
       ref={ref}
       aria-hidden
+      // eslint-disable-next-line halftone/no-raw-colour -- a mask: #000 is opacity, not a colour
       className="pointer-events-none absolute inset-0 -z-10 size-full [mask-image:radial-gradient(ellipse_46%_34%_at_50%_32%,transparent_35%,#000_92%)] print:hidden"
     />
   );

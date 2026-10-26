@@ -272,6 +272,7 @@ function StepPopover({ role, step }: { role: ColorRole; step: string }) {
       preview={
         <div className="ring-foreground/10 flex h-20 items-end justify-between rounded-lg p-2.5 ring-1 ring-inset" style={{ background: hex, color: contrast(hex, '#ffffff') >= contrast(hex, '#000000') ? '#ffffff' : '#000000' }}>
           <span className="font-mono text-xs uppercase">{hex}</span>
+          {/* eslint-disable-next-line halftone/no-raw-colour -- a label drawn over a swatch of any colour */}
           {isInput ? <span className="rounded bg-black/20 px-1.5 py-0.5 text-[11px] font-medium text-white">input</span> : null}
         </div>
       }

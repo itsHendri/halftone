@@ -68,7 +68,7 @@ export default function ScreensPage() {
         </p>
       </header>
       {/* Jump to a product; sticks under the top bar (apps/docs/design/navigation-wireframes.md). */}
-      <nav aria-label="Products" className="bg-fd-background/80 sticky top-14 z-20 -mx-1 -my-12 flex flex-wrap gap-2 px-1 py-3 backdrop-blur-sm">
+      <nav aria-label="Products" className="bg-background/80 sticky top-14 z-20 -mx-1 -my-12 flex flex-wrap gap-2 px-1 py-3 backdrop-blur-sm">
         {PRODUCTS.map((p) => (
           <a key={p.id} href={`#${p.id}`} className="border-border hover:bg-accent rounded-full border px-3.5 py-1 text-sm font-medium">
             {p.name}

@@ -112,6 +112,7 @@ function RampGrids() {
                       aria-hidden
                       className="ring-border flex h-14 flex-col justify-center gap-0.5 rounded-md px-1 text-[11px] font-semibold tabular-nums ring-1 ring-inset sm:px-1.5"
                       style={{ background: hex }}>
+                      {/* eslint-disable-next-line halftone/no-raw-colour -- the white-text sample the ratio is measured against */}
                       <span data-sample={sample(onWhite)} data-ratio={ratioText(onWhite)} className={SAMPLE} style={{ color: '#ffffff' }} />
                       <span data-sample={sample(onInk)} data-ratio={ratioText(onInk)} className={SAMPLE} style={{ color: ink }} />
                     </span>

@@ -78,7 +78,7 @@ function DocsMenu() {
 /** The slim bar on /studio. */
 function StudioHeader() {
   return (
-    <header className="bg-fd-background/80 sticky top-0 z-40 border-b backdrop-blur-sm">
+    <header className="bg-background/80 sticky top-0 z-40 border-b backdrop-blur-sm">
       <div className="flex h-12 items-center gap-4 px-4 md:px-6">
         <Link href="/" className="inline-flex shrink-0 items-center gap-2 font-semibold">
           <span aria-hidden className="bg-primary size-5 rounded-md" />
@@ -108,8 +108,8 @@ export function SiteHeader({ variant }: { variant: 'home' | 'docs' }) {
       className={
         variant === 'docs'
           ? // The notebook layout's grid slot and header height (fumadocs-ui notebook/slots/header).
-            'bg-fd-background/80 sticky top-(--fd-docs-row-1) z-10 border-b backdrop-blur-sm [grid-area:header] layout:[--fd-header-height:--spacing(14)]'
-          : 'bg-fd-background/80 sticky top-0 z-40 border-b backdrop-blur-sm'
+            'bg-background/80 sticky top-(--fd-docs-row-1) z-10 border-b backdrop-blur-sm [grid-area:header] layout:[--fd-header-height:--spacing(14)]'
+          : 'bg-background/80 sticky top-0 z-40 border-b backdrop-blur-sm'
       }>
       <div className="flex h-14 items-center gap-6 px-4 md:px-6">
         <Link href="/" className="inline-flex shrink-0 items-center gap-2 font-semibold">
