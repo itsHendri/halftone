@@ -17,16 +17,10 @@ export type Step = 'sm' | 'md' | 'lg';
 
 const ICON = { button: PlusIcon, chip: StarIcon, badge: StarIcon, input: SearchIcon } as const;
 
-/** A shadow level as CSS (the Foundations shadows), with the web kit's own until the system sets one. */
+/** A shadow level as CSS (the Foundations shadows); a Ghost button has none. */
 function shadowOf(name: ComponentName, shape: ComponentShape, variant: string): string | null {
   const level = shape.shadow;
-  if (level === undefined) return null;
-  if (level === null) {
-    // The web kit's own: an Outline button's shadow-xs; a boxed field's.
-    if (name === 'button') return variant === 'outline' ? 'var(--shadow-1)' : null;
-    return shape.borderWidth ? 'var(--shadow-1)' : null;
-  }
-  if (level === 'none' || (name === 'button' && variant === 'ghost')) return null;
+  if (!level || level === 'none' || (name === 'button' && variant === 'ghost')) return null;
   return `var(--shadow-${level})`;
 }
 
