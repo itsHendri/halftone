@@ -259,6 +259,24 @@ export function variantContrast(theme: Theme, name: ComponentName, variant: stri
   return rows.filter((r) => r.component === name && (variant === null || r.variant === variant));
 }
 
+/** A colour over another at an opacity, in sRGB (as the tokens' contrast gate blends a see-through fill). */
+function blend(hex: string, base: string, alpha: number) {
+  const rgb = (h: string) => [1, 3, 5].map((i) => parseInt(h.slice(i, i + 2), 16));
+  const [f, b] = [rgb(hex), rgb(base)];
+  return `#${f.map((c, i) => Math.round(alpha * c + (1 - alpha) * b[i]).toString(16).padStart(2, '0')).join('')}`;
+}
+
+/** A variant's label on its hover and pressed fill (the pressed colour over the page), light and dark. */
+export function pressedContrast(theme: Theme, name: ComponentName, variant: string) {
+  const v = theme.components[name].variants[variant];
+  if (!v?.pressed || !v.label) return [];
+  return (['light', 'dark'] as const).map((mode) => {
+    const page = theme.resolved[mode].background;
+    const a = v.pressed!.alpha[mode];
+    return { mode, fg: v.label![mode], bg: a >= 1 ? v.pressed![mode] : a <= 0 ? page : blend(v.pressed![mode], page, a) };
+  });
+}
+
 /** The px a corner name stands for in this theme. */
 export function cornerPx(shape: ComponentShape) {
   return shape.radius >= 9999 ? 'full' : `${shape.radius}px`;
