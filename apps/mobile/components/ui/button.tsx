@@ -1,6 +1,7 @@
 import { IconSizeContext } from '@/components/ui/icon';
 import { TextClassContext } from '@/components/ui/text';
 import { labelClass, shadowClass } from '@/lib/component-classes';
+import { useLiveComponent } from '@/lib/palette-context';
 import { TOKENS } from '@/lib/theme';
 import { cn } from '@/lib/utils';
 import { cva, type VariantProps } from 'class-variance-authority';
@@ -117,11 +118,14 @@ function touchSlop(size: ButtonProps['size']) {
 type ButtonProps = React.ComponentProps<typeof Pressable> & React.RefAttributes<typeof Pressable> & VariantProps<typeof buttonVariants>;
 
 function Button({ className, variant, size, ...props }: ButtonProps) {
+  // A live theme from the docs site (embedded web) brings its own weight, case and shadow.
+  const live = useLiveComponent('button');
+  const liveShadow = live && 'shadow' in live && variant !== 'ghost' && variant !== 'link' ? shadowClass(live.shadow ?? null, 'shadow-sm') : null;
   return (
-    <TextClassContext.Provider value={buttonTextVariants({ variant, size })}>
+    <TextClassContext.Provider value={cn(buttonTextVariants({ variant, size }), live && labelClass(live, true))}>
       <IconSizeContext.Provider value={button.icon}>
         <Pressable
-          className={cn(props.disabled && 'opacity-50', buttonVariants({ variant, size }), className)}
+          className={cn(props.disabled && 'opacity-50', buttonVariants({ variant, size }), liveShadow, className)}
           role="button"
           hitSlop={touchSlop(size)}
           {...props}

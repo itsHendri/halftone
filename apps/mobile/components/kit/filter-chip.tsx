@@ -2,6 +2,7 @@ import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { labelClass } from '@/lib/component-classes';
 import { haptic } from '@/lib/haptics';
+import { useLiveComponent } from '@/lib/palette-context';
 import { TOKENS } from '@/lib/theme';
 import { cn } from '@/lib/utils';
 import type { LucideIcon } from 'lucide-react-native';
@@ -37,6 +38,7 @@ const TEXT = cn(
  */
 export function FilterChip({ label, selected, onPress, icon, size = 'md', disabled, className }: ChipProps) {
   const SLOP = slop(size);
+  const live = useLiveComponent('chip');
   return (
     <Pressable
       accessibilityRole="button"
@@ -59,7 +61,7 @@ export function FilterChip({ label, selected, onPress, icon, size = 'md', disabl
         className
       )}>
       {icon ? <Icon as={icon} size={chip.icon ?? 14} className={selected ? 'text-chip-selected-fg' : 'text-chip-unselected-fg'} /> : null}
-      <Text className={cn(TEXT, selected ? 'text-chip-selected-fg' : 'text-chip-unselected-fg')}>{label}</Text>
+      <Text className={cn(TEXT, live && labelClass(live, true), selected ? 'text-chip-selected-fg' : 'text-chip-unselected-fg')}>{label}</Text>
     </Pressable>
   );
 }

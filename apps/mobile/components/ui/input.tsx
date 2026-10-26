@@ -1,5 +1,6 @@
 import { useFontStyle } from '@/components/ui/text';
 import { shadowClass } from '@/lib/component-classes';
+import { useLiveComponent } from '@/lib/palette-context';
 import { TOKENS } from '@/lib/theme';
 import { cn } from '@/lib/utils';
 import { Platform, TextInput } from 'react-native';
@@ -16,6 +17,7 @@ const TEXT = cn(
 function Input({ className, ...props }: React.ComponentProps<typeof TextInput> & React.RefAttributes<TextInput>) {
   // The theme's body font, like Text (a custom font is one family per weight on native).
   const font = useFontStyle(className ?? '');
+  const live = useLiveComponent('input');
   return (
     <TextInput
       className={cn(
@@ -24,7 +26,7 @@ function Input({ className, ...props }: React.ComponentProps<typeof TextInput> &
         'bg-field-default-bg border-field-default-border border-field-w border-b-field-edge-w rounded-t-field rounded-b-field-b px-field-x text-field-default-fg flex h-field-md w-full min-w-0 flex-row items-center py-1 text-type-field leading-5',
         TEXT,
         // No shadow until the system sets one.
-        shadowClass(input.shadow, ''),
+        shadowClass(live && 'shadow' in live ? (live.shadow ?? null) : input.shadow, ''),
         props.editable === false &&
         cn(
           'bg-field-disabled-bg border-field-disabled-border text-field-disabled-fg opacity-50',

@@ -2,6 +2,7 @@ import { Icon } from '@/components/ui/icon';
 import { NativeOnlyAnimatedView } from '@/components/ui/native-only-animated-view';
 import { TextClassContext } from '@/components/ui/text';
 import { shadowClass } from '@/lib/component-classes';
+import { useLiveComponent } from '@/lib/palette-context';
 import { TOKENS } from '@/lib/theme';
 import { cn } from '@/lib/utils';
 import * as SelectPrimitive from '@rn-primitives/select';
@@ -55,6 +56,7 @@ function SelectTrigger({
     children?: React.ReactNode;
     size?: 'default' | 'sm';
   }) {
+  const live = useLiveComponent('input');
   return (
     <SelectPrimitive.Trigger
       ref={ref}
@@ -62,7 +64,7 @@ function SelectTrigger({
         // The theme's Input (semantic.component.input, --field-*), as Input draws it.
         'bg-field-default-bg border-field-default-border border-field-w border-b-field-edge-w rounded-t-field rounded-b-field-b px-field-x active:opacity-80 flex h-field-md w-full flex-row items-center justify-between gap-2 py-2',
         // A trigger keeps shadow-sm until the system sets a shadow.
-        shadowClass(TOKENS.components.input.shadow, 'shadow-sm'),
+        shadowClass(live && 'shadow' in live ? (live.shadow ?? null) : TOKENS.components.input.shadow, 'shadow-sm'),
         Platform.select({
           web: 'focus-visible:border-field-focus-border focus-visible:bg-field-focus-bg focus-visible:ring-field-focus-ring aria-invalid:ring-field-error-ring aria-invalid:border-field-error-border aria-invalid:bg-field-error-bg dark:hover:bg-input/50 w-fit whitespace-nowrap text-sm outline-none transition-[color,box-shadow] focus-visible:ring-[length:var(--field-ring-w)] disabled:cursor-not-allowed [&_svg]:pointer-events-none [&_svg]:shrink-0',
         }),

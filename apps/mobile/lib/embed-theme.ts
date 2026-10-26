@@ -17,6 +17,8 @@ import { Platform } from 'react-native';
  * also kept in sessionStorage (same origin as the docs), so public/index.html can paint it first.
  */
 export type ThemeHex = Partial<Record<keyof typeof THEME.light, string>>;
+/** What the component layer picks in JS (lib/component-classes.ts), sent along so a live theme reaches it. */
+export type ComponentLook = { weight?: number; case?: 'none' | 'uppercase'; shadow?: 'none' | '1' | '2' | '3' | null; icon?: number | null };
 export type EmbedTokens = {
   code: string | null;
   /** Google Fonts family names by role; loaded from fonts.googleapis.com while the theme is live. `roles`: each
@@ -24,6 +26,8 @@ export type EmbedTokens = {
   fonts?: { heading?: string; body?: string; mono?: string; roles?: Partial<Record<TextStyleName, FontRole>> };
   vars?: { light?: Record<string, string>; dark?: Record<string, string> };
   hex?: { light?: ThemeHex; dark?: ThemeHex };
+  /** Each component's weight, case, shadow and icon size (`components.button.weight`…). */
+  components?: Partial<Record<keyof typeof TOKENS.components, ComponentLook>>;
 };
 
 type TextStyleName = keyof typeof TOKENS.textStyles;
@@ -66,6 +70,26 @@ function cleanHex(map: unknown): ThemeHex {
   ) as ThemeHex;
 }
 
+const WEIGHTS = [400, 500, 600, 700];
+const SHADOWS = ['none', '1', '2', '3'];
+
+/** Each component's look, only the values a component can take. */
+function cleanComponents(map: unknown): EmbedTokens['components'] {
+  if (!map || typeof map !== 'object') return {};
+  const out: NonNullable<EmbedTokens['components']> = {};
+  for (const [name, value] of Object.entries(map as Record<string, unknown>)) {
+    if (!(name in TOKENS.components) || !value || typeof value !== 'object') continue;
+    const v = value as Record<string, unknown>;
+    const look: ComponentLook = {};
+    if (WEIGHTS.includes(v.weight as number)) look.weight = v.weight as number;
+    if (v.case === 'none' || v.case === 'uppercase') look.case = v.case;
+    if (v.shadow === null || SHADOWS.includes(v.shadow as string)) look.shadow = v.shadow as ComponentLook['shadow'];
+    if (v.icon === null || (typeof v.icon === 'number' && v.icon >= 8 && v.icon <= 40)) look.icon = v.icon as number | null;
+    out[name as keyof typeof TOKENS.components] = look;
+  }
+  return out;
+}
+
 /** Validate a message (or a cached copy). Returns null for anything that isn't a theme. */
 export function parseEmbedTokens(data: unknown): EmbedTokens | null {
   const d = data as { type?: unknown; v?: unknown; code?: unknown; vars?: { light?: unknown; dark?: unknown }; hex?: { light?: unknown; dark?: unknown } } | null;
@@ -81,6 +105,7 @@ export function parseEmbedTokens(data: unknown): EmbedTokens | null {
   ) as Partial<Record<TextStyleName, FontRole>>;
   return {
     code: d.code,
+    components: cleanComponents((d as { components?: unknown }).components),
     fonts: { heading: family(f?.heading), body: family(f?.body), mono: family(f?.mono), roles },
     vars: { light: cleanVars(d.vars?.light), dark: cleanVars(d.vars?.dark) },
     hex: { light: cleanHex(d.hex?.light), dark: cleanHex(d.hex?.dark) },
