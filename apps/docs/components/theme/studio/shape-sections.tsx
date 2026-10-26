@@ -274,6 +274,7 @@ function Layers({ layers, onChange }: { layers: Layer[]; onChange: (layers: Laye
           </div>
         </fieldset>
       ))}
+      {/* eslint-disable-next-line halftone/no-raw-colour -- a new shadow layer's default colour, which the person then edits */}
       <button type="button" className={`${smallButton} self-start`} onClick={() => onChange([...layers, { x: 0, y: 4, blur: 12, spread: -2, color: '#000000', alpha: 0.08 }])}>
         <PlusIcon className="size-3.5" aria-hidden />
         Add a layer

@@ -15,7 +15,9 @@ function onColour(hex: string) {
 export function iconColours(theme: Theme, background: string) {
   const light = theme.resolved.light;
   if (background === 'brand') return { background: light.primary, mark: light['primary-foreground'] };
+  // eslint-disable-next-line halftone/no-raw-colour -- the exported icon's white background, a file's colour, not the page's
   if (background === 'white') return { background: '#ffffff', mark: light.foreground };
+  // eslint-disable-next-line halftone/no-raw-colour -- the exported icon's black background and its white mark
   if (background === 'black') return { background: '#000000', mark: '#ffffff' };
   return { background, mark: onColour(background) };
 }
