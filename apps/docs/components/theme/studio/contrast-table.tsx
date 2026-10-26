@@ -213,10 +213,11 @@ function FixCell({ line, onFixed }: { line: Line; onFixed?: () => void }) {
   const { system } = useLiveTheme();
   if (line.component) {
     const { name, variant } = line.component;
-    const slots = editedSlots(system, name, variant).map((s) => SLOT_LABELS[s].toLowerCase());
+    // Input's placeholder pairing: the placeholder role is its label; the fill is the default state's.
+    const slots = editedSlots(system, name, variant).map((s) => (variant === 'placeholder' ? (s === 'label' ? 'role' : 'default fill') : SLOT_LABELS[s].toLowerCase()));
     return (
       <span className="flex flex-col items-start gap-0.5 text-xs">
-        <span className="text-muted-foreground">Pick another fill or label role in Foundations › Components.</span>
+        <span className="text-muted-foreground">Pick another {variant === 'placeholder' ? 'placeholder' : 'fill or label'} role in Foundations › Components.</span>
         <span className="text-muted-foreground">
           edited: {COMPONENTS[name].label} {VARIANT_LABELS[variant]?.toLowerCase()} {slots.join(', ')}
         </span>

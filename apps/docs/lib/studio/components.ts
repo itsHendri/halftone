@@ -12,6 +12,9 @@ import { setRecipe } from '@/lib/theme/store';
 
 export type Slot = 'fill' | 'label' | 'border' | 'pressed';
 type Edit = NonNullable<HalftoneSystem['components'][ComponentName]>;
+/** The open card's panel groups (wireframe 9), always in this order; a component shows the ones it has. */
+export type Group = 'style' | 'shape' | 'size' | 'type' | 'effects' | 'colours';
+export const GROUP_LABELS: Record<Group, string> = { style: 'Style', shape: 'Shape', size: 'Size', type: 'Type', effects: 'Icon · effects', colours: 'Colours' };
 
 export const COMPONENT_ORDER: ComponentName[] = ['button', 'chip', 'badge', 'input'];
 
@@ -27,6 +30,7 @@ export const VARIANT_LABELS: Record<string, string> = {
   focus: 'Focus',
   error: 'Error',
   disabled: 'Disabled',
+  placeholder: 'Placeholder',
 };
 export const SLOT_LABELS: Record<Slot, string> = { fill: 'Fill', label: 'Label', border: 'Border', pressed: 'Pressed' };
 export const STYLE_LABELS: Record<string, string> = {
@@ -40,7 +44,9 @@ export const STYLE_LABELS: Record<string, string> = {
   square: 'Square',
 };
 export const CORNER_LABELS: Record<string, string> = { sm: 'Small', md: 'Medium', lg: 'Large', xl: 'XL', '2xl': '2XL', full: 'Full' };
-export const SIZE_LABELS: Record<string, string> = { sm: 'Small', md: 'Medium', lg: 'Large', x: 'Padding x', gap: 'Gap' };
+export const SIZE_LABELS: Record<string, string> = { sm: 'Small', md: 'Medium', lg: 'Large', x: 'Padding', gap: 'Gap' };
+export const STEP_SHORT: Record<string, string> = { sm: 'S', md: 'M', lg: 'L' };
+export const WEIGHT_LABELS: Record<number, string> = { 400: 'Regular', 500: 'Medium', 600: 'Semibold', 700: 'Bold' };
 
 /** What a variant is called in the kits' classes and variables: --button-primary-bg, bg-chip-selected-bg. */
 export const prefixOf = (name: ComponentName) => COMPONENTS[name].prefix;
@@ -142,6 +148,74 @@ export function resetVariant(name: ComponentName, variant: string) {
   });
 }
 
+type Prop = 'border' | 'weight' | 'case' | 'icon' | 'shadow' | 'placeholder';
+
+/** One of the open card's properties (border, weight, case, icon, shadow, placeholder), or null for the default. */
+export function setProp(name: ComponentName, key: Prop, value: string | number | null) {
+  editComponent(
+    name,
+    (e) => {
+      const entry = e as Record<string, unknown>;
+      if (value === null) delete entry[key];
+      else entry[key] = value;
+      return e;
+    },
+    typeof value === 'number' ? `component.${name}.${key}` : undefined
+  );
+}
+
+/** The focus ring's width (px) or role, or null for the default. */
+export function setRing(name: ComponentName, key: 'width' | 'role', value: string | number | null) {
+  editComponent(
+    name,
+    (e) => {
+      const ring = { ...e.ring } as Record<string, unknown>;
+      if (value === null) delete ring[key];
+      else ring[key] = value;
+      if (Object.keys(ring).length) e.ring = ring as Edit['ring'];
+      else delete e.ring;
+      return e;
+    },
+    typeof value === 'number' ? `component.${name}.ring.${key}` : undefined
+  );
+}
+
+/** What each panel group edits, as paths into the component's edits (and Colours: the variants). */
+const GROUP_KEYS: Record<Exclude<Group, 'colours'>, string[]> = {
+  style: ['style'],
+  shape: ['radius', 'border'],
+  size: ['size'],
+  type: ['text', 'weight', 'case', 'placeholder'],
+  effects: ['icon', 'shadow', 'ring'],
+};
+
+/** The edits in one group: "size.md", "ring.role", "variants.primary.fill". */
+export function groupEdits(doc: HalftoneSystem, name: ComponentName, group: Group): string[] {
+  const e = editsOf(doc, name) as Record<string, unknown>;
+  const keys = group === 'colours' ? ['variants'] : GROUP_KEYS[group];
+  const out: string[] = [];
+  for (const key of keys) {
+    const v = e[key];
+    if (v === undefined) continue;
+    if (key === 'variants') for (const [variant, slots] of Object.entries(v as Record<string, object>)) for (const slot of Object.keys(slots)) out.push(`variants.${variant}.${slot}`);
+    else if (v && typeof v === 'object') for (const k of Object.keys(v)) out.push(`${key}.${k}`);
+    else out.push(key);
+  }
+  return out;
+}
+
+/** Every edit a component holds (the card header's "N edited"). */
+export const componentEdits = (doc: HalftoneSystem, name: ComponentName) => (['style', 'shape', 'size', 'type', 'effects', 'colours'] as Group[]).flatMap((g) => groupEdits(doc, name, g));
+
+/** Reset one group's edits. */
+export function resetGroup(name: ComponentName, group: Group) {
+  editComponent(name, (e) => {
+    const entry = e as Record<string, unknown>;
+    for (const key of group === 'colours' ? ['variants'] : GROUP_KEYS[group]) delete entry[key];
+    return e;
+  });
+}
+
 /** Reset every edit of a component (the style too, for Chip and Badge). */
 export function resetComponent(name: ComponentName) {
   edit((doc) => {
@@ -152,8 +226,15 @@ export function resetComponent(name: ComponentName) {
   });
 }
 
-/** The slots a variant edits in the system. */
-export const editedSlots = (doc: HalftoneSystem, name: ComponentName, variant: string) => Object.keys(editsOf(doc, name).variants?.[variant] ?? {}) as Slot[];
+/**
+ * The slots a variant edits in the system. Input's placeholder pairing (its own line in Accessibility) counts the
+ * placeholder role as its label and the default state's fill.
+ */
+export const editedSlots = (doc: HalftoneSystem, name: ComponentName, variant: string): Slot[] => {
+  const e = editsOf(doc, name);
+  if (name === 'input' && variant === 'placeholder') return [...(e.placeholder ? ['label' as const] : []), ...(e.variants?.default?.fill ? ['fill' as const] : [])];
+  return Object.keys(e.variants?.[variant] ?? {}) as Slot[];
+};
 
 /** A colour as CSS, its opacity mixed in (a clear fill is transparent). */
 export const colorCss = (c: ComponentColor | undefined, mode: Mode) => {
@@ -172,10 +253,10 @@ export const roleName = (role: string | null) => {
   return s.charAt(0).toUpperCase() + s.slice(1);
 };
 
-/** Label on fill, light and dark, for one variant (the fill over the page at its opacity). */
-export function variantContrast(theme: Theme, name: ComponentName, variant: string) {
+/** Label on fill, light and dark, for one variant (the fill over the page at its opacity), or for every one (null). */
+export function variantContrast(theme: Theme, name: ComponentName, variant: string | null) {
   const rows = componentContrast(theme.components, { light: theme.resolved.light.background, dark: theme.resolved.dark.background });
-  return rows.filter((r) => r.component === name && r.variant === variant);
+  return rows.filter((r) => r.component === name && (variant === null || r.variant === variant));
 }
 
 /** The px a corner name stands for in this theme. */

@@ -63,7 +63,7 @@ const PAGES = [
   '/w/showcase/typeset/',
 ];
 /**
- * The Studio's popovers, open (components/theme/studio/item-popover.tsx): each is clicked open on /studio/ and checked
+ * The Studio's popovers and open cards (components/theme/studio/item-popover.tsx, components-section.tsx): each is clicked open on /studio/ and checked
  * as it stands, in both themes, at a desktop width and as a phone's bottom sheet. `click` is the selectors to click
  * in turn; `wait` what shows once it's open (a popover, by default).
  */
@@ -77,9 +77,11 @@ const POPOVERS = [
   { name: 'shadow layers', click: ['button[aria-label^="Shadow 2:"]'] },
   { name: 'item menu', click: ['button[aria-label="Primary · role: more"]'], wait: '[role="menu"]' },
   { name: '+ New', click: ['button:has-text("New colour")'], wait: '[role="menu"]' },
-  { name: 'component variant + role picker', click: ['button[aria-label^="Chip Selected"]', 'button[aria-label^="Chip Selected fill:"]'] },
-  { name: 'component corner', click: ['button[aria-label^="Button corner:"]'] },
-  { name: 'component size', click: ['button[aria-label^="Input size:"]'] },
+  // Foundations › Components (wireframe 9): an open card in place (full screen on a phone), and a role picker in its
+  // Colours group (an accordion row on a phone).
+  { name: 'open component card', click: ['button[aria-label^="Open Button:"]'], wait: '[data-component-card="button"][data-open]' },
+  { name: 'open card + role picker', click: ['button[aria-label^="Open Chip:"]', '[data-component-card="chip"] [data-group="colours"]', 'button[aria-label^="Chip Unselected fill:"]'], wait: '[role="listbox"]' },
+  { name: 'open Input card, size group', click: ['button[aria-label^="Open Input:"]', '[data-component-card="input"] [data-group="size"]'], wait: '[data-component-card="input"][data-open]' },
 ];
 const SCHEMES = ['light', 'dark'];
 const TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
