@@ -347,7 +347,7 @@
         "components/kit/filter-chip.tsx"
       ],
       "notes": "filter chips · selected is the theme's Chip colour (inverted by default)",
-      "api": "<FilterChipRow><FilterChip label selected onPress icon? /></FilterChipRow>",
+      "api": "<FilterChipRow><FilterChip label selected onPress icon? size?=\"sm|md|lg\" /></FilterChipRow>",
       "caption": "Selected is the theme's Chip selected colour: inverted neutral by default.",
       "aliases": [
         "chip",
@@ -861,7 +861,7 @@
         "components/ui/badge.tsx"
       ],
       "notes": "tag/pill/count · tint with semantic classes",
-      "api": "<Badge variant=\"default|secondary|destructive|outline\"><Text /></Badge>",
+      "api": "<Badge variant=\"default|secondary|destructive|outline\" size?=\"sm|md\"><Text /></Badge>",
       "caption": "Tint with a semantic class (bg-success + text-success-foreground), never a raw colour.",
       "aliases": [
         "tag",

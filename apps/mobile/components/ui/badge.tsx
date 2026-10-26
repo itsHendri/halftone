@@ -1,16 +1,21 @@
+import { IconSizeContext } from '@/components/ui/icon';
 import { TextClassContext } from '@/components/ui/text';
+import { labelClass } from '@/lib/component-classes';
 import { TOKENS } from '@/lib/theme';
 import { cn } from '@/lib/utils';
 import { Slot } from '@rn-primitives/slot';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { Platform, View } from 'react-native';
 
-/** The theme's Badge (semantic.component.badge, --badge-*): corner, padding, text and each variant's colours. */
+/**
+ * The theme's Badge (semantic.component.badge, --badge-*): corner, border, padding, gap, sizes (at least that tall),
+ * text, icon size and each variant's colours.
+ */
 const badgeVariants = cva(
   cn(
-    'group shrink-0 flex-row items-center justify-center gap-1 overflow-hidden rounded-badge border px-badge-x py-0.5',
+    'group shrink-0 flex-row items-center justify-center gap-badge-gap overflow-hidden rounded-badge border-badge px-badge-x',
     Platform.select({
-      web: 'focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive w-fit whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none [&>svg]:size-3',
+      web: 'focus-visible:border-ring focus-visible:ring-ring/50 aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive w-fit whitespace-nowrap transition-[color,box-shadow] focus-visible:ring-[3px] [&>svg]:pointer-events-none [&>svg]:size-[var(--badge-icon)]',
     })
   ),
   {
@@ -21,17 +26,25 @@ const badgeVariants = cva(
         destructive: cn('bg-badge-destructive-bg border-badge-destructive-border', Platform.select({ web: '[a&]:hover:bg-badge-destructive-pressed' })),
         outline: cn('bg-badge-outline-bg border-badge-outline-border', Platform.select({ web: '[a&]:hover:bg-badge-outline-pressed' })),
       },
+      // S has no vertical padding.
+      size: {
+        sm: 'min-h-badge-sm py-0',
+        md: 'min-h-badge-md py-0.5',
+      },
     },
     defaultVariants: {
       variant: 'default',
+      size: 'md',
     },
   }
 );
 
-const text = TOKENS.components.badge.text;
+const badge = TOKENS.components.badge;
+const text = badge.text;
 const badgeTextVariants = cva(
   cn(
-    'text-type-badge leading-type-badge font-medium',
+    'text-type-badge leading-type-badge',
+    labelClass(text),
     (Platform.OS === 'web' || text.tracking !== 0) && 'tracking-type-badge',
     text.font === 'heading' && 'font-heading',
     text.font === 'mono' && 'font-mono'
@@ -55,11 +68,13 @@ type BadgeProps = React.ComponentProps<typeof View> & React.RefAttributes<View> 
   asChild?: boolean;
 } & VariantProps<typeof badgeVariants>;
 
-function Badge({ className, variant, asChild, ...props }: BadgeProps) {
+function Badge({ className, variant, size, asChild, ...props }: BadgeProps) {
   const Component = asChild ? Slot : View;
   return (
     <TextClassContext.Provider value={badgeTextVariants({ variant })}>
-      <Component className={cn(badgeVariants({ variant }), className)} {...props} />
+      <IconSizeContext.Provider value={badge.icon}>
+        <Component className={cn(badgeVariants({ variant, size }), className)} {...props} />
+      </IconSizeContext.Provider>
     </TextClassContext.Provider>
   );
 }

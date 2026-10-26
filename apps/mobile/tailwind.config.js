@@ -9,7 +9,7 @@ module.exports = {
   // Relative to this file, not the working directory, so the build is the same from the monorepo root.
   content: {
     relative: true,
-    files: ['./app/**/*.{ts,tsx}', './components/**/*.{ts,tsx}', './prototype/**/*.{ts,tsx}'],
+    files: ['./app/**/*.{ts,tsx}', './components/**/*.{ts,tsx}', './prototype/**/*.{ts,tsx}', './lib/component-classes.ts'],
   },
   presets: [require('nativewind/preset')],
   theme: {

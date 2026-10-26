@@ -50,9 +50,21 @@ test('the defaults are what the mobile kit drew: density heights, pill corners, 
   const { button, chip, badge, input } = theme.components;
   assert.deepEqual([button.radius, button.h, button.x], [9999, { sm: 40, md: 48, lg: 56 }, { sm: 16, md: 20, lg: 24 }]);
   // text-base (16 on 24) and text-sm (14 on 20), the kits' own weights kept by the components.
-  assert.deepEqual(button.text, { style: 'p', font: 'body', size: 16, leading: 24, tracking: 0 });
-  assert.deepEqual([chip.radius, chip.h, chip.x, chip.text.size, chip.text.leading], [9999, { md: 36 }, { md: 14 }, 14, 20]);
-  assert.deepEqual([badge.radius, badge.x, badge.text.size, badge.text.leading], [9999, { md: 8 }, 14, 20]);
+  assert.deepEqual(button.text, { style: 'p', font: 'body', size: 16, leading: 24, tracking: 0, weight: 500, case: 'none' });
+  assert.deepEqual([chip.radius, chip.h, chip.x, chip.text.size, chip.text.leading], [9999, { sm: 32, md: 36, lg: 40 }, { md: 14 }, 14, 20]);
+  // A badge is as tall as its text, padding (2 + 2; none at S) and border.
+  assert.deepEqual([badge.radius, badge.h, badge.x, badge.text.size, badge.text.leading], [9999, { sm: 22, md: 26 }, { md: 8 }, 14, 20]);
+  // What every variant shares: the kits' gaps (Button S tighter), the theme's border, kit icons and shadows, a 3px ring.
+  assert.deepEqual([button.gap, chip.gap, badge.gap, input.gap], [{ sm: 6, md: 8, lg: 8 }, { md: 6 }, { md: 4 }, undefined]);
+  assert.deepEqual([button.border, chip.borderWidth, badge.borderWidth, input.borderWidth, input.edgeWidth], [null, 1, 1, 1, 1]);
+  assert.deepEqual([button.icon, chip.icon, badge.icon, button.shadow, input.shadow], [null, 14, null, null, null]);
+  assert.deepEqual([button.ring, input.ring], [{ width: 3, role: null }, { width: 3, role: null }]);
+  assert.deepEqual([button.focusBorder.role, input.placeholder.role, input.text.weight], ['ring', 'muted-foreground', 400]);
+  // Button rings: the ring role at 50%, Destructive its own at 20% (40% in dark).
+  assert.deepEqual([button.variants.primary.ring.role, button.variants.primary.ring.alpha.light], ['ring', 0.5]);
+  assert.deepEqual([button.variants.destructive.ring.role, button.variants.destructive.ring.alpha.dark], ['destructive', 0.4]);
+  // Input's focus and error states take the default state's fill and text until set.
+  assert.deepEqual([input.variants.focus.fill.light, input.variants.error.label.light], [input.variants.default.fill.light, input.variants.default.label.light]);
   // Input: rounded-md (8 at the default radius), density's height, a 16px inset.
   assert.deepEqual([input.radius, input.radiusBottom, input.h, input.x], [8, 8, { sm: 32, md: 48, lg: 56 }, { md: 16 }]);
   // The colours are roles: the button style's for Primary, the inverted chip, the field style's fill.
@@ -128,11 +140,34 @@ test('components in a document: validated per component, Button and Input styles
       components: {
         tag: {},
         chip: { style: 'pill', size: { lg: 40 }, variants: { hover: {}, selected: { fill: 'brand-ish', label: 'none' } } },
-        input: { variants: { focus: { fill: 'primary' } }, radius: 'huge', text: 'h7' },
+        badge: { size: { lg: 40 }, shadow: '2', ring: { width: 2 } },
+        input: { variants: { focus: { pressed: 'primary' } }, radius: 'huge', text: 'h7', weight: 500, ring: { role: 'brand-ish', size: 2 }, border: 12 },
+        button: { weight: 450, case: 'lower', icon: 4, shadow: 4, size: { gap: 30 } },
       },
     })
   );
-  for (const path of ['components.tag', 'components.chip.style', 'components.chip.size.lg', 'components.chip.variants.hover', 'components.chip.variants.selected.fill', 'components.chip.variants.selected.label', 'components.input.variants.focus.fill', 'components.input.radius', 'components.input.text']) {
+  for (const path of [
+    'components.tag',
+    'components.chip.style',
+    'components.chip.variants.hover',
+    'components.chip.variants.selected.fill',
+    'components.chip.variants.selected.label',
+    'components.badge.size.lg',
+    'components.badge.shadow',
+    'components.badge.ring',
+    'components.input.variants.focus.pressed',
+    'components.input.radius',
+    'components.input.text',
+    'components.input.weight',
+    'components.input.ring.role',
+    'components.input.ring.size',
+    'components.input.border',
+    'components.button.weight',
+    'components.button.case',
+    'components.button.icon',
+    'components.button.shadow',
+    'components.button.size.gap',
+  ]) {
     assert.ok(errors.some((e) => e.startsWith(`${path}:`)), `${path} in\n${errors.join('\n')}`);
   }
 });
@@ -171,6 +206,60 @@ test('a system without component edits is the recipe theme; edits change only wh
   assert.deepEqual([input.variants.focus.border.light, input.variants.focus.ring.alpha.light], [t.resolved.light.primary, 0.5]);
   // Disabled follows the default state.
   assert.equal(input.variants.disabled.border.light, input.variants.default.border.light);
+});
+
+/** Every new property, set (Phase 6.1). */
+const EVERYTHING = {
+  button: { border: 2, size: { gap: 10, sm: 36 }, weight: 600, case: 'uppercase', icon: 20, shadow: '2', ring: { width: 2, role: 'primary' } },
+  chip: { border: 0, size: { sm: 28, lg: 44, gap: 4 }, weight: 700, icon: 16 },
+  badge: { border: 2, size: { sm: 20, md: 30, gap: 2 }, weight: 600, case: 'uppercase', icon: 10 },
+  input: { style: 'filled', border: 3, shadow: 'none', ring: { width: 4, role: 'accent' }, placeholder: 'foreground', variants: { error: { fill: 'destructive', label: 'destructive-foreground' } } },
+};
+
+test('the open card’s properties: border, gap, weight, case, icon, shadow, focus ring, placeholder, S/M/L', () => {
+  const doc = normalizeSystem(sys({ components: EVERYTHING }));
+  assert.equal(doc.recipe.field, 'filled');
+  assert.deepEqual(doc.components.button.ring, { width: 2, role: 'primary' });
+  assert.ok(systemOverrides(doc).includes('components.button.ring.role'));
+  assert.ok(systemOverrides(doc).includes('components.input.placeholder'));
+  const { button, chip, badge, input } = generateSystem(doc, base).components;
+  // Button: every drawn border is 2 (Ghost and Secondary have none), one gap, the label, the icon, shadow and ring.
+  assert.deepEqual([button.variants.outline.borderWidth, button.variants.primary.borderWidth, button.variants.secondary.borderWidth], [2, 2, 0]);
+  assert.deepEqual([button.h.sm, button.gap], [36, { sm: 10, md: 10, lg: 10 }]);
+  assert.deepEqual([button.text.weight, button.text.case, button.icon, button.shadow, button.ring], [600, 'uppercase', 20, '2', { width: 2, role: 'primary' }]);
+  assert.deepEqual([button.focusBorder.role, button.variants.destructive.ring.role, button.variants.ghost.ring.alpha.light], ['primary', 'primary', 0.5]);
+  // Chip: S/M/L, no border, its own gap and icon.
+  assert.deepEqual([chip.h, chip.borderWidth, chip.gap, chip.text.weight, chip.icon], [{ sm: 28, md: 36, lg: 44 }, 0, { md: 4 }, 700, 16]);
+  // Badge: S and M set, a thicker border.
+  assert.deepEqual([badge.h, badge.borderWidth, badge.gap, badge.text.case, badge.icon], [{ sm: 20, md: 30 }, 2, { md: 2 }, 'uppercase', 10]);
+  // Input, filled: the border is its bottom line (a filled field has no box), no shadow, the ring and placeholder.
+  assert.deepEqual([input.borderWidth, input.edgeWidth, input.shadow, input.ring], [0, 3, 'none', { width: 4, role: 'accent' }]);
+  assert.deepEqual([input.placeholder.role, input.variants.focus.ring.role, input.variants.error.fill.role], ['foreground', 'accent', 'destructive']);
+  // Nothing else moved.
+  const plain = generateSystem(sys({ recipe: { ...DEFAULT_RECIPE, field: 'filled' } }), base).components;
+  assert.deepEqual([button.radius, chip.x, badge.text, input.h], [plain.button.radius, plain.chip.x, { ...plain.badge.text, weight: 600, case: 'uppercase' }, plain.input.h]);
+});
+
+test('the build writes every component variable a live theme sends, with every property set', async () => {
+  for (const components of [{}, EVERYTHING]) {
+    const { tokens, theme: t } = applySystem(base, sys({ components }));
+    const ctx = await built(tokens);
+    for (const format of ['hsl', 'oklch']) {
+      const live = themeVars(t, format);
+      const contents = format === 'hsl' ? nativewind3(ctx, { css: 'global.css', tailwind: 'theme.js' })[0].contents : shadcnWeb(ctx, { out: 'web.css' })[0].contents;
+      // The build's font variables add fallbacks (a live theme always sets --kit-font-*).
+      const names = componentVarNames().filter((n) => live.light[n] !== undefined && !n.endsWith('-text-font'));
+      assert.ok(names.length > 150, `${format}: ${names.length} variables`);
+      for (const name of names) {
+        const escaped = live.light[name].replace(/[.()*+?[\]\\|{}^$]/g, '\\$&');
+        assert.match(contents, new RegExp(`${name}: ${escaped};`), `${format} ${name} (${Object.keys(components).length ? 'edited' : 'default'})`);
+      }
+      // Each variable the kits may draw is one an embedded kit accepts.
+      for (const name of Object.keys(live.light).filter((n) => /^--(button|chip|badge|field)-/.test(n) && !/^--(button|field)-(alpha|border-w|edge-w|foreground|edge)$/.test(n))) {
+        assert.ok(componentVarNames().includes(name), `${name} is in componentVarNames`);
+      }
+    }
+  }
 });
 
 test('the tokens reach tokens.json and come back as the build reads them, in both kits', async () => {
@@ -242,7 +331,9 @@ test('label-on-fill pairings blend a see-through fill over the page', () => {
   assert.equal(outline.bg, blend(theme.resolved.dark.input, theme.resolved.dark.background, 0.3));
   const ghost = pairs.find((p) => p.component === 'button' && p.variant === 'ghost');
   assert.equal(ghost.bg, theme.resolved.dark.background);
-  assert.ok(!pairs.some((p) => p.component === 'input' && p.variant === 'focus'));
+  // Input's states each have text on a fill now, and the placeholder sits on the default fill.
+  const placeholder = pairs.find((p) => p.component === 'input' && p.variant === 'placeholder');
+  assert.deepEqual([placeholder.fg, placeholder.fgRole], [theme.resolved.dark['muted-foreground'], 'muted-foreground']);
 });
 
 test('usage: a component class counts as its component and the role it points at; comments are skipped', async () => {

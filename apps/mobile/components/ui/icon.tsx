@@ -13,6 +13,9 @@ function IconImpl({ as: IconComponent, ...props }: IconProps) {
   return <IconComponent {...props} />;
 }
 
+/** The size an icon takes when it sets none: a Button or Badge passes the theme's icon size (null: Icon's 14). */
+const IconSizeContext = React.createContext<number | null>(null);
+
 cssInterop(IconImpl, {
   className: {
     target: 'style',
@@ -40,22 +43,23 @@ cssInterop(IconImpl, {
  *
  * @param {LucideIcon} as - The Lucide icon component to render.
  * @param {string} className - Utility classes to style the icon using Nativewind.
- * @param {number} size - Icon size (defaults to 14).
+ * @param {number} size - Icon size (defaults to the enclosing Button's or Badge's icon size, or 14).
  * @param {number} strokeWidth - Relative to Lucide's 2: the theme's icon stroke scales it (thin 1.5, bold 2.5).
  * @param {...LucideProps} ...props - Additional Lucide icon props passed to the "as" icon.
  */
-function Icon({ as: IconComponent, className, size = 14, strokeWidth = 2, ...props }: IconProps) {
+function Icon({ as: IconComponent, className, size, strokeWidth = 2, ...props }: IconProps) {
   const textClass = React.useContext(TextClassContext);
+  const themed = React.useContext(IconSizeContext);
   const stroke = useIconStroke();
   return (
     <IconImpl
       as={IconComponent}
       className={cn('text-foreground', textClass, className)}
-      size={size}
+      size={size ?? themed ?? 14}
       strokeWidth={(Number(strokeWidth) * stroke) / 2}
       {...props}
     />
   );
 }
 
-export { Icon };
+export { Icon, IconSizeContext };

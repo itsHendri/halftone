@@ -23,12 +23,18 @@ const round = (n) => Number(n.toFixed(4));
 function componentsObject(components) {
   return COMPONENT_NAMES.map((name) => {
     const c = components[name];
-    const text = { font: c.text.font, size: round(c.text.size), lineHeight: round(c.text.leading), tracking: c.text.tracking };
+    const text = { font: c.text.font, size: round(c.text.size), lineHeight: round(c.text.leading), tracking: c.text.tracking, weight: c.text.weight ?? (name === 'input' ? 400 : 500), case: c.text.case ?? 'none' };
+    // Set on the system or null (each kit's own): the icon size and the shadow ('none', '1'…'3').
+    const own = { ...(c.gap ? { gap: c.gap } : {}), ...('icon' in c ? { icon: c.icon } : {}), ...('shadow' in c ? { shadow: c.shadow } : {}) };
     // The font role is typed as a role, so code can branch on it (the object is `as const`), and tracking as a
     // number: a kit compares it with 0, which wouldn't typecheck against a system's literal 0.01.
-    const json = JSON.stringify({ height: c.h, x: c.x, radius: c.radius, text })
+    const json = JSON.stringify({ height: c.h, x: c.x, radius: c.radius, text, ...own })
       .replace(/"font":("\w+")/, `"font":$1 as 'heading' | 'body' | 'mono'`)
-      .replace(/"tracking":(-?[\d.e-]+)/, '"tracking":$1 as number');
+      .replace(/"tracking":(-?[\d.e-]+)/, '"tracking":$1 as number')
+      .replace(/"weight":(\d+)/, '"weight":$1 as number')
+      .replace(/"case":("\w+")/, `"case":$1 as 'none' | 'uppercase'`)
+      .replace(/"icon":(null|[\d.]+)/, '"icon":$1 as number | null')
+      .replace(/"shadow":(null|"\w+")/, `"shadow":$1 as 'none' | '1' | '2' | '3' | null`);
     return `    ${name}: ${json},`;
   }).join('\n');
 }
@@ -102,9 +108,10 @@ ${primitiveGroup(ctx.prim, ['radius'])}
   styles: ${JSON.stringify(ctx.styles)},
   button: ${JSON.stringify(ctx.shape.button)},
   field: ${JSON.stringify(ctx.shape.field)},
-  /** The component layer (Button, Chip, Badge, Input) as numbers: heights and padding (px), corner, and the text's
-   *  font role and tracking. The classes (h-button-md, rounded-button, text-type-button…) already follow them; this is
-   *  for the touch-target floor (phones raise a height under ${TOUCH_TARGET} with hitSlop) and the font. */
+  /** The component layer (Button, Chip, Badge, Input) as numbers: heights, padding and gaps (px), corner, the text's
+   *  font role, tracking, weight and case, the icon size and shadow (null: the kit's own). The classes (h-button-md,
+   *  rounded-button, text-type-button…) already follow the sizes; this is for the touch-target floor (phones raise a
+   *  height under ${TOUCH_TARGET} with hitSlop) and what native picks in JS: the font, weight, case, icon and shadow. */
   components: {
 ${componentsObject(ctx.components)}
   },

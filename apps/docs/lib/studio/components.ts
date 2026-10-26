@@ -40,7 +40,7 @@ export const STYLE_LABELS: Record<string, string> = {
   square: 'Square',
 };
 export const CORNER_LABELS: Record<string, string> = { sm: 'Small', md: 'Medium', lg: 'Large', xl: 'XL', '2xl': '2XL', full: 'Full' };
-export const SIZE_LABELS: Record<string, string> = { sm: 'Small', md: 'Medium', lg: 'Large', x: 'Padding x' };
+export const SIZE_LABELS: Record<string, string> = { sm: 'Small', md: 'Medium', lg: 'Large', x: 'Padding x', gap: 'Gap' };
 
 /** What a variant is called in the kits' classes and variables: --button-primary-bg, bg-chip-selected-bg. */
 export const prefixOf = (name: ComponentName) => COMPONENTS[name].prefix;
@@ -91,7 +91,7 @@ export function setCorner(name: ComponentName, radius: string | number | null) {
   );
 }
 
-export function setSize(name: ComponentName, key: 'sm' | 'md' | 'lg' | 'x', px: number | null) {
+export function setSize(name: ComponentName, key: 'sm' | 'md' | 'lg' | 'x' | 'gap', px: number | null) {
   editComponent(
     name,
     (e) => {

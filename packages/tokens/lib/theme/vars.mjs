@@ -54,8 +54,8 @@ export function textStyleVars(styles, format, font = (role) => `var(--kit-font-$
 /**
  * The button and field styles' variables (both formats), from a theme's or a token file's { button, field }
  * (generate.mjs, resolve.mjs). Widths are numbers on the light block; the field's fill opacity is per mode. A
- * field's corners and padding are the component layer's (componentVars: --field-radius, --field-radius-b,
- * --field-x).
+ * field's corners, padding and shadow are the component layer's (componentVars: --field-radius, --field-radius-b,
+ * --field-x, --field-shadow; web: a boxed field keeps shadcn's shadow-xs until a system sets one).
  */
 export function styleVars({ button, field }, format) {
   return {
@@ -66,8 +66,6 @@ export function styleVars({ button, field }, format) {
       '--field-alpha': String(field.alpha.light),
       '--field-border-w': `${field.border}px`,
       '--field-edge-w': `${field.edge}px`,
-      // Web: a boxed field keeps shadcn's shadow-xs; a filled or underline field has none.
-      ...(format === 'hsl' ? {} : { '--field-shadow': field.border ? 'var(--shadow-1)' : '0 0 #0000' }),
     },
     dark: { '--field-alpha': String(field.alpha.dark) },
   };

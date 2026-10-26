@@ -92,6 +92,14 @@ function BadgeDemo() {
           <Text>99+</Text>
         </Badge>
       </View>
+      <View className="flex-row flex-wrap items-center gap-2">
+        <Badge size="sm" variant="secondary">
+          <Text>Small</Text>
+        </Badge>
+        <Badge variant="secondary">
+          <Text>Medium</Text>
+        </Badge>
+      </View>
     </View>
   );
 }

@@ -98,7 +98,8 @@ ${cssBlock('.dark:root', ctx.semDark, { styleShape: ctx.shape, extras: ctx.extra
   const letterSpacing = Object.fromEntries(Object.keys(ctx.textStyles).map((name) => [`type-${name}`, `var(--type-${name}-tracking)`]));
   const fontWeight = Object.fromEntries(Object.keys(ctx.textStyles).map((name) => [`type-${name}`, `var(--type-${name}-weight)`]));
   // The component layer: bg-button-primary-bg, rounded-button, h-button-md, px-button-x, text-type-button,
-  // border-button-primary-w… Each colour carries its opacity (--button-primary-bg-a).
+  // border-button-primary-w, gap-button-gap, border-chip… Each colour carries its opacity (--button-primary-bg-a).
+  // Weight, case and shadow are picked in JS from TOKENS.components (a custom font is one family per weight).
   Object.assign(colors, componentColors(ctx.components, (key, alpha) => (alpha ? `hsl(var(--${key}) / var(--${key}-a))` : `hsl(var(--${key}))`)));
   for (const name of COMPONENT_NAMES) {
     const c = ctx.components[name];
@@ -111,6 +112,10 @@ ${cssBlock('.dark:root', ctx.semDark, { styleShape: ctx.shape, extras: ctx.extra
     letterSpacing[`type-${p}`] = `var(--${p}-text-tracking)`;
   }
   Object.assign(spacing, { 'button-x-sm': 'var(--button-x-sm)', 'button-x-lg': 'var(--button-x-lg)' });
+  // Gaps (gap-button-gap, gap-button-gap-sm, gap-chip-gap, gap-badge-gap) and Chip and Badge borders (border-chip).
+  for (const name of ['button', 'chip', 'badge']) spacing[`${name}-gap`] = `var(--${name}-gap)`;
+  spacing['button-gap-sm'] = 'var(--button-gap-sm)';
+  for (const name of ['chip', 'badge']) borderWidth[name] = `var(--${name}-border-w)`;
   for (const variant of Object.keys(ctx.components.button.variants)) {
     borderWidth[`button-${variant}-w`] = `var(--button-${variant}-border-w)`;
     borderWidth[`button-${variant}-edge-w`] = `var(--button-${variant}-edge-w)`;

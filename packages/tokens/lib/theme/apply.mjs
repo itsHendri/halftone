@@ -96,11 +96,11 @@ function typeOf(path) {
   const parts = path.split('.');
   if (parts[0] === 'semantic' && parts[1] === 'type' && parts.length === 4) return { font: 'fontFamily', weight: 'fontWeight' }[parts[3]] ?? 'number';
   if (path === 'semantic.border.style') return 'strokeStyle';
-  if (parts[1] === 'component') return COLOR_SLOTS.has(parts.at(-1)) ? 'color' : parts.at(-1) === 'font' ? 'fontFamily' : 'number';
+  if (parts[1] === 'component') return COLOR_SLOTS.has(parts.at(-1)) ? 'color' : { font: 'fontFamily', weight: 'fontWeight' }[parts.at(-1)] ?? 'number';
   return TYPES[parts[1]] ?? 'color';
 }
 
-const COLOR_SLOTS = new Set(['fill', 'label', 'border', 'pressed', 'ring']);
+const COLOR_SLOTS = new Set(['fill', 'label', 'border', 'pressed', 'ring', 'focus-border', 'placeholder']);
 /** What a component token is, for its $description (semantic.component.<name>.…). */
 const COMPONENT_DESCRIPTION = {
   radius: 'corner radius (px; 9999 = a pill)',
@@ -115,6 +115,16 @@ const COMPONENT_DESCRIPTION = {
   'text.leading': 'line height (px), fitted to the control',
   'text.tracking': 'letter spacing (em)',
   'text.font': "the text style's font",
+  'text.weight': "the label's font weight",
+  'text.uppercase': '1 = uppercase labels',
+  'gap.sm': 'small gap between an icon and the label (px)',
+  'gap.md': 'gap between an icon and the label (px)',
+  'gap.lg': 'large gap between an icon and the label (px)',
+  icon: 'icon size (px); unset, each kit draws its own',
+  shadow: 'shadow level (0 = none; unset, each kit draws its own)',
+  'ring-width': 'focus ring width (px)',
+  'focus-border': 'border colour when focused (the focus ring role)',
+  placeholder: 'placeholder text colour (a role)',
   fill: 'fill colour (a role)',
   'fill-alpha': 'fill opacity',
   label: 'label colour (a role)',
@@ -124,7 +134,7 @@ const COMPONENT_DESCRIPTION = {
   'edge-width': 'bottom edge width (px)',
   pressed: 'pressed and hover fill (derived from the fill unless set)',
   'pressed-alpha': 'pressed and hover opacity',
-  ring: 'focus ring colour (the border, faded)',
+  ring: 'focus ring colour (a role or the border, faded)',
   'ring-alpha': 'focus ring opacity',
   alpha: "the style's fill opacity",
   round: '1 = rounded top corners, 0 = square',

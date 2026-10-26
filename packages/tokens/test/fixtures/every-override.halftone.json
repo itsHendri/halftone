@@ -61,9 +61,26 @@
   },
   "brand": { "name": "Every override", "iconBackground": "brand" },
   "components": {
-    "button": { "radius": "full", "size": { "md": 44 }, "variants": { "outline": { "border": "primary" } } },
-    "chip": { "radius": "sm", "variants": { "selected": { "fill": "primary" } } },
-    "badge": { "style": "square", "text": "p", "variants": { "secondary": { "label": "primary" } } },
-    "input": { "size": { "md": 52 }, "variants": { "focus": { "border": "foreground" } } }
+    "button": {
+      "radius": "full",
+      "border": 2,
+      "size": { "sm": 36, "md": 44, "lg": 52, "gap": 10 },
+      "weight": 600,
+      "case": "uppercase",
+      "icon": 18,
+      "shadow": "2",
+      "ring": { "width": 2, "role": "primary" },
+      "variants": { "outline": { "border": "primary" } }
+    },
+    "chip": { "radius": "sm", "border": 2, "size": { "sm": 30, "lg": 44, "gap": 4 }, "weight": 600, "icon": 16, "variants": { "selected": { "fill": "primary" } } },
+    "badge": { "style": "square", "border": 0, "size": { "sm": 20, "md": 28, "gap": 2 }, "text": "p", "weight": 700, "case": "uppercase", "icon": 10, "variants": { "secondary": { "label": "primary" } } },
+    "input": {
+      "border": 2,
+      "size": { "sm": 36, "md": 52, "lg": 60 },
+      "shadow": "1",
+      "ring": { "width": 4, "role": "accent" },
+      "placeholder": "foreground",
+      "variants": { "focus": { "border": "foreground" }, "error": { "fill": "muted", "label": "destructive" } }
+    }
   }
 }

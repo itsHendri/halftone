@@ -76,11 +76,18 @@ function FilterChipDemo() {
   const [on, setOn] = React.useState<string[]>(['Paid']);
   const toggle = (l: string) => setOn((xs) => (xs.includes(l) ? xs.filter((x) => x !== l) : [...xs, l]));
   return (
-    <FilterChipRow className="max-w-full">
-      {['Paid', 'Overdue', 'Draft', 'This month', 'Over £1,000'].map((l) => (
-        <FilterChip key={l} label={l} selected={on.includes(l)} onClick={() => toggle(l)} />
-      ))}
-    </FilterChipRow>
+    <div className="flex max-w-full flex-col gap-3">
+      <FilterChipRow className="max-w-full">
+        {['Paid', 'Overdue', 'Draft', 'This month', 'Over £1,000'].map((l) => (
+          <FilterChip key={l} label={l} selected={on.includes(l)} onClick={() => toggle(l)} />
+        ))}
+      </FilterChipRow>
+      <FilterChipRow className="max-w-full items-center">
+        <FilterChip size="sm" label="Small" />
+        <FilterChip label="Medium" />
+        <FilterChip size="lg" label="Large" />
+      </FilterChipRow>
+    </div>
   );
 }
 

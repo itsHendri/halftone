@@ -194,6 +194,20 @@
       ]
     },
     {
+      "name": "lib-component-classes",
+      "type": "registry:lib",
+      "title": "lib/component-classes.ts",
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "lib/component-classes.ts",
+          "type": "registry:lib",
+          "target": "lib/component-classes.ts"
+        }
+      ]
+    },
+    {
       "name": "lib-embed-theme",
       "type": "registry:lib",
       "title": "lib/embed-theme.ts",
@@ -388,6 +402,8 @@
         "class-variance-authority@^0.7.1"
       ],
       "registryDependencies": [
+        "@halftone-native/icon",
+        "@halftone-native/lib-component-classes",
         "@halftone-native/lib-theme",
         "@halftone-native/lib-utils",
         "@halftone-native/text"
@@ -610,6 +626,7 @@
       "description": "always with `Label`",
       "dependencies": [],
       "registryDependencies": [
+        "@halftone-native/lib-component-classes",
         "@halftone-native/lib-theme",
         "@halftone-native/lib-utils",
         "@halftone-native/text"
@@ -667,6 +684,7 @@
       "description": "",
       "dependencies": [],
       "registryDependencies": [
+        "@halftone-native/lib-component-classes",
         "@halftone-native/lib-theme",
         "@halftone-native/lib-utils",
         "@halftone-native/text"
@@ -793,6 +811,7 @@
       ],
       "registryDependencies": [
         "@halftone-native/icon",
+        "@halftone-native/lib-component-classes",
         "@halftone-native/lib-theme",
         "@halftone-native/lib-utils",
         "@halftone-native/text",
@@ -826,6 +845,7 @@
       ],
       "registryDependencies": [
         "@halftone-native/icon",
+        "@halftone-native/lib-component-classes",
         "@halftone-native/lib-haptics",
         "@halftone-native/lib-theme",
         "@halftone-native/lib-utils",
@@ -847,7 +867,7 @@
           "FilterChip",
           "FilterChipRow"
         ],
-        "api": "<FilterChipRow><FilterChip label selected onPress icon? /></FilterChipRow>"
+        "api": "<FilterChipRow><FilterChip label selected onPress icon? size?=\"sm|md|lg\" /></FilterChipRow>"
       }
     },
     {
@@ -1595,6 +1615,8 @@
         "class-variance-authority@^0.7.1"
       ],
       "registryDependencies": [
+        "@halftone-native/icon",
+        "@halftone-native/lib-component-classes",
         "@halftone-native/lib-theme",
         "@halftone-native/lib-utils",
         "@halftone-native/text"
@@ -1614,7 +1636,7 @@
         "exports": [
           "Badge"
         ],
-        "api": "<Badge variant=\"default|secondary|destructive|outline\"><Text /></Badge>"
+        "api": "<Badge variant=\"default|secondary|destructive|outline\" size?=\"sm|md\"><Text /></Badge>"
       }
     },
     {

@@ -27,6 +27,7 @@ export { CVD_TYPES, cvdWarnings, describeCvdWarnings, DISTINCT_PAIRS, MIN_DELTA_
 
 export { AA, AA_NON_TEXT, componentContrast, contrastPairs, contrastReport } from '../contrast.mjs';
 export {
+  CASES,
   COMPONENT_NAMES,
   COMPONENTS,
   componentColors,
@@ -37,8 +38,12 @@ export {
   defaultCorner,
   defaultStyle,
   fittedLeading,
+  ICON_DEFAULT,
+  RING_WIDTH,
+  SHADOWS,
   SLOT_VAR,
   SLOTS,
   TOUCH_TARGET,
+  WEIGHTS,
 } from './components.mjs';
 export { apcaContrast } from '../apca.mjs';

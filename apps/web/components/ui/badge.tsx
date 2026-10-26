@@ -4,7 +4,8 @@ import { cn } from "cn"
 import { Slot } from "radix-ui"
 
 const badgeVariants = cva(
-  "inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-badge border px-(--badge-x) py-0.5 type-badge font-medium whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-3",
+  // The theme's Badge: its gap, border width, padding, label (type-badge: the text style, weight and case) and icon size.
+  "inline-flex w-fit shrink-0 items-center justify-center gap-(--badge-gap) overflow-hidden rounded-badge border-(length:--badge-border-w) px-(--badge-x) type-badge whitespace-nowrap transition-[color,box-shadow] focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50 aria-invalid:border-destructive aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 [&>svg]:pointer-events-none [&>svg]:size-(--badge-icon)",
   {
     variants: {
       variant: {
@@ -19,9 +20,15 @@ const badgeVariants = cva(
         ghost: "border-transparent [a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
         link: "border-transparent text-primary underline-offset-4 [a&]:hover:underline",
       },
+      // S and M (--badge-h-*): at least that tall; S has no vertical padding.
+      size: {
+        sm: "min-h-(--badge-h-sm) py-0",
+        md: "min-h-(--badge-h-md) py-0.5",
+      },
     },
     defaultVariants: {
       variant: "default",
+      size: "md",
     },
   }
 )
@@ -29,6 +36,7 @@ const badgeVariants = cva(
 function Badge({
   className,
   variant = "default",
+  size = "md",
   asChild = false,
   ...props
 }: React.ComponentProps<"span"> &
@@ -39,7 +47,8 @@ function Badge({
     <Comp
       data-slot="badge"
       data-variant={variant}
-      className={cn(badgeVariants({ variant }), className)}
+      data-size={size}
+      className={cn(badgeVariants({ variant, size }), className)}
       {...props}
     />
   )
