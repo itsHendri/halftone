@@ -13,8 +13,8 @@ import { Platform, Pressable } from 'react-native';
  * disabled is 50% opacity.
  */
 const button = TOKENS.components.button;
-/** The shadow: shadow-sm on every variant but Ghost until the system sets one. */
-const shadow = shadowClass(button.shadow, 'shadow-sm');
+/** The shadow, on every variant but Ghost. */
+const shadow = shadowClass(button.shadow);
 const buttonVariants = cva(
   cn(
     'group shrink-0 flex-row items-center justify-center gap-button-gap rounded-button shadow-none',
@@ -120,7 +120,7 @@ type ButtonProps = React.ComponentProps<typeof Pressable> & React.RefAttributes<
 function Button({ className, variant, size, ...props }: ButtonProps) {
   // A live theme from the docs site (embedded web) brings its own weight, case and shadow.
   const live = useLiveComponent('button');
-  const liveShadow = live && 'shadow' in live && variant !== 'ghost' && variant !== 'link' ? shadowClass(live.shadow ?? null, 'shadow-sm') : null;
+  const liveShadow = live?.shadow && variant !== 'ghost' && variant !== 'link' ? shadowClass(live.shadow) : null;
   return (
     <TextClassContext.Provider value={cn(buttonTextVariants({ variant, size }), live && labelClass(live, true))}>
       <IconSizeContext.Provider value={button.icon}>

@@ -150,7 +150,7 @@
   --button-primary-ring-a: 0.5;
   --button-primary-border-w: 0px;
   --button-primary-edge-w: 0px;
-  --button-primary-shadow: 0 0 #0000;
+  --button-primary-shadow: var(--shadow-1);
   --button-secondary-bg: oklch(0.9674 0.0013 286.38);
   --button-secondary-bg-a: 1;
   --button-secondary-fg: oklch(0.2103 0.0059 285.89);
@@ -162,7 +162,7 @@
   --button-secondary-ring-a: 0.5;
   --button-secondary-border-w: 0px;
   --button-secondary-edge-w: 0px;
-  --button-secondary-shadow: 0 0 #0000;
+  --button-secondary-shadow: var(--shadow-1);
   --button-outline-bg: oklch(1 0 0);
   --button-outline-bg-a: 1;
   --button-outline-fg: oklch(0.1408 0.0044 285.82);
@@ -198,7 +198,7 @@
   --button-destructive-ring-a: 0.2;
   --button-destructive-border-w: 0px;
   --button-destructive-edge-w: 0px;
-  --button-destructive-shadow: 0 0 #0000;
+  --button-destructive-shadow: var(--shadow-1);
   --chip-radius: 9999px;
   --chip-h-sm: 32px;
   --chip-h-md: 36px;

@@ -129,6 +129,9 @@ export const TOKENS = {
   },
   /** Lucide stroke width for icons (the Icon component's default; an explicit strokeWidth is relative to 2). */
   iconStroke: 2,
+  /** The Foundations shadows as CSS, per mode (shadow-sm / md / lg): native draws a component's shadow with them
+   *  (React Native's boxShadow), so a see-through field shows one too. */
+  shadows: {"light":{"1":"0px 1px 2px 0px rgba(0, 0, 0, 0.051)","2":"0px 4px 12px -2px rgba(0, 0, 0, 0.078)","3":"0px 12px 24px -6px rgba(0, 0, 0, 0.122)"},"dark":{"1":"0px 1px 2px 0px rgba(0, 0, 0, 0.302)","2":"0px 4px 12px -2px rgba(0, 0, 0, 0.4)","3":"0px 12px 24px -6px rgba(0, 0, 0, 0.502)"}},
   /** Width of `border` in px. */
   borderWidth: 1,
   /** The theme's styles (button: solid · soft · outline · raised; field: outline · filled · underline) and their
@@ -137,14 +140,14 @@ export const TOKENS = {
   button: {"alpha":1,"border":0,"edge":0},
   field: {"alpha":{"light":0,"dark":0.3},"border":1,"edge":1,"inset":1,"radius":8,"radiusBottom":8},
   /** The component layer (Button, Chip, Badge, Input) as numbers: heights, padding and gaps (px), corner, the text's
-   *  font role, tracking, weight and case, the icon size and shadow (null: the kit's own). The classes (h-button-md,
+   *  font role, tracking, weight and case, the icon size and shadow level. The classes (h-button-md,
    *  rounded-button, text-type-button…) already follow the sizes; this is for the touch-target floor (phones raise a
    *  height under 44 with hitSlop) and what native picks in JS: the font, weight, case, icon and shadow. */
   components: {
-    button: {"height":{"sm":40,"md":48,"lg":56},"x":{"sm":16,"md":20,"lg":24},"radius":9999,"text":{"font":"body" as 'heading' | 'body' | 'mono',"size":16,"lineHeight":24,"tracking":0 as number,"weight":500 as number,"case":"none" as 'none' | 'uppercase'},"gap":{"sm":6,"md":8,"lg":8},"icon":null as number | null,"shadow":null as 'none' | '1' | '2' | '3' | null},
-    chip: {"height":{"sm":32,"md":36,"lg":40},"x":{"md":14},"radius":9999,"text":{"font":"body" as 'heading' | 'body' | 'mono',"size":14,"lineHeight":20,"tracking":0 as number,"weight":500 as number,"case":"none" as 'none' | 'uppercase'},"gap":{"md":6},"icon":14 as number | null},
-    badge: {"height":{"sm":22,"md":26},"x":{"md":8},"radius":9999,"text":{"font":"body" as 'heading' | 'body' | 'mono',"size":14,"lineHeight":20,"tracking":0 as number,"weight":500 as number,"case":"none" as 'none' | 'uppercase'},"gap":{"md":4},"icon":null as number | null},
-    input: {"height":{"sm":32,"md":48,"lg":56},"x":{"md":16},"radius":8,"text":{"font":"body" as 'heading' | 'body' | 'mono',"size":16,"lineHeight":24,"tracking":0 as number,"weight":400 as number,"case":"none" as 'none' | 'uppercase'},"shadow":null as 'none' | '1' | '2' | '3' | null},
+    button: {"height":{"sm":40,"md":48,"lg":56},"x":{"sm":16,"md":20,"lg":24},"radius":9999,"text":{"font":"body" as 'heading' | 'body' | 'mono',"size":16,"lineHeight":24,"tracking":0 as number,"weight":500 as number,"case":"none" as 'none' | 'uppercase'},"gap":{"sm":6,"md":8,"lg":8},"icon":16 as number,"shadow":"1" as 'none' | '1' | '2' | '3'},
+    chip: {"height":{"sm":32,"md":36,"lg":40},"x":{"md":14},"radius":9999,"text":{"font":"body" as 'heading' | 'body' | 'mono',"size":14,"lineHeight":20,"tracking":0 as number,"weight":500 as number,"case":"none" as 'none' | 'uppercase'},"gap":{"md":6},"icon":14 as number},
+    badge: {"height":{"sm":22,"md":26},"x":{"md":8},"radius":9999,"text":{"font":"body" as 'heading' | 'body' | 'mono',"size":14,"lineHeight":20,"tracking":0 as number,"weight":500 as number,"case":"none" as 'none' | 'uppercase'},"gap":{"md":4},"icon":12 as number},
+    input: {"height":{"sm":32,"md":48,"lg":56},"x":{"md":16},"radius":8,"text":{"font":"body" as 'heading' | 'body' | 'mono',"size":16,"lineHeight":24,"tracking":0 as number,"weight":400 as number,"case":"none" as 'none' | 'uppercase'},"shadow":"1" as 'none' | '1' | '2' | '3'},
   },
   /** Control heights and padding (px) for the theme's density: h-control-sm, h-control, h-control-lg, px-control-x. */
   density: {"sm":40,"md":48,"lg":56,"x":20},

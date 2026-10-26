@@ -198,7 +198,10 @@
       "type": "registry:lib",
       "title": "lib/component-classes.ts",
       "dependencies": [],
-      "registryDependencies": [],
+      "registryDependencies": [
+        "@halftone-native/lib-theme",
+        "@halftone-native/lib-theme-context"
+      ],
       "files": [
         {
           "path": "lib/component-classes.ts",

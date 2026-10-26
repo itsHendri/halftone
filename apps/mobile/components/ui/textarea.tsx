@@ -1,5 +1,5 @@
 import { useFontStyle } from '@/components/ui/text';
-import { shadowClass } from '@/lib/component-classes';
+import { fieldShadowClass, useFieldShadow } from '@/lib/component-classes';
 import { useLiveComponent } from '@/lib/palette-context';
 import { TOKENS } from '@/lib/theme';
 import { cn } from '@/lib/utils';
@@ -15,13 +15,15 @@ function Textarea({
   // The theme's body font, like Text (a custom font is one family per weight on native).
   const font = useFontStyle(className ?? '');
   const live = useLiveComponent('input');
+  const level = live?.shadow ?? TOKENS.components.input.shadow;
+  const shadow = useFieldShadow(level);
   return (
     <TextInput
       className={cn(
         // The theme's Input (semantic.component.input, --field-*), as Input draws it.
         'text-field-default-fg bg-field-default-bg border-field-default-border border-field-w border-b-field-edge-w rounded-t-field rounded-b-field-b px-field-x flex min-h-24 w-full flex-row py-2 text-type-field leading-type-field',
         (Platform.OS === 'web' || TOKENS.components.input.text.tracking !== 0) && 'tracking-type-field',
-        shadowClass(live && 'shadow' in live ? (live.shadow ?? null) : TOKENS.components.input.shadow, ''),
+        fieldShadowClass(level),
         Platform.select({
           web: 'placeholder:text-field-placeholder placeholder-shown:text-field-placeholder focus-visible:border-field-focus-border focus-visible:bg-field-focus-bg focus-visible:text-field-focus-fg focus-visible:ring-field-focus-ring aria-invalid:ring-field-error-ring aria-invalid:border-field-error-border aria-invalid:bg-field-error-bg aria-invalid:text-field-error-fg field-sizing-content resize-y outline-none transition-[color,box-shadow] focus-visible:ring-[length:var(--field-ring-w)] disabled:cursor-not-allowed',
         }),
@@ -34,7 +36,7 @@ function Textarea({
       textAlignVertical="top"
       aria-disabled={props.editable === false || undefined}
       {...props}
-      style={font ? [font, props.style] : props.style}
+      style={[font, shadow, props.style]}
     />
   );
 }

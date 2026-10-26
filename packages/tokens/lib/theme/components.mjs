@@ -77,11 +77,13 @@ export const WEIGHTS = [400, 500, 600, 700];
 export const CASES = ['none', 'uppercase'];
 /** A component's shadow: none, or a Foundations shadow level. */
 export const SHADOWS = ['none', '1', '2', '3'];
-/**
- * The icon size (px) the web builds draw until a system sets one: Button 16, Chip 14, Badge 12. Native icons in the
- * mobile kit's Button and Badge stay at Icon's own 14 until then; the Chip's are 14 everywhere.
- */
+/** The icon size (px) until a system sets one, the same in both kits: Button 16, Chip 14, Badge 12. */
 export const ICON_DEFAULT = { button: 16, chip: 14, badge: 12 };
+/**
+ * The shadow until a system sets one, the same in both kits: a Button has Shadow 1 (Ghost none); an Input has its
+ * field style's (a boxed field Shadow 1, a filled or underline field none).
+ */
+export const defaultShadow = (name, borderWidth) => (name === 'button' ? '1' : borderWidth ? '1' : 'none');
 /** The focus ring's width (px) until a system sets one: the kits' ring-[3px]. */
 export const RING_WIDTH = 3;
 
@@ -305,13 +307,13 @@ export function componentLayer({ styles, controls, corner, density, borderWidth,
 
     const out = { style, corner: typeof o.radius === 'number' ? null : cornerName, radius, h, x, text, variants };
     // What every variant shares beyond the basics: the border set on the component (null: as the style draws it),
-    // the gap, the icon size (null: each kit's own), the shadow (null: each kit's own), the focus ring, and Input's
+    // the gap, the icon size, the shadow, the focus ring, and Input's
     // placeholder.
     out.border = line ?? null;
     if (name !== 'button') Object.assign(out, { borderWidth: borderWidthOf, edgeWidth: edgeWidthOf });
     if (gap) out.gap = gap;
-    if (def.props.includes('icon')) out.icon = o.icon ?? (name === 'chip' ? ICON_DEFAULT.chip : null);
-    if (def.props.includes('shadow')) out.shadow = o.shadow ?? null;
+    if (def.props.includes('icon')) out.icon = o.icon ?? ICON_DEFAULT[name];
+    if (def.props.includes('shadow')) out.shadow = o.shadow ?? defaultShadow(name, borderWidthOf);
     if (def.props.includes('ring')) {
       out.ring = { width: o.ring?.width ?? RING_WIDTH, role: o.ring?.role ?? null };
       // Button: the focused border is the ring's role, opaque.
@@ -353,8 +355,8 @@ function componentTokens(name, c, { button, field }) {
       inset: field.inset,
     });
   }
-  // Set on the system only (a kit keeps its own until then): the icon size and the shadow (0 = none).
-  if (c.icon !== undefined && c.icon !== null) t.icon = c.icon;
+  // The icon size and the shadow level (0 = none).
+  if (c.icon !== undefined) t.icon = c.icon;
   if (c.shadow) t.shadow = c.shadow === 'none' ? 0 : Number(c.shadow);
   if (c.ring) t['ring-width'] = c.ring.width;
   if (c.focusBorder) t['focus-border'] = { light: c.focusBorder.ref.light, dark: c.focusBorder.ref.dark };
@@ -429,10 +431,10 @@ export function readComponents(light, dark, raw, { borderWidth = 1 } = {}) {
       const gap = sizes('gap');
       out.gap = name === 'button' ? { sm: 6, md: 8, lg: 8, ...gap } : { md: name === 'chip' ? 6 : 4, ...gap };
     }
-    if (def.props.includes('icon')) out.icon = num('icon', name === 'chip' ? ICON_DEFAULT.chip : null);
+    if (def.props.includes('icon')) out.icon = num('icon', ICON_DEFAULT[name]);
     if (def.props.includes('shadow')) {
       const level = num('shadow', null);
-      out.shadow = level === null ? null : level === 0 ? 'none' : String(level);
+      out.shadow = level === null ? defaultShadow(name, out.borderWidth) : level === 0 ? 'none' : String(level);
     }
     if (def.props.includes('ring')) out.ring = { width: num('ring-width', RING_WIDTH), role: null };
     if (name === 'button') out.focusBorder = readColor('button.focus-border');
@@ -494,7 +496,7 @@ const NO_SHADOW = '0 0 #0000';
 /**
  * A shape as CSS variables, { light, dark }, in a kit's format (vars.mjs):
  *   'hsl'    mobile: colours as triplets, lengths in px or rem (4 places); no font variable (the kit picks it in JS),
- *            and no shadow (the kit picks its shadow class from TOKENS)
+ *            and no shadow (the kit draws TOKENS.components' level with TOKENS.shadows)
  *   'oklch'  web: oklch colours; `font(role)` writes the text's font family; shadows are var(--shadow-N)
  * Colours carry their opacity apart (--button-primary-bg and --button-primary-bg-a), as --button and --button-alpha do.
  */
@@ -531,9 +533,8 @@ export function componentVars(shape, format, convert, font = (role) => `var(--ki
       light[`--${p}-${cssName}`] = convert(c[key].light);
       dark[`--${p}-${cssName}`] = convert(c[key].dark);
     }
-    // Web shadows: Button's until set is the kit's own (Outline's shadow-xs); Input's the field style's (a boxed
-    // field has one). Ghost never has one.
-    if (format !== 'hsl' && name === 'input') light['--field-shadow'] = c.shadow ? shadow(c.shadow) : c.borderWidth ? 'var(--shadow-1)' : NO_SHADOW;
+    // Web shadows, as Foundations shadows (defaultShadow until set). Ghost never has one.
+    if (format !== 'hsl' && name === 'input') light['--field-shadow'] = shadow(c.shadow ?? defaultShadow(name, c.borderWidth));
     for (const [variant, v] of Object.entries(c.variants)) {
       for (const [slot, col] of Object.entries(v)) {
         if (!SLOT_VAR[slot] || !col) continue;
@@ -546,7 +547,7 @@ export function componentVars(shape, format, convert, font = (role) => `var(--ki
         }
       }
       if (v.borderWidth !== undefined) Object.assign(light, { [`--button-${variant}-border-w`]: `${v.borderWidth}px`, [`--button-${variant}-edge-w`]: `${v.edgeWidth}px` });
-      if (format !== 'hsl' && name === 'button') light[`--button-${variant}-shadow`] = variant === 'ghost' ? NO_SHADOW : c.shadow ? shadow(c.shadow) : variant === 'outline' ? 'var(--shadow-1)' : NO_SHADOW;
+      if (format !== 'hsl' && name === 'button') light[`--button-${variant}-shadow`] = variant === 'ghost' ? NO_SHADOW : shadow(c.shadow ?? defaultShadow(name));
     }
   }
   return { light, dark };

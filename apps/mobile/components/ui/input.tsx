@@ -1,5 +1,5 @@
 import { useFontStyle } from '@/components/ui/text';
-import { shadowClass } from '@/lib/component-classes';
+import { fieldShadowClass, useFieldShadow } from '@/lib/component-classes';
 import { useLiveComponent } from '@/lib/palette-context';
 import { TOKENS } from '@/lib/theme';
 import { cn } from '@/lib/utils';
@@ -18,6 +18,9 @@ function Input({ className, ...props }: React.ComponentProps<typeof TextInput> &
   // The theme's body font, like Text (a custom font is one family per weight on native).
   const font = useFontStyle(className ?? '');
   const live = useLiveComponent('input');
+  // The field's shadow (its style's until the system sets one); native draws it as a boxShadow.
+  const level = live?.shadow ?? input.shadow;
+  const shadow = useFieldShadow(level);
   return (
     <TextInput
       className={cn(
@@ -25,8 +28,7 @@ function Input({ className, ...props }: React.ComponentProps<typeof TextInput> &
         // its height and text, and each state's colours.
         'bg-field-default-bg border-field-default-border border-field-w border-b-field-edge-w rounded-t-field rounded-b-field-b px-field-x text-field-default-fg flex h-field-md w-full min-w-0 flex-row items-center py-1 text-type-field leading-5',
         TEXT,
-        // No shadow until the system sets one.
-        shadowClass(live && 'shadow' in live ? (live.shadow ?? null) : input.shadow, ''),
+        fieldShadowClass(level),
         props.editable === false &&
         cn(
           'bg-field-disabled-bg border-field-disabled-border text-field-disabled-fg opacity-50',
@@ -48,7 +50,7 @@ function Input({ className, ...props }: React.ComponentProps<typeof TextInput> &
       // A read-only field is drawn disabled, so say so (web renders readonly otherwise).
       aria-disabled={props.editable === false || undefined}
       {...props}
-      style={font ? [font, props.style] : props.style}
+      style={[font, shadow, props.style]}
     />
   );
 }
