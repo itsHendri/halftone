@@ -678,12 +678,14 @@
     "shadow.1": [
       "button",
       "checkbox",
+      "input",
       "menubar",
       "radio-group",
       "segmented-control",
       "select",
       "slider",
       "switch",
+      "textarea",
       "toggle",
       "toggle-group"
     ],

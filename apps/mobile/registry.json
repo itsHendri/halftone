@@ -404,6 +404,7 @@
       "registryDependencies": [
         "@halftone-native/icon",
         "@halftone-native/lib-component-classes",
+        "@halftone-native/lib-palette-context",
         "@halftone-native/lib-theme",
         "@halftone-native/lib-utils",
         "@halftone-native/text"
@@ -627,6 +628,7 @@
       "dependencies": [],
       "registryDependencies": [
         "@halftone-native/lib-component-classes",
+        "@halftone-native/lib-palette-context",
         "@halftone-native/lib-theme",
         "@halftone-native/lib-utils",
         "@halftone-native/text"
@@ -685,6 +687,7 @@
       "dependencies": [],
       "registryDependencies": [
         "@halftone-native/lib-component-classes",
+        "@halftone-native/lib-palette-context",
         "@halftone-native/lib-theme",
         "@halftone-native/lib-utils",
         "@halftone-native/text"
@@ -812,6 +815,7 @@
       "registryDependencies": [
         "@halftone-native/icon",
         "@halftone-native/lib-component-classes",
+        "@halftone-native/lib-palette-context",
         "@halftone-native/lib-theme",
         "@halftone-native/lib-utils",
         "@halftone-native/text",
@@ -847,6 +851,7 @@
         "@halftone-native/icon",
         "@halftone-native/lib-component-classes",
         "@halftone-native/lib-haptics",
+        "@halftone-native/lib-palette-context",
         "@halftone-native/lib-theme",
         "@halftone-native/lib-utils",
         "@halftone-native/text"
@@ -1617,6 +1622,7 @@
       "registryDependencies": [
         "@halftone-native/icon",
         "@halftone-native/lib-component-classes",
+        "@halftone-native/lib-palette-context",
         "@halftone-native/lib-theme",
         "@halftone-native/lib-utils",
         "@halftone-native/text"
