@@ -20,10 +20,10 @@ const badgeVariants = cva(
         ghost: "border-transparent [a&]:hover:bg-accent [a&]:hover:text-accent-foreground",
         link: "border-transparent text-primary underline-offset-4 [a&]:hover:underline",
       },
-      // S and M (--badge-h-*): at least that tall; S has no vertical padding.
+      // S and M (--badge-h-*): exact heights, the label centred.
       size: {
-        sm: "min-h-(--badge-h-sm) py-0",
-        md: "min-h-(--badge-h-md) py-0.5",
+        sm: "h-(--badge-h-sm)",
+        md: "h-(--badge-h-md)",
       },
     },
     defaultVariants: {

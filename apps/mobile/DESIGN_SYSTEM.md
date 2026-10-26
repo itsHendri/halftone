@@ -57,7 +57,12 @@ Rules:
 - No Tailwind palette colours (`bg-blue-500`, `text-gray-400`). They don't follow the theme or the brand.
 - Lint enforces these in every screen and component outside `components/ui` and `components/kit`
   (`halftone/no-raw-colour`): a raw colour is an error that names the semantic class to use instead.
-- Tint a surface with an alpha of a semantic colour: `bg-primary/15`, `bg-success/15`. Text on a tint stays
+- **Colours come from the ramps, not from opacity.** A colour drawn at partial opacity takes on whatever is behind it,
+  so its contrast changes with the surface (white, a grey card). Fills, text and borders are roles or ramp steps;
+  the component layer (Button, FilterChip, Badge and the fields) uses no opacity at all, and its hover and pressed
+  colours are the next ramp step. Transparency is for overlays only: a scrim behind a sheet, a focus ring's halo.
+- Until the kits have tint roles from the ramps, a surface tint is the one other exception: `bg-primary/15`,
+  `bg-success/15`. Text on a tint stays
   `text-foreground`: a status colour as small text on its own tint measures under 4.5:1 (success on
   `success/15` 4.09, destructive 3.82). The status colour goes on the icon or a dot.
 - Selected / active states in segments are **neutral** (inverted foreground), not the brand colour. A selected

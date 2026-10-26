@@ -41,7 +41,12 @@ Rules:
 - **No hex, `rgb()` or Tailwind palette colours (`bg-blue-500`, `text-white`) in `app/` or `components/`.**
   The one exception is the modal scrim, `bg-black/50`, in the shadcn overlays. Lint enforces this outside
   `components/ui` and `components/kit` (`halftone/no-raw-colour`), naming the semantic class to use.
-- Tint a surface with an alpha of a semantic colour: `bg-primary/10`, `bg-success/15`. Text on a tint stays
+- **Colours come from the ramps, not from opacity.** A colour drawn at partial opacity takes on whatever is behind it,
+  so its contrast changes with the surface (white, a grey card). Fills, text and borders are roles or ramp steps;
+  the component layer (Button, FilterChip, Badge and the fields) uses no opacity at all, and its hover and pressed
+  colours are the next ramp step. Transparency is for overlays only: a scrim behind a sheet, a focus ring's halo.
+- Until the kits have tint roles from the ramps, a surface tint is the one other exception: `bg-primary/10`,
+  `bg-success/15`. Text on a tint stays
   `text-foreground`: a status colour as small text on its own tint measures under 4.5:1 (success 4.09,
   destructive 3.81). A status badge is an outline Badge with a coloured dot.
 - Selected / active states (tabs, segmented controls, nav items) are **neutral**, not the brand colour. A selected

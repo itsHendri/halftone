@@ -9,7 +9,7 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { Platform, View } from 'react-native';
 
 /**
- * The theme's Badge (semantic.component.badge, --badge-*): corner, border, padding, gap, sizes (at least that tall),
+ * The theme's Badge (semantic.component.badge, --badge-*): corner, border, padding, gap, sizes,
  * text, icon size and each variant's colours.
  */
 const badgeVariants = cva(
@@ -27,10 +27,10 @@ const badgeVariants = cva(
         destructive: cn('bg-badge-destructive-bg border-badge-destructive-border', Platform.select({ web: '[a&]:hover:bg-badge-destructive-pressed' })),
         outline: cn('bg-badge-outline-bg border-badge-outline-border', Platform.select({ web: '[a&]:hover:bg-badge-outline-pressed' })),
       },
-      // S has no vertical padding.
+      // S and M (h-badge-*): exact heights, the label centred.
       size: {
-        sm: 'min-h-badge-sm py-0',
-        md: 'min-h-badge-md py-0.5',
+        sm: 'h-badge-sm',
+        md: 'h-badge-md',
       },
     },
     defaultVariants: {

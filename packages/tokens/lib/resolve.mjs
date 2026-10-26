@@ -6,6 +6,7 @@
 import StyleDictionary from 'style-dictionary';
 import { readFileSync } from 'node:fs';
 import { componentLayer, readComponents } from './theme/components.mjs';
+import { rampsOf } from './theme/generate.mjs';
 import { extraList } from './theme/extras.mjs';
 import { BUTTON, DEFAULT_RECIPE, DENSITY, DEPTH, FIELD, fieldWidth, resolveTextStyles, shadowCss, textEdits, TYPE, typeScale } from './theme/recipe.mjs';
 
@@ -185,6 +186,7 @@ function loadComponents({ source, compLight, compDark, prim, colors, radius, sha
       const name = /^\{semantic\.color\.(.+)\}$/.exec(ref)?.[1];
       return String(name ? byName[name]?.[mode] : primMap[ref.slice(1, -1)]).toLowerCase();
     },
+    ramps: rampsOf(source.primitive?.color ?? {}, (path) => String(primMap[path]).toLowerCase()),
   }).shape;
 }
 

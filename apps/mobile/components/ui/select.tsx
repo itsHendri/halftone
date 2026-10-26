@@ -40,9 +40,9 @@ function SelectValue({
 }
 
 /** Phones raise a tap target under 44pt to 44 (hitSlop): the trigger keeps its drawn height. */
-function selectSlop(size: 'default' | 'sm') {
+function selectSlop(size: 'default' | 'sm' | 'lg') {
   if (Platform.OS === 'web') return undefined;
-  const y = Math.max(0, Math.ceil((44 - TOKENS.components.input.height[size === 'sm' ? 'sm' : 'md']) / 2));
+  const y = Math.max(0, Math.ceil((44 - TOKENS.components.input.height[size === 'default' ? 'md' : size]) / 2));
   return y ? { top: y, bottom: y } : undefined;
 }
 
@@ -54,7 +54,7 @@ function SelectTrigger({
   ...props
 }: React.ComponentProps<typeof SelectPrimitive.Trigger> & {
     children?: React.ReactNode;
-    size?: 'default' | 'sm';
+    size?: 'default' | 'sm' | 'lg';
   }) {
   const live = useLiveComponent('input');
   const level = live?.shadow ?? TOKENS.components.input.shadow;
@@ -72,6 +72,7 @@ function SelectTrigger({
         }),
         props.disabled && 'bg-field-disabled-bg border-field-disabled-border opacity-50',
         size === 'sm' && 'h-field-sm py-2 sm:py-1.5',
+        size === 'lg' && 'h-field-lg',
         className
       )}
       // Radix sets aria-autocomplete for its combobox role, but rn-primitives renders role="button",

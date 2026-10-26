@@ -651,7 +651,7 @@
         "exports": [
           "Input"
         ],
-        "api": "<Label htmlFor /> + <Input id placeholder keyboardType … />"
+        "api": "<Label htmlFor /> + <Input id placeholder keyboardType size?=\"sm|md|lg\" … />"
       }
     },
     {
@@ -839,7 +839,7 @@
         "exports": [
           "Select"
         ],
-        "api": "<Select><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectItem label value /></SelectContent></Select>"
+        "api": "<Select><SelectTrigger size?=\"sm|default|lg\"><SelectValue /></SelectTrigger><SelectContent><SelectItem label value /></SelectContent></Select>"
       }
     },
     {
