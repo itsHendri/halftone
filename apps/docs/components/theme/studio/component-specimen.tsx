@@ -116,17 +116,14 @@ export function Specimen({
   const edgeWidth = name === 'button' ? (v.edgeWidth ?? 0) : borderWidth;
   const borderColor = focus && name === 'button' && shape.focusBorder && borderWidth ? colorCss(shape.focusBorder, mode) : colorCss(v.border, mode);
   if (focus) shadows.push(`0 0 0 ${shape.ring?.width ?? 3}px ${colorCss(v.ring ?? shape.focusBorder, mode)}`);
-  const badge = name === 'badge';
   const height = shape.h[step] ?? shape.h.md;
   return (
     <span
       className={`inline-flex shrink-0 items-center justify-center whitespace-nowrap ${className}`}
       style={{
         ...text(name, shape),
-        height: badge ? undefined : height,
-        minHeight: badge ? height : undefined,
+        height,
         paddingInline: shape.x[step] ?? shape.x.md,
-        paddingBlock: badge ? (step === 'sm' ? 0 : 2) : undefined,
         gap: shape.gap?.[step] ?? shape.gap?.md,
         borderRadius: shape.radius,
         background: colorCss(fill, mode),
