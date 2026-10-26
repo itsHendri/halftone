@@ -435,7 +435,6 @@ function EffectsGroup({ name }: { name: ComponentName }) {
   const def = COMPONENTS[name];
   const shape = theme.components[name];
   const e = editsOf(doc, name);
-  const kitIcon = name === 'button' ? 'web 16, phones 14' : name === 'badge' ? 'web 12, phones 14' : null;
   return (
     <>
       {def.props.includes('icon') ? (
@@ -444,7 +443,7 @@ function EffectsGroup({ name }: { name: ComponentName }) {
           value={shape.icon ?? ICON_DEFAULT[name as 'button']}
           min={10}
           max={32}
-          note={e.icon === undefined && kitIcon ? `Each kit’s own until set (${kitIcon}).` : undefined}
+          note={e.icon === undefined ? 'Both kits, where an icon sets no size of its own.' : undefined}
           edited={e.icon !== undefined}
           onChange={(v) => setProp(name, 'icon', v)}
           onReset={() => setProp(name, 'icon', null)}
@@ -458,7 +457,7 @@ function EffectsGroup({ name }: { name: ComponentName }) {
             </div>
             {e.shadow !== undefined ? <ResetLink label={`Reset ${def.label} shadow`} onReset={() => setProp(name, 'shadow', null)} /> : null}
           </div>
-          {e.shadow === undefined ? <p className="text-muted-foreground text-xs">{name === 'button' ? 'Each kit’s own until set: Outline has Shadow 1 on the web, every filled button on phones.' : 'The field style’s until set: a boxed field has Shadow 1 on the web.'}</p> : null}
+          {e.shadow === undefined ? <p className="text-muted-foreground text-xs">{name === 'button' ? 'Shadow 1 until set (Ghost has none). Both kits.' : 'The field style’s until set: a boxed field has Shadow 1. Both kits.'}</p> : null}
         </Row>
       ) : null}
       {shape.ring ? (
