@@ -411,6 +411,93 @@
       }
     },
     {
+      "name": "checkbox",
+      "type": "registry:ui",
+      "title": "Checkbox",
+      "description": "`checked onCheckedChange` · pick any",
+      "dependencies": [
+        "cn@^0.4.0",
+        "lucide-react@^1.52.0",
+        "radix-ui@^1.7.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/ui/checkbox.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/checkbox.tsx"
+        }
+      ],
+      "categories": [
+        "inputs"
+      ],
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "Checkbox"
+        ],
+        "api": "<Checkbox id checked onCheckedChange /><Label htmlFor>…</Label>"
+      }
+    },
+    {
+      "name": "radio-group",
+      "type": "registry:ui",
+      "title": "Radio group",
+      "description": "pick exactly one · `RadioGroupItem value id`",
+      "dependencies": [
+        "cn@^0.4.0",
+        "lucide-react@^1.52.0",
+        "radix-ui@^1.7.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/ui/radio-group.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/radio-group.tsx"
+        }
+      ],
+      "categories": [
+        "inputs"
+      ],
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "RadioGroup",
+          "RadioGroupItem"
+        ],
+        "api": "<RadioGroup value onValueChange><RadioGroupItem value id /></RadioGroup>"
+      }
+    },
+    {
+      "name": "switch",
+      "type": "registry:ui",
+      "title": "Switch",
+      "description": "a setting that applies at once (no Save button)",
+      "dependencies": [
+        "cn@^0.4.0",
+        "radix-ui@^1.7.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/ui/switch.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/switch.tsx"
+        }
+      ],
+      "categories": [
+        "inputs"
+      ],
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "Switch"
+        ],
+        "api": "<Switch id checked onCheckedChange />"
+      }
+    },
+    {
       "name": "select",
       "type": "registry:ui",
       "title": "Select",
@@ -883,6 +970,42 @@
       }
     },
     {
+      "name": "navigation-menu",
+      "type": "registry:ui",
+      "title": "Navigation menu",
+      "description": "a marketing site’s top nav with dropdown panels · not for app navigation (AppShell)",
+      "dependencies": [
+        "class-variance-authority@^0.7.1",
+        "cn@^0.4.0",
+        "lucide-react@^1.52.0",
+        "radix-ui@^1.7.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/ui/navigation-menu.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/navigation-menu.tsx"
+        }
+      ],
+      "categories": [
+        "navigation"
+      ],
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "NavigationMenu",
+          "NavigationMenuList",
+          "NavigationMenuItem",
+          "NavigationMenuTrigger",
+          "NavigationMenuContent",
+          "NavigationMenuLink",
+          "navigationMenuTriggerStyle"
+        ],
+        "api": "<NavigationMenu><NavigationMenuList><NavigationMenuItem><NavigationMenuTrigger /><NavigationMenuContent /></NavigationMenuItem></NavigationMenuList></NavigationMenu>"
+      }
+    },
+    {
       "name": "menubar",
       "type": "registry:ui",
       "title": "Menubar",
@@ -1039,7 +1162,7 @@
       ],
       "registryDependencies": [
         "@halftone-web/empty-state",
-        "table"
+        "@halftone-web/table"
       ],
       "files": [
         {
@@ -1057,6 +1180,38 @@
           "DataTable"
         ],
         "api": "<DataTable columns={[{key,header,cell?,sortValue?,align?}]} rows rowKey caption? />"
+      }
+    },
+    {
+      "name": "table",
+      "type": "registry:ui",
+      "title": "Table",
+      "description": "the primitive under DataTable; use it directly for small static tables",
+      "dependencies": [
+        "cn@^0.4.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/ui/table.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/table.tsx"
+        }
+      ],
+      "categories": [
+        "data"
+      ],
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "Table",
+          "TableHeader",
+          "TableBody",
+          "TableRow",
+          "TableHead",
+          "TableCell",
+          "TableCaption"
+        ]
       }
     },
     {
@@ -1462,6 +1617,34 @@
           "AlertDescription"
         ],
         "api": "<Alert variant?><Icon /><AlertTitle /><AlertDescription /></Alert>"
+      }
+    },
+    {
+      "name": "progress",
+      "type": "registry:ui",
+      "title": "Progress",
+      "description": "determinate 0–100",
+      "dependencies": [
+        "cn@^0.4.0",
+        "radix-ui@^1.7.0"
+      ],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "components/ui/progress.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/progress.tsx"
+        }
+      ],
+      "categories": [
+        "feedback"
+      ],
+      "docs": "Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute=\"class\") at the root.",
+      "meta": {
+        "exports": [
+          "Progress"
+        ],
+        "api": "<Progress value aria-label />"
       }
     },
     {

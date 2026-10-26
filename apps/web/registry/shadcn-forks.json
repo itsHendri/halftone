@@ -48,7 +48,7 @@
     },
     "checkbox": {
       "upstream": true,
-      "forked": false
+      "forked": true
     },
     "collapsible": {
       "upstream": true,
@@ -92,7 +92,7 @@
     },
     "navigation-menu": {
       "upstream": true,
-      "forked": false
+      "forked": true
     },
     "pagination": {
       "upstream": true,
@@ -104,11 +104,11 @@
     },
     "progress": {
       "upstream": true,
-      "forked": false
+      "forked": true
     },
     "radio-group": {
       "upstream": true,
-      "forked": false
+      "forked": true
     },
     "scroll-area": {
       "upstream": true,
@@ -140,11 +140,11 @@
     },
     "switch": {
       "upstream": true,
-      "forked": false
+      "forked": true
     },
     "table": {
       "upstream": true,
-      "forked": false
+      "forked": true
     },
     "tabs": {
       "upstream": true,
