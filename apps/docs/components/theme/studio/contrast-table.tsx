@@ -93,7 +93,7 @@ export function ContrastTable({ onFixed }: { onFixed?: () => void }) {
             <col className="w-40" />
             <col className="w-44" />
           </colgroup>
-          <thead role="rowgroup" className="bg-muted/60 text-muted-foreground text-xs @max-xl:block">
+          <thead role="rowgroup" className="bg-muted text-muted-foreground text-xs @max-xl:block">
             <tr role="row" className={STACK}>
               <th role="columnheader" scope="col" className="px-3 py-2 font-medium @max-xl:sr-only">
                 Pairing
@@ -114,7 +114,7 @@ export function ContrastTable({ onFixed }: { onFixed?: () => void }) {
             return (
               <tbody key={g.id} role="rowgroup" className="border-border border-t @max-xl:block">
                 <tr role="row" className="@max-xl:block">
-                  <th role="rowheader" scope="rowgroup" colSpan={4} className="bg-muted/30 px-3 pb-1.5 pt-3 font-normal @max-xl:block">
+                  <th role="rowheader" scope="rowgroup" colSpan={4} className="bg-muted-subtle px-3 pb-1.5 pt-3 font-normal @max-xl:block">
                     <span className="block text-xs font-semibold">{g.title}</span>
                     <span className="text-muted-foreground block text-xs">{g.note}</span>
                   </th>

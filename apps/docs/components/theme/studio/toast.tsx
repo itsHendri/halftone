@@ -45,11 +45,11 @@ export function Toaster({ className = 'bottom-4' }: { className?: string }) {
                 t.action?.run();
                 dismissToast(t.id);
               }}
-              className="focus-visible:ring-background hover:bg-background/15 rounded-full px-3 py-1 font-medium underline-offset-2 focus-visible:outline-none focus-visible:ring-2">
+              className="focus-visible:ring-background hover:bg-muted-foreground rounded-full px-3 py-1 font-medium underline-offset-2 focus-visible:outline-none focus-visible:ring-2">
               {t.action.label}
             </button>
           ) : null}
-          <button type="button" onClick={() => dismissToast(t.id)} aria-label="Dismiss" className="focus-visible:ring-background hover:bg-background/15 inline-flex size-7 items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2">
+          <button type="button" onClick={() => dismissToast(t.id)} aria-label="Dismiss" className="focus-visible:ring-background hover:bg-muted-foreground inline-flex size-7 items-center justify-center rounded-full focus-visible:outline-none focus-visible:ring-2">
             <XIcon className="size-3.5" aria-hidden />
           </button>
         </div>

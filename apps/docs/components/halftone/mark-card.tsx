@@ -127,7 +127,7 @@ export function MarkCard({ href, title, children }: { href: string; title: strin
     <Link
       ref={card}
       href={href}
-      className="group bg-card/75 hover:bg-primary hover:text-primary-foreground focus-visible:bg-primary focus-visible:text-primary-foreground focus-visible:ring-ring relative flex min-h-44 flex-col justify-between gap-6 overflow-hidden p-5 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset backdrop-blur-sm motion-reduce:transition-none sm:min-h-48">
+      className="group bg-card hover:bg-primary hover:text-primary-foreground focus-visible:bg-primary focus-visible:text-primary-foreground focus-visible:ring-ring relative flex min-h-44 flex-col justify-between gap-6 overflow-hidden p-5 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset backdrop-blur-sm motion-reduce:transition-none sm:min-h-48">
       <canvas ref={ref} aria-hidden className="pointer-events-none absolute inset-0 size-full" />
       <span className="relative flex max-w-[60%] flex-col gap-1">
         <span className="text-xl font-medium tracking-tight">{title}</span>

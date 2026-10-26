@@ -44,11 +44,11 @@ export function BrowserFrame({ path, title, viewport = { width: 1280, height: 80
 
   return (
     <div className={`border-border bg-card w-full min-w-0 overflow-hidden rounded-xl border shadow-xl ${className ?? ''}`}>
-      <div className="border-border bg-muted/60 flex h-9 items-center gap-3 border-b px-3" aria-hidden>
+      <div className="border-border bg-muted-subtle flex h-9 items-center gap-3 border-b px-3" aria-hidden>
         <span className="flex gap-1.5">
-          <span className="bg-foreground/15 size-2.5 rounded-full" />
-          <span className="bg-foreground/15 size-2.5 rounded-full" />
-          <span className="bg-foreground/15 size-2.5 rounded-full" />
+          <span className="bg-border size-2.5 rounded-full" />
+          <span className="bg-border size-2.5 rounded-full" />
+          <span className="bg-border size-2.5 rounded-full" />
         </span>
         <span className="bg-background text-muted-foreground min-w-0 flex-1 truncate rounded-md px-3 py-0.5 text-center font-mono text-xs">
           {address ?? path.split('?')[0]}

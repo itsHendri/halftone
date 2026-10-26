@@ -198,7 +198,7 @@ function SlotPopover({ slot }: { slot: Slot }) {
         <button
           type="button"
           aria-label={`${slot.label}: ${own ? 'uploaded' : slot.id === 'icon' ? 'app icon' : from ? `same as ${from}` : 'placeholder'}. Edit`}
-          className="hover:bg-accent/60 focus-visible:ring-ring flex min-w-0 flex-col gap-1.5 rounded-lg p-1 text-left focus-visible:outline-none focus-visible:ring-2">
+          className="hover:bg-accent focus-visible:ring-ring flex min-w-0 flex-col gap-1.5 rounded-lg p-1 text-left focus-visible:outline-none focus-visible:ring-2">
           <SlotArt slot={slot} size="tile" />
           <span className="text-muted-foreground px-0.5 text-xs">
             {slot.label}

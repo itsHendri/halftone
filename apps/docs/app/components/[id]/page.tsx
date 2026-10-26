@@ -116,7 +116,7 @@ function Panel({ side, e, c }: { side: Side; e: Entry; c: KitComponent }) {
   } else if (side === 'native' && SCREEN_LEVEL.has(c.id)) {
     // A whole-screen component reads as one only on a screen.
     preview = (
-      <div className="border-border bg-fd-muted/40 flex justify-center rounded-xl border p-6">
+      <div className="border-border bg-muted-subtle flex justify-center rounded-xl border p-6">
         <PhoneFrame path={demo} title={label} width={300} />
       </div>
     );
@@ -138,7 +138,7 @@ function Panel({ side, e, c }: { side: Side; e: Entry; c: KitComponent }) {
       {c.caption ? (
         <section>
           <h2 className="mb-2 text-lg font-semibold">Usage</h2>
-          <p className="text-fd-foreground/90 leading-7">
+          <p className="text-fd-foreground leading-7">
             <InlineMd text={c.caption} />
           </p>
         </section>

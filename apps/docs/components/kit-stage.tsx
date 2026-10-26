@@ -24,7 +24,7 @@ export function KitStage({ kind, path, title, minHeight = 120 }: Props) {
     <div className="border-border bg-background relative flex justify-center overflow-hidden rounded-xl border">
       <div className="relative w-full" style={{ maxWidth: kind === 'mobile' ? 390 : undefined, height: h }}>
         {src ? <iframe ref={ref} src={src} title={title} loading="lazy" className="block size-full border-0" /> : null}
-        {height === null ? <div className="bg-muted/60 absolute inset-0 animate-pulse" aria-hidden /> : null}
+        {height === null ? <div className="bg-muted-subtle absolute inset-0 animate-pulse" aria-hidden /> : null}
       </div>
     </div>
   );

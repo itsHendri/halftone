@@ -81,7 +81,7 @@ In the kit you are working in:
 
 - Build screens only from registry components, by their exact names. If something is missing, stop, say
   so in one line, and add it with the \`add-component\` skill. Never invent a component.
-- Style with semantic classes only (\`bg-card\`, \`text-muted-foreground\`, \`bg-primary/15\`). No hex, no
+- Style with semantic classes only (\`bg-card\`, \`text-muted-foreground\`, \`bg-primary-subtle\`). No hex, no
   Tailwind palette colours, no inline colour styles.
 - One primary action per screen. Content is flat; shadows only on what you can press or what floats.
 - Mock data lives beside the prototype (mobile: \`components/<slug>/data.ts\`; web: \`app/<slug>/data.ts\`). Never

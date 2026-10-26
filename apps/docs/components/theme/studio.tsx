@@ -244,7 +244,7 @@ export function Studio() {
   }, []);
 
   return (
-    <div ref={root} data-studio className="bg-muted/40 flex w-full flex-1 flex-col">
+    <div ref={root} data-studio className="bg-muted-subtle flex w-full flex-1 flex-col">
       {/* The switcher shows each system's name in its own heading font, and the preset cards theirs. */}
       {ALL_FONTS ? <link rel="stylesheet" href={ALL_FONTS} /> : null}
       {PRESET_FONTS ? <link rel="stylesheet" href={PRESET_FONTS} /> : null}

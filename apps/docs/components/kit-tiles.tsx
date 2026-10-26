@@ -51,7 +51,7 @@ function TileFrame({ kind, ids, title, kit }: { kind: 'mobile' | 'web'; ids: str
   return (
     <div className="bg-fd-background relative" style={{ height: height ?? Math.ceil(ids.length / 3) * 260 }}>
       {src ? <iframe ref={ref} src={src} title={title} loading="lazy" className="block size-full border-0" /> : null}
-      {height === null ? <div className="bg-fd-muted/50 absolute inset-0 animate-pulse" aria-hidden /> : null}
+      {height === null ? <div className="bg-muted-subtle absolute inset-0 animate-pulse" aria-hidden /> : null}
     </div>
   );
 }

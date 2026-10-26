@@ -192,7 +192,7 @@ export function ThemePill() {
               </div>
               <p className="text-muted-foreground px-2.5 pb-1 pt-3 text-xs font-medium">{ambient ? 'Start from a preset' : `Presets for ${label}`}</p>
               {asking ? (
-                <div role="group" aria-label={`${asking.name} on ${label}`} className="bg-muted/60 mx-1 mb-1.5 flex flex-col gap-2 rounded-lg p-2.5">
+                <div role="group" aria-label={`${asking.name} on ${label}`} className="bg-muted mx-1 mb-1.5 flex flex-col gap-2 rounded-lg p-2.5">
                   <p className="text-sm">
                     <span className="font-medium">{asking.name}</span> on {label}, which has {edits} hand edit{edits === 1 ? '' : 's'}.
                   </p>
