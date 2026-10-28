@@ -293,7 +293,7 @@
   --field-text-font: var(--kit-font-body, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif);
   --field-ring-w: 3px;
   --field-placeholder: oklch(0.4419 0.0146 285.79);
-  --field-shadow: var(--shadow-1);
+  --field-shadow: 0 0 #0000;
   --field-default-bg: oklch(0.9197 0.004 286.32);
   --field-default-bg-a: 0;
   --field-default-fg: oklch(0.1408 0.0044 285.82);

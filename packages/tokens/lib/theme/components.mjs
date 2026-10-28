@@ -85,10 +85,10 @@ export const SHADOWS = ['none', '1', '2', '3'];
 /** The icon size (px) until a system sets one, the same in both kits: Button 16, Chip 14, Badge 12. */
 export const ICON_DEFAULT = { button: 16, chip: 14, badge: 12 };
 /**
- * The shadow until a system sets one, the same in both kits: a Button has Shadow 1 (Ghost none); an Input has its
- * field style's (a boxed field Shadow 1, a filled or underline field none).
+ * The shadow until a system sets one, the same in both kits: a Button has Shadow 1 (Ghost none); an Input has none,
+ * whatever its field style (content is flat: a field neither presses nor floats).
  */
-export const defaultShadow = (name, borderWidth) => (name === 'button' ? '1' : borderWidth ? '1' : 'none');
+export const defaultShadow = (name) => (name === 'button' ? '1' : 'none');
 /** The focus ring's width (px) until a system sets one: the kits' ring-[3px]. */
 export const RING_WIDTH = 3;
 
@@ -389,7 +389,7 @@ export function componentLayer({ styles, controls, corner, density, borderWidth,
     if (name !== 'button') Object.assign(out, { borderWidth: borderWidthOf, edgeWidth: edgeWidthOf });
     if (gap) out.gap = gap;
     if (def.props.includes('icon')) out.icon = o.icon ?? ICON_DEFAULT[name];
-    if (def.props.includes('shadow')) out.shadow = o.shadow ?? defaultShadow(name, borderWidthOf);
+    if (def.props.includes('shadow')) out.shadow = o.shadow ?? defaultShadow(name);
     if (def.props.includes('ring')) {
       out.ring = { width: o.ring?.width ?? RING_WIDTH, role: o.ring?.role ?? null };
       // Button: the focused border is the ring's role, opaque.
@@ -510,7 +510,7 @@ export function readComponents(light, dark, raw, { borderWidth = 1 } = {}) {
     if (def.props.includes('icon')) out.icon = num('icon', ICON_DEFAULT[name]);
     if (def.props.includes('shadow')) {
       const level = num('shadow', null);
-      out.shadow = level === null ? defaultShadow(name, out.borderWidth) : level === 0 ? 'none' : String(level);
+      out.shadow = level === null ? defaultShadow(name) : level === 0 ? 'none' : String(level);
     }
     if (def.props.includes('ring')) out.ring = { width: num('ring-width', RING_WIDTH), role: null };
     if (name === 'button') out.focusBorder = readColor('button.focus-border');
@@ -610,7 +610,7 @@ export function componentVars(shape, format, convert, font = (role) => `var(--ki
       dark[`--${p}-${cssName}`] = convert(c[key].dark);
     }
     // Web shadows, as Foundations shadows (defaultShadow until set). Ghost never has one.
-    if (format !== 'hsl' && name === 'input') light['--field-shadow'] = shadow(c.shadow ?? defaultShadow(name, c.borderWidth));
+    if (format !== 'hsl' && name === 'input') light['--field-shadow'] = shadow(c.shadow ?? defaultShadow(name));
     for (const [variant, v] of Object.entries(c.variants)) {
       for (const [slot, col] of Object.entries(v)) {
         if (!SLOT_VAR[slot] || !col) continue;
