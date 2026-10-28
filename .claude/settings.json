@@ -6,7 +6,8 @@
         "matcher": "Edit|Write|MultiEdit",
         "hooks": [
           { "type": "command", "command": "node \"$CLAUDE_PROJECT_DIR/apps/mobile/.claude/hooks/lint-edited.mjs\"", "timeout": 60 },
-          { "type": "command", "command": "node \"$CLAUDE_PROJECT_DIR/apps/web/.claude/hooks/lint-edited.mjs\"", "timeout": 60 }
+          { "type": "command", "command": "node \"$CLAUDE_PROJECT_DIR/apps/web/.claude/hooks/lint-edited.mjs\"", "timeout": 60 },
+          { "type": "command", "command": "node \"$CLAUDE_PROJECT_DIR/apps/mobile/.claude/hooks/lint-edited.mjs\" --app \"$CLAUDE_PROJECT_DIR/apps/docs\" --dirs app,components,lib", "timeout": 60 }
         ]
       }
     ]
