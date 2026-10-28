@@ -55,7 +55,7 @@ export function textStyleVars(styles, format, font = (role) => `var(--kit-font-$
  * The button and field styles' variables (both formats), from a theme's or a token file's { button, field }
  * (generate.mjs, resolve.mjs). Widths are numbers on the light block; the field's fill opacity is per mode. A
  * field's corners, padding and shadow are the component layer's (componentVars: --field-radius, --field-radius-b,
- * --field-x, --field-shadow; web: a boxed field keeps shadcn's shadow-xs until a system sets one).
+ * --field-x, --field-shadow; a field is flat until a system gives it a shadow).
  */
 export function styleVars({ button, field }, format) {
   return {

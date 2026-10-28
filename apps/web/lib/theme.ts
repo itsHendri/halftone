@@ -172,7 +172,7 @@ export const TOKENS = {
     button: {"height":{"sm":40,"md":48,"lg":56},"x":{"sm":16,"md":20,"lg":24},"radius":9999,"text":{"font":"body" as 'heading' | 'body' | 'mono',"size":16,"lineHeight":24,"tracking":0 as number,"weight":500 as number,"case":"none" as 'none' | 'uppercase'},"gap":{"sm":6,"md":8,"lg":8},"icon":16 as number,"shadow":"1" as 'none' | '1' | '2' | '3'},
     chip: {"height":{"sm":32,"md":36,"lg":40},"x":{"md":14},"radius":9999,"text":{"font":"body" as 'heading' | 'body' | 'mono',"size":14,"lineHeight":20,"tracking":0 as number,"weight":500 as number,"case":"none" as 'none' | 'uppercase'},"gap":{"md":6},"icon":14 as number},
     badge: {"height":{"sm":22,"md":26},"x":{"md":8},"radius":9999,"text":{"font":"body" as 'heading' | 'body' | 'mono',"size":14,"lineHeight":20,"tracking":0 as number,"weight":500 as number,"case":"none" as 'none' | 'uppercase'},"gap":{"md":4},"icon":12 as number},
-    input: {"height":{"sm":32,"md":48,"lg":56},"x":{"md":16},"radius":8,"text":{"font":"body" as 'heading' | 'body' | 'mono',"size":16,"lineHeight":24,"tracking":0 as number,"weight":400 as number,"case":"none" as 'none' | 'uppercase'},"shadow":"1" as 'none' | '1' | '2' | '3'},
+    input: {"height":{"sm":32,"md":48,"lg":56},"x":{"md":16},"radius":8,"text":{"font":"body" as 'heading' | 'body' | 'mono',"size":16,"lineHeight":24,"tracking":0 as number,"weight":400 as number,"case":"none" as 'none' | 'uppercase'},"shadow":"none" as 'none' | '1' | '2' | '3'},
   },
   /** Control heights and padding (px) for the theme's density: h-control-sm, h-control, h-control-lg, px-control-x. */
   density: {"sm":40,"md":48,"lg":56,"x":20},

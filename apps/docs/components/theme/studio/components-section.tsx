@@ -467,7 +467,7 @@ function EffectsGroup({ name }: { name: ComponentName }) {
             </div>
             {e.shadow !== undefined ? <ResetLink label={`Reset ${def.label} shadow`} onReset={() => setProp(name, 'shadow', null)} /> : null}
           </div>
-          {e.shadow === undefined ? <p className="text-muted-foreground text-xs">{name === 'button' ? 'Shadow 1 until set (Ghost has none). Both kits.' : 'The field style’s until set: a boxed field has Shadow 1. Both kits.'}</p> : null}
+          {e.shadow === undefined ? <p className="text-muted-foreground text-xs">{name === 'button' ? 'Shadow 1 until set (Ghost has none). Both kits.' : 'None until set: fields are flat. Both kits.'}</p> : null}
         </Row>
       ) : null}
       {shape.ring ? (
