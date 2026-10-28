@@ -94,7 +94,7 @@ export function HabitView() {
               <CardTitle>Last 30 days</CardTitle>
             </CardHeader>
             <CardContent>
-              <ChartContainer config={config} className="h-32 w-full">
+              <ChartContainer config={config} className="aspect-auto h-32 w-full">
                 <AreaChart accessibilityLayer data={COMPLETION_30D}>
                   <XAxis dataKey="day" hide />
                   <YAxis domain={[0, 100]} hide />

@@ -330,7 +330,7 @@ export const COMPONENTS: ComponentMeta[] = [
     files: ['components/ui/pagination.tsx'],
     notes: 'pages of a long list or table · Previous/Next + page links · `isActive` on the current page',
     api: '<Pagination><PaginationContent><PaginationItem><PaginationPrevious href /></PaginationItem>…</PaginationContent></Pagination>',
-    caption: 'Under a DataTable with more rows than fit. Say where the person is (“21–30 of 128”) next to it.',
+    caption: 'Under a DataTable with more rows than fit. Say where the person is (“21–30 of 128”) next to it. On a phone, show “Page 3 of 13” between Previous and Next instead of the page links: they are touch-sized and don’t fit.',
     aliases: ['pages', 'next page', 'paging'],
   },
   {
@@ -669,7 +669,7 @@ export const COMPONENTS: ComponentMeta[] = [
     files: ['components/kit/prose.tsx'],
     notes: "long-form text (articles, docs, rendered markdown) at the theme's typeset: measure, leading, flow",
     api: '<Prose as?="div|article|section">{html}</Prose>',
-    caption: 'Wrap text, not layout: headings, paragraphs, lists, quotes, code and tables. No cards or buttons inside.',
+    caption: 'Wrap text, not layout: headings, paragraphs, lists, quotes, code and tables. No cards or buttons inside. A `pre` that can scroll sideways takes `tabIndex={0}`: a keyboard can’t scroll what it can’t focus.',
     aliases: ['typography', 'article', 'markdown', 'rich text', 'typeset'],
   },
   {

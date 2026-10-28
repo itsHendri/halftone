@@ -27,7 +27,7 @@ export function ToolCallCard({ title, status, input, output, className }: Props)
   const s = STATUS[status];
   const details = input || output;
   return (
-    <Collapsible className={cn('border-border bg-card rounded-xl border text-sm', className)}>
+    <Collapsible className={cn('border-border bg-card min-w-0 rounded-xl border text-sm', className)}>
       <CollapsibleTrigger
         disabled={!details}
         className="flex w-full items-center gap-3 px-3 py-2.5 text-left disabled:cursor-default [&[data-state=open]>svg:last-child]:rotate-180">
