@@ -37,7 +37,8 @@ title travels with it. *Break it:* no exception.
 **Left-align text, empty and success states included.** *Why:* every line starts at the same edge, so the eye finds the next
 line and the next block without searching. *Break it only for* one short block alone in a small space (a compact empty state
 in a tile), or a marketing Hero of one line and one button.
-Follow-up: `SuccessScreen` and `EmptyState` centre today. They would need a left-aligned layout, which is a code change, not docs.
+`SuccessScreen` and `EmptyState` are left-aligned in both kits (done with this work, 2026-10-28): a column centred on its
+space, its text left-aligned.
 
 ### Cards vs lists (replaces "identical card grids")
 - NN/g: "Cards work best for collections of heterogeneous items". Cards "are not appropriate when users search for a
@@ -80,14 +81,13 @@ and most dangerous (moving money, deleting an account) gets a deliberate gesture
 taken back. *Break it:* no exception.
 Today mobile says "AlertDialog for reversible", which contradicts every source.
 
-### Multi-step flows (keeps, gains a why; reason needs the user)
+### Multi-step flows (dropped for now)
 - GOV.UK: "each page containing just one thing". This helps people focus, "recover easily from form errors", and use the
   service on mobile.
 - Apple: "help people avoid data loss by getting confirmation before closing" a task view.
 
-**A flow is one route with a step state, and each step asks one thing.** *Why (to confirm):* the answers live in one
-place for the whole flow, the header, `Stepper` and bottom bar stay put, and one question per step is easier to answer and to
-correct. Leaving with answers entered asks first. *Break it:* no exception.
+The user (2026-10-28): no rule yet. A flow with a Stepper doesn't always want a bottom bar, so the "one frame" reason
+doesn't hold. Learn from the prototypes first. The mobile guide's "one route, `useState<Step>`" pattern came out.
 
 ### One primary action (adds to mobile; web has it)
 - GOV.UK: "Having more than one main call to action reduces their impact".
@@ -162,14 +162,15 @@ matches nothing just says so, with a way to clear the filter).
 
 ## Visual
 
-### Shadow and elevation (keeps, gains a why; fixes inputs)
+### Shadow and elevation (keeps, gains a why; fields go flat)
 - Atlassian: raised is "reserved for movable cards", overlay is for UI over UI (dialogs, menus, floating buttons). Don't raise to
   group content. Shadows are harder to see in dark mode.
-- Studio decision 2026-10-26: a boxed Input takes the theme's field shadow, so "inputs are flat" is out of date.
+- Studio decision 2026-10-26 gave a boxed Input Shadow 1. The user (2026-10-28): go flat for now. Fields draw no shadow
+  until a system sets one (`defaultShadow` in `@halftone-ds/tokens`).
 
 **A shadow means it lifts: it presses or it floats.** *Why:* people read a shadow as "this sits above the page", so on
-static content it promises something that isn't there. *Break it only for* the shadow the theme's field style gives a boxed
-field. Never add one by hand.
+static content it promises something that isn't there. Fields are content. *Break it only through* the theme (a system may
+give its fields a shadow in Studio). Never add one by hand.
 
 ### Colour and selection (keeps, gains a source)
 - Apple: reserve colour "for elements that truly benefit from emphasis, such as status indicators or primary actions". Don't
@@ -216,10 +217,12 @@ finger, which tracks the gesture, and reduced motion, which collapses to 0.
 **Icon-only only for icons everyone knows** (close, search, share, more). They are always labelled, and never for a destructive
 action. *Why:* people learn an action faster from a word than from an icon. *Break it:* no exception.
 
-## Open for the user
-1. Multi-step flows: confirm the why (state in one place + one frame + one thing per step).
-2. Alignment: left-aligned SuccessScreen and EmptyState is a code change in both kits. Do it in this PR, or as a follow-up?
-3. Rules not yet written down: one primary, labels, empty states and disabled are proposed above. Anything else?
+## Decided (2026-10-28)
+1. Fields are flat until a system sets a shadow.
+2. Multi-step flows have no rule yet.
+3. SuccessScreen and EmptyState are left-aligned, in this PR.
+4. One primary, labels, confirmations, empty states, disabled, toasts, never colour alone and web targets are in both guides.
+   The user's other rules get added as they come up.
 
 Sources: [Apple HIG](https://developer.apple.com/design/human-interface-guidelines) ·
 [GOV.UK buttons](https://design-system.service.gov.uk/components/button/) ·
