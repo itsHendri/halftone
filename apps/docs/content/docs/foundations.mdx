@@ -16,9 +16,30 @@ file, so they follow the theme toggle.
 
 <TokenSwatches />
 
+### Tints and pressed fills
+
+Colours come from the ramps, not from opacity. A colour at partial opacity (`bg-primary/15`) takes on
+whatever is behind it, so its contrast changes with the surface: the same tint reads differently on the page
+and on a card. Each tint is a ramp step chosen for each theme, a light step on a light page and a dark one on
+a dark page:
+
+- `<tone>-subtle` (primary, success, warning, destructive, info) is a tinted surface: an alert, an icon
+  well, a selected card, a promo. `<tone>-border` is its edge.
+- `muted-subtle` is a neutral surface one step off the page: a placeholder, a quiet band.
+- `primary-pressed` and `secondary-pressed` are the pressed (or, on the web, hover) fill of a `bg-primary` or
+  `bg-secondary` control that isn't a Button: the next step of the ramp, away from the page.
+
+Text on a tint is `text-foreground` or `text-muted-foreground`. The tone itself goes on an icon or a dot: a
+tone as small text on its own tint can fall under 4.5:1. Transparency is only for overlays: the scrim behind
+a sheet, a frosted bar with `backdrop-blur`, a focus ring's halo. Both kits' lint (`halftone/no-alpha-colour`)
+flags any other colour at an opacity.
+
+<TintSwatches />
+
 The build checks every pairing the kit renders, in both themes: each fill and its `-foreground`, body and
-muted text on every surface, each status colour used as text, and each status icon on its own tint.
-The build names anything below WCAG AA, and fails on it with `--strict` (Halftone's own kits build strict).
+muted text on every surface and every tint, each status colour used as text, each status icon on its own
+tint and each label on its pressed fill. The build names anything below WCAG AA, and fails on it with
+`--strict` (Halftone's own kits build strict).
 
 ## Spacing
 
