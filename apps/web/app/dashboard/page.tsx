@@ -51,7 +51,7 @@ export default function Overview() {
           <CardDescription>By month invoiced, January to June</CardDescription>
         </CardHeader>
         <CardContent>
-          <ChartContainer config={chartConfig} className="h-64 w-full">
+          <ChartContainer config={chartConfig} className="aspect-auto h-64 w-full">
             <BarChart accessibilityLayer data={MONTHLY}>
               <CartesianGrid vertical={false} />
               <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={8} />

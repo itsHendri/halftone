@@ -41,7 +41,7 @@ export function InsightsView() {
           </CardHeader>
           <CardContent>
             {range === 'w' ? (
-              <ChartContainer config={doneConfig} className="h-56 w-full">
+              <ChartContainer config={doneConfig} className="aspect-auto h-56 w-full">
                 <BarChart accessibilityLayer data={WEEK}>
                   <CartesianGrid vertical={false} />
                   <XAxis dataKey="day" tickLine={false} axisLine={false} tickMargin={8} />
@@ -50,7 +50,7 @@ export function InsightsView() {
                 </BarChart>
               </ChartContainer>
             ) : (
-              <ChartContainer config={rateConfig} className="h-56 w-full">
+              <ChartContainer config={rateConfig} className="aspect-auto h-56 w-full">
                 <AreaChart accessibilityLayer data={COMPLETION_30D}>
                   <CartesianGrid vertical={false} />
                   <XAxis dataKey="day" tickLine={false} axisLine={false} tickMargin={8} interval={4} />
