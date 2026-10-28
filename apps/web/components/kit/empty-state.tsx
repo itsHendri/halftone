@@ -13,13 +13,16 @@ type Props = {
   className?: string;
 };
 
-/** What a list, table or page shows when there is nothing yet. Always offer the next step. */
+/**
+ * What a list, table or page shows when there is nothing yet. Always offer the next step. Left-aligned: the `default`
+ * one in a column centred on its space, a `compact` one at the edge of its card.
+ */
 export function EmptyState({ icon: Icon, title, description, action, variant = 'default', className }: Props) {
   return (
     <div
       className={cn(
-        'flex flex-col items-center justify-center gap-3 text-center',
-        variant === 'default' ? 'px-6 py-16' : 'px-4 py-8',
+        'flex flex-col items-start justify-center gap-3',
+        variant === 'default' ? 'mx-auto w-full max-w-sm px-6 py-16' : 'px-4 py-8',
         className
       )}>
       <span className={cn('bg-muted text-muted-foreground flex items-center justify-center rounded-full', variant === 'default' ? 'size-14' : 'size-10')}>
