@@ -16,14 +16,17 @@ type Props = {
   className?: string;
 };
 
-/** Standard empty state: icon, title, subtitle, optional action. */
+/**
+ * Standard empty state: icon, title, subtitle, optional action, left-aligned (the `default` one in a column centred
+ * on the section; on a phone the column is its width).
+ */
 export function EmptyState({ icon, title, subtitle, action, variant = 'default', className }: Props) {
   if (variant === 'compact') {
     return (
-      <View className={cn('items-center px-5 py-6', className)}>
+      <View className={cn('items-start px-5 py-6', className)}>
         {icon ? <Icon as={icon} size={28} className="text-muted-foreground mb-2" /> : null}
-        <Text className="text-muted-foreground text-center text-sm font-medium">{title}</Text>
-        {subtitle ? <Text className="text-muted-foreground mt-1 text-center text-sm">{subtitle}</Text> : null}
+        <Text className="text-muted-foreground text-sm font-medium">{title}</Text>
+        {subtitle ? <Text className="text-muted-foreground mt-1 text-sm">{subtitle}</Text> : null}
         {action ? (
           <Pressable onPress={action.onPress} accessibilityRole="button" className="mt-3 min-h-11 justify-center">
             <Text className="text-primary text-sm font-semibold">{action.label}</Text>
@@ -33,15 +36,13 @@ export function EmptyState({ icon, title, subtitle, action, variant = 'default',
     );
   }
   return (
-    <View className={cn('items-center justify-center px-6 py-12', className)}>
-      {icon ? <Spot icon={icon} size="lg" className="mb-6" /> : null}
-      <View className="w-full max-w-xs items-center gap-2">
-        <Text variant="h4" className="text-center">
-          {title}
-        </Text>
-        {subtitle ? <Text className="text-muted-foreground text-center">{subtitle}</Text> : null}
+    <View className={cn('justify-center px-5 py-12', className)}>
+      <View className="w-full max-w-sm items-start gap-2 self-center">
+        {icon ? <Spot icon={icon} size="lg" className="mb-4" /> : null}
+        <Text variant="h4">{title}</Text>
+        {subtitle ? <Text className="text-muted-foreground">{subtitle}</Text> : null}
         {action ? (
-          <Button onPress={action.onPress} className="mt-4 w-full">
+          <Button onPress={action.onPress} className="mt-4">
             <Text>{action.label}</Text>
           </Button>
         ) : null}

@@ -19,28 +19,31 @@ type Props = {
   className?: string;
 };
 
-/** The one success template. Centred check, title, optional amount, body. Actions go in a StickyBottomBar. */
+/**
+ * The one success template: check, title, optional amount, body, left-aligned in a column centred on the screen (on a
+ * phone the column is the screen's width). Actions go in a StickyBottomBar.
+ */
 export function SuccessScreen({ title, body, amount, amountSubtitle, loading, children, className }: Props) {
   return (
-    <View className={cn('flex-1 items-center justify-center px-6', className)}>
-      {loading ? (
-        <View className="bg-muted mb-7 size-24 items-center justify-center rounded-full">
-          <Spinner size="large" />
-        </View>
-      ) : (
-        <Spot icon={CheckIcon} size="xl" tone="success" className="mb-7" />
-      )}
-      {!loading ? (
-        <View className="w-full max-w-xs items-center gap-2">
-          <Text variant="h3" className="text-center">
-            {title}
-          </Text>
-          {amount ? <Text className="text-primary text-center text-4xl font-bold">{amount}</Text> : null}
-          {amountSubtitle ? <Text className="text-muted-foreground text-center">{amountSubtitle}</Text> : null}
-          {body ? <Text className="text-muted-foreground text-center">{body}</Text> : null}
-          {children ? <View className="mt-4 w-full">{children}</View> : null}
-        </View>
-      ) : null}
+    <View className={cn('flex-1 justify-center px-5', className)}>
+      <View className="w-full max-w-sm items-start self-center">
+        {loading ? (
+          <View className="bg-muted mb-6 size-24 items-center justify-center rounded-full">
+            <Spinner size="large" />
+          </View>
+        ) : (
+          <Spot icon={CheckIcon} size="xl" tone="success" className="mb-6" />
+        )}
+        {!loading ? (
+          <View className="w-full gap-2">
+            <Text variant="h3">{title}</Text>
+            {amount ? <Text className="text-primary text-4xl font-bold">{amount}</Text> : null}
+            {amountSubtitle ? <Text className="text-muted-foreground">{amountSubtitle}</Text> : null}
+            {body ? <Text className="text-muted-foreground">{body}</Text> : null}
+            {children ? <View className="mt-4 w-full">{children}</View> : null}
+          </View>
+        ) : null}
+      </View>
     </View>
   );
 }
