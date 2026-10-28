@@ -44,10 +44,15 @@ Rules:
 - **No hex, `rgb()` or Tailwind palette colours (`bg-blue-500`, `text-white`) in `app/` or `components/`.**
   The one exception is the modal scrim, `bg-black/50`, in the shadcn overlays. Lint enforces this outside
   `components/ui` and `components/kit` (`halftone/no-raw-colour`), naming the semantic class to use.
-- **Colours come from the ramps, not from opacity.** A colour drawn at partial opacity takes on whatever is behind it,
-  so its contrast changes with the surface (white, a grey card). Fills, text and borders are roles or ramp steps;
-  the component layer (Button, FilterChip, Badge and the fields) uses no opacity at all, and its hover and pressed
-  colours are the next ramp step. Transparency is for overlays only: a scrim behind a sheet, a focus ring's halo.
+- **Colours come from the ramps, not from opacity.** Fills, text and borders are roles or ramp steps
+  (`bg-primary-subtle`, never `bg-primary/15`); the component layer (Button, FilterChip, Badge and the fields) uses
+  no opacity at all, and its hover and pressed colours are the next ramp step.
+  *Why:* a colour at partial opacity takes on whatever is behind it, so its contrast changes with the surface (the
+  page, a grey card, dark mode) and no build can check it. A ramp step is one known colour per theme, which
+  `tokens:build` checks against the text and icons that sit on it.
+  *Break it only for overlays*, which exist to show what is behind them: the scrim behind a sheet or dialog
+  (`bg-black/50`), a frosted bar (`bg-background/90` with `backdrop-blur`), a focus ring's halo (`ring-ring/50`), a
+  control drawn over a photo or the camera image.
 - **Tints are roles:** `bg-primary-subtle`, `bg-success-subtle`, `bg-warning-subtle`, `bg-destructive-subtle`,
   `bg-info-subtle` with `border-<tone>-border`, and `bg-muted-subtle`; each is a ramp step per theme (a light step on
   a light page, a dark one on a dark page). Hover and pressed are `hover:bg-primary-pressed` / `hover:bg-secondary-pressed`
@@ -297,6 +302,12 @@ the tables. Text between `GENERATED` markers is overwritten.
 - **Shadow:** only on what you can press or what floats (dialogs, popovers, menus, toasts). Content is flat.
 - **Responsive:** design at 375px and 1280px. Sidebars collapse into a sheet (`AppShell` does), tables
   scroll inside their card, grids drop columns.
+- **States only on what acts:** a hover or pressed look (`hover:bg-accent`, `active:bg-*`, a shadow that lifts,
+  `cursor-pointer`) goes only on an element that does something when clicked: a Button, a link, a ListRow with
+  `href` or `onClick`, a card that opens. *Why:* a state is a promise that something happens. A row that lights up
+  and does nothing reads as broken, and an agent or a tester reading the page will try to click it. *When a whole
+  row or card acts,* the state goes on that one element, never on its parts as well. There is no exception: a
+  read-only table row doesn't hover (the kit's `TableRow` doesn't; give a clickable row `hover:bg-muted` and a link).
 
 Worked examples of the first three: `/dashboard` (an AppShell app with a chart, a filtered table, a dialog
 form, settings and a guarded delete), `/landing` and `/assistant`.
@@ -307,6 +318,7 @@ form, settings and a guarded delete), `/landing` and `/assistant`.
 - ✗ Brand colour put on selected tabs, chips or nav items by hand (a chip's selected colour is the theme's). ✗ Grey-on-grey text below 4.5:1.
 - ✗ More than one primary button in view. ✗ “OK”/“Submit” as the label of a consequential action.
 - ✗ Modals as the default home for secondary content. ✗ Icon-only buttons without `aria-label`.
+- ✗ A hover or pressed look on something that does nothing when clicked.
 - ✗ An assistant that acts without asking, or hides what it did.
 
 ## Hallucination guard

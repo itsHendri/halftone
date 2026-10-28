@@ -60,10 +60,15 @@ Rules:
 - No Tailwind palette colours (`bg-blue-500`, `text-gray-400`). They don't follow the theme or the brand.
 - Lint enforces these in every screen and component outside `components/ui` and `components/kit`
   (`halftone/no-raw-colour`): a raw colour is an error that names the semantic class to use instead.
-- **Colours come from the ramps, not from opacity.** A colour drawn at partial opacity takes on whatever is behind it,
-  so its contrast changes with the surface (white, a grey card). Fills, text and borders are roles or ramp steps;
-  the component layer (Button, FilterChip, Badge and the fields) uses no opacity at all, and its hover and pressed
-  colours are the next ramp step. Transparency is for overlays only: a scrim behind a sheet, a focus ring's halo.
+- **Colours come from the ramps, not from opacity.** Fills, text and borders are roles or ramp steps
+  (`bg-primary-subtle`, never `bg-primary/15`); the component layer (Button, FilterChip, Badge and the fields) uses
+  no opacity at all, and its hover and pressed colours are the next ramp step.
+  *Why:* a colour at partial opacity takes on whatever is behind it, so its contrast changes with the surface (the
+  page, a grey card, dark mode) and no build can check it. A ramp step is one known colour per theme, which
+  `tokens:build` checks against the text and icons that sit on it.
+  *Break it only for overlays*, which exist to show what is behind them: the scrim behind a sheet or dialog
+  (`bg-black/50`), a frosted bar (`bg-background/90` with `backdrop-blur`), a focus ring's halo (`ring-ring/50`), a
+  control drawn over a photo or the camera image.
 - **Tints are roles:** `bg-primary-subtle`, `bg-success-subtle`, `bg-warning-subtle`, `bg-destructive-subtle`,
   `bg-info-subtle` with `border-<tone>-border`, and `bg-muted-subtle`; each is a ramp step per theme (a light step on
   a light page, a dark one on a dark page). Pressed is `active:bg-primary-pressed` / `active:bg-secondary-pressed`
@@ -342,6 +347,11 @@ Remote push is gone from Expo Go since SDK 53.
   from `lib/reduced-motion.ts` and collapses to 0ms when the OS asks. `components/ui` gets this
   from reanimated's `ReduceMotion.System`; the kit's `Animated` code has no equivalent, so it is
   not optional — a new animated component without it is a bug.
+- **States only on what acts:** a pressed look (`active:bg-accent`, a dimmed row) goes only on something with an
+  `onPress`: a Button, a ListRow with `onPress`, a card that opens. In the web build the same goes for hover.
+  *Why:* a state is a promise that something happens. A row that reacts and does nothing reads as broken, and
+  an agent or a tester reading the screen will try to tap it. *When a whole row or card acts,* the state goes on
+  that one element, never on its parts as well. There is no exception: read-only content never reacts.
 - **Shadow:** only on something you can **press**, or something **floating above the page**
   (dialogs, sheets, menus, toasts, the FloatingButton). Content is flat — that includes inputs,
   which are neither.
@@ -358,6 +368,7 @@ Remote push is gone from Expo Go since SDK 53.
 - ✗ Same padding on every element; vary it to create rhythm.
 - ✗ Modals as the default home for secondary content.
 - ✗ Brand colour put on selected chips/tabs by hand (a chip's selected colour is the theme's). ✗ Grey-on-grey text below 4.5:1 contrast.
+- ✗ A pressed look on something that does nothing when tapped.
 - ✗ Tap targets under 44×44. ✗ Icon-only buttons without `accessibilityLabel`.
 - ✗ A control without a name: a Switch, RadioGroupItem or Checkbox needs a `Label htmlFor` its `id`, or an
   `aria-label` (a Switch at the end of a ListRow). ✗ `accessibilityState`/`accessibilityValue` in new

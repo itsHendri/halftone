@@ -7,7 +7,7 @@ import type { MDXComponents } from 'mdx/types';
 import { CopyPrompt } from './copy-prompt';
 import { PhoneFrame } from './phone-frame';
 import { TypeSpecimen } from './theme/specimen';
-import { TokenSwatches } from './token-swatches';
+import { TintSwatches, TokenSwatches } from './token-swatches';
 
 export function getMDXComponents(components?: MDXComponents) {
   return {
@@ -22,6 +22,7 @@ export function getMDXComponents(components?: MDXComponents) {
     CopyPrompt,
     PhoneFrame,
     TokenSwatches,
+    TintSwatches,
     TypeSpecimen,
     ...components,
   } satisfies MDXComponents;
