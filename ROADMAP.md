@@ -6,6 +6,9 @@ Halftone's ground: **one brand on phone and web, from one design-token file**, w
 colours (radius, fonts, depth, density, border, icon stroke, typeset), contrast checked on every build, and
 agents that build only from what the kits ship. Free, open, and run by your own agent.
 
+**Plan before building.** Every phase below gets its own plan first, with wireframes when it has UI, and is built
+only once that plan is agreed. Where the UX is still open, the item lists the questions its plan has to answer.
+
 ## Done: trust and pitch
 
 - **Guardrails in lint.** `halftone/*` ESLint rules in both kits (raw colours, imports outside the registry,
@@ -34,6 +37,9 @@ A `/brief` page that turns a guided brief, or a pasted transcript, into a planni
 - **Publish Halftone themes as shadcn registry items**: a `registry:theme` download from the studio, the presets
   at `/r/theme/<preset>.json`, and later any theme code by URL.
 - `theme decode` and `theme resolve` in the CLI.
+
+Still to come: a docs page, "Use your Halftone theme in any shadcn kit" (the DESIGN.md, the `registry:theme` file
+and the preset code), for workspaces like Design Studio that take all three.
 
 ## Done: brand assets
 
@@ -72,8 +78,30 @@ layer the `HalftoneSystem` document in `@halftone-ds/tokens`, shipped in 1.3):
 - `npm run eject-samples` one sample at a time, with `--status`; CI ejects each one and runs the gates.
 - `npm run qc:look` (Playwright and axe) in both kits, and an `.mcp.json` per kit for its dev server.
 
+## Next: the thinking beside the screens
+
+A prototype keeps its reasoning next to its screens, in both kits. Learned from Design Studio
+(itspatmorgan/design-studio), which keeps briefs, decisions and diagrams beside each prototype.
+- **The brief, the decisions and a handoff note** in the prototype's folder. The handoff note says what is real,
+  what is simulated and what still needs a production decision. transcript-to-prototype writes them, and the kit
+  shell shows them beside the screens.
+- **A Sketch preset:** greyscale with a handwritten font, for a wireframe pass before the brand goes on.
+- **`PERSONAS.md` for agents**, including the engineer who receives the handoff, and every rule in the guides
+  written with a short why and when to break it.
+
+Plan first. Open UX questions:
+- Where do the notes show on a phone (a sheet over the screen, a tab, the kit's Home?) and on the web (a side
+  panel?)? Do they show in the published web export, or only while building?
+- One file per prototype, or brief, decisions and handoff as separate files?
+- Is Sketch a preset you apply to the whole kit, or a switch per prototype or screen, so a sketch and the branded
+  version can sit side by side?
+- How does a reviewer move between a screen and the note about it?
+
 ## Later: agent reach
 
+- **Skills any agent can use.** The skills live once in `.agents/skills/`, with `.claude/skills` generated from
+  them, and AGENTS.md gets a routing block ("when the person asks for X, read skill Y"), so Codex and Cursor pick
+  them up too. Before the plugin, as it reaches more people for less. Learned from Design Studio.
 - The skills as a Claude Code plugin, so they load outside the kit folders.
 - `DESIGN.md` linted against the open DESIGN.md spec in CI.
 - qc-pass driving the app through Expo's MCP tools: screenshots by test ID, every route in both themes.
@@ -93,6 +121,12 @@ the Foundations summary for a system without a code (#76). Learned from contenta
 - `kit:update -- --status`: what changed upstream since, and which of the project's files differ from the kit they
   started as.
 - CI copies a kit out at an older release, updates it to this commit and runs the gates.
+- **A path map** in each kit: which files are the kit's (updates may change them) and which are the project's
+  (updates never do). The project's own agent guidance goes in `AGENTS.project.md`, appended to AGENTS.md, which
+  updates never overwrite.
+
+Design Studio built a scripted updater and dropped it a week later (0.1.1) for reviewed Git merges, so `--status`
+and the per-file diffs come first; applying changes waits until those have proved themselves.
 
 ## Later: accounts
 
