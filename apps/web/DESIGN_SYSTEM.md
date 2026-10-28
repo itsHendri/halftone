@@ -3,20 +3,32 @@
 The visual rules and the component registry for the web kit. **Read this before writing any UI.**
 Engineering conventions (routes, state, workflows) live in `AGENTS.md`.
 
+Every rule says what to do, *why*, and when (if ever) to break it. For a case a rule doesn't list, apply its why. When
+the why doesn't settle it, ask. The mobile kit has the same rules; they differ only where the platform does (hover
+here, hitSlop and haptics there).
+
 > **Core rule.** Never introduce a colour, spacing value, component or pattern that is not defined here
 > without flagging it first. Never invent a component name. If it is not in the registry, say so and ask
 > before building. Everything in the registry is previewed live at **/components**.
+> *Why:* a prototype built only from the kit re-brands with one theme and reads as one product. Anything from outside
+> keeps its own look when the theme changes, and an invented name either fails to import or becomes a look-alike nobody
+> maintains. *Break it only* after flagging the gap and getting a yes, and then through the `add-component` skill, so the
+> new piece joins the registry.
 
 ## Tokens
 
 Single source of truth: `tokens/tokens.json` (DTCG), shared with the mobile kit. `npm run tokens:build`
 regenerates `app/tokens.css` (Tailwind 4 / shadcn variables, oklch), `lib/theme.ts`, `DESIGN.md` and
-`tokens/generated/`. Never edit the generated files. In the Halftone monorepo the brand is edited in
-`apps/mobile/tokens/tokens.json` and copied here with `npm run tokens:sync`.
+`tokens/generated/`. In the Halftone monorepo the brand is edited in `apps/mobile/tokens/tokens.json` and copied here
+with `npm run tokens:sync`.
 
-**The build checks contrast.** Every `X` / `X-foreground` pairing, muted text on every surface, and each
-status colour used as text must clear WCAG AA (4.5:1) in both themes; `tokens:build` names any that falls
-short, and `--strict` (how Halftone's own kits build) fails on it.
+- **Never edit the generated files.** *Why:* `tokens:build` writes them from `tokens.json`, so a hand edit is lost on
+  the next build. There is no exception.
+- **The build checks contrast.** Every `X` / `X-foreground` pairing, muted text on every surface, and each status
+  colour used as text must clear WCAG AA (4.5:1) in both themes; `tokens:build` names any that falls short, and
+  `--strict` (how Halftone's own kits build) fails on it. *Why:* 4.5:1 is the WCAG AA level for body text, and a
+  prototype is shown on screens and projectors you don't control. *Break it only* when the person chose the colour
+  knowingly. Say so, and the project builds without `--strict`.
 
 ### Colour — semantic names only
 
@@ -41,9 +53,11 @@ The shadcn vocabulary through Tailwind classes; each works as `bg-`, `text-`, `b
 | `chart-1` … `chart-5` | data series (through a ChartConfig) |
 
 Rules:
-- **No hex, `rgb()` or Tailwind palette colours (`bg-blue-500`, `text-white`) in `app/` or `components/`.**
-  The one exception is the modal scrim, `bg-black/50`, in the shadcn overlays. Lint enforces this outside
-  `components/ui` and `components/kit` (`halftone/no-raw-colour`), naming the semantic class to use.
+- **No hex, `rgb()` or Tailwind palette colours (`bg-blue-500`, `text-white`) in `app/` or `components/`.** *Why:* a
+  literal or a palette colour doesn't change with the theme or with dark mode, so after a re-brand it is the one colour
+  on screen that is wrong. *Break it only for* black at an opacity as a shade (the modal scrim `bg-black/50` in the
+  shadcn overlays), and chart or SVG colours, which take a token variable (`var(--chart-1)`). Lint enforces this
+  outside `components/ui` and `components/kit` (`halftone/no-raw-colour`), naming the semantic class to use.
 - **Colours come from the ramps, not from opacity.** Fills, text and borders are roles or ramp steps
   (`bg-primary-subtle`, never `bg-primary/15`); the component layer (Button, FilterChip, Badge and the fields) uses
   no opacity at all, and its hover and pressed colours are the next ramp step.
@@ -53,31 +67,63 @@ Rules:
   *Break it only for overlays*, which exist to show what is behind them: the scrim behind a sheet or dialog
   (`bg-black/50`), a frosted bar (`bg-background/90` with `backdrop-blur`), a focus ring's halo (`ring-ring/50`), a
   control drawn over a photo or the camera image.
-- **Tints are roles:** `bg-primary-subtle`, `bg-success-subtle`, `bg-warning-subtle`, `bg-destructive-subtle`,
-  `bg-info-subtle` with `border-<tone>-border`, and `bg-muted-subtle`; each is a ramp step per theme (a light step on
-  a light page, a dark one on a dark page). Hover and pressed are `hover:bg-primary-pressed` / `hover:bg-secondary-pressed`
-  (the next step of the ramp), not `/90`. Text on a tint stays `text-foreground` (or `text-muted-foreground`): a
-  tone as small text on its own tint can measure under 4.5:1 (primary on `primary-subtle` 4.24, destructive 4.09).
-  The tone goes on the icon (3:1, checked) or a dot; a status badge is an outline Badge with a coloured dot. `tokens:build` checks every tint's text and icon.
+- **A tint is a role, and the text on it stays neutral.** The tints are `bg-primary-subtle`, `bg-success-subtle`,
+  `bg-warning-subtle`, `bg-destructive-subtle`, `bg-info-subtle` with `border-<tone>-border`, and `bg-muted-subtle`;
+  each is a ramp step per theme (a light step on a light page, a dark one on a dark page). Hover and pressed are
+  `hover:bg-primary-pressed` / `hover:bg-secondary-pressed` (the next step of the ramp), not `/90`. Text on a tint is
+  `text-foreground` (or `text-muted-foreground`); a status badge is an outline Badge with a coloured dot.
+  `tokens:build` checks every tint's text and icon.
+  *Why:* a tone as small text on its own tint can measure under 4.5:1 (primary on `primary-subtle` 4.24, destructive
+  4.09). *Break it only for* the icon (3:1, checked) or a dot, which carry the tone.
 - Lint enforces it everywhere, `components/ui` and `components/kit` included (`halftone/no-alpha-colour`): a
   `bg-`, `text-` or `border-` colour at an opacity is an error that names the role to use. The overlays it allows:
   the scrim (`bg-black/50`) and a frosted bar (`bg-background/90` with `backdrop-blur`). Focus halos are `ring-*`.
-- Selected / active states (tabs, segmented controls, nav items) are **neutral**, not the brand colour. A selected
-  FilterChip is the theme's Chip `selected` colour: inverted by default, and a system may make it a role such as
-  primary. Never colour one by hand.
+- **Selected is neutral; the brand colour is for the primary action and focus.** Tabs, segmented controls, nav items
+  and the active range select with a neutral or inverted foreground. A selected FilterChip is the theme's Chip
+  `selected` colour: inverted by default. *Why:* the brand colour marks the one thing to do next, and on a selected tab
+  it competes with that. A neutral selection also clears contrast under any theme, where a brand colour may not.
+  *Break it only* through the theme: a system may make the Chip's selected colour a role such as primary. Never colour
+  one by hand.
+- **Never colour alone.** A status carries a word or an icon as well as its colour (a Badge's dot and word, a
+  StatusDot beside its label, a chart's legend). *Why:* some people can't tell the colours apart, and screens and
+  projectors change them (WCAG 1.4.1). There is no exception.
 - **Styles are the theme's, not the screen's.** The theme picks the primary button (solid, soft, outline,
   raised), the text fields (outline, filled, underline), and each component's corner, size, text and variant
   colours, the same as the mobile kit's; `Button`, `FilterChip`, `Badge`, `Input`, `Textarea` and `Select` already
   draw them (`bg-button-primary-bg`, `rounded-button`, `h-(--button-h-md)`, `type-button`…). Never restyle one in
-  a page (no `bg-primary` on a `Button`, no `border-b` field, no `h-9` or `rounded-md` on a Button): change the
-  theme instead. Inside the primary `Button`, a `Spinner` takes `tone="button-foreground"`; an `Icon` needs no colour.
-- Light and dark are both required.
+  a page (no `bg-primary` on a `Button`, no `border-b` field, no `h-9` or `rounded-md` on a Button). Inside the primary
+  `Button`, a `Spinner` takes `tone="button-foreground"`; an `Icon` needs no colour.
+  *Why:* one system sets these for both kits (Studio on the docs site). A restyle in a page survives the next
+  re-brand, and that page's button stops matching every other. There is no exception: a look a page needs is a theme
+  change, or a new variant through the `add-component` skill.
+- **Light and dark are both required.** *Why:* the viewer's system picks the theme, so a prototype is seen in whichever
+  one they use. There is no exception.
+
+### Sizing and targets
+
+- **Controls take their size from the theme.** Button, FilterChip, Badge, Input, Textarea and Select take their
+  corners, heights, padding and text from the theme's component layer, the same as the mobile kit's (one theme for
+  both kits): `rounded-button`, `rounded-chip`, `rounded-badge` (pills by default), `h-(--button-h-md)` (48 by default),
+  `h-(--field-h-md)`, `type-button`. *Why:* the theme sets sizes once for both kits, and a hard-coded height keeps its
+  size when the system changes. There is no exception: a different size is the component's `size` prop.
+- **A click target is at least 24×24, or spaced so it can't be mistaken for its neighbour** (WCAG 2.5.8). *Why:* a
+  small target is hard to hit with a shaky hand or a trackpad, and too close to the next one it gets the wrong click.
+  *Break it only for* a link inside a sentence.
 
 ### Spacing
 
-Tailwind's numeric scale on a 4-pt grid: `0 1 2 3 4 5 6 8 10 12 16` (0–64 px). Page gutters `px-4 sm:px-6
-lg:px-8`, sections `gap-8`–`gap-12`, inside cards `p-5`/`p-6`. Use `gap-*` for siblings, not margins.
-The theme's density scales the whole scale (`--spacing` × 0.875 compact, × 1.125 spacious), so stay on it.
+- **Spacing comes from the scale:** Tailwind's numeric scale on a 4-pt grid, `0 1 2 3 4 5 6 8 10 12 16` (0–64 px).
+  Page gutters `px-4 sm:px-6 lg:px-8`, sections `gap-8`–`gap-12`, inside cards `p-5`/`p-6`. The theme's density scales
+  the whole scale (`--spacing` × 0.875 compact, × 1.125 spacious). *Why:* space shows what belongs together: close means
+  related, more space starts a new group or gives weight. One scale keeps those steps the same on every page, and only
+  values on it follow the density. *Break it only for* half steps (`0.5`, `1.5`, `2.5`) inside a component's small
+  parts, a hero's or a marketing section's own breathing room (`py-20`, `gap-24`), and the clearance under a fixed bar.
+- **`gap-*` between siblings, not margins.** *Why:* the gap belongs to the parent, so adding, hiding or reordering a
+  child never leaves a stray or doubled space. *Break it only for* an overlap on purpose (AvatarGroup's negative
+  margin) or one child that sits apart from the rest.
+- **Vary spacing to show hierarchy.** The values above are defaults. A group that belongs together sits closer than
+  the groups around it. *Why:* the same padding on every element flattens the page, so nothing reads as grouped or as
+  more important. There is no exception.
 
 ### Radius
 
@@ -85,37 +131,66 @@ The theme's density scales the whole scale (`--spacing` × 0.875 compact, × 1.1
 `rounded-sm` 6 · `rounded-md` 8 (inputs) · `rounded-lg` 10 (cards, dialogs) · `rounded-xl` 16 (panels, tables) · `rounded-2xl` 20 (hero surfaces) · `rounded-full` (avatars, pills).
 <!-- /GENERATED:tokens:radius -->
 
+- **Corners come from the theme.** Buttons, chips and badges use their component corners; everything else uses the
+  scale above, which the theme scales from its base. *Why:* the radius is part of the brand and changes with it; a
+  fixed corner stays behind when the system changes. *Break it only for* `rounded-full` on what is round by nature
+  (avatars, dots, thumbs).
+- **A thumb on a track is `bg-card`, not `bg-background`** (the SegmentedControl thumb, the Switch thumb, the Slider
+  handle). *Why:* it must stay the raised colour if the page surface is ever tinted. There is no exception.
+
 ### Typography
 
 The theme's fonts (`app/fonts.ts`): h1–h4 and card titles take the heading font (`font-heading`), everything
-else the body font (`font-sans`). Page title `text-2xl sm:text-3xl font-semibold
-tracking-tight` (PageHeader does this); section titles `text-lg`/`text-xl font-semibold`; body `text-base`
-with `leading-7` for prose; helper text `text-sm text-muted-foreground`. `tabular-nums` for figures.
-The theme's text styles, the mobile kit's Text variants, are utilities: `type-h1 type-h2 type-h3 type-h4 type-lead
-type-p type-large type-small type-muted type-code type-blockquote` (font, size, line height, tracking and weight
-from `--type-<style>-*`; `leading-*`, `tracking-*` and `font-*` still override). Prose's running text is `type-p`.
+else the body font (`font-sans`). Page title `text-2xl sm:text-3xl font-semibold tracking-tight` (PageHeader does
+this); section titles `text-lg`/`text-xl font-semibold`; body `text-base` with `leading-7` for prose; helper text
+`text-sm text-muted-foreground`.
+
+- **Text takes the theme's text styles,** the mobile kit's Text variants as utilities: `type-h1 type-h2 type-h3 type-h4
+  type-lead type-p type-large type-small type-muted type-code type-blockquote` (font, size, line height, tracking and
+  weight from `--type-<style>-*`; `leading-*`, `tracking-*` and `font-*` still override). Prose's running text is
+  `type-p`. *Why:* an edited style in tokens.json then changes every use of it, in both kits. *Break it only for* a size
+  no style fits: Tailwind's `text-*` sizes.
+- **Weights: `font-medium` for row titles, `font-semibold` for headings and values, `font-bold` for the hero figure
+  only.** *Why:* bold is the loudest weight. Kept for the one figure the page is about, it stays loud; on every value,
+  none stands out. Mark a section with a heading, not bold body text. There is no exception.
+- **`tabular-nums` for figures** in tables, tiles and amounts. *Why:* every digit takes the same width, so columns line
+  up and a changing number doesn't shift. *Break it only for* a number inside running text.
 
 ### Depth and borders
 
-`shadow-xs`/`shadow-sm` (controls, cards), `shadow-md` (raised, popovers), `shadow-lg`/`shadow-xl` (menus,
-dialogs) are the theme's three elevation levels; `border` is its width; Lucide icons take its stroke.
-Button, FilterChip, Badge, Input, Textarea and Select take their corners, heights, padding and text from the theme's
-component layer, the same as the mobile kit's (one theme for both kits): `rounded-button`, `rounded-chip`,
-`rounded-badge` (pills by default), `h-(--button-h-md)` (48 by default), `h-(--field-h-md)`, `type-button`.
+- **Elevation is the theme's three levels:** `shadow-xs`/`shadow-sm` (controls, cards that press), `shadow-md`
+  (raised, popovers), `shadow-lg`/`shadow-xl` (menus, dialogs). No shadow colour on surfaces. *Why:* the theme owns
+  depth, its shadows and their colour, and a surface's own shadow colour stays put through a re-brand. *Break it only
+  for* a thumb or a floating element that must separate on any theme: `shadow-black/20` deepens the level's shadow.
+- **`border` is the theme's width.** *Why:* a system can make borders thin or none, and the page follows it. *Break it
+  only for* a shape that is only a line (a radio ring, a badge's cut-out, the Timeline's current step), which keeps
+  `border-2` so it can't vanish.
+- **Lucide icons take the theme's stroke.** *Why:* the stroke is the brand's, and an icon set apart from it looks
+  borrowed. There is no exception.
 
 ### Motion
 
-150 ms for hover and small feedback, 200 ms for most transitions, 300 ms for sheets. Anything that moves
-uses `motion-safe:`/`motion-reduce:` or `useReducedMotion()` from `hooks/use-reduced-motion.ts`.
+- **Duration grows with distance:** 150 ms for hover and small feedback, 200 ms for most transitions, 300 ms for
+  sheets. *Why:* a big surface moving as fast as a hover looks like a jump, and a hover as slow as a sheet feels laggy.
+  *Break it only for* motion that follows the pointer (it tracks the drag) and reduced motion (below).
+- **Anything that moves respects reduced motion:** `motion-safe:`/`motion-reduce:` or `useReducedMotion()` from
+  `hooks/use-reduced-motion.ts`. *Why:* the setting is there for people whom motion makes dizzy. There is no exception.
 
 ### Icons
 
-lucide-react only. `size-4` in buttons and menus, `size-5` in headers and feature blocks. Icon-only buttons
-always carry an `aria-label`.
+- **lucide-react only.** *Why:* one set takes the theme's stroke and sizes, and a second set looks different beside it
+  (`halftone/no-foreign-ui`). *Break it only for* the brand mark, which is `Logo`.
+- **Size follows where it sits:** `size-4` in buttons and menus, `size-5` in headers and feature blocks. *Why:* an icon
+  matches the text beside it, so the line reads as one. There is no exception.
+- **Icon-only buttons only for icons everyone knows** (close, search, share, more), always with an `aria-label` and a
+  `Tooltip`, and never for a destructive action. *Why:* people learn an action faster from a word than from an icon; a
+  screen reader has only the label, and a pointer user only the tooltip. There is no exception.
 
 ## Component registry
 
-Two folders, one rule: **use what's here, extend before duplicating, register anything new.**
+Two folders, one rule: **use what's here, extend before duplicating, register anything new.** *Why:* the lint, the
+/components page, the shadcn registry and llms.txt all read the registry, so a component outside it is invisible to the
+next person or agent.
 
 - `components/ui/*` — shadcn/ui (owned source; installed with the shadcn CLI, then ours to edit).
 - `components/kit/*` — ours, composed from `ui` primitives, className-only styling.
@@ -282,51 +357,130 @@ the tables. Text between `GENERATED` markers is overwritten.
 
 ## Patterns
 
+#### Pages and layout
+
 - **App page:** `AppShell` in the prototype's `layout.tsx` → `PageHeader` → 2–4 `StatTile`s → `Card`s or a
-  `DataTable`. One primary action per page, in the PageHeader.
+  `DataTable`. The page's primary action sits in the PageHeader. *Why:* every app page has the same shape, so a viewer
+  finds the title, the numbers and the detail in the same places. *Break it only for* a page that is one tool (an
+  editor, a map, a conversation): AppShell and PageHeader, then the tool.
 - **Marketing page:** `Hero` → `FeatureGrid` → social proof or a product shot → `PricingCard`s → FAQ
-  (`Accordion`) → a closing call to action. One promise, one primary action, repeated at the end.
+  (`Accordion`) → a closing call to action. One promise, one primary action, repeated at the end. *Why:* a visitor
+  decides in seconds; one promise and one action keep the decision simple, and the repeat catches those who read on.
+  There is no exception.
 - **AI conversation:** `ChatMessage`s in a centred column (`max-w-3xl`), `ChatComposer` pinned at the bottom.
   Show work as it happens (`ThinkingIndicator`, `ToolCallCard`), stream the answer (`StreamingText`), and ask
   with an `ApprovalCard` before anything irreversible or costly (consent before consequence). Past
   conversations go in a `ChatThreadList`: a sidebar on desktop, a Sheet on small screens. When the assistant
   can use files, give `ChatComposer` an `accept`; sent files show as `AttachmentChip`s in the user's turn. An answer
   built on the person's data or documents cites them (`CitedText` + `SourceList`); the latest answer can end
-  with `FollowUpSuggestions`. A cancelled tool
-  call is `stopped`, not `error`.
-- **Forms:** a `Label` for every field, `DatePicker` for a single date, errors next to the field (`aria-invalid` + a `text-destructive`
-  line), the submit button names the action.
-- **Confirmations:** `AlertDialog` for destructive actions, its button says what happens. `toast()` for
-  done-and-undo.
-- **Empty and loading:** every list has an `EmptyState` with the next step; `Skeleton` for content shapes.
-- **Shadow:** only on what you can press or what floats (dialogs, popovers, menus, toasts). Content is flat.
-- **Responsive:** design at 375px and 1280px. Sidebars collapse into a sheet (`AppShell` does), tables
-  scroll inside their card, grids drop columns.
+  with `FollowUpSuggestions`. A cancelled tool call is `stopped`, not `error`. *Why:* the person can't see the model
+  work. Showing each step, citing what an answer rests on and asking before acting keep them in charge and let them
+  stop it. There is no exception.
+- **Responsive:** design at 375px and 1280px. Sidebars collapse into a sheet (`AppShell` does), tables scroll inside
+  their card, grids drop columns. *Why:* 375 and 1280 are the narrow phone and the common laptop, the two ends a
+  prototype is shown on, and `qc:look` checks both. There is no exception.
+- **A title sits on the thing it names.** A group of rows takes its title above it, outside the card (`SectionHeader`,
+  or `ListGroup`'s title). A card that is one thing (a chart, a form, a plan) takes its title at its top, inside
+  (`CardHeader`). Never both on one group. *Why:* a title above a list names the whole group and leaves the card to its
+  rows; a chart or a form is one object, and its title travels with it. There is no exception.
+- **One surface per group: never a card inside a card.** Rows inside a card are `ListRow`s, divided by the list, or a
+  `Separator`. *Why:* a card says "this is one group". A second card inside adds an edge and padding without a second
+  meaning. There is no exception.
+- **Items of one kind are a list; cards are for mixed things.** Records people scan, search or compare (orders,
+  people, invoices) are a `ListGroup` or a `DataTable`. Cards hold different things side by side (a dashboard: a chart,
+  a KPI, a list). *Why:* a list keeps each field in the same place, so the eye runs down a column. Cards move the
+  fields, take more room and hide the order. *Break it only for* things people choose by looking (products, photos,
+  places): a grid of `ImageTile`s. A marketing page's `FeatureGrid` holds 3–6 points that differ, not one point
+  repeated.
+- **Left-align text**, empty and success states included (`EmptyState` and `SuccessScreen` do). *Why:* every line
+  starts at the same edge, so the eye finds the next line and the next block without searching. *Break it only for* a
+  marketing `Hero` without media (one line and one button), and a figure or a label alone in a small space.
+- **Overlays are for short, scoped tasks:** confirming, picking, a short edit form (`Dialog`), a record's details or
+  filters (`Sheet`). Secondary content goes on the page or its own route, one overlay at a time, each with a way out.
+  *Why:* an overlay stops the task, hides what the person may need to answer it, and can't be linked or scrolled with
+  the page. There is no exception.
+
+#### Actions
+
+- **One primary action in view.** Everything else is secondary, outline or ghost. *Why:* the filled button is where the
+  eye goes first; two of them compete, and the person has to work out which is the next step. *Break it only for* an
+  overlay, which has its own primary, and several empty states shown at once, whose actions drop to secondary.
+- **A button names its action** ("Delete 3 invoices", "Send invite"), never "OK" or "Submit" on something with a
+  consequence. *Why:* people read the button, not the sentence above it, and a generic label hides what happens.
+  *Break it only for* the standard words (Done, Cancel, Close, Back), and OK on an alert that only informs.
+- **The cost of a mistake sets the friction.** Reversible: do it, and offer Undo in a `toast()`. Irreversible or
+  costly: an `AlertDialog` that names the thing and the effect, its button naming the action, Cancel never the
+  default. *Why:* a confirmation people see on every click gets clicked through, so it is kept for what can't be taken
+  back. There is no exception.
 - **States only on what acts:** a hover or pressed look (`hover:bg-accent`, `active:bg-*`, a shadow that lifts,
   `cursor-pointer`) goes only on an element that does something when clicked: a Button, a link, a ListRow with
   `href` or `onClick`, a card that opens. *Why:* a state is a promise that something happens. A row that lights up
   and does nothing reads as broken, and an agent or a tester reading the page will try to click it. *When a whole
   row or card acts,* the state goes on that one element, never on its parts as well. There is no exception: a
   read-only table row doesn't hover (the kit's `TableRow` doesn't; give a clickable row `hover:bg-muted` and a link).
+- **Prefer an enabled button that says what's missing over a disabled one.** When something is disabled, it is the
+  theme's 50%, never restyled. *Why:* a disabled control can't say why it is off, and its contrast is exempt from WCAG,
+  so some people can't read it. *Break it only for* an action in progress: disabled with a `Spinner`, so it can't be
+  sent twice.
+- **Forms:** a `Label` for every field, `DatePicker` for a single date, errors next to the field (`aria-invalid` and a
+  `text-destructive` line), and the submit button names the action. *Why:* the Label is the field's name for a screen
+  reader and a bigger click target, and an error beside its field says where to fix it. There is no exception.
+
+#### Feedback
+
+- **A finished task ends on `SuccessScreen`; a single action gets a toast.** An order, a payment or a sign-up ends on
+  the success screen, with what happens next and a "Done". A saved setting or an archived row gets a `toast()`.
+  *Why:* a task the person worked through needs a clear end and a receipt; a small action only needs a nod, without
+  leaving the page. There is no exception.
+- **A toast confirms; it never carries what someone must not miss.** An error that needs action goes next to its field
+  or in an `Alert`. *Why:* a toast leaves on a timer, and anyone looking away, or on a screen reader, can miss it.
+  There is no exception.
+- **Anything that can be empty has an `EmptyState` with the next step.** *Why:* a blank area reads as broken or still
+  loading; the empty state says what goes there and how to start. *Break it only for* a space with no next step: a
+  filtered table with no matches says so, with a way to clear the filter.
+- **Loading:** `Skeleton` for content, `Spinner` inside a button (`tone="button-foreground"` on the primary one),
+  `Progress` when you know how far. *Why:* a skeleton shows what is coming and keeps the layout from jumping; a spinner
+  in a button ties the wait to that action. *Break it only for* a wait under a second, which shows nothing.
+- **Shadow only on what presses or floats** (dialogs, popovers, menus, toasts). Content is flat, and so are fields,
+  which are neither. *Why:* a shadow reads as "this lifts off the page", so on static content it promises something
+  that isn't there. *Break it only through* the theme: a system may give its fields a shadow in Studio. Never add one by
+  hand.
+
+#### Access
+
+- **Every control has a name.** A field has its `Label`, a Switch, Checkbox or radio a `Label htmlFor` its `id` or an
+  `aria-label`, an icon-only button an `aria-label`. *Why:* a screen reader announces the name and nothing else. There
+  is no exception.
+- **One group picks one or picks any, never both.** Radios and checkboxes go in separate groups. *Why:* they look
+  alike, and mixed in one group people can't tell which choices exclude each other. There is no exception.
 
 Worked examples of the first three: `/dashboard` (an AppShell app with a chart, a filtered table, a dialog
 form, settings and a guarded delete), `/landing` and `/assistant`.
 
 ## Anti-patterns
 
-- ✗ Cards inside cards. ✗ Identical icon + heading + body cards repeated as filler.
-- ✗ Brand colour put on selected tabs, chips or nav items by hand (a chip's selected colour is the theme's). ✗ Grey-on-grey text below 4.5:1.
-- ✗ More than one primary button in view. ✗ “OK”/“Submit” as the label of a consequential action.
-- ✗ Modals as the default home for secondary content. ✗ Icon-only buttons without `aria-label`.
+A last look before saying done. Each one breaks a rule above, which says why.
+
+- ✗ A card inside a card. ✗ A section title inside a card of rows. ✗ Centred blocks of text.
+- ✗ Cards for a list of like items. ✗ The same padding on every element.
+- ✗ Radio and checkbox choices in one group.
+- ✗ An overlay as the default home for secondary content.
+- ✗ Brand colour put on selected tabs, chips or nav items by hand. ✗ Colour as the only signal. ✗ Grey-on-grey text
+  below 4.5:1.
 - ✗ A hover or pressed look on something that does nothing when clicked.
+- ✗ Two primary buttons in view. ✗ "OK" or "Submit" on an action with a consequence.
+- ✗ A confirmation dialog for something Undo could take back.
+- ✗ Icon-only buttons without `aria-label`. ✗ A control without a name.
+- ✗ A toast carrying an error someone must act on. ✗ A blank list or table.
 - ✗ An assistant that acts without asking, or hides what it did.
 
 ## Hallucination guard
 
-Before writing JSX, list the components you intend to use. Every name must appear in the registry above
-**exactly**. If you need something else: stop, describe the gap in one line, and use the `add-component`
-skill. Do not import from UI libraries that are not in `package.json` (no MUI, Chakra, Mantine, Ant).
-
-`npm run lint` enforces this: an import from `components/ui` or `components/kit` that the registry doesn't
-list, another UI library, or `recharts` without `ChartContainer` is an error (`halftone/*` rules). A real
-exception takes `// eslint-disable-next-line <rule> -- <reason>`.
+- **Before writing JSX, list the components you intend to use.** Every name must appear in the registry above
+  **exactly**. If you need something else: stop, describe the gap in one line, and use the `add-component` skill. Do
+  not import from UI libraries that are not in `package.json` (no MUI, Chakra, Mantine, Ant). *Why:* a name that isn't
+  in the registry is a guess; it either fails to import or produces a look-alike outside the theme that nobody
+  maintains. There is no exception.
+- **`npm run lint` enforces this:** an import from `components/ui` or `components/kit` that the registry doesn't list,
+  another UI library, or `recharts` without `ChartContainer` is an error (`halftone/*` rules). *Break it only* with
+  `// eslint-disable-next-line <rule> -- <reason>`, the reason saying why the kit can't do it.
