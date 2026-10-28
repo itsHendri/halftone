@@ -24,6 +24,10 @@ kit.json        The kit's name and addresses, read by the generators.
   rebuilds. CI fails when the copies differ.
 - React and react-dom are pinned once, in the root `overrides`, to the version the Expo SDK requires.
   An SDK upgrade moves every app.
+- **The kits' colour rules lint the docs site too** (`apps/docs/eslint.config.mjs` reads `apps/mobile/eslint/halftone.mjs`):
+  no raw colours, no colour at an opacity. In Claude Code the lint-on-edit hook covers it as it does the kits
+  (`.claude/settings.json` here and in `apps/docs`), so an edit that breaks one comes straight back with the error.
+  *Why:* the site shows the brand, so it follows the brand's rules; finding out at CI is a round trip too late.
 - Tailwind 3 (mobile, NativeWind) and Tailwind 4 (docs, web) coexist: the root pins `tailwindcss@^3`
   so v3 hoists and v4 nests under the Next apps. `npm ls tailwindcss` should show that.
 
