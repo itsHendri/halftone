@@ -58,8 +58,8 @@ build without one.
   if the kit shell should be hidden).
 - Data in `components/<slug>/data.ts` (typed, exported constants). No network calls.
 - Screens follow the patterns in `DESIGN_SYSTEM.md`: screen skeleton, `SectionHeader` + `Card` of
-  `ListRow`s, one `StickyBottomBar` for the primary action, `SuccessScreen` for every success,
-  multi-step flows as one route with a `Step` state machine and a `Stepper`.
+  `ListRow`s, one `StickyBottomBar` for the primary action, `SuccessScreen` at the end of a finished task (a toast
+  for a single action).
 - Copy: real, specific, short. No lorem ipsum. Use the client's product vocabulary.
 - Every screen works in light and dark. No hex. Tap targets ≥ 44pt. Icons have labels.
 - Model the sample apps (`app/shop`, `app/habits`) for structure; do not copy their content. Add `<KitChip />` to the new root layout so the kit stays reachable.
