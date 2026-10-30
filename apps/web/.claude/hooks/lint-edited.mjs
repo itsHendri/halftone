@@ -5,6 +5,9 @@
  * it is still writing. Wired in .claude/settings.json (and the monorepo root's). Lints only files under
  * app/ and components/ of this kit; never blocks on its own failure (a missing eslint, a crash: exit 0).
  *
+ * `--app <dir> --dirs app,components,lib` lints another app with it: the monorepo's docs site, which runs the
+ * kits' colour rules (apps/docs/eslint.config.mjs) and is never copied out, so it borrows this file.
+ *
  * SOURCE: apps/mobile/.claude/hooks/lint-edited.mjs; apps/web has a copy (`npm run lint:sync` at the monorepo root).
  */
 import { spawnSync } from 'node:child_process';
@@ -13,7 +16,12 @@ import { createRequire } from 'node:module';
 import { dirname, join, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-const app = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
+const flag = (name) => {
+  const i = process.argv.indexOf(name);
+  return i === -1 ? undefined : process.argv[i + 1];
+};
+const app = resolve(flag('--app') ?? join(dirname(fileURLToPath(import.meta.url)), '..', '..'));
+const dirs = (flag('--dirs') ?? 'app,components').split(',');
 
 let input = {};
 try {
@@ -24,7 +32,7 @@ try {
 const file = input.tool_input?.file_path;
 if (typeof file !== 'string' || !existsSync(file)) process.exit(0);
 const rel = relative(app, resolve(file)).split(sep).join('/');
-if (rel.startsWith('..') || !/^(app|components)\//.test(rel) || !/\.[cm]?[jt]sx?$/.test(rel)) process.exit(0);
+if (rel.startsWith('..') || !dirs.some((d) => rel.startsWith(`${d}/`)) || !/\.[cm]?[jt]sx?$/.test(rel)) process.exit(0);
 
 let bin;
 try {
