@@ -225,14 +225,18 @@ function PaginationDemo() {
           <PaginationItem>
             <PaginationPrevious href="#" onClick={go(page - 1)} aria-disabled={page === 1} className={page === 1 ? 'pointer-events-none opacity-50' : undefined} />
           </PaginationItem>
+          {/* Seven 48px page links don't fit a phone: there it says where you are instead. */}
+          <PaginationItem className="px-2 text-sm sm:hidden">
+            Page {page} of {last}
+          </PaginationItem>
           {pages.map((p, i) => (
             <React.Fragment key={p}>
               {i > 0 && p - pages[i - 1] > 1 ? (
-                <PaginationItem>
+                <PaginationItem className="hidden sm:block">
                   <PaginationEllipsis />
                 </PaginationItem>
               ) : null}
-              <PaginationItem>
+              <PaginationItem className="hidden sm:block">
                 <PaginationLink href="#" isActive={p === page} onClick={go(p)}>
                   {p}
                 </PaginationLink>
@@ -508,7 +512,7 @@ export const DEMOS: Record<string, ComponentType> = {
     </div>
   ),
   chart: () => (
-    <ChartContainer config={chartConfig} className="h-56 w-full max-w-xl">
+    <ChartContainer config={chartConfig} className="aspect-auto h-56 w-full max-w-xl">
       <BarChart accessibilityLayer data={chartData}>
         <CartesianGrid vertical={false} />
         <XAxis dataKey="month" tickLine={false} axisLine={false} tickMargin={8} />
@@ -629,7 +633,7 @@ export const DEMOS: Record<string, ComponentType> = {
       <p>
         Export every invoice as CSV from <a href="#prose">Settings › Billing</a>, or from the command line:
       </p>
-      <pre>
+      <pre tabIndex={0}>
         <code>northwind invoices export --since 2026-01-01</code>
       </pre>
     </Prose>
