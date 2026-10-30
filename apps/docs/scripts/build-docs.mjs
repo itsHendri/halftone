@@ -155,6 +155,8 @@ const expected = [
   'install.md',
   'llms.txt',
   'llms-full.txt',
+  'sitemap.xml',
+  'robots.txt',
   'api/search',
   'm/index.html',
   'r/native/registry.json',
