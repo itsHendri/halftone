@@ -9,6 +9,11 @@ agents that build only from what the kits ship. Free, open, and run by your own 
 **Plan before building.** Every phase below gets its own plan first, with wireframes when it has UI, and is built
 only once that plan is agreed. Where the UX is still open, the item lists the questions its plan has to answer.
 
+**Where we left off (2026-11-04).** Everything below marked Done is merged on `main`; no work is in flight and no
+pull request is open except Version Packages #90 (`@halftone-ds/tokens` 1.4.0, the Phase 6.1 component properties,
+tint roles and flat fields), which publishes only on the maintainer's go. What comes next is not chosen yet: "The
+thinking beside the screens" was passed over for now, and the candidates are under "Ideas waiting for a decision".
+
 ## Done: trust and pitch
 
 - **Guardrails in lint.** `halftone/*` ESLint rules in both kits (raw colours, imports outside the registry,
@@ -70,24 +75,38 @@ layer the `HalftoneSystem` document in `@halftone-ds/tokens`, shipped in 1.3):
   fix and undo.
 - Tested end to end in both kits copied out (#76–#82, 1.3.1); CI now applies a system with every kind of override
   to both kits (`system apply`).
+- **The open-card component editor** (Phase 6.1, wireframe 9, #86–#88): a variants × sizes specimen with a states
+  row and an in-context strip, beside an always-visible panel (Style · Shape · Size · Type · Icon and effects ·
+  Colours). New properties in tokens and both kits: border width, gap, weight, case, icon size, shadow, focus ring,
+  placeholder, Chip S/M/L and Badge S/M.
+- **Nothing drawn at partial opacity** (#89, #91): tint and pressed roles (`primary-subtle`, `primary-pressed`, …)
+  come from the ramps in both kits and the docs site; fields are flat until a system gives them a shadow (#93).
+  Waiting to publish as 1.4.0 (#90).
 
 ## Done: first run and agent tooling
 
 - `npm run setup` in both kits: name, app id, samples and theme, planned and confirmed (flags and `--yes` for an
   agent or CI).
 - `npm run eject-samples` one sample at a time, with `--status`; CI ejects each one and runs the gates.
-- `npm run qc:look` (Playwright and axe) in both kits, and an `.mcp.json` per kit for its dev server.
+- `npm run qc:look` (Playwright and axe) in both kits, and an `.mcp.json` per kit for its dev server. Every web kit
+  page passes it at 375px and 1280px in both themes (#94).
+- The lint-on-edit hook covers the docs site as well as both kits (#95).
 
-## Next: the thinking beside the screens
+## Done: rules with reasons
+
+Every rule in both kits' guides and the docs says why, and when to break it (#93; the research behind each rule,
+with sources, is `apps/docs/design/rules-research.md`). New rules are written the same way as they land.
+
+## Planned, not started: the thinking beside the screens
 
 A prototype keeps its reasoning next to its screens, in both kits. Learned from Design Studio
-(itspatmorgan/design-studio), which keeps briefs, decisions and diagrams beside each prototype.
+(itspatmorgan/design-studio), which keeps briefs, decisions and diagrams beside each prototype. It was next in line
+until 2026-11-04, when the maintainer chose not to start it yet; no plan or wireframes exist.
 - **The brief, the decisions and a handoff note** in the prototype's folder. The handoff note says what is real,
   what is simulated and what still needs a production decision. transcript-to-prototype writes them, and the kit
   shell shows them beside the screens.
 - **A Sketch preset:** greyscale with a handwritten font, for a wireframe pass before the brand goes on.
-- **`PERSONAS.md` for agents**, including the engineer who receives the handoff, and every rule in the guides
-  written with a short why and when to break it.
+- **`PERSONAS.md` for agents**, including the engineer who receives the handoff.
 
 Plan first. Open UX questions:
 - Where do the notes show on a phone (a sheet over the screen, a tab, the kit's Home?) and on the web (a side
@@ -96,6 +115,23 @@ Plan first. Open UX questions:
 - Is Sketch a preset you apply to the whole kit, or a switch per prototype or screen, so a sketch and the branded
   version can sit side by side?
 - How does a reviewer move between a screen and the note about it?
+
+## Ideas waiting for a decision
+
+Proposed on 2026-11-03 after a look at Cofounder (cofounder.co; notes in `apps/docs/design/cofounder-research.md`),
+which runs a company through the person's own agent and has shipped a shallow "theme from a URL". None is agreed;
+each needs its plan first.
+- **Component editing, round two.** Feedback from using the open-card editor, then more components as editable
+  cards: Card, Tabs, Switch and Checkbox, Avatar, the Select menu (the recipe's reserved card and tab style bits).
+- **A theme from a URL, landing in the Studio** (moved up from "Later: agent reach"): a site becomes a full editable
+  system, ramps from its colours, contrast fixed, both kits. Cofounder stops at a JSON file.
+- **The Studio MCP, local first** (moved up from "Later: agent reach"): systems live in the browser, so before
+  accounts it needs a local bridge, for example `halftone-tokens studio connect` linking an agent session to the
+  open Studio tab. Decide this before accounts.
+- **Agent conventions in the CLI and skills:** `next_steps` in every command's output, `--json` everywhere, steps
+  only the person can do handed back as a link, "suggest 2–3 next tasks, recommend one".
+- **The site:** a "what it replaces" page (a design-system project from an agency vs. free and open) and a free
+  guide, such as "Brand a prototype in an afternoon".
 
 ## Later: agent reach
 
@@ -138,4 +174,4 @@ wording at the top.
 
 - Expo SDK 58: on `chore/sdk-58`, until 58 is stable.
 - Package releases: `RELEASES_ENABLED` is on, so changes to `@halftone-ds/tokens` collect in a Version Packages PR,
-  which publishes only when merged on the maintainer's go.
+  which publishes only when merged on the maintainer's go. Published so far: 1.0–1.3.2; #90 (1.4.0) is waiting.
