@@ -1,5 +1,39 @@
 # @halftone-ds/tokens
 
+## 1.4.0
+
+### Minor Changes
+
+- e584bdd: The component layer gets the open card's properties (Studio Phase 6.1). A system's `components` can now set a border
+  width, the icon gap, a label's weight and case, an icon size, a shadow and focus ring (Button and Input) and Input's
+  placeholder role; Chip has S/M/L heights and Badge S/M, and Input's focus and error states have a fill and text of
+  their own. They reach `semantic.component.*` and both kits' variables (`--button-gap`, `--chip-border-w`,
+  `--button-ring-w`, `--field-placeholder`, `--button-<variant>-shadow`…), and `TOKENS.components` carries the weight,
+  case, icon size and shadow the mobile kit picks in JS (`TOKENS.shadows` draws a field's shadow on native). Every
+  property defaults to what the kits drew before, except where the two kits differed: one icon size (Button 16,
+  Badge 12) and one shadow (Button: Shadow 1 but Ghost; Input: Shadow 1 on a boxed field) now hold in both. The
+  contrast gate also checks the placeholder on the field.
+
+  Component colours come from the ramps: a default drawn at partial opacity (an outline button's or field's dark fill)
+  is now the nearest ramp step, and a derived hover/pressed colour is the next step of the fill's ramp away from the
+  page whose label still reads at AA (it was the fill at 90%, whose contrast depended on the surface behind it). A
+  Badge's S/M heights are exact (never shorter than its text and border), and Input and Select have an L size.
+
+- b93468f: Fields are flat until a system gives them a shadow: Input, Textarea and Select draw no shadow by default, whatever the
+  field style (a boxed field had Shadow 1). Content is flat in both kits; a shadow means something presses or floats.
+  A system that sets the field shadow keeps it. A token file applied from a code before this one still has Shadow 1, which
+  `theme show` now lists as a hand edit: apply the theme again with `--force` to take the flat default.
+- ea04aa0: Tint roles from the ramps, so nothing in a kit draws a colour at partial opacity: `primary-subtle`, `success-subtle`,
+  `warning-subtle`, `destructive-subtle`, `info-subtle` (a tinted surface, 100 light / 950 dark), each with a `-border`
+  (300 / 900), `muted-subtle` (neutral 50 / 900) and the pressed fills `primary-pressed` (the next brand step away from
+  the page) and `secondary-pressed` (neutral 200 / 700). A theme writes them with the rest of its semantic colours, and
+  an existing preset or code keeps every colour it had.
+
+  The contrast gate checks text (`foreground`, `muted-foreground`) on every tint, each tone's icon on its own tint
+  (3:1, in place of the alpha blends) and the labels on the pressed fills. The fixer moves a derived role (a tint, a
+  pressed fill), never the ink on it. The source scan also flags a tone's text on its own `-subtle` tint when the
+  palette can't carry it, and DESIGN.md / llms.txt name the roles. A token file from before them keeps the alpha checks.
+
 ## 1.3.2
 
 ### Patch Changes
