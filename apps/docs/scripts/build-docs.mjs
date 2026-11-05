@@ -33,9 +33,20 @@ run('node', ['scripts/prepare-content.mjs'], docs);
 
 step(`mobile kit web export → public${KIT_PATH}`);
 rmSync(join(pub, KIT_PATH.slice(1)), { recursive: true, force: true });
-run('npx', ['expo', 'export', '--platform', 'web', '--output-dir', join(pub, KIT_PATH.slice(1))], mobile, {
-  KIT_WEB_BASE_URL: KIT_PATH,
-});
+// Metro reads thousands of files at once (lucide-react-native is one file per icon), and Cloudflare's build machine
+// starts with a low open-file limit: the export failed there with EMFILE now and then. Raise the soft limit to the
+// hard one first, and try once more if it still runs out.
+const exportKit = () =>
+  run('sh', ['-c', 'ulimit -n "$(ulimit -Hn)" 2>/dev/null || true; exec npx expo export --platform web --output-dir "$0"', join(pub, KIT_PATH.slice(1))], mobile, {
+    KIT_WEB_BASE_URL: KIT_PATH,
+  });
+try {
+  exportKit();
+} catch {
+  console.log('\n  the export failed (EMFILE on a busy machine?): trying once more');
+  rmSync(join(pub, KIT_PATH.slice(1)), { recursive: true, force: true });
+  exportKit();
+}
 
 step('shadcn registry → public/r/native');
 run('npm', ['run', 'registry:dist'], mobile);
