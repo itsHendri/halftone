@@ -3,29 +3,20 @@ import { Popover, PopoverContent, PopoverTrigger } from 'fumadocs-ui/components/
 import { LockIcon, LockOpenIcon, PlusIcon } from 'lucide-react';
 import * as React from 'react';
 import { openItem, useOpenItem } from '@/components/theme/studio/item-popover';
+import { setCurrentSection } from '@/lib/studio/current-section';
+import { FOUNDATION_SECTIONS, sectionAnchor, type SectionId } from '@/lib/studio/sections';
+
+export type { SectionId };
 import { toggleLock, useLocks, type LockKey } from '@/lib/theme/store';
 
 /**
  * The Foundations page's scaffold (wireframe 1): each section's header has its name and count, its base knob (the
- * recipe axis that rewrites every item you haven't edited) and "+ New"; a sticky index jumps between sections, and
- * under 1024px it is a jump menu under the Studio bar (wireframe 6).
+ * recipe axis that rewrites every item you haven't edited) and "+ New". The Studio sidebar's Foundations rows jump
+ * between sections and follow the one being read (useSectionSpy).
  */
 
-export const SECTIONS = [
-  { id: 'brand', label: 'Brand' },
-  { id: 'colours', label: 'Colours' },
-  { id: 'typography', label: 'Typography' },
-  { id: 'corners', label: 'Corners' },
-  { id: 'shadows', label: 'Shadows' },
-  { id: 'borders', label: 'Borders' },
-  { id: 'components', label: 'Components' },
-] as const;
-export type SectionId = (typeof SECTIONS)[number]['id'];
-
-const sectionId = (id: string) => `foundations-${id}`;
-
-/** Under the site header (3.5rem) and the Studio bar (measured, --studio-bar), plus the jump menu below lg. */
-const SCROLL_MARGIN = 'scroll-mt-[calc(3.5rem+var(--studio-bar,3.5rem)+3.75rem)] lg:scroll-mt-[calc(3.5rem+var(--studio-bar,3.5rem)+1rem)]';
+/** Under the site header (3.5rem) and the Studio toolbar (measured, --studio-bar). */
+const SCROLL_MARGIN = 'scroll-mt-[calc(3.5rem+var(--studio-bar,3.5rem)+1rem)]';
 
 export function FoundationSection({
   id,
@@ -44,9 +35,9 @@ export function FoundationSection({
   add?: React.ReactNode;
   children: React.ReactNode;
 }) {
-  const headingId = `${sectionId(id)}-title`;
+  const headingId = `${sectionAnchor(id)}-title`;
   return (
-    <section id={sectionId(id)} aria-labelledby={headingId} data-foundation={id} className={`border-border bg-card text-card-foreground flex flex-col gap-4 rounded-xl border p-4 outline-none sm:p-5 ${SCROLL_MARGIN}`}>
+    <section id={sectionAnchor(id)} aria-labelledby={headingId} data-foundation={id} className={`border-border bg-card text-card-foreground flex flex-col gap-4 rounded-xl border p-4 outline-none sm:p-5 ${SCROLL_MARGIN}`}>
       <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
         <h2 id={headingId} className="flex items-baseline gap-2 text-base font-semibold">
           {title}
@@ -66,78 +57,31 @@ export function FoundationSection({
   );
 }
 
-/** Which section is in view, for the index's aria-current. */
-function useCurrent() {
-  const [current, setCurrent] = React.useState<SectionId>('brand');
+/** Which section is being read, for the Studio sidebar's Foundations rows (lib/studio/current-section.ts). */
+export function useSectionSpy() {
   React.useEffect(() => {
     const seen = new Map<string, boolean>();
+    const update = () => {
+      // The last section can't scroll up into the band: at the end of the page, it is the one being read.
+      const atEnd = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
+      const first = atEnd ? FOUNDATION_SECTIONS.at(-1) : FOUNDATION_SECTIONS.find((s) => seen.get(s.id));
+      if (first) setCurrentSection(first.id);
+    };
     const io = new IntersectionObserver(
       (entries) => {
         for (const e of entries) seen.set((e.target as HTMLElement).dataset.foundation!, e.isIntersecting);
-        const first = SECTIONS.find((s) => seen.get(s.id));
-        if (first) setCurrent(first.id);
+        update();
       },
       // The band just under the bars: the section whose top part is there is the one being read.
       { rootMargin: '-160px 0px -55% 0px' }
     );
     document.querySelectorAll<HTMLElement>('[data-foundation]').forEach((el) => io.observe(el));
-    return () => io.disconnect();
+    window.addEventListener('scroll', update, { passive: true });
+    return () => {
+      io.disconnect();
+      window.removeEventListener('scroll', update);
+    };
   }, []);
-  return current;
-}
-
-function jump(id: SectionId) {
-  const el = document.getElementById(sectionId(id));
-  if (!el) return;
-  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  el.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
-  // Keyboard and screen-reader users land in the section too.
-  el.setAttribute('tabindex', '-1');
-  el.focus({ preventScroll: true });
-}
-
-/** The sticky index (lg and up) and the jump menu (below). */
-export function SectionIndex() {
-  const current = useCurrent();
-  return (
-    <>
-      <nav aria-label="Foundations sections" className="sticky top-[calc(3.5rem+var(--studio-bar,3.5rem)+1rem)] self-start max-lg:hidden">
-        <ul className="flex flex-col gap-0.5">
-          {SECTIONS.map((s) => (
-            <li key={s.id}>
-              <a
-                href={`#${sectionId(s.id)}`}
-                aria-current={current === s.id ? 'true' : undefined}
-                onClick={(e) => {
-                  e.preventDefault();
-                  jump(s.id);
-                }}
-                className={`focus-visible:ring-ring block rounded-md px-2.5 py-1.5 text-sm focus-visible:outline-none focus-visible:ring-2 ${
-                  current === s.id ? 'bg-accent text-accent-foreground font-medium' : 'text-muted-foreground hover:text-foreground'
-                }`}>
-                {s.label}
-              </a>
-            </li>
-          ))}
-        </ul>
-      </nav>
-      <div className="bg-muted-subtle sticky top-[calc(3.5rem+var(--studio-bar,3.5rem))] z-20 -mx-4 px-4 py-2 backdrop-blur-sm md:-mx-6 md:px-6 lg:hidden">
-        <label className="flex items-center gap-2 text-sm">
-          <span className="text-muted-foreground shrink-0">Jump to</span>
-          <select
-            value={current}
-            onChange={(e) => jump(e.target.value as SectionId)}
-            className="border-border bg-background focus-visible:ring-ring h-9 min-w-0 flex-1 rounded-md border px-2 text-sm font-medium focus-visible:outline-none focus-visible:ring-2">
-            {SECTIONS.map((s) => (
-              <option key={s.id} value={s.id}>
-                {s.label}
-              </option>
-            ))}
-          </select>
-        </label>
-      </div>
-    </>
-  );
 }
 
 /** A small two-way switch for a section header (Colours' Light / dark). */
