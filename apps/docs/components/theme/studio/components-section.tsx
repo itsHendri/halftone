@@ -857,8 +857,8 @@ export function ComponentsSection() {
   };
   return (
     <FoundationSection
-      id="components"
-      title="Components"
+      id="controls"
+      title="Controls"
       count={COMPONENT_ORDER.length}
       knob={
         <div className="flex flex-wrap items-center gap-2">

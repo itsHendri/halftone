@@ -14,6 +14,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const paths = [
     '/',
     '/studio',
+    '/studio/components',
+    '/studio/accessibility',
     '/screens',
     '/components',
     ...CATALOGUE.map((e) => entryUrl(e.id)),
