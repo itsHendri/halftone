@@ -1,20 +1,20 @@
 'use client';
+import Link from 'next/link';
 import * as React from 'react';
-import { SIDE_LABEL, SIDES, type Side } from '@/lib/catalogue';
-import { FILTER_KEY } from '@/lib/theme/keys';
+import { entryUrl, SIDE_LABEL, type Side } from '@/lib/catalogue';
+import { KIT_KEY } from '@/lib/theme/keys';
 import { rovingKeyDown, rovingTabIndex } from '@/lib/roving';
 
 /**
- * Which kits have a component, and the visitor's choice between them (apps/docs/design/components-wireframes.md).
- * The filter is `<html data-kit-filter="native|web">` (set before paint by the boot script), so the sidebar and
- * the index hide entries with CSS (app/global.css) and nothing re-renders.
+ * Which kit a component page shows (apps/docs/design/navigation-wireframes.md › Round two). The choice is made in
+ * the preview header (KitSwitch), switches the whole page (KitPanel), and is remembered for the next component.
+ * `?kit=native|web` wins for the page it is on. Both kits' panels are in the static page; the other is hidden.
  */
-export type Filter = 'all' | Side;
 
-const readFilter = (): Filter => {
-  const v = typeof document === 'undefined' ? '' : document.documentElement.dataset.kitFilter;
-  return v === 'native' || v === 'web' ? v : 'all';
-};
+/** The kit picked on this visit (a click), before the remembered one. */
+let picked: Side | null = null;
+/** `?kit=` or a block's anchor: wins on the page it is on, until a click. */
+let forced: { path: string; side: Side } | null = null;
 const listeners = new Set<() => void>();
 const subscribe = (l: () => void) => {
   listeners.add(l);
@@ -22,103 +22,133 @@ const subscribe = (l: () => void) => {
     listeners.delete(l);
   };
 };
+const emit = () => listeners.forEach((l) => l());
 
-export function setFilter(next: Filter) {
-  if (next === 'all') delete document.documentElement.dataset.kitFilter;
-  else document.documentElement.dataset.kitFilter = next;
+/** The remembered kit (the last one picked on a component page), if any. */
+export function storedKit(): Side | null {
   try {
-    if (next === 'all') localStorage.removeItem(FILTER_KEY);
-    else localStorage.setItem(FILTER_KEY, next);
+    const v = localStorage.getItem(KIT_KEY);
+    return v === 'native' || v === 'web' ? v : null;
   } catch {
-    /* storage unavailable: the filter lasts for this page */
+    return null;
   }
-  listeners.forEach((l) => l());
 }
 
-export const useFilter = () => React.useSyncExternalStore(subscribe, readFilter, () => 'all' as Filter);
+const read = () => (forced && forced.path === window.location.pathname ? forced.side : (picked ?? storedKit()));
 
-/** Small availability badges: `Native` `Web`. */
-export function KitBadges({ sides, size = 'sm' }: { sides: Side[]; size?: 'sm' | 'md' }) {
-  return (
-    // The badge text is the accessible text; on a page header it reads "Available for Native, Web".
-    <span className="inline-flex shrink-0 gap-1">
-      {size === 'md' ? <span className="sr-only">Available for</span> : null}
-      {sides.map((s) => (
-        <span
-          key={s}
-          className={`border-border text-muted-foreground rounded-full border font-medium ${size === 'md' ? 'px-2.5 py-0.5 text-xs' : 'px-1.5 text-[10px] leading-4'}`}>
-          {SIDE_LABEL[s]}
-        </span>
-      ))}
-    </span>
-  );
+export function setKit(side: Side) {
+  picked = side;
+  forced = null;
+  try {
+    localStorage.setItem(KIT_KEY, side);
+  } catch {
+    /* storage unavailable: the choice lasts for this visit */
+  }
+  emit();
 }
 
-/** All | Native | Web, at the top of the components sidebar. */
-export function KitFilter() {
-  const filter = useFilter();
-  const options: Filter[] = ['all', 'native', 'web'];
+/** The kit this page shows, of the ones the component has: the choice if it has it, else its first. */
+export function useKit(sides: Side[]): Side {
+  React.useEffect(() => {
+    // `?kit=`, or a block's anchor (`#native-line-chart`, where an old slug redirects) opens that kit.
+    const q = new URLSearchParams(window.location.search).get('kit') ?? window.location.hash.match(/^#(native|web)-/)?.[1];
+    if ((q === 'native' || q === 'web') && (forced?.path !== window.location.pathname || forced.side !== q)) {
+      forced = { path: window.location.pathname, side: q };
+      emit();
+    }
+  }, []);
+  const pref = React.useSyncExternalStore(subscribe, read, () => null);
+  return pref && sides.includes(pref) ? pref : sides[0];
+}
+
+const segment = 'bg-fd-muted inline-flex gap-0.5 rounded-lg p-0.5 text-sm';
+const segmentButton = (on: boolean) =>
+  `focus-visible:ring-fd-ring rounded-md px-3 py-0.5 font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 ${
+    on ? 'bg-fd-background text-fd-foreground shadow-sm' : 'text-fd-muted-foreground hover:text-fd-foreground'
+  }`;
+
+/**
+ * Native | Web in the preview header, or the one kit it is in ("Native only"), with what to use in the other kit
+ * when there is something close.
+ */
+export function KitSwitch({ sides, counterparts = [] }: { sides: Side[]; counterparts?: { side: Side; id: string; title: string }[] }) {
+  const active = useKit(sides);
+  if (sides.length < 2) {
+    return (
+      <span className="text-fd-muted-foreground text-sm">
+        {SIDE_LABEL[sides[0]]} only
+        {counterparts.map((cp) => (
+          <React.Fragment key={cp.id}>
+            {' · '}
+            <Link href={entryUrl(cp.id)} className="hover:text-fd-foreground underline underline-offset-4">
+              {SIDE_LABEL[cp.side]}: {cp.title}
+            </Link>
+          </React.Fragment>
+        ))}
+      </span>
+    );
+  }
   return (
-    <div role="radiogroup" aria-label="Show components for" onKeyDown={(e) => rovingKeyDown(e, { select: true })} className="bg-fd-muted flex gap-0.5 rounded-lg p-0.5 text-sm">
-      {options.map((o, i) => (
+    <div role="radiogroup" aria-label="Kit" onKeyDown={(e) => rovingKeyDown(e, { select: true })} className={segment}>
+      {sides.map((s, i) => (
         <button
-          key={o}
+          key={s}
           type="button"
           role="radio"
-          aria-checked={filter === o}
-          tabIndex={rovingTabIndex(i, options.indexOf(filter))}
-          onClick={() => setFilter(o)}
-          className={`focus-visible:ring-fd-ring flex-1 rounded-md px-2 py-1 font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 ${
-            filter === o ? 'bg-fd-background text-fd-foreground shadow-sm' : 'text-fd-muted-foreground hover:text-fd-foreground'
-          }`}>
-          {o === 'all' ? 'All' : SIDE_LABEL[o]}
+          aria-checked={active === s}
+          tabIndex={rovingTabIndex(i, sides.indexOf(active))}
+          onClick={() => setKit(s)}
+          className={segmentButton(active === s)}>
+          {SIDE_LABEL[s]}
         </button>
       ))}
     </div>
   );
 }
 
-/**
- * A component's page for each kit that has it. With both, a Native | Web switch shows one; it starts on the
- * filter's side (or `?kit=`), else Native. Both panels are in the page (static export); the other is hidden.
- */
-export function KitPanels({ panels }: { panels: Partial<Record<Side, React.ReactNode>> }) {
-  const sides = SIDES.filter((s) => panels[s]);
-  const filter = useFilter();
-  const [picked, setPicked] = React.useState<Side | null>(null);
-  React.useEffect(() => {
-    const q = new URLSearchParams(window.location.search).get('kit');
-    if (q === 'native' || q === 'web') setPicked(q);
-  }, []);
-  const preferred: Side = filter === 'web' ? 'web' : 'native';
-  const active = picked && sides.includes(picked) ? picked : sides.includes(preferred) ? preferred : sides[0];
-
+/** One kit's half of a component page: shown when it is the active kit. */
+export function KitPanel({ side, sides, children }: { side: Side; sides: Side[]; children: React.ReactNode }) {
+  const active = useKit(sides);
   return (
-    <div className="flex flex-col gap-6">
-      {sides.length > 1 ? (
-        <div role="tablist" aria-label="Kit" className="bg-fd-muted inline-flex gap-0.5 self-start rounded-lg p-0.5 text-sm">
-          {sides.map((s) => (
-            <button
-              key={s}
-              type="button"
-              role="tab"
-              id={`kit-tab-${s}`}
-              aria-controls={`kit-panel-${s}`}
-              aria-selected={active === s}
-              onClick={() => setPicked(s)}
-              className={`focus-visible:ring-fd-ring rounded-md px-4 py-1 font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 ${
-                active === s ? 'bg-fd-background text-fd-foreground shadow-sm' : 'text-fd-muted-foreground hover:text-fd-foreground'
-              }`}>
-              {SIDE_LABEL[s]}
-            </button>
-          ))}
-        </div>
-      ) : null}
-      {sides.map((s) => (
-        <div key={s} id={`kit-panel-${s}`} role={sides.length > 1 ? 'tabpanel' : undefined} aria-labelledby={sides.length > 1 ? `kit-tab-${s}` : undefined} hidden={active !== s}>
-          {panels[s]}
-        </div>
-      ))}
+    <div data-kit-panel={side} hidden={active !== side} className="flex flex-col gap-10">
+      {children}
     </div>
+  );
+}
+
+/**
+ * A preview block (Untitled UI's shape): a header row with the name, the kit switch (on the first block) and
+ * Preview | Code, then the live preview or the demo's source. The preview stays mounted under Code, so its frame
+ * doesn't reload.
+ */
+export function PreviewBlock({ id, title, kitSwitch, preview, code }: { id: string; title: string; kitSwitch?: React.ReactNode; preview: React.ReactNode; code: React.ReactNode | null }) {
+  const [view, setView] = React.useState<'preview' | 'code'>('preview');
+  const views: ('preview' | 'code')[] = code ? ['preview', 'code'] : ['preview'];
+  return (
+    <figure id={id} className="flex scroll-mt-24 flex-col gap-3">
+      <figcaption className="flex flex-wrap items-center gap-x-3 gap-y-2">
+        <span className="text-fd-foreground font-medium">{title}</span>
+        <span className="flex-1" />
+        {kitSwitch}
+        {code ? (
+          <div role="radiogroup" aria-label={`${title}: show`} onKeyDown={(e) => rovingKeyDown(e, { select: true })} className={segment}>
+            {views.map((v, i) => (
+              <button
+                key={v}
+                type="button"
+                role="radio"
+                aria-checked={view === v}
+                tabIndex={rovingTabIndex(i, views.indexOf(view))}
+                onClick={() => setView(v)}
+                className={segmentButton(view === v)}>
+                {v === 'preview' ? 'Preview' : 'Code'}
+              </button>
+            ))}
+          </div>
+        ) : null}
+      </figcaption>
+      <div hidden={view !== 'preview'}>{preview}</div>
+      {code ? <div hidden={view !== 'code'}>{code}</div> : null}
+    </figure>
   );
 }

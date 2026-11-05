@@ -3,10 +3,12 @@
  * Pages generated from the kit itself, so the site cannot disagree with it. Runs before `next dev` and
  * `next build`; the outputs are gitignored.
  *   content/docs/patterns.mdx  ← apps/{mobile,web}/DESIGN_SYSTEM.md › Patterns + Anti-patterns
+ *   lib/generated/demo-sources.json  ← the kits' demo files (the Code tab on component pages)
  */
-import { readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { demoSources } from './demo-sources.mjs';
 
 const docs = join(dirname(fileURLToPath(import.meta.url)), '..');
 const designSystem = {
@@ -59,3 +61,9 @@ ${mdxSafe(section(designSystem.mobile, 'Hallucination guard'))}
 
 writeFileSync(join(docs, 'content/docs/patterns.mdx'), page);
 console.log('prepare-content → content/docs/patterns.mdx');
+
+// The Code tab's demo sources (scripts/demo-sources.mjs) → lib/generated/demo-sources.json (gitignored).
+const demos = demoSources(join(docs, '..'));
+mkdirSync(join(docs, 'lib/generated'), { recursive: true });
+writeFileSync(join(docs, 'lib/generated/demo-sources.json'), `${JSON.stringify(demos)}\n`);
+console.log(`prepare-content → lib/generated/demo-sources.json (${Object.keys(demos.native).length} native, ${Object.keys(demos.web).length} web demos)`);

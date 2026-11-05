@@ -18,7 +18,7 @@ export const { staticGET: GET } = createSearchAPI('advanced', {
     })),
     // One result per component, whichever kits have it; the breadcrumb says which.
     ...CATALOGUE.map((e) => {
-      const versions = [e.native, e.web].filter((c) => c !== undefined);
+      const versions = [...e.parts.native, ...e.parts.web];
       return {
         id: entryUrl(e.id),
         title: e.title,
@@ -28,7 +28,7 @@ export const { staticGET: GET } = createSearchAPI('advanced', {
         structuredData: {
           headings: [],
           contents: versions
-            .flatMap((c) => [c.exports.join(' '), c.notes, c.caption ?? '', (c.aliases ?? []).join(' ')])
+            .flatMap((c) => [c.title, c.exports.join(' '), c.notes, c.caption ?? '', (c.aliases ?? []).join(' ')])
             .filter(Boolean)
             .map((content) => ({ heading: undefined, content: content.replace(/`/g, '') })),
         },
