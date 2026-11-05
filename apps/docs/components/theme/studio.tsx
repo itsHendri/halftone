@@ -4,16 +4,13 @@ import { EllipsisIcon, LinkIcon, MoonIcon, Redo2Icon, ShuffleIcon, SparklesIcon,
 import { useTheme } from 'next-themes';
 import * as React from 'react';
 import { ExportPanel } from '@/components/theme/export-panel';
-import { Canvas, TABS, type Tab } from '@/components/theme/studio/canvas';
-import { readView, writeView, type ComponentsView } from '@/components/theme/studio/components-tab';
+import { AccessibilityTab } from '@/components/theme/studio/accessibility-tab';
+import { ComponentsTab, readView, writeView, type ComponentsView } from '@/components/theme/studio/components-tab';
 import { outlineButton, primaryButton } from '@/components/theme/studio/dialog';
-import { ALL_FONTS, PRESET_FONTS } from '@/components/theme/studio/parts';
-import { SystemDialogs } from '@/components/theme/studio/system-dialogs';
-import { SystemsMenu, type StudioDialog } from '@/components/theme/studio/systems-menu';
-import { toast, Toaster } from '@/components/theme/studio/toast';
-import { failingCount } from '@/lib/studio/accessibility';
+import { Foundations } from '@/components/theme/studio/foundations';
+import { useStudioDialogs } from '@/components/theme/studio/shell';
+import { toast } from '@/components/theme/studio/toast';
 import { dismissMigrated, discardShared, saveShared, useSystems } from '@/lib/studio/systems';
-import { holdAmbient } from '@/lib/theme/ambient';
 import { useMode } from '@/lib/theme/mode';
 import { redo, shuffle, undo, useLiveTheme } from '@/lib/theme/store';
 
@@ -28,49 +25,7 @@ function useScheme() {
   return { dark, toggle: () => setTheme(dark ? 'light' : 'dark') };
 }
 
-/** The tabs, with the number of pairings below AA on Accessibility (its table's rows to check). Arrow keys move between them. */
-function Tabs({ tab, onTab }: { tab: Tab; onTab: (t: Tab) => void }) {
-  const { theme } = useLiveTheme();
-  const warnings = failingCount(theme);
-  const onKey = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    const keys = ['ArrowRight', 'ArrowLeft', 'Home', 'End'];
-    if (!keys.includes(e.key)) return;
-    e.preventDefault();
-    const i = TABS.findIndex((t) => t.id === tab);
-    const n = e.key === 'Home' ? 0 : e.key === 'End' ? TABS.length - 1 : (i + (e.key === 'ArrowRight' ? 1 : TABS.length - 1)) % TABS.length;
-    onTab(TABS[n].id);
-    e.currentTarget.querySelector<HTMLElement>(`[data-tab="${TABS[n].id}"]`)?.focus();
-  };
-  return (
-    <div role="tablist" aria-label="Studio" onKeyDown={onKey} className="flex gap-0.5">
-      {TABS.map((t) => (
-        <button
-          key={t.id}
-          type="button"
-          role="tab"
-          id={`studio-tab-${t.id}`}
-          data-tab={t.id}
-          aria-selected={tab === t.id}
-          aria-controls="studio-panel"
-          tabIndex={tab === t.id ? 0 : -1}
-          onClick={() => onTab(t.id)}
-          className={`focus-visible:ring-ring inline-flex h-8 items-center gap-1.5 rounded-full px-3 text-sm font-medium focus-visible:outline-none focus-visible:ring-2 ${
-            tab === t.id ? 'bg-accent text-accent-foreground' : 'text-muted-foreground hover:text-foreground'
-          }`}>
-          {t.label}
-          {t.id === 'accessibility' && warnings ? (
-            <span className="bg-destructive text-destructive-foreground rounded-full px-1.5 text-xs tabular-nums">
-              {warnings}
-              <span className="sr-only"> {warnings === 1 ? 'pairing' : 'pairings'} below AA</span>
-            </span>
-          ) : null}
-        </button>
-      ))}
-    </div>
-  );
-}
-
-/** Undo, redo, shuffle, light/dark: in the bar from sm up, in the ⋯ menu on a phone. */
+/** Undo, redo, shuffle, light/dark: in the toolbar from sm up, in the ⋯ menu on a phone. */
 function Actions() {
   const { canUndo, canRedo } = useLiveTheme();
   const { dark, toggle } = useScheme();
@@ -132,8 +87,9 @@ function UseSystem() {
   );
 }
 
-/** The first-run and shared-link notes, under the bar (wireframe 3). */
-function Banners({ onDialog }: { onDialog: (d: StudioDialog) => void }) {
+/** The first-run and shared-link notes, under the toolbar (wireframe 3). */
+function Banners() {
+  const { open: onDialog } = useStudioDialogs();
   const s = useSystems();
   if (s.shared) {
     return (
@@ -174,103 +130,58 @@ function Banners({ onDialog }: { onDialog: (d: StudioDialog) => void }) {
   return null;
 }
 
+export type StudioPageId = 'foundations' | 'components' | 'accessibility';
+const TITLES: Record<StudioPageId, string> = { foundations: 'Foundations', components: 'Components', accessibility: 'Accessibility' };
+
 /**
- * Studio (/studio): a design system manager (apps/docs/design/studio-wireframes.md). A bar with the system switcher,
- * the Foundations / Components / Accessibility tabs, undo, redo, shuffle, light/dark and Use system; then the tab.
- * The tab is kept in `?tab=`; an old `/themes/?view=contrast` link lands on Accessibility.
+ * One Studio page (design/navigation-wireframes.md › Round two): /studio (Foundations), /studio/components and
+ * /studio/accessibility, in the notebook layout's page column. The sidebar is the navigation; over the canvas sits
+ * a slim toolbar (undo, redo, shuffle, light/dark, Use system), then the first-run and shared-link notes, then
+ * the page. The toolbar's height is `--studio-bar`, for what sticks under it.
  */
-export function Studio() {
-  const [tab, setTab] = React.useState<Tab>('foundations');
-  const [dialog, setDialog] = React.useState<StudioDialog>(null);
-
-  // The Studio shows the system being edited, so the ambient drift holds still here.
-  React.useEffect(() => holdAmbient('studio'), []);
-
-  // ?tab= (and the Components tab's view) in, and out on every change. The page is static: read it on the client.
-  const [view, setView] = React.useState<ComponentsView>({ group: null, kit: 'web', uses: null });
-  React.useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const t = params.get('tab') ?? (params.get('view') === 'contrast' ? 'accessibility' : null);
-    if (TABS.some((x) => x.id === t)) setTab(t as Tab);
-    setView(readView(params));
-  }, []);
-  const go = (t: Tab, next: ComponentsView) => {
-    const url = new URL(window.location.href);
-    url.searchParams.delete('view');
-    if (t === 'foundations') url.searchParams.delete('tab');
-    else url.searchParams.set('tab', t);
-    writeView(url.searchParams, t === 'components' ? next : null);
-    // The hash is the group scrolled to; a new tab or a new filter starts at the top.
-    url.hash = '';
-    window.history.replaceState(window.history.state, '', url);
-    window.scrollTo({ top: 0 });
-    setTab(t);
-    setView(next);
-  };
-  const changeTab = (t: Tab) => go(t, view);
-  const changeView = (patch: Partial<ComponentsView>) => go('components', { ...view, ...patch });
-  // Show usage › "See them in Components": exactly the components that draw a token (`?uses=`), every group.
-  const onShowUsage = React.useEffectEvent((e: Event) => {
-    const { tab: t, uses } = (e as CustomEvent<{ tab: Tab; uses?: string }>).detail;
-    go(t, { ...view, group: null, uses: uses ?? null });
-  });
-  React.useEffect(() => {
-    window.addEventListener('studio:tab', onShowUsage);
-    return () => window.removeEventListener('studio:tab', onShowUsage);
-  }, []);
-
-  // The bar's height (it wraps on a phone), for what sticks under it: the section index and the jump menu.
-  const root = React.useRef<HTMLDivElement>(null);
+export function StudioPage({ page }: { page: StudioPageId }) {
   const bar = React.useRef<HTMLDivElement>(null);
   React.useEffect(() => {
     const el = bar.current;
-    if (!el) return;
-    const ro = new ResizeObserver(() => root.current?.style.setProperty('--studio-bar', `${el.offsetHeight}px`));
+    const root = document.querySelector<HTMLElement>('[data-studio]');
+    if (!el || !root) return;
+    const ro = new ResizeObserver(() => root.style.setProperty('--studio-bar', `${el.offsetHeight}px`));
     ro.observe(el);
     return () => ro.disconnect();
   }, []);
 
-  // Undo / redo from the keyboard (not while typing in a field).
-  React.useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if ((e.target as HTMLElement).closest('input, textarea, select, [contenteditable], dialog')) return;
-      if (!(e.metaKey || e.ctrlKey) || e.key.toLowerCase() !== 'z') return;
-      e.preventDefault();
-      if (e.shiftKey) redo();
-      else undo();
-    };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
-  }, []);
-
   return (
-    <div ref={root} data-studio className="bg-muted-subtle flex w-full flex-1 flex-col">
-      {/* The switcher shows each system's name in its own heading font, and the preset cards theirs. */}
-      {ALL_FONTS ? <link rel="stylesheet" href={ALL_FONTS} /> : null}
-      {PRESET_FONTS ? <link rel="stylesheet" href={PRESET_FONTS} /> : null}
-      <h1 className="sr-only">Studio</h1>
-
-      <div ref={bar} className="bg-background/90 border-border sticky top-14 z-30 border-b backdrop-blur-sm">
-        <div className="flex flex-wrap items-center gap-x-2 gap-y-2 px-4 py-2 md:px-6">
-          <SystemsMenu onDialog={setDialog} />
-          <div className="max-sm:order-last max-sm:w-full sm:ml-2">
-            <Tabs tab={tab} onTab={changeTab} />
-          </div>
+    <div className="bg-muted-subtle flex min-w-0 flex-col [grid-area:main]">
+      <h1 className="sr-only">Studio: {TITLES[page]}</h1>
+      <div ref={bar} className="bg-background/90 border-border sticky top-14 z-20 border-b backdrop-blur-sm">
+        <div className="flex items-center gap-2 px-4 py-2 md:px-6">
+          <span className="text-muted-foreground text-sm font-medium">{TITLES[page]}</span>
           <div className="flex-1" />
           <Actions />
           <UseSystem />
         </div>
       </div>
-
       <div className="flex flex-col gap-4 px-4 pb-24 pt-4 md:px-6">
-        <Banners onDialog={setDialog} />
-        <div id="studio-panel" role="tabpanel" aria-labelledby={`studio-tab-${tab}`}>
-          <Canvas tab={tab} view={view} onView={changeView} />
-        </div>
+        <Banners />
+        {page === 'foundations' ? <Foundations /> : page === 'components' ? <ComponentsPage /> : <AccessibilityTab />}
       </div>
-
-      <SystemDialogs dialog={dialog} onClose={() => setDialog(null)} />
-      <Toaster />
     </div>
   );
+}
+
+/** The Components page, its view (group, kit, uses) kept in the URL's query, and the group scrolled to in the hash. */
+function ComponentsPage() {
+  const [view, setView] = React.useState<ComponentsView>({ group: null, kit: 'web', uses: null });
+  React.useEffect(() => setView(readView(new URLSearchParams(window.location.search))), []);
+  const onView = (patch: Partial<ComponentsView>) => {
+    const next = { ...view, ...patch };
+    const url = new URL(window.location.href);
+    writeView(url.searchParams, next);
+    // A new filter starts at the top.
+    url.hash = '';
+    window.history.replaceState(window.history.state, '', url);
+    window.scrollTo({ top: 0 });
+    setView(next);
+  };
+  return <ComponentsTab view={view} onView={onView} />;
 }
