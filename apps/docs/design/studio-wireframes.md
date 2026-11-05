@@ -44,7 +44,7 @@ Subframe's Theme page, plus uicolors' ramps.
 | Undo · Redo · Shuffle · Light/dark | Undo works across the whole system; Shuffle respects locks (today's `LOCK_KEYS`), set with "Lock for shuffle" in an item's menu or the lock beside a base knob |
 | **Use system** | The one primary action. Opens today's export panel (code, agent prompt, `.halftone.json`, brand zip) |
 
-- **Slim site header on `/studio`** (decided 2026-10-20). The site's Docs / Components / Screens nav shrinks to a
+- ~~**Slim site header on `/studio`** (decided 2026-10-20).~~ **Superseded 2026-11-05** by navigation-wireframes.md › Round two: Studio keeps the full shared top bar, and its tabs become sidebar groups. Was: The site's Docs / Components / Screens nav shrinks to a
   slim header (logo, a way back to the docs, search), because the Studio is a tool, not a docs page. The Studio bar
   sits directly under it.
 - The site-wide theme pill follows the active system. The ambient colour drift stops once someone has a system

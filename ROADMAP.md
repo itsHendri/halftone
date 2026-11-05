@@ -17,7 +17,12 @@ only once that plan is agreed. Where the UX is still open, the item lists the qu
   `--strict` / `HALFTONE_STRICT=1` fails. Halftone's own CI is strict.
 - **The pitch:** "One brand. Phone and web. Built by your agent."
 
-## Done: a brief wizard on the site
+## Removed: a brief wizard on the site
+
+Removed on 2026-11-05 (docs nav round two, `apps/docs/design/navigation-wireframes.md`): it was over-built for
+what it did. The agent can ask the same questions itself, and Docs › Start a prototype now shows how to hand it a
+transcript, notes or a brief. The approval stop and the brief template stayed in transcript-to-prototype. The
+wizard is in git history (`814a7ba`). What it was:
 
 A `/brief` page that turns a guided brief, or a pasted transcript, into a planning session.
 
@@ -106,7 +111,7 @@ Plan first. Open UX questions:
 - `DESIGN.md` linted against the open DESIGN.md spec in CI.
 - qc-pass driving the app through Expo's MCP tools: screenshots by test ID, every route in both themes.
 - A theme from a URL (a client's site → a recipe).
-- Two or three theme variants side by side in the brief wizard, before the build.
+- Two or three theme variants side by side before the build (was: in the brief wizard, now removed).
 - An MCP server for the theme studio, so an agent changes the theme while you watch.
 
 ## Later: kits that keep up

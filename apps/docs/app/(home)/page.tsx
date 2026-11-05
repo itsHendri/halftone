@@ -14,7 +14,7 @@ import { colorNames, kit } from "@/lib/kit";
 const STEPS = [
   {
     title: "Give an agent a brief",
-    body: "A meeting transcript, a few notes, or the brief wizard on this site. Your agent turns it into a brief and a screen list, then waits for your go-ahead before any code.",
+    body: "A meeting transcript, a few notes or a brief you wrote. Your agent turns it into a brief and a screen list, then waits for your go-ahead before any code.",
   },
   {
     title: "It builds from the registry only",

@@ -24,8 +24,8 @@ export type SectionId = (typeof SECTIONS)[number]['id'];
 
 const sectionId = (id: string) => `foundations-${id}`;
 
-/** Under the site header (3rem) and the Studio bar (measured, --studio-bar), plus the jump menu below lg. */
-const SCROLL_MARGIN = 'scroll-mt-[calc(3rem+var(--studio-bar,3.5rem)+3.75rem)] lg:scroll-mt-[calc(3rem+var(--studio-bar,3.5rem)+1rem)]';
+/** Under the site header (3.5rem) and the Studio bar (measured, --studio-bar), plus the jump menu below lg. */
+const SCROLL_MARGIN = 'scroll-mt-[calc(3.5rem+var(--studio-bar,3.5rem)+3.75rem)] lg:scroll-mt-[calc(3.5rem+var(--studio-bar,3.5rem)+1rem)]';
 
 export function FoundationSection({
   id,
@@ -101,7 +101,7 @@ export function SectionIndex() {
   const current = useCurrent();
   return (
     <>
-      <nav aria-label="Foundations sections" className="sticky top-[calc(3rem+var(--studio-bar,3.5rem)+1rem)] self-start max-lg:hidden">
+      <nav aria-label="Foundations sections" className="sticky top-[calc(3.5rem+var(--studio-bar,3.5rem)+1rem)] self-start max-lg:hidden">
         <ul className="flex flex-col gap-0.5">
           {SECTIONS.map((s) => (
             <li key={s.id}>
@@ -121,7 +121,7 @@ export function SectionIndex() {
           ))}
         </ul>
       </nav>
-      <div className="bg-muted-subtle sticky top-[calc(3rem+var(--studio-bar,3.5rem))] z-20 -mx-4 px-4 py-2 backdrop-blur-sm md:-mx-6 md:px-6 lg:hidden">
+      <div className="bg-muted-subtle sticky top-[calc(3.5rem+var(--studio-bar,3.5rem))] z-20 -mx-4 px-4 py-2 backdrop-blur-sm md:-mx-6 md:px-6 lg:hidden">
         <label className="flex items-center gap-2 text-sm">
           <span className="text-muted-foreground shrink-0">Jump to</span>
           <select
