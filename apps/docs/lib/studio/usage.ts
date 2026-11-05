@@ -8,16 +8,14 @@
  */
 import mobile from '../../../mobile/registry/generated/token-usage.json';
 import web from '../../../web/registry/generated/token-usage.json';
-import { CATALOGUE, type Entry, type Side } from '@/lib/catalogue';
+import { CATALOGUE, entryOf, type Entry, type Side } from '@/lib/catalogue';
 import { TEXT_LABELS, type TextStyleName } from '@/lib/studio/foundations';
 
 type Usage = Record<string, string[]>;
 const KITS: Record<Side, Usage> = { native: (mobile as { usage: Usage }).usage, web: (web as { usage: Usage }).usage };
 
-/** The catalogue entry a kit's registry id belongs to (an entry may carry another name in the other kit). */
-function entryFor(side: Side, id: string): Entry | undefined {
-  return CATALOGUE.find((e) => (side === 'native' ? e.native?.id : e.web?.id) === id) ?? CATALOGUE.find((e) => e.id === id);
-}
+/** The catalogue entry a kit's registry id belongs to (a merged entry holds components with other ids). */
+const entryFor = (side: Side, id: string): Entry | undefined => entryOf(side, id) ?? CATALOGUE.find((e) => e.id === id);
 
 /** Catalogue entries that draw any of these tokens (a list, or comma-separated), in either kit, with the kits that do. */
 export function usageOf(keys: string | string[]): { entry: Entry; sides: Side[] }[] {

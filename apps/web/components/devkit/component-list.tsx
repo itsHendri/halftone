@@ -1,5 +1,5 @@
 'use client';
-import { ArrowUpRightIcon, SearchIcon } from 'lucide-react';
+import { SearchIcon } from 'lucide-react';
 import { cn } from 'cn';
 import { useSearchParams } from 'next/navigation';
 import * as React from 'react';
@@ -52,35 +52,48 @@ function openInHost(id: string) {
 }
 
 /**
- * The docs index's live tiles (?tiles=a,b,c with ?embed=1): each component's demo in a cell, its title a button
- * that opens the component's page in the docs (`kit:open`). Measured for ?autosize=1.
+ * The docs index's cards (?tiles=a,b,c with ?embed=1): each component's demo, live on a quiet canvas, then its name
+ * (a button that opens the component's page in the docs, `kit:open`) and the line the docs send for it in
+ * ?lines= (a JSON map of id → text, e.g. which kits have it). Measured for ?autosize=1. The canvas stays live, so
+ * only the name is the link.
  */
-function Tiles({ ids }: { ids: string[] }) {
+function Tiles({ ids, lines }: { ids: string[]; lines: Record<string, string> }) {
   const list = ids.map((id) => PREVIEWED.find((c) => c.id === id)).filter((c) => c !== undefined);
   return (
-    <div data-autosize className="-mt-px -ml-px grid w-[calc(100%+1px)] grid-cols-[repeat(auto-fill,minmax(300px,1fr))]">
+    // p-px keeps the cards' hairlines inside the frame.
+    <div data-autosize className="grid grid-cols-[repeat(auto-fill,minmax(260px,1fr))] gap-x-4 gap-y-6 p-px">
       {list.map((c) => (
-        // Each cell draws its own left and top line, inset so the next cell can't paint over it. The grid sits 1px up
-        // and left, so the outer edges fall outside the frame (the docs draw that border), and an unfilled last row
-        // stays blank.
-        <div key={c.id} className="bg-background flex flex-col shadow-[inset_1px_0_0_var(--border),inset_0_1px_0_var(--border)]">
-          <button
-            type="button"
-            onClick={() => openInHost(c.id)}
-            className="text-muted-foreground hover:text-foreground focus-visible:ring-ring flex items-center justify-between gap-2 px-4 pt-3 text-left text-sm font-medium focus-visible:outline-none focus-visible:ring-2">
-            {c.title}
-            <ArrowUpRightIcon className="size-4" aria-hidden />
-          </button>
-          <div className="flex max-h-80 min-h-44 flex-1 justify-center overflow-hidden p-6 [align-items:safe_center] [mask-image:linear-gradient(to_bottom,black_85%,transparent)]">
-            {/* min-w-0: a full-width demo (an amount field, a chip row) fits the tile instead of widening it. */}
+        <div key={c.id} className="flex min-w-0 flex-col gap-2">
+          {/* A card is a thumbnail: a code block in a demo (Prose) clips instead of scrolling sideways, which would
+              need a keyboard stop of its own (axe: scrollable-region-focusable). */}
+          <div className="border-border bg-background flex h-52 justify-center overflow-hidden rounded-2xl border p-6 [align-items:safe_center] [mask-image:linear-gradient(to_bottom,black_85%,transparent)] [&_pre]:overflow-hidden!">
+            {/* min-w-0: a full-width demo (an amount field, a chip row) fits the card instead of widening it. */}
             <div className="max-w-full min-w-0">
               <Section c={c} bare />
             </div>
           </div>
+          <button
+            type="button"
+            onClick={() => openInHost(c.id)}
+            className="focus-visible:ring-ring flex flex-col items-start rounded-md text-left focus-visible:outline-none focus-visible:ring-2">
+            <span className="text-foreground text-sm font-medium hover:underline">{c.title}</span>
+            {lines[c.id] ? <span className="text-muted-foreground text-xs">{lines[c.id]}</span> : null}
+          </button>
         </div>
       ))}
     </div>
   );
+}
+
+/** ?lines= as a map; anything unreadable is no lines. */
+function readLines(raw: string | null): Record<string, string> {
+  if (!raw) return {};
+  try {
+    const v: unknown = JSON.parse(raw);
+    return v && typeof v === 'object' ? Object.fromEntries(Object.entries(v).filter(([, t]) => typeof t === 'string')) : {};
+  } catch {
+    return {};
+  }
 }
 
 /**
@@ -106,7 +119,7 @@ export function ComponentList({ embedded }: { embedded?: boolean }) {
   }, [section]);
 
   const tiles = params.get('tiles');
-  if (embedded && tiles) return <Tiles ids={tiles.split(',')} />;
+  if (embedded && tiles) return <Tiles ids={tiles.split(',')} lines={readLines(params.get('lines'))} />;
 
   if (embedded && section) {
     const c = PREVIEWED.find((x) => x.id === section);

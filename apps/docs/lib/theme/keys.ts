@@ -32,15 +32,13 @@ export const LEGACY_BRAND_KEY = 'halftone.brand';
 export const EMBED_BRAND_KEY = 'kit.embed.brand';
 
 
-/** The components filter (All | Native | Web), as <html data-kit-filter>. */
-export const FILTER_KEY = 'halftone.kits';
+/** The kit a component page last showed (Native | Web), for the next one (components/kit-availability.tsx). */
+export const KIT_KEY = 'halftone.kits';
 
 /**
  * Inline in <head>: the active system's CSS before first paint, so a themed site never flashes the default; the
- * ambient drift's last colours when no system is active; and the components filter, so the sidebar doesn't
- * flash entries it hides.
+ * ambient drift's last colours when no system is active.
  */
 export const themeBootScript = `(function(){try{var c=localStorage.getItem('${CSS_KEY}');if(c){var s=document.createElement('style');s.id='${STYLE_ID}';s.textContent=c;document.head.appendChild(s)}
 var a=localStorage.getItem('${AMBIENT_CSS_KEY}');if(a&&!localStorage.getItem('${ACTIVE_KEY}')&&!localStorage.getItem('${LEGACY_THEME_KEY}')){var t=document.createElement('style');t.id='${AMBIENT_ID}';t.textContent=a;document.head.appendChild(t)}
-var f=localStorage.getItem('${FONTS_KEY}');if(c&&f&&f.indexOf('https://fonts.googleapis.com/')===0){var l=document.createElement('link');l.id='${FONTS_ID}';l.rel='stylesheet';l.href=f;document.head.appendChild(l)}
-var k=localStorage.getItem('${FILTER_KEY}');if(k==='native'||k==='web')document.documentElement.dataset.kitFilter=k}catch(e){}})();`;
+var f=localStorage.getItem('${FONTS_KEY}');if(c&&f&&f.indexOf('https://fonts.googleapis.com/')===0){var l=document.createElement('link');l.id='${FONTS_ID}';l.rel='stylesheet';l.href=f;document.head.appendChild(l)}}catch(e){}})();`;

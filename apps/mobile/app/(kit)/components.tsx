@@ -3,9 +3,7 @@ import { DevKitHub } from '@/components/devkit/DevKitHub';
 import { DevKitSection } from '@/components/devkit/DevKitSection';
 import { SECTIONS } from '@/components/devkit/registry';
 import { Text } from '@/components/ui/text';
-import { Icon } from '@/components/ui/icon';
 import { EMBED, openInHost, reportEmbedSize } from '@/lib/embed';
-import { ArrowUpRightIcon } from 'lucide-react-native';
 import { useLocalSearchParams } from 'expo-router';
 import { Pressable, ScrollView, View } from 'react-native';
 
@@ -18,30 +16,30 @@ import { Pressable, ScrollView, View } from 'react-native';
  *   …&autosize=1                             and report its height (kit:size), for a frame sized to it
  */
 export default function ComponentsScreen() {
-  const { open, section, tiles } = useLocalSearchParams<{ open?: string; section?: string; tiles?: string }>();
+  const { open, section, tiles, lines } = useLocalSearchParams<{ open?: string; section?: string; tiles?: string; lines?: string }>();
 
-  // The docs index's live tiles (?tiles=a,b,c): each demo in a cell, its title opens the docs page (kit:open).
+  // The docs index's cards (?tiles=a,b,c): each demo live on a quiet canvas, then its name (opens the docs page,
+  // kit:open) and the line the docs send for it in ?lines= (JSON, id → text). Only the name is the link: the canvas
+  // stays live.
   if (EMBED.embedded && tiles) {
     const list = tiles
       .split(',')
       .map((id) => SECTIONS.find((s) => s.id === id))
       .filter((s) => s !== undefined);
+    const notes = readLines(lines);
     return (
       <ScrollView className="bg-background flex-1">
-        <View className="bg-border flex-row flex-wrap gap-px" onLayout={(e) => reportEmbedSize(e.nativeEvent.layout.height)}>
+        {/* p-px keeps the cards' hairlines inside the frame. */}
+        <View className="flex-row flex-wrap gap-x-4 gap-y-6 p-px" onLayout={(e) => reportEmbedSize(e.nativeEvent.layout.height)}>
           {list.map((s) => (
-            <View key={s.id} className="bg-background min-w-[300px] flex-1 basis-[300px]">
-              <Pressable
-                onPress={() => openInHost(s.id)}
-                accessibilityRole="button"
-                accessibilityLabel={`Open ${s.title}`}
-                className="flex-row items-center justify-between px-4 pt-3">
-                <Text className="text-muted-foreground text-sm font-medium">{s.title}</Text>
-                <Icon as={ArrowUpRightIcon} className="text-muted-foreground size-4" />
-              </Pressable>
-              <View className="max-h-80 min-h-44 overflow-hidden">
+            <View key={s.id} className="min-w-[260px] flex-1 basis-[260px] gap-2">
+              <View className="border-border bg-background h-52 justify-center overflow-hidden rounded-2xl border">
                 <DevKitSection section={s} bare />
               </View>
+              <Pressable onPress={() => openInHost(s.id)} accessibilityRole="button" accessibilityLabel={`Open ${s.title}`} className="self-start">
+                <Text className="text-foreground text-sm font-medium">{s.title}</Text>
+                {notes[s.id] ? <Text className="text-muted-foreground text-xs">{notes[s.id]}</Text> : null}
+              </Pressable>
             </View>
           ))}
         </View>
@@ -75,4 +73,15 @@ export default function ComponentsScreen() {
       focusSection={section}
     />
   );
+}
+
+/** ?lines= as a map; anything unreadable is no lines. */
+function readLines(raw: string | undefined): Record<string, string> {
+  if (!raw) return {};
+  try {
+    const v: unknown = JSON.parse(raw);
+    return v && typeof v === 'object' ? Object.fromEntries(Object.entries(v).filter(([, t]) => typeof t === 'string')) : {};
+  } catch {
+    return {};
+  }
 }

@@ -7,8 +7,7 @@ import { BrowserFrame } from "@/components/browser-frame";
 import { PhoneFrame } from "@/components/phone-frame";
 import { phoneFrameHeight } from "@/lib/device";
 import { ShowcaseFrame } from "@/components/showcase-frame";
-import { KitBadges } from "@/components/kit-availability";
-import { CATALOGUE, entriesIn, GROUPS, SIDES } from "@/lib/catalogue";
+import { CATALOGUE, entriesIn, GROUPS, SIDE_LABEL, SIDES } from "@/lib/catalogue";
 import { colorNames, kit } from "@/lib/kit";
 
 const STEPS = [
@@ -215,7 +214,11 @@ export default function HomePage() {
                     <span className="text-muted-foreground text-sm">
                       {g.blurb}
                     </span>
-                    <KitBadges sides={sides} />
+                    <span className="text-muted-foreground text-xs">
+                      {sides.length > 1
+                        ? sides.map((s) => SIDE_LABEL[s]).join(" · ")
+                        : `${SIDE_LABEL[sides[0]]} only`}
+                    </span>
                   </Link>
                 </li>
               );
