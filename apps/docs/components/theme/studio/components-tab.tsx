@@ -55,11 +55,11 @@ function useScrollInHash() {
     const onScroll = () => {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
-        // Under the site header (48px) and the Studio bar.
+        // Under the site header (56px) and the Studio bar.
         const studio = document.querySelector<HTMLElement>('[data-studio]');
         const bar = (studio && parseFloat(getComputedStyle(studio).getPropertyValue('--studio-bar'))) || 0;
         let current = '';
-        for (const el of document.querySelectorAll<HTMLElement>('[data-components-group]')) if (el.getBoundingClientRect().top <= 48 + bar + 80) current = el.id;
+        for (const el of document.querySelectorAll<HTMLElement>('[data-components-group]')) if (el.getBoundingClientRect().top <= 56 + bar + 80) current = el.id;
         const url = new URL(window.location.href);
         url.hash = current;
         if (url.href !== window.location.href) window.history.replaceState(window.history.state, '', url);

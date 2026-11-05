@@ -1,7 +1,7 @@
 /**
  * A pasted theme code in either format: a Halftone code (ht1-…, ht2-…, ht3-…) or a shadcn/ui preset code
  * (ui.shadcn.com/create). A shadcn code becomes the nearest Halftone recipe, with a note for each value that
- * doesn't carry over. Used by the studio's Open box, the ?t= link and the brief wizard.
+ * doesn't carry over. Used by the studio's Open box and the ?t= link.
  */
 import { decodeRecipe, decodeShadcnPreset, isShadcnPresetCode, isThemeCode, recipeFromShadcn, type Recipe } from '@halftone-ds/tokens/theme';
 

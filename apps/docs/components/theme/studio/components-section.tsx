@@ -824,7 +824,7 @@ function OpenCard({ name, onClose }: { name: ComponentName; onClose: () => void 
       </ItemMenu>
       <div className="grid min-w-0 gap-6 p-4 lg:grid-cols-[minmax(0,1fr)_16rem]">
         {/* The specimen stays in view while the panel scrolls beside it. */}
-        <div className="min-w-0 lg:sticky lg:top-[calc(3rem+var(--studio-bar,3.5rem)+1rem)] lg:self-start">
+        <div className="min-w-0 lg:sticky lg:top-[calc(3.5rem+var(--studio-bar,3.5rem)+1rem)] lg:self-start">
           <SpecimenGrid name={name} variant={variant} onVariant={setVariant} step={step} onStep={setStep} narrow={narrow} />
         </div>
         <div className="lg:border-border flex min-w-0 flex-col gap-3 lg:border-l lg:pl-5">

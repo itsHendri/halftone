@@ -250,7 +250,7 @@ export function Studio() {
       {PRESET_FONTS ? <link rel="stylesheet" href={PRESET_FONTS} /> : null}
       <h1 className="sr-only">Studio</h1>
 
-      <div ref={bar} className="bg-background/90 border-border sticky top-12 z-30 border-b backdrop-blur-sm">
+      <div ref={bar} className="bg-background/90 border-border sticky top-14 z-30 border-b backdrop-blur-sm">
         <div className="flex flex-wrap items-center gap-x-2 gap-y-2 px-4 py-2 md:px-6">
           <SystemsMenu onDialog={setDialog} />
           <div className="max-sm:order-last max-sm:w-full sm:ml-2">

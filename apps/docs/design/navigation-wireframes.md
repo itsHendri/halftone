@@ -4,6 +4,85 @@ A living contract for the docs site's navigation. Wireframes: `navigation-wirefr
 browser). A build that contradicts this file stops and re-checks it first; change this file in place when a
 decision changes.
 
+## Round two (2026-11-05): one shell, for real
+
+### What was wrong
+
+- **Studio left the shell.** On `/studio` the top bar became a slim one (logo, "← Docs", search; 48px, not 56px, no
+  section links), the Studio stacked its own bar (system switcher, Foundations / Components / Accessibility tabs,
+  actions) and then an inset section index styled unlike the Docs sidebar. Three levels of navigation, and it felt
+  like leaving the site.
+- **Components carried chrome.** An All | Native | Web filter above the sidebar, Native / Web chips on every row,
+  and "All components" as a highlighted row with no heading over it.
+- **Brief was over-built.** The `/brief` wizard duplicated Docs › Start a prototype and the `transcript-to-prototype`
+  skill, which already takes a transcript or notes from chat.
+
+Reference for the catalogue: untitledui.com/react/components (cards with a live canvas, a name and one quiet line;
+a component page whose large, quiet preview has its name and Preview | Code in one header row; no badges in the
+sidebar).
+
+### Information architecture
+
+| Top bar | Route | Sidebar |
+| --- | --- | --- |
+| Logo → Home | `/` | none |
+| Docs | `/docs/*` | Get started · Design system · Project |
+| Components | `/components/*` | Overview, then the groups, plain rows |
+| Screens | `/screens` | none |
+| Studio | `/studio`, `/studio/components`, `/studio/accessibility` | system switcher, then Foundations · Components · Accessibility |
+| Search ⌘K, Get started (→ `/docs/install`), theme, GitHub | | |
+
+`/brief` is gone (301 → `/docs/start/`).
+
+### Rules
+
+- **One bar, one sidebar.** Every section uses the same top bar and, where it has a tree, the same notebook
+  sidebar: same width, same row style, same neutral selected fill. A section never swaps the bar or adds a second one.
+  Why: moving between sections must never move the navigation. When to break: never; a tool that needs more room
+  hides the sidebar, it doesn't replace the bar.
+- **Two levels, not three.** The top bar says which section; the sidebar says where in it. Tabs inside a page are for
+  views of one thing (Preview | Code, Native | Web), never for places. Why: a third level reads as stepping out of
+  the site.
+- **The sidebar's banner slot holds the section's one context control**: the system switcher in Studio, nothing in
+  Components. Why: it is the one control that changes what every row shows.
+- **Availability lives on the component, not in the sidebar.** No filter, no chips in rows. The index card's muted
+  line and the preview header say Native · Web, Native only or Web only. Why: 86 of 110 entries are on both kits, so
+  chips on every row are noise; a page says it once where it matters.
+- **Native | Web is a view of the page.** In the preview header; it switches the preview, code, usage, API, Get it
+  and Details; `?kit=` wins; the choice is remembered for the next component.
+- **Preview | Code** sits beside it. Code is the kit's real demo source (the devkit demo function), with copy; where
+  a demo isn't a named function it falls back to the API snippet.
+- **The Components sidebar starts with Overview**, a normal row, then the groups. Group titles have no counts.
+- **Merged entries.** The same component under another name in the other kit is one entry: Chart (native Line,
+  Bar, Donut chart + web Chart) and Page header (native Screen header + web Page header). Old slugs redirect to the
+  merged page. Native Option sheet and Action sheet stay native-only (web has Sheet and Drawer, different patterns);
+  their page says what to use on web.
+- **Studio's groups.** Foundations (Brand, Colours, Typography, Corners, Shadows, Borders, Controls) are anchors on
+  one page with a scroll spy; the old Foundations "Components" section is called **Controls** so the sidebar never
+  says Components twice. Components is one row (the group chips stay over the canvas). Accessibility carries the
+  count of pairings below AA. Undo, redo, shuffle, light/dark and Use system are a slim toolbar over the canvas.
+- **Phones.** The same drawer on Docs, Components and Studio: the four sections, then the section's tree.
+
+### Explicitly deferred (round two)
+
+- Porting one-kit components to the other kit: a later phase, picked one by one. Device features (camera, Face ID,
+  share, keypad, tab bar) and desktop patterns (data table, pagination, command, app shell, hero) stay one-kit.
+- A breadcrumb, "Copy page" and an on-this-page rail on component pages.
+- One Studio sidebar row per catalogue group.
+- A guided brief on the site (the wizard is in git history, commit `814a7ba`).
+
+### Phases
+
+1. **Shell:** four sections, Studio under the shared bar, Brief removed.
+2. **Components:** sidebar, index cards, component page (preview header, Code tab), merges and redirects.
+3. **Studio:** notebook layout, sidebar groups, routes, toolbar.
+
+One PR each, one at a time.
+
+---
+
+The record below is round one (2026-10-09). Where it disagrees with round two, round two wins.
+
 ## The problem (2026-10-09)
 
 - Two shells: Home, Screens and Themes used Fumadocs' home layout (links in a top bar), while Docs and

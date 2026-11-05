@@ -112,10 +112,13 @@ const redirects = routes.flatMap(({ path, nested }) => [
 // The components used to live under one tree per kit (/components/mobile/<id>, /components/web/<id>); they are
 // one catalogue now (/components/<id>, design/components-wireframes.md). Old links keep working.
 // The theme studio became Studio (design/studio-wireframes.md); the query (a shared ?t=) comes along.
+// The brief wizard was removed (design/navigation-wireframes.md › Round two); Start a prototype explains the skill.
 const moved = [
   ...['mobile', 'web'].flatMap((p) => [`/components/${p} /components/ 301`, `/components/${p}/ /components/ 301`, `/components/${p}/* /components/:splat 301`]),
   '/themes /studio/ 301',
   '/themes/ /studio/ 301',
+  '/brief /docs/start/ 301',
+  '/brief/ /docs/start/ 301',
 ];
 writeFileSync(
   join(pub, '_redirects'),

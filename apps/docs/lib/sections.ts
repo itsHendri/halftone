@@ -4,5 +4,4 @@ export const SECTIONS = [
   { text: 'Components', url: '/components' },
   { text: 'Screens', url: '/screens' },
   { text: 'Studio', url: '/studio' },
-  { text: 'Brief', url: '/brief' },
 ] as const;

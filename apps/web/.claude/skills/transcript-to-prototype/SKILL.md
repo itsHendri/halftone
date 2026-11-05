@@ -1,12 +1,12 @@
 ---
 name: transcript-to-prototype
-description: Turn a client conversation (meeting transcript, notes, a brief, or a BRIEF.md from the Halftone brief wizard) into a first working web prototype inside this kit (dashboard, marketing page or AI product), built only from registry components. Use when given a transcript/brief and asked to "build a prototype", "make a first version", "turn this into pages", or "scaffold the app from this conversation".
+description: Turn a client conversation (meeting transcript, notes, a written brief or a filled-in BRIEF.md) into a first working web prototype inside this kit (dashboard, marketing page or AI product), built only from registry components. Use when given a transcript/brief and asked to "build a prototype", "make a first version", "turn this into pages", or "scaffold the app from this conversation".
 ---
 
 # Transcript → prototype (web)
 
-Input: a transcript or brief (pasted, or a file path), or a BRIEF.md from the Halftone brief wizard
-(halftonedesignsystem.com/brief). Output: a browsable prototype in its own folder
+Input: a transcript or brief (pasted, or a file path), or a BRIEF.md someone filled in from
+`BRIEF.template.md`. Output: a browsable prototype in its own folder
 under `app/`, mock data beside it, and a short brief that records the decisions.
 
 Work in this order. Do not skip the brief: it is what the client sees first and what keeps the build honest.
@@ -17,9 +17,9 @@ pages.
 
 Read the whole transcript. Write `app/<slug>/BRIEF.md` from `BRIEF.template.md` (beside this skill).
 
-**From the brief wizard:** keep the person's answers in their words. Leave out anything marked "Does not
-apply". Each item under "Not answered" becomes an Open question with the default you pick. Never invent proof,
-numbers, customers or quotes. The wizard's "How to use this brief" section is for you; don't copy it in.
+**From a written brief or a filled-in BRIEF.md:** keep the person's answers in their words. Leave out anything
+marked "Does not apply". Each field left empty becomes an Open question with the default you pick. Never invent
+proof, numbers, customers or quotes.
 
 The template's fields:
 

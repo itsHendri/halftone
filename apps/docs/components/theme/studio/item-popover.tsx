@@ -48,11 +48,11 @@ export function usePhone() {
   );
 }
 
-/** Where the page shows under the sticky chrome: the site header (48px) and the Studio bar (--studio-bar). */
+/** Where the page shows under the sticky chrome: the site header (56px) and the Studio bar (--studio-bar). */
 function chromeBottom() {
   const studio = document.querySelector<HTMLElement>('[data-studio]');
   const bar = (studio && parseFloat(getComputedStyle(studio).getPropertyValue('--studio-bar'))) || 0;
-  return 48 + bar;
+  return 56 + bar;
 }
 
 // ---- the popover ----------------------------------------------------------------------------------------

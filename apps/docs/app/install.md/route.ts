@@ -18,8 +18,8 @@ colours, imports outside the registry and other UI libraries. The two kits:
 
 If the person did not say which, ask: "a phone app, a web app, or both?"
 
-If the person gave you a **BRIEF.md** from the brief wizard (\`${site('/brief/')}\`), its "How to use this brief"
-section says which path to take and what to do after: plan first, and wait for approval before writing code.
+If the person gave you a transcript, notes or a **BRIEF.md**, set the kit up first, then run the kit's
+\`transcript-to-prototype\` skill on it: plan first, and wait for approval before writing code.
 
 ## 1. Pick the path
 

@@ -1,6 +1,6 @@
 # Brief: <name>
 
-<!-- The fields match the Halftone brief wizard (halftonedesignsystem.com/brief). Keep the person's words.
+<!-- Fill this in yourself, or let the transcript-to-prototype skill write it from a transcript. Keep the person's words.
      Drop a field the person marked "Does not apply"; never invent proof, numbers or quotes. -->
 
 **One-line concept:** who it is for, what it does.

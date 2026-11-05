@@ -15,7 +15,6 @@ export default function sitemap(): MetadataRoute.Sitemap {
     '/',
     '/studio',
     '/screens',
-    '/brief',
     '/components',
     ...CATALOGUE.map((e) => entryUrl(e.id)),
     ...source.getPages().map((p) => p.url),
