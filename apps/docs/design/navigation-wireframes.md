@@ -65,7 +65,19 @@ sidebar).
   one page with a scroll spy; the old Foundations "Components" section is called **Controls** so the sidebar never
   says Components twice. Components is one row (the group chips stay over the canvas). Accessibility carries the
   count of pairings below AA. Undo, redo, shuffle, light/dark and Use system are a slim toolbar over the canvas.
-- **Phones.** The same drawer on Docs, Components and Studio: the four sections, then the section's tree.
+- **Phones.** The same drawer on Docs, Components and Studio: the four sections, then the section's tree. In Studio
+  the switcher (the banner slot) sits at the top of the drawer, above the sections: that is where Fumadocs puts it.
+
+### How Studio is built (phase 3)
+
+- `app/studio/layout.tsx` is the notebook layout with `lib/studio/tree.tsx`, `StudioSystems` in the banner and
+  `StudioItem` for rows (`components/theme/studio/sidebar.tsx`). Foundations' rows are `/studio#foundations-<id>`
+  anchors, active from the page's scroll spy (`useSectionSpy` → `lib/studio/current-section.ts`).
+- `StudioShell` (`components/theme/studio/shell.tsx`) wraps the layout: the system dialogs (so the sidebar's
+  switcher can open them), the toaster, undo/redo keys, the fonts, the ambient hold, and the old links
+  (`?tab=`, `?view=contrast`, the item menu's `studio:tab`).
+- Each route renders `StudioPage` (`components/theme/studio.tsx`): the toolbar (its height is `--studio-bar` on
+  `[data-studio]`), the banners, then Foundations, Components or Accessibility.
 
 ### Explicitly deferred (round two)
 

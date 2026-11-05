@@ -1,5 +1,10 @@
 # Studio: decision record
 
+> **Superseded in part (2026-11-05):** the Studio bar's Foundations / Components / Accessibility tabs are sidebar groups
+> now, at `/studio`, `/studio/components` and `/studio/accessibility`; the system switcher is in the sidebar and the bar is a
+> slim toolbar over the canvas. Foundations' "Components" section is called Controls. See `navigation-wireframes.md` ›
+> Round two.
+
 A living contract for `/studio`, the design system manager that replaces the theme studio at `/themes`.
 The wireframes are in `studio-wireframes.html` (open it in a browser). A build that contradicts this file stops
 and re-checks it first. When a decision changes, change this file in place.
