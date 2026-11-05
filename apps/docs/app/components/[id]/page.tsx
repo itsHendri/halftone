@@ -6,10 +6,12 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { InlineMd } from '@/components/inline-md';
-import { KitBadges, KitPanels } from '@/components/kit-availability';
+import { KitPanel, KitSwitch, PreviewBlock } from '@/components/kit-availability';
 import { KitStage } from '@/components/kit-stage';
+import { MovedTo } from '@/components/moved-to';
 import { PhoneFrame } from '@/components/phone-frame';
-import { CATALOGUE, entryUrl, getEntry, groupOf, PLATFORM_OF, SCREEN_LEVEL, SIDE_LABEL, stageMinHeight, type Entry, type Side } from '@/lib/catalogue';
+import { CATALOGUE, entryUrl, getEntry, groupOf, MOVED, partAnchor, PLATFORM_OF, SCREEN_LEVEL, SIDE_LABEL, stageMinHeight, type Entry, type Side } from '@/lib/catalogue';
+import demoSources from '@/lib/generated/demo-sources.json';
 import { kits, registryItemFor, sourceUrl, type KitComponent, type Platform } from '@/lib/kit';
 import { site } from '@/lib/llms';
 import { codeThemes } from '@/lib/shared';
@@ -17,7 +19,8 @@ import { codeThemes } from '@/lib/shared';
 export const dynamicParams = false;
 
 export function generateStaticParams() {
-  return CATALOGUE.map((e) => ({ id: e.id }));
+  // The merged components' old slugs too (MOVED): each is a page that sends you on to its block.
+  return [...CATALOGUE.map((e) => ({ id: e.id })), ...Object.keys(MOVED).map((id) => ({ id }))];
 }
 
 async function resolve(props: PageProps<'/components/[id]'>) {
@@ -27,7 +30,15 @@ async function resolve(props: PageProps<'/components/[id]'>) {
   return e;
 }
 
+/** `/components/line-chart/` → `/components/chart/#native-line-chart`. */
+const movedUrl = (id: string) => {
+  const [entry, hash] = MOVED[id].split('#');
+  return `${entryUrl(entry)}/#${hash}`;
+};
+
 export async function generateMetadata(props: PageProps<'/components/[id]'>): Promise<Metadata> {
+  const { id } = await props.params;
+  if (MOVED[id]) return { title: 'Components', robots: { index: false }, alternates: { canonical: movedUrl(id) } };
   const e = await resolve(props);
   const c = (e.native ?? e.web)!;
   return { title: `${e.title} · Components`, description: c.notes.replace(/`/g, '') || c.caption };
@@ -51,7 +62,12 @@ const upstreamName = (platform: Platform) => (platform === 'mobile' ? 'react-nat
 const depLabel = (d: string) =>
   d.replace(/^https:\/\/reactnativereusables\.com\/r\/nativewind\/(.*)\.json$/, 'rnr/$1').replace(/^https:\/\/ui\.shadcn\.com\/r\/styles\/[^/]+\/(.*)\.json$/, '$1');
 
+/** The kit's demo source for a component (scripts/demo-sources.mjs), if it has a named demo. */
+const DEMO_SOURCE: Record<Side, Record<string, string>> = demoSources;
+
 export default async function ComponentPage(props: PageProps<'/components/[id]'>) {
+  const { id } = await props.params;
+  if (MOVED[id]) return <Moved id={id} />;
   const e = await resolve(props);
   const lead = (e.native ?? e.web)!;
   const at = CATALOGUE.indexOf(e);
@@ -63,20 +79,19 @@ export default async function ComponentPage(props: PageProps<'/components/[id]'>
     <DocsPage full className="*:mx-auto *:w-full">
       <p className="text-fd-muted-foreground text-sm">{group.label}</p>
       <DocsTitle>{e.title}</DocsTitle>
-      <div className="not-prose -mt-1 flex flex-wrap items-center gap-2">
-        <KitBadges sides={e.sides} size="md" />
-        {e.counterparts.map((cp) => (
-          <Link key={cp.id} href={entryUrl(cp.id)} className="text-fd-muted-foreground text-sm underline underline-offset-4">
-            {SIDE_LABEL[cp.side]}: {cp.title}
-          </Link>
-        ))}
-      </div>
       <DocsDescription className="mb-0">
         <InlineMd text={lead.notes || lead.caption || ''} />
       </DocsDescription>
       <DocsBody>
+        {/* One panel per kit; the switch in the first preview's header picks one (design/navigation-wireframes.md). */}
         <div className="not-prose">
-          <KitPanels panels={Object.fromEntries(e.sides.map((side) => [side, <Panel key={side} side={side} e={e} c={e[side]!} />]))} />
+          {e.sides.map((side) => (
+            <KitPanel key={side} side={side} sides={e.sides}>
+              {e.parts[side].map((c, i) => (
+                <Part key={c.id} side={side} e={e} c={c} kitSwitch={i === 0 ? <KitSwitch sides={e.sides} counterparts={e.counterparts} /> : undefined} />
+              ))}
+            </KitPanel>
+          ))}
         </div>
 
         <nav aria-label="More components" className="not-prose mt-12 flex justify-between gap-4 text-sm">
@@ -101,14 +116,39 @@ export default async function ComponentPage(props: PageProps<'/components/[id]'>
   );
 }
 
-/** One kit's version of a component: the live preview, then usage, API, how to get it and the details. */
-function Panel({ side, e, c }: { side: Side; e: Entry; c: KitComponent }) {
+/** A merged component's old page: on to its block on the merged one. */
+function Moved({ id }: { id: string }) {
+  const e = getEntry(MOVED[id].split('#')[0])!;
+  return (
+    <DocsPage full className="*:mx-auto *:w-full">
+      <MovedTo to={movedUrl(id)} />
+      <DocsTitle>{e.title}</DocsTitle>
+      <DocsDescription>
+        This component is now part of{' '}
+        <Link href={movedUrl(id)} className="text-fd-foreground underline underline-offset-4">
+          {e.title}
+        </Link>
+        …
+      </DocsDescription>
+    </DocsPage>
+  );
+}
+
+/**
+ * One kit component: its preview block (Preview | Code), then usage, API, how to get it and the details. A merged
+ * entry has several on a side (Chart's Line, Bar and Donut chart): each gets its own heading, and its parts drop a
+ * level.
+ */
+function Part({ side, e, c, kitSwitch }: { side: Side; e: Entry; c: KitComponent; kitSwitch?: React.ReactNode }) {
   const platform = PLATFORM_OF[side];
   const k = kits[platform];
   const item = registryItemFor(platform, c);
   const ours = c.install?.startsWith(`${k.namespace}/`) ?? false;
   const demo = `${k.componentsRoute}?section=${c.id}`;
-  const label = `${e.title} (${SIDE_LABEL[side]}), live preview`;
+  const label = `${c.title} (${SIDE_LABEL[side]}), live preview`;
+  const several = e.parts[side].length > 1;
+  const H = several ? 'h3' : 'h2';
+  const heading = several ? 'mb-2 text-base font-semibold' : 'mb-2 text-lg font-semibold';
 
   let preview: React.ReactNode;
   if (c.preview === false) {
@@ -116,28 +156,25 @@ function Panel({ side, e, c }: { side: Side; e: Entry; c: KitComponent }) {
   } else if (side === 'native' && SCREEN_LEVEL.has(c.id)) {
     // A whole-screen component reads as one only on a screen.
     preview = (
-      <div className="border-border bg-muted-subtle flex justify-center rounded-xl border p-6">
+      <div className="border-border bg-muted-subtle flex justify-center rounded-2xl border p-6">
         <PhoneFrame path={demo} title={label} width={300} />
       </div>
     );
   } else {
     preview = <KitStage kind={platform} path={demo} title={label} minHeight={stageMinHeight(e)} />;
   }
+  // The Code tab: the kit's demo, else the API snippet, else no tab.
+  const source = DEMO_SOURCE[side][c.id] ?? c.api ?? null;
+  const code = source ? <DynamicCodeBlock options={{ themes: codeThemes }} lang="tsx" code={source} /> : null;
 
   return (
-    <div className="flex flex-col gap-8">
-      <figure className="flex flex-col gap-2">
-        {preview}
-        {c.preview === false ? null : (
-          <figcaption className="text-muted-foreground text-xs">
-            The {SIDE_LABEL[side].toLowerCase()} kit&apos;s real component, live{side === 'native' ? ' in its web build at phone width' : ''}. Follows this site&apos;s theme.
-          </figcaption>
-        )}
-      </figure>
+    <section className="flex flex-col gap-8">
+      {several ? <h2 className="-mb-4 text-lg font-semibold">{c.title}</h2> : null}
+      <PreviewBlock id={partAnchor(side, c.id)} title={several ? 'Preview' : e.title} kitSwitch={kitSwitch} preview={preview} code={code} />
 
       {c.caption ? (
         <section>
-          <h2 className="mb-2 text-lg font-semibold">Usage</h2>
+          <H className={heading}>Usage</H>
           <p className="text-fd-foreground leading-7">
             <InlineMd text={c.caption} />
           </p>
@@ -146,18 +183,18 @@ function Panel({ side, e, c }: { side: Side; e: Entry; c: KitComponent }) {
 
       {c.api ? (
         <section>
-          <h2 className="mb-2 text-lg font-semibold">API</h2>
+          <H className={heading}>API</H>
           <DynamicCodeBlock options={{ themes: codeThemes }} lang="tsx" code={c.api} />
         </section>
       ) : null}
 
       <section>
-        <h2 className="mb-2 text-lg font-semibold">Get it</h2>
+        <H className={heading}>Get it</H>
         <GetIt platform={platform} c={c} ours={ours} replacesUpstream={replacesUpstream(platform, item)} />
       </section>
 
       <section>
-        <h2 className="mb-2 text-lg font-semibold">Details</h2>
+        <H className={heading}>Details</H>
         <dl className="border-border divide-border divide-y rounded-xl border text-sm">
           <Row term="Exports">
             <InlineMd text={c.exports.map((x) => `\`${x}\``).join(', ')} />
@@ -182,7 +219,7 @@ function Panel({ side, e, c }: { side: Side; e: Entry; c: KitComponent }) {
           ) : null}
         </dl>
       </section>
-    </div>
+    </section>
   );
 }
 

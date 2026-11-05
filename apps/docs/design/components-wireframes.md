@@ -1,5 +1,8 @@
 # Components: one catalogue (2026-10-12)
 
+> **Superseded in part (2026-11-05):** the All | Native | Web filter, the sidebar badges, the counterpart links and the
+> Native | Web tabs under the title are gone; see `navigation-wireframes.md` › Round two.
+
 A living contract for the Components section, the home page's sample apps and Screens. Builds that contradict it
 stop and re-check here first. Wireframes: `components-wireframes.html`. Update both in place.
 

@@ -50,12 +50,16 @@ sidebar).
   chips on every row are noise; a page says it once where it matters.
 - **Native | Web is a view of the page.** In the preview header; it switches the preview, code, usage, API, Get it
   and Details; `?kit=` wins; the choice is remembered for the next component.
+- **Index cards are live, so only the name is the link.** The canvas runs the real demo (buttons, fields), and a
+  link can't hold controls; the name and the line under it open the page. The kit draws the cards in its `?tiles=`
+  mode; the docs send each card's line in `lines=`.
 - **Preview | Code** sits beside it. Code is the kit's real demo source (the devkit demo function), with copy; where
   a demo isn't a named function it falls back to the API snippet.
 - **The Components sidebar starts with Overview**, a normal row, then the groups. Group titles have no counts.
 - **Merged entries.** The same component under another name in the other kit is one entry: Chart (native Line,
-  Bar, Donut chart + web Chart) and Page header (native Screen header + web Page header). Old slugs redirect to the
-  merged page. Native Option sheet and Action sheet stay native-only (web has Sheet and Drawer, different patterns);
+  Bar, Donut chart + web Chart) and Page header (native Screen header + web Page header). Old slugs (`line-chart`, `bar-chart`,
+  `donut-chart`, `screen-header`) are static pages that send you on to the block (`#native-line-chart`), from
+  `MOVED` in `lib/catalogue.ts`. Native Option sheet and Action sheet stay native-only (web has Sheet and Drawer, different patterns);
   their page says what to use on web.
 - **Studio's groups.** Foundations (Brand, Colours, Typography, Corners, Shadows, Borders, Controls) are anchors on
   one page with a scroll spy; the old Foundations "Components" section is called **Controls** so the sidebar never

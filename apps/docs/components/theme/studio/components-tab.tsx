@@ -1,6 +1,7 @@
 'use client';
 import { XIcon } from 'lucide-react';
 import * as React from 'react';
+import { storedKit } from '@/components/kit-availability';
 import { GroupTiles, hasTile } from '@/components/kit-tiles';
 import { Segmented } from '@/components/theme/studio/section';
 import { CATALOGUE, GROUPS, type Entry, type GroupId, type Side } from '@/lib/catalogue';
@@ -20,11 +21,11 @@ export type ComponentsView = { group: GroupId | null; kit: Side; uses: string | 
 const KIT_PARAM: Record<Side, string> = { web: 'web', native: 'mobile' };
 const KIT_LABEL: Record<Side, string> = { web: 'Web', native: 'Mobile' };
 
-/** The view in a URL's query; the kit defaults to the site's Native/Web filter, else Web. */
+/** The view in a URL's query; the kit defaults to the one last picked on a component page, else Web. */
 export function readView(params: URLSearchParams): ComponentsView {
   const g = params.get('group');
   const k = params.get('kit');
-  const site = document.documentElement.dataset.kitFilter;
+  const site = storedKit();
   return {
     group: GROUPS.some((x) => x.id === g) ? (g as GroupId) : null,
     kit: k === 'mobile' || k === 'native' ? 'native' : k === 'web' ? 'web' : site === 'native' ? 'native' : 'web',

@@ -47,12 +47,25 @@ const WEB_ONLY = new Set(['app-shell', 'navigation-menu', 'breadcrumb', 'paginat
 /** Scaffolding, not product components. */
 const HIDDEN = new Set(['kit-chip']);
 
-/** The same idea under another name in the other kit: cross-linked, not merged. */
+/**
+ * One component under different names in the two kits: one entry, one page (design/navigation-wireframes.md ›
+ * Round two). A side may hold several kit components (Chart's native side is Line, Bar and Donut chart); the page
+ * shows one preview per component. The old slugs redirect to the merged page (MOVED, scripts/build-docs.mjs).
+ */
+const MERGES: { id: string; title: string; group: GroupId; native: string[]; web: string[] }[] = [
+  { id: 'chart', title: 'Chart', group: 'data', native: ['line-chart', 'bar-chart', 'donut-chart'], web: ['chart'] },
+  { id: 'page-header', title: 'Page header', group: 'navigation', native: ['screen-header'], web: ['page-header'] },
+];
+
+/** Old component slugs → where they live now (`<entry>#<side>-<kit id>`). */
+export const MOVED: Record<string, string> = Object.fromEntries(
+  MERGES.flatMap((m) =>
+    (['native', 'web'] as const).flatMap((side) => m[side].filter((id) => id !== m.id).map((id) => [id, `${m.id}#${side}-${id}`]))
+  )
+);
+
+/** Close, but not the same component: a one-kit entry says what to reach for in the other kit. */
 const COUNTERPARTS: Record<string, string> = {
-  'line-chart': 'chart',
-  'bar-chart': 'chart',
-  'donut-chart': 'chart',
-  'screen-header': 'page-header',
   'option-sheet': 'drawer',
   'action-sheet': 'drawer',
 };
@@ -68,34 +81,44 @@ export type Entry = {
   id: string;
   title: string;
   group: GroupId;
+  /** The lead kit component on each side (the first of `parts`). */
   native?: KitComponent;
   web?: KitComponent;
+  /** Every kit component on each side: one for most entries, more for a merged one. */
+  parts: Record<Side, KitComponent[]>;
   sides: Side[];
-  /** Differently named counterparts in the other kit, e.g. `{ side: 'web', id: 'chart', title: 'Chart' }`. */
+  /** For a one-kit entry: what to use in the other kit, e.g. `{ side: 'web', id: 'drawer', title: 'Drawer' }`. */
   counterparts: { side: Side; id: string; title: string }[];
 };
 
 function build(): Entry[] {
   const byId = new Map<string, Entry>();
+  const mergedInto = new Map<string, (typeof MERGES)[number]>();
+  for (const m of MERGES) for (const side of SIDES) for (const id of m[side]) mergedInto.set(`${side}:${id}`, m);
   const add = (side: Side, c: KitComponent) => {
     if (HIDDEN.has(c.id)) return;
-    let e = byId.get(c.id);
+    const m = mergedInto.get(`${side}:${c.id}`);
+    const id = m?.id ?? c.id;
+    let e = byId.get(id);
     if (!e) {
-      e = { id: c.id, title: c.title, group: 'actions', sides: [], counterparts: [] };
-      byId.set(c.id, e);
+      e = { id, title: m?.title ?? c.title, group: m?.group ?? 'actions', parts: { native: [], web: [] }, sides: [], counterparts: [] };
+      byId.set(id, e);
     }
-    e[side] = c;
-    e.sides.push(side);
+    e.parts[side].push(c);
+    e[side] ??= c;
+    if (!e.sides.includes(side)) e.sides.push(side);
   };
   for (const c of kits.mobile.components) add('native', c);
   for (const c of kits.web.components) add('web', c);
 
+  const merged = new Set(MERGES.map((m) => m.id));
   for (const e of byId.values()) {
+    e.sides.sort((a, b) => SIDES.indexOf(a) - SIDES.indexOf(b));
+    if (merged.has(e.id)) continue;
     const category = (e.native ?? e.web)!.category as GroupId;
     e.group = NATIVE_ONLY.has(e.id) || category === ('native' as GroupId) ? 'native-only' : WEB_ONLY.has(e.id) ? 'web-only' : category;
-    e.sides.sort((a, b) => SIDES.indexOf(a) - SIDES.indexOf(b));
   }
-  // Counterparts both ways (chart lists line, bar and donut chart).
+  // Counterparts both ways (Drawer lists Option sheet and Action sheet).
   for (const [nativeId, webId] of Object.entries(COUNTERPARTS)) {
     const n = byId.get(nativeId);
     const w = byId.get(webId);
@@ -117,5 +140,9 @@ export const entriesIn = (group: GroupId) => CATALOGUE.filter((e) => e.group ===
 export const getEntry = (id: string) => CATALOGUE.find((e) => e.id === id);
 export const entryUrl = (id: string) => `/components/${id}`;
 export const groupOf = (id: GroupId) => GROUPS.find((g) => g.id === id)!;
-/** `native`, `web` or `native web`: what the sidebar and index filter on. */
-export const sidesAttr = (e: Entry) => e.sides.join(' ');
+/** The entry a kit component belongs to (a merged entry holds components with other ids). */
+export const entryOf = (side: Side, kitId: string) => CATALOGUE.find((e) => e.parts[side].some((c) => c.id === kitId));
+/** "Native · Web", "Native only" or "Web only": the index card's line and the page's preview header. */
+export const availability = (e: Entry) => (e.sides.length > 1 ? e.sides.map((s) => SIDE_LABEL[s]).join(' · ') : `${SIDE_LABEL[e.sides[0]]} only`);
+/** The anchor of one kit component's block on its entry's page. */
+export const partAnchor = (side: Side, kitId: string) => `${side}-${kitId}`;
