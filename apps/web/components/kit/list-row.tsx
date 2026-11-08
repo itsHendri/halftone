@@ -1,7 +1,7 @@
 'use client';
 import { cn } from 'cn';
 import { CheckIcon, ChevronRightIcon } from 'lucide-react';
-import Link from 'next/link';
+import { KitLink } from '@/lib/link';
 import type * as React from 'react';
 
 type Props = {
@@ -70,9 +70,9 @@ export function ListRow({ leading, select, title, subtitle, wrap, value, valueCl
   const interactive = 'hover:bg-accent focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:ring-inset';
   if (href) {
     return (
-      <Link href={href} aria-disabled={disabled} className={cn(base, interactive)}>
+      <KitLink href={href} aria-disabled={disabled} className={cn(base, interactive)}>
         {body}
-      </Link>
+      </KitLink>
     );
   }
   if (onClick) {

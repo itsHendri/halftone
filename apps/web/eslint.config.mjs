@@ -43,6 +43,23 @@ export default defineConfig([
       'halftone/no-alpha-colour': 'error',
     },
   },
+  // Kit components work in any React app: they link through @/lib/link, which the app points at its router once
+  // (KitLinkProvider). A next/link import here would break every app that isn't Next.js.
+  {
+    files: ['components/kit/**'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            { name: 'next/link', message: 'Kit components link with KitLink from @/lib/link, so they work in any React app.' },
+            { name: 'next/navigation', message: 'Kit components read the path with usePathname from @/lib/link, so they work in any React app.' },
+          ],
+          patterns: [{ group: ['next/*', '!next/link', '!next/navigation'], message: 'Kit components must work in any React app: no Next.js imports.' }],
+        },
+      ],
+    },
+  },
   {
     files: CODE,
     ignores: SOURCES,

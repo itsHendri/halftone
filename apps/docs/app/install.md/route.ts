@@ -97,7 +97,22 @@ npm run dev        # http://localhost:3100
    happened, run \`npx shadcn@latest add ${kit.registry.web}/button --overwrite\`.
 5. When shadcn asks to overwrite \`button.tsx\`, \`badge.tsx\` or \`slider.tsx\` with the kit's, answer yes: the kit's
    versions fix colour contrast that kit components rely on.
-6. Kit components link with \`next/link\` (and \`AppShell\` reads \`next/navigation\`), so this path is for Next.js apps.
+6. Links: kit components link through \`@/lib/link\` (it arrives with them). Tell it once to use Next.js's link, in a
+   client component around the app (a component can't be passed from a server layout), or links work as plain
+   \`<a>\` tags that reload the page:
+
+   \`\`\`tsx
+   'use client';
+   import NextLink from 'next/link';
+   import { usePathname } from 'next/navigation';
+   import { KitLinkProvider } from '@/lib/link';
+
+   export function Providers({ children }: { children: React.ReactNode }) {
+     return <KitLinkProvider link={NextLink} usePathname={usePathname}>{children}</KitLinkProvider>;
+   }
+   \`\`\`
+
+   Set it in your own code, not by editing \`lib/link.tsx\`: \`shadcn add --overwrite\` copies kit files again.
 
 **E. Mobile and web on one brand**: \`git clone ${kit.repo}.git\`, \`npm install\` at the root, and work in
 \`apps/mobile\` and \`apps/web\`. \`apps/mobile/tokens/tokens.json\` is the one brand file; \`npm run tokens:sync\`

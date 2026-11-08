@@ -1,5 +1,5 @@
 import { cn } from 'cn';
-import Link from 'next/link';
+import { KitLink } from '@/lib/link';
 
 type Props = {
   children: string;
@@ -16,9 +16,9 @@ export function Footnote({ children, action, className }: Props) {
       <p className="text-muted-foreground text-xs leading-5">{children}</p>
       {action ? (
         action.href ? (
-          <Link href={action.href} className={linkClass}>
+          <KitLink href={action.href} className={linkClass}>
             {action.label}
-          </Link>
+          </KitLink>
         ) : (
           <button type="button" onClick={action.onClick} className={linkClass}>
             {action.label}
