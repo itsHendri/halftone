@@ -3,10 +3,11 @@ title: How it works
 description: One brand on phone and web, built by your agent.
 ---
 
-Halftone is two prototype kits, one for the phone (Expo) and one for the web (Next.js), on one set of design
-tokens, for designers who work with coding agents. Each kit is a working app with three things an agent needs
-and usually lacks: a **registry** of the components that exist, **design tokens** that define the brand, and
-**rules**, enforced by lint, that keep the prototype inside both.
+Halftone is two kits, one for the phone (Expo) and one for the web (Next.js, with components that install into
+any React app), on one set of design tokens, for designers and teams who work with coding agents. Each kit is a
+working app with three things an agent needs and usually lacks: a **registry** of the components that exist,
+**design tokens** that define the brand, and **rules**, enforced by lint, that keep the work inside both. Start
+with a prototype; when it becomes the product, keep building on the same components.
 
 ## The loop
 
@@ -70,8 +71,9 @@ written twice, so the docs, the agent and the code cannot drift apart.
 ## Is it for you?
 
 Halftone is for designers and product people who prototype with a coding agent (Claude Code, Cursor or
-similar) and want the result to run on a phone, in a browser, or both, on their brand. You run a few `npm`
-commands and read what the agent changed; the agent writes the code.
+similar) and want the result to run on a phone, in a browser, or both, on their brand, and for teams that take
+that prototype on into the product. You run a few `npm` commands and read what the agent changed; the agent
+writes the code.
 
 ### What you skip
 
@@ -93,9 +95,10 @@ has done it before:
 
 It is not:
 
-- **A no-code tool.** There is no visual page builder. A prototype is a real Expo or Next.js app that you run
+- **A no-code tool.** There is no visual page builder. A prototype is a real Expo or React app that you run
   and change through your agent. [Studio](/studio) edits the theme, not the screens.
-- **A production starter.** No sign-in, backend, payments or real APIs: prototypes run on mock data, on
-  purpose. One can grow into a product, but the kits don't ship that plumbing.
+- **A backend.** No sign-in, database, payments or hosting: the kits are the front end. Prototypes run on mock
+  data, on purpose; a product brings its own back end and keeps the same components, tokens and checks (each
+  kit's `AGENTS.md` › Using the kit in a real product).
 - **A Figma library.** Tokens export to Figma variables, but the components live in code.
 - **Something you pay for.** Both kits, the tokens package and this site are free and open source.
