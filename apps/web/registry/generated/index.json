@@ -648,7 +648,8 @@
         "next page",
         "paging"
       ],
-      "install": "pagination"
+      "install": "@halftone-web/pagination",
+      "republished": true
     },
     {
       "id": "command",
@@ -674,7 +675,8 @@
         "search",
         "combobox"
       ],
-      "install": "command"
+      "install": "@halftone-web/command",
+      "republished": true
     },
     {
       "id": "menubar",
@@ -1431,7 +1433,8 @@
       ],
       "notes": "a short task on top of the page (an edit form)",
       "api": "<Dialog><DialogTrigger asChild /><DialogContent><DialogHeader><DialogTitle /></DialogHeader>…</DialogContent></Dialog>",
-      "install": "dialog"
+      "install": "@halftone-web/dialog",
+      "republished": true
     },
     {
       "id": "alert-dialog",
@@ -1452,7 +1455,8 @@
       "aliases": [
         "confirm"
       ],
-      "install": "alert-dialog"
+      "install": "@halftone-web/alert-dialog",
+      "republished": true
     },
     {
       "id": "sheet",

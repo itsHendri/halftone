@@ -213,6 +213,12 @@ function Part({ side, e, c, kitSwitch }: { side: Side; e: Entry; c: KitComponent
           {realDeps(item).length ? <Row term="Installs with">{realDeps(item).map(depLabel).join(', ')}</Row> : null}
           {c.aliases?.length ? <Row term="Also searched as">{c.aliases.join(', ')}</Row> : null}
           {c.install && !ours ? <Row term="Upstream">Unchanged from {upstreamName(platform)}; installs from their registry.</Row> : null}
+          {c.republished ? (
+            <Row term="Upstream">
+              Unchanged from {upstreamName(platform)}. The kit publishes its own copy so it brings the kit&apos;s versions of the files it uses; {upstreamName(platform)}&apos;s
+              would replace them.
+            </Row>
+          ) : null}
           {ours && c.install ? (
             <Row term="Registry JSON">
               <a href={`${k.registryPath}/${c.install.slice(k.namespace.length + 1)}.json`} className="font-mono underline underline-offset-4">

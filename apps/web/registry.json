@@ -1049,6 +1049,79 @@
       }
     },
     {
+      "name": "pagination",
+      "type": "registry:ui",
+      "title": "Pagination",
+      "description": "pages of a long list or table · Previous/Next + page links · `isActive` on the current page (Unchanged from shadcn/ui; published by the kit so it uses the kit's versions of the files it imports.)",
+      "dependencies": [
+        "cn@^0.4.0",
+        "lucide-react@^1.52.0"
+      ],
+      "registryDependencies": [
+        "@halftone-web/button",
+        "@halftone-web/kit-setup"
+      ],
+      "files": [
+        {
+          "path": "components/ui/pagination.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/pagination.tsx"
+        }
+      ],
+      "categories": [
+        "navigation"
+      ],
+      "meta": {
+        "exports": [
+          "Pagination",
+          "PaginationContent",
+          "PaginationItem",
+          "PaginationLink",
+          "PaginationPrevious",
+          "PaginationNext",
+          "PaginationEllipsis"
+        ],
+        "api": "<Pagination><PaginationContent><PaginationItem><PaginationPrevious href /></PaginationItem>…</PaginationContent></Pagination>"
+      }
+    },
+    {
+      "name": "command",
+      "type": "registry:ui",
+      "title": "Command",
+      "description": "search-as-you-type list · `CommandDialog` for a ⌘K palette (Unchanged from shadcn/ui; published by the kit so it uses the kit's versions of the files it imports.)",
+      "dependencies": [
+        "cmdk@^1.1.1",
+        "cn@^0.4.0",
+        "lucide-react@^1.52.0"
+      ],
+      "registryDependencies": [
+        "@halftone-web/dialog",
+        "@halftone-web/kit-setup"
+      ],
+      "files": [
+        {
+          "path": "components/ui/command.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/command.tsx"
+        }
+      ],
+      "categories": [
+        "navigation"
+      ],
+      "meta": {
+        "exports": [
+          "Command",
+          "CommandDialog",
+          "CommandInput",
+          "CommandList",
+          "CommandEmpty",
+          "CommandGroup",
+          "CommandItem"
+        ],
+        "api": "<Command><CommandInput /><CommandList><CommandGroup heading><CommandItem /></CommandGroup></CommandList></Command>"
+      }
+    },
+    {
       "name": "menubar",
       "type": "registry:ui",
       "title": "Menubar",
@@ -1939,6 +2012,77 @@
           "Footnote"
         ],
         "api": "<Footnote action?={{label,href|onClick}}>{copy}</Footnote>"
+      }
+    },
+    {
+      "name": "dialog",
+      "type": "registry:ui",
+      "title": "Dialog",
+      "description": "a short task on top of the page (an edit form) (Unchanged from shadcn/ui; published by the kit so it uses the kit's versions of the files it imports.)",
+      "dependencies": [
+        "cn@^0.4.0",
+        "lucide-react@^1.52.0",
+        "radix-ui@^1.7.0"
+      ],
+      "registryDependencies": [
+        "@halftone-web/button",
+        "@halftone-web/kit-setup"
+      ],
+      "files": [
+        {
+          "path": "components/ui/dialog.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/dialog.tsx"
+        }
+      ],
+      "categories": [
+        "overlays"
+      ],
+      "meta": {
+        "exports": [
+          "Dialog",
+          "DialogTrigger",
+          "DialogContent",
+          "DialogHeader",
+          "DialogTitle",
+          "DialogDescription",
+          "DialogFooter",
+          "DialogClose"
+        ],
+        "api": "<Dialog><DialogTrigger asChild /><DialogContent><DialogHeader><DialogTitle /></DialogHeader>…</DialogContent></Dialog>"
+      }
+    },
+    {
+      "name": "alert-dialog",
+      "type": "registry:ui",
+      "title": "Alert dialog",
+      "description": "confirm something destructive · name the action on the button (Unchanged from shadcn/ui; published by the kit so it uses the kit's versions of the files it imports.)",
+      "dependencies": [
+        "cn@^0.4.0",
+        "radix-ui@^1.7.0"
+      ],
+      "registryDependencies": [
+        "@halftone-web/button",
+        "@halftone-web/kit-setup"
+      ],
+      "files": [
+        {
+          "path": "components/ui/alert-dialog.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/alert-dialog.tsx"
+        }
+      ],
+      "categories": [
+        "overlays"
+      ],
+      "meta": {
+        "exports": [
+          "AlertDialog",
+          "AlertDialogTrigger",
+          "AlertDialogContent",
+          "AlertDialogAction",
+          "AlertDialogCancel"
+        ]
       }
     },
     {
