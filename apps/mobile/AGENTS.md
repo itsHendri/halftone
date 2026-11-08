@@ -68,7 +68,8 @@ npx expo run:ios       # build + install the dev client on the simulator (needs 
    `Stack` at it and make it the initial route.
 2. Screens compose ONLY registry components. Screen skeleton, multi-step flow and success patterns
    are in `DESIGN_SYSTEM.md › Patterns`. The sample apps (`app/shop`, `app/habits`, `app/northwind`) are the worked examples; `KitChip` in their root layouts is the way back to the kit.
-3. Mock data lives beside the prototype (`components/<slug>/data.ts`). Never call real APIs.
+3. Mock data lives beside the prototype (`components/<slug>/data.ts`). Never call real APIs. *Why:* a prototype
+   has to run anywhere, for anyone, without accounts or keys. A real product is different (below).
 4. New component needed? Use the `add-component` skill — it must land in the registry and the docs.
 5. Before saying "done": run the `qc-pass` skill (typecheck, lint, `npm run qc:look` on the web build, simulator
    look in both themes).
@@ -77,6 +78,16 @@ npx expo run:ios       # build + install the dev client on the simulator (needs 
    hook (`.claude/settings.json`) lints each file you edit and hands the errors back. A real exception takes
    `// eslint-disable-next-line <rule> -- <reason>`; the reason is required. The hook runs once the folder is
    trusted, from a session started here or at the monorepo root.
+
+## Using the kit in a real product
+
+The kit isn't only for prototypes. When it's the base of a real app:
+
+- **Still the same:** screens compose only registry components, colours come only from the tokens, every screen
+  works in light and dark, and the `qc-pass` skill runs before "done".
+- **Different:** real data and real APIs are fine, and the app's own structure wins over "a prototype lives under
+  its own segment". Point the root `Stack` at the product (rule 1 says how) and remove the samples with
+  `npm run eject-samples`.
 
 ## Workflows
 

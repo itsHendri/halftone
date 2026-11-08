@@ -116,6 +116,30 @@ jobs:
       - name: Registry builds and round-trips
         run: npm run registry:dist && npm run registry:roundtrip
 
+  # The web kit in an app that isn't the kit: tests/react-app (Vite + React Router) set up the way install.md says,
+  # with `halftone-tokens init` from this commit and every kit component from this commit's registry, then built
+  # and opened in Chromium (scripts/react-app-check.mjs). It fails when a kit component starts to need Next.js.
+  react-app:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - name: Chromium for Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Build the web registry
+        run: npm run registry:dist -w apps/web
+
+      - name: The kit works in a Vite + React Router app
+        run: npm run check:react-app
+
   tokens:
     runs-on: ubuntu-latest
     steps:

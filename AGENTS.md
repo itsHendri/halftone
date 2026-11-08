@@ -7,6 +7,7 @@ apps/mobile/    Expo mobile kit. Its AGENTS.md, DESIGN_SYSTEM.md and .claude/ski
 apps/docs/      Docs site (Next + Fumadocs, static export for Cloudflare). Reads apps/mobile; the one app allowed to.
 apps/web/       Web kit: Next.js + shadcn/ui. Its AGENTS.md, DESIGN_SYSTEM.md and .claude/skills are the rules for web work.
 packages/tokens/ @halftone-ds/tokens: the token build (DTCG → NativeWind, Tailwind 4, TS, DESIGN.md, Figma) every app uses.
+tests/react-app/ a plain Vite + React Router app the web kit installs into (npm run check:react-app; CI job react-app).
 kit.json        The kit's name and addresses, read by the generators.
 ```
 
@@ -39,6 +40,9 @@ kit.json        The kit's name and addresses, read by the generators.
 - Anything in a package that should ship needs a changeset: `npx changeset` at the root. Merging to main
   opens a "Version Packages" PR; merging that publishes to npm (`.github/workflows/release.yml`, trusted
   publishing). Never bump package versions by hand, and keep app ranges on the same major.
+- CI's `react-app` job installs the web kit into `tests/react-app` the way install.md tells anyone to (its own
+  `components.json`, `halftone-tokens init` from this commit, every kit component from this commit's registry), builds it
+  and opens it in Chromium. If it fails, a kit component has started to need Next.js, or the install path broke.
 - CI's `extract` job copies apps/mobile out of the repo and runs its checks standalone. If it fails, an app
   has started depending on something outside its folder.
 

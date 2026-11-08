@@ -95,6 +95,10 @@ and never declares it.
 - Brand file (#1, #6): `halftone-tokens init`, which does the install.md stopgap in one command, with an optional theme code.
 - Button swap (#3): publish our own copies of alert-dialog, dialog and pagination so they depend on the kit's button.
 
+**Built (2026-11-08):** #100 the fix-now items, #101 links, #102 `halftone-tokens init` and web fonts, #103 the
+button-safe copies, #104 the any-React-app guide, the real-product rules and CI's `react-app` job. Also found and
+fixed on the way: `Logo` pulled in `lib/embed.ts`, whose `process.env` read broke outside Next.js.
+
 **The options as they were put (kept for the record)**
 - #1 for real: how the registry delivers the whole `tokens.css` (the theme item carries it, a file plus one
   `@import`, or `halftone-tokens init`), and whether adding a component may re-apply the theme.

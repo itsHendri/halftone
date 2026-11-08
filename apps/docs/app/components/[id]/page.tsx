@@ -240,7 +240,7 @@ function replacesUpstream(platform: Platform, item: ReturnType<typeof registryIt
 
 function GetIt({ platform, c, ours, replacesUpstream }: { platform: Platform; c: KitComponent; ours: boolean; replacesUpstream: boolean }) {
   const command = c.install ? `npx shadcn@latest add ${c.install}` : null;
-  const existing = platform === 'mobile' ? 'Existing Expo app' : 'Existing Next.js app';
+  const existing = platform === 'mobile' ? 'Existing Expo app' : 'Existing React app';
   return (
     // Explicit values: Fumadocs builds tab ids from the label and only replaces its first space.
     <Tabs defaultValue="kit">
