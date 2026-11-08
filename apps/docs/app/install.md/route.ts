@@ -66,6 +66,8 @@ npm run dev        # http://localhost:3100
    expect the kit's refined versions.
 5. After every add: \`npx expo install --fix\` (Expo packages to the project's SDK) and \`npx halftone-tokens build\`
    (the registry brings \`lib/theme.ts\` and \`lib/fonts.ts\` with Halftone's default brand; the build puts yours back).
+6. Check: \`npx halftone-tokens doctor\` names anything missing (tokens, \`global.css\`, the preset,
+   \`KitThemeProvider\`, fonts, a stock file over a kit one) and the command that fixes it.
 
 **D. Add kit components to an existing React app** on Tailwind 4: Next.js, Vite, React Router, or any other.
 The steps are the same everywhere; where they differ, the note says so. This also covers a real product, not
@@ -142,6 +144,11 @@ just a prototype.
    \`\`\`
 
    Another router: pass its link component (taking \`href\`) and a hook that returns the current path.
+6. One \`cn\`: kit and shadcn files import it from the \`cn\` package. If the app's \`lib/utils.ts\` has its own
+   (clsx + tailwind-merge, from an older \`shadcn init\`), make it \`export { cn } from 'cn';\` (shadcn's own
+   \`utils\` does that now) and keep any other helpers in the file.
+7. Check: \`npx halftone-tokens doctor\` names anything missing (tokens, stylesheet imports, aliases, dark mode,
+   \`KitLinkProvider\`, a stock shadcn file over a kit one, a second \`cn\`) and the command that fixes it.
 
 **E. Mobile and web on one brand**: \`git clone ${kit.repo}.git\`, \`npm install\` at the root, and work in
 \`apps/mobile\` and \`apps/web\`. \`apps/mobile/tokens/tokens.json\` is the one brand file; \`npm run tokens:sync\`
