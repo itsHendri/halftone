@@ -9,10 +9,10 @@ agents that build only from what the kits ship. Free, open, and run by your own 
 **Plan before building.** Every phase below gets its own plan first, with wireframes when it has UI, and is built
 only once that plan is agreed. Where the UX is still open, the item lists the questions its plan has to answer.
 
-**Where we left off (2026-11-04).** Everything below marked Done is merged on `main`; no work is in flight and no
-pull request is open except Version Packages #90 (`@halftone-ds/tokens` 1.4.0, the Phase 6.1 component properties,
-tint roles and flat fields), which publishes only on the maintainer's go. What comes next is not chosen yet: "The
-thinking beside the screens" was passed over for now, and the candidates are under "Ideas waiting for a decision".
+**Where we left off (2026-11-08).** Everything below marked Done is merged on `main`, and `@halftone-ds/tokens` 1.4.0
+is published (Version Packages #90: the Phase 6.1 component properties, tint roles and flat fields, and
+`halftone-tokens init` for web and Expo apps). What comes next is not chosen yet: "The thinking beside the screens"
+was passed over for now, and the candidates are under "Ideas waiting for a decision".
 
 ## Done: trust and pitch
 
@@ -196,4 +196,4 @@ wording at the top.
 
 - Expo SDK 58: on `chore/sdk-58`, until 58 is stable.
 - Package releases: `RELEASES_ENABLED` is on, so changes to `@halftone-ds/tokens` collect in a Version Packages PR,
-  which publishes only when merged on the maintainer's go. Published so far: 1.0–1.3.2; #90 (1.4.0) is waiting.
+  which publishes only when merged on the maintainer's go. Published so far: 1.0–1.4.0 (1.4.0 on 2026-11-08, #90).
