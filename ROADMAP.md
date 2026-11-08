@@ -111,6 +111,13 @@ layer the `HalftoneSystem` document in `@halftone-ds/tokens`, shipped in 1.3):
 Every rule in both kits' guides and the docs says why, and when to break it (#93; the research behind each rule,
 with sources, is `apps/docs/design/rules-research.md`). New rules are written the same way as they land.
 
+## Planned: the whole brand file for an existing Expo app
+
+The mobile kit's theme item brings colours and radius only, so its parts arrive undersized in someone else's Expo
+app (the gap the web kit had before `halftone-tokens init`). `init` learns Expo: the brand file, `global.css`, a
+Tailwind preset the app adds in one line, `lib/theme.ts` and `lib/fonts.ts`, and a CI check on a plain Expo app.
+Plan: `feedback/2026-11-08-mobile-tokens-plan.md`.
+
 ## Planned, not started: the thinking beside the screens
 
 A prototype keeps its reasoning next to its screens, in both kits. Learned from Design Studio
