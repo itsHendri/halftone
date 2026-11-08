@@ -265,8 +265,8 @@ the tables. Text between `GENERATED` markers is overwritten.
 | Avatar / AvatarImage / AvatarFallback | `components/ui/avatar.tsx` | image with initials fallback |
 | Separator | `components/ui/separator.tsx` | a hairline between groups · prefer spacing |
 | AvatarGroup | `components/kit/avatar-group.tsx` | overlapping avatars + "+N" |
-| ListRow | `components/kit/list-row.tsx` | ONE row · the canonical row · `last` on the final row · `select={{mode,selected}}` makes it a radio/checkbox row |
-| ListGroup | `components/kit/list-group.tsx` | the CONTAINER around rows: title, dividers, footnote, card/plain surface · sets `last` for you |
+| ListRow | `components/kit/list-row.tsx` | ONE row · the canonical row · `last` on the final row · `select={{mode,selected}}` makes it a radio/checkbox row · `wrap` lets long text run onto more lines |
+| ListGroup | `components/kit/list-group.tsx` | the CONTAINER around rows: title, dividers, footnote, card/plain surface · sets `last` for you (wrapping ListRow in your own component? return it as the root, or forward `last`) |
 | IconCircle | `components/kit/icon-circle.tsx` | leading icon well, row scale (≤64px) · `shape` circle/square · `tone` |
 | KeyValueList / SummaryCard | `components/kit/key-value-list.tsx` | label/value rows, optionally in a Card |
 | PercentChange | `components/kit/percent-change.tsx` | signed % with trend icon |

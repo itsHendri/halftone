@@ -274,8 +274,8 @@ App tabs and stacks are Expo Router: `app/(kit)/_layout.tsx` shows the pattern; 
 | AvatarGroup | `components/kit/avatar-group.tsx` | overlapping avatars + "+N" |
 | Badge | `components/ui/badge.tsx` | tag/pill/count · tint with semantic classes |
 | Separator | `components/ui/separator.tsx` | |
-| ListRow | `components/kit/list-row.tsx` | ONE row · the canonical row · `last` on the final row · `select={{mode,selected}}` makes it a radio/checkbox row |
-| ListGroup | `components/kit/list-group.tsx` | the CONTAINER around rows: owns the title, dividers, footnote and card/plain surface · wraps ListRows and sets `last` for you · `variant` card/plain (plain = settings look) |
+| ListRow | `components/kit/list-row.tsx` | ONE row · the canonical row · `last` on the final row · `select={{mode,selected}}` makes it a radio/checkbox row · `wrap` lets long text run onto more lines |
+| ListGroup | `components/kit/list-group.tsx` | the CONTAINER around rows: owns the title, dividers, footnote and card/plain surface · wraps ListRows and sets `last` for you (wrapping ListRow in your own component? forward `last`) · `variant` card/plain (plain = settings look) |
 | IconCircle | `components/kit/icon-circle.tsx` | leading icon well, row scale (≤44px) · `shape` circle/square · `tone` |
 | KeyValueList / SummaryCard | `components/kit/key-value-list.tsx` | label/value rows, optionally in a Card |
 | StatTile | `components/kit/stat-tile.tsx` | KPI tile with delta |

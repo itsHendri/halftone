@@ -278,7 +278,14 @@ export const TWIN_DEMOS: Record<string, ComponentType> = {
   'list-row': () => (
     <div className="w-full max-w-md">
       <ListRow leading={<IconCircle as={PackageIcon} />} title="Order #4821" subtitle="2 items · Delivered" value="£64.00" />
-      <ListRow leading={<IconCircle as={UserIcon} />} title="Ada Marsh" subtitle="Owner" chevron onClick={() => toast('Would open Ada')} last />
+      <ListRow leading={<IconCircle as={UserIcon} />} title="Ada Marsh" subtitle="Owner" chevron onClick={() => toast('Would open Ada')} />
+      <ListRow
+        wrap
+        leading={<IconCircle as={BellIcon} />}
+        title="Send the revised quote to the client before Friday's review"
+        subtitle="They asked for the delivery dates to be split by phase, with the second phase priced separately."
+        last
+      />
     </div>
   ),
   'list-group': () => (

@@ -62,6 +62,9 @@ const upstreamName = (platform: Platform) => (platform === 'mobile' ? 'react-nat
 const depLabel = (d: string) =>
   d.replace(/^https:\/\/reactnativereusables\.com\/r\/nativewind\/(.*)\.json$/, 'rnr/$1').replace(/^https:\/\/ui\.shadcn\.com\/r\/styles\/[^/]+\/(.*)\.json$/, '$1');
 
+/** Real dependencies only: `kit-setup` is a file-less item that carries the install note (registry-build.mjs). */
+const realDeps = (item: { registryDependencies?: string[] } | undefined) => (item?.registryDependencies ?? []).filter((d) => !d.endsWith('/kit-setup'));
+
 /** The kit's demo source for a component (scripts/demo-sources.mjs), if it has a named demo. */
 const DEMO_SOURCE: Record<Side, Record<string, string>> = demoSources;
 
@@ -207,7 +210,7 @@ function Part({ side, e, c, kitSwitch }: { side: Side; e: Entry; c: KitComponent
             ))}
           </Row>
           {item?.dependencies?.length ? <Row term="Packages">{item.dependencies.join(', ')}</Row> : null}
-          {item?.registryDependencies?.length ? <Row term="Installs with">{item.registryDependencies.map(depLabel).join(', ')}</Row> : null}
+          {realDeps(item).length ? <Row term="Installs with">{realDeps(item).map(depLabel).join(', ')}</Row> : null}
           {c.aliases?.length ? <Row term="Also searched as">{c.aliases.join(', ')}</Row> : null}
           {c.install && !ours ? <Row term="Upstream">Unchanged from {upstreamName(platform)}; installs from their registry.</Row> : null}
           {ours && c.install ? (
@@ -226,7 +229,7 @@ function Part({ side, e, c, kitSwitch }: { side: Side; e: Entry; c: KitComponent
 /** True when installing the item also swaps in the kit's versions of upstream files (shadcn asks to overwrite). */
 function replacesUpstream(platform: Platform, item: ReturnType<typeof registryItemFor>) {
   const ns = kits[platform].namespace;
-  return !!item?.registryDependencies?.some((d) => d.startsWith(`${ns}/`) && !d.includes('/lib-') && !d.includes('/hook-') && !d.endsWith('/theme'));
+  return realDeps(item).some((d) => d.startsWith(`${ns}/`) && !d.includes('/lib-') && !d.includes('/hook-') && !d.endsWith('/theme'));
 }
 
 function GetIt({ platform, c, ours, replacesUpstream }: { platform: Platform; c: KitComponent; ours: boolean; replacesUpstream: boolean }) {

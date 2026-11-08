@@ -11,6 +11,11 @@ type Props = {
   select?: { mode: 'radio' | 'checkbox'; selected: boolean };
   title: string;
   subtitle?: string;
+  /**
+   * Let the title and subtitle run onto more lines instead of cutting them to one, and top-align the leading and
+   * trailing content. For rows whose text is the point (a to-do, a note); keep one line for scannable lists.
+   */
+  wrap?: boolean;
   /** Right-aligned value. */
   value?: string;
   valueClassName?: string;
@@ -31,13 +36,13 @@ type Props = {
 };
 
 /** The canonical list row: leading · title/subtitle · value/sublabel or trailing. Never rebuild this inline. */
-export function ListRow({ leading, select, title, subtitle, value, valueClassName, sublabel, sublabelClassName, trailing, chevron, onClick, href, disabled, last, className }: Props) {
+export function ListRow({ leading, select, title, subtitle, wrap, value, valueClassName, sublabel, sublabelClassName, trailing, chevron, onClick, href, disabled, last, className }: Props) {
   const body = (
     <>
       {leading}
       <span className="min-w-0 flex-1">
-        <span className="block truncate font-medium">{title}</span>
-        {subtitle ? <span className="text-muted-foreground block truncate text-sm">{subtitle}</span> : null}
+        <span className={cn('block font-medium', wrap ? 'break-words' : 'truncate')}>{title}</span>
+        {subtitle ? <span className={cn('text-muted-foreground block text-sm', wrap ? 'break-words' : 'truncate')}>{subtitle}</span> : null}
       </span>
       {trailing ??
         (value || sublabel ? (
@@ -60,7 +65,7 @@ export function ListRow({ leading, select, title, subtitle, value, valueClassNam
       {chevron ? <ChevronRightIcon className="text-muted-foreground size-4 shrink-0" aria-hidden /> : null}
     </>
   );
-  const base = cn('flex min-h-14 w-full items-center gap-3 py-3 text-left', !last && 'border-border border-b', disabled && 'pointer-events-none opacity-50', className);
+  const base = cn('flex min-h-14 w-full gap-3 py-3 text-left', wrap ? 'items-start' : 'items-center', !last && 'border-border border-b', disabled && 'pointer-events-none opacity-50', className);
   // No side offset for the hover: the row's divider must line up with the rows around it.
   const interactive = 'hover:bg-accent focus-visible:ring-ring/50 outline-none focus-visible:ring-[3px] focus-visible:ring-inset';
   if (href) {

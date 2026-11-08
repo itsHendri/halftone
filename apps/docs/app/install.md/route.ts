@@ -55,13 +55,49 @@ npm run dev        # http://localhost:3100
 
 **D. Add kit components to an existing Next.js app** that already uses shadcn/ui (Tailwind 4):
 
-1. Add the registry to \`components.json\`:
-   \`"registries": { "${kit.registry.web}": "${site('/r/web/{name}.json')}" }\`
-2. \`npx shadcn@latest add ${kit.registry.web}/theme\` for the kit's colours and radius, then components:
-   \`npx shadcn@latest add ${kit.registry.web}/data-table\`. Components the kit did not change are plain shadcn
-   items (\`npx shadcn@latest add dialog\`).
-3. When shadcn asks to overwrite \`button.tsx\`, \`badge.tsx\` or \`slider.tsx\`, answer yes: the kit's versions
-   fix colour contrast that kit components rely on.
+1. \`components.json\`: the kit is built on **Radix** with the **new-york** style. Write the file yourself rather
+   than running \`shadcn init\`: its presets are not new-york, and \`--defaults\` picks Base UI, which kit components
+   do not work on. Set \`"rsc": false\` if the app has no React Server Components. An app that already has a
+   \`components.json\` on Radix and new-york only needs the \`registries\` entry.
+
+   \`\`\`json
+   {
+     "$schema": "https://ui.shadcn.com/schema.json",
+     "style": "new-york",
+     "rsc": true,
+     "tsx": true,
+     "tailwind": { "config": "", "css": "app/globals.css", "baseColor": "neutral", "cssVariables": true, "prefix": "" },
+     "iconLibrary": "lucide",
+     "aliases": { "components": "@/components", "utils": "@/lib/utils", "ui": "@/components/ui", "lib": "@/lib", "hooks": "@/hooks" },
+     "registries": { "${kit.registry.web}": "${site('/r/web/{name}.json')}" }
+   }
+   \`\`\`
+2. The tokens. Kit components need the kit's whole generated \`tokens.css\` (colours, sizes, type styles, spacing,
+   shadows), not just colours. Build it with \`@halftone-ds/tokens\`:
+
+   \`\`\`bash
+   npm install -D @halftone-ds/tokens
+   npm install tw-animate-css
+   mkdir -p tokens
+   curl -fsSL -o tokens/tokens.json https://raw.githubusercontent.com/${repoPath}/main/apps/web/tokens/tokens.json
+   echo '{ "source": "tokens/tokens.json", "targets": { "shadcn-web": { "out": "app/tokens.css" } } }' > tokens/tokens.config.json
+   npx halftone-tokens build
+   \`\`\`
+
+   Then make the top of \`app/globals.css\` \`@import 'tailwindcss'; @import 'tw-animate-css'; @import './tokens.css';\`
+   and delete the \`:root\`, \`.dark\`, \`@theme\`, \`@layer base\` and \`body\` rules that \`shadcn init\` or
+   \`create-next-app\` wrote: \`tokens.css\` has all of them, and a copy left in \`globals.css\` wins over it. In a new
+   app those three lines are the whole file. Re-brand later with
+   \`npx halftone-tokens theme apply <code>\`. (\`${kit.registry.web}/theme\` is colours and radius only, for a
+   plain shadcn app that wants the brand without kit components.)
+3. Dark mode is a \`.dark\` class on \`<html>\`: next-themes with \`attribute="class"\`, or any code that sets it.
+4. Add plain shadcn items first and kit items last: \`npx shadcn@latest add dialog\`, then
+   \`npx shadcn@latest add ${kit.registry.web}/data-table\`. A plain item that depends on \`button\` (alert-dialog,
+   calendar, pagination, …) brings stock \`button.tsx\` with it and replaces the kit's without a warning. If that
+   happened, run \`npx shadcn@latest add ${kit.registry.web}/button --overwrite\`.
+5. When shadcn asks to overwrite \`button.tsx\`, \`badge.tsx\` or \`slider.tsx\` with the kit's, answer yes: the kit's
+   versions fix colour contrast that kit components rely on.
+6. Kit components link with \`next/link\` (and \`AppShell\` reads \`next/navigation\`), so this path is for Next.js apps.
 
 **E. Mobile and web on one brand**: \`git clone ${kit.repo}.git\`, \`npm install\` at the root, and work in
 \`apps/mobile\` and \`apps/web\`. \`apps/mobile/tokens/tokens.json\` is the one brand file; \`npm run tokens:sync\`

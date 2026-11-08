@@ -355,3 +355,15 @@ test('token usage: which components draw which tokens, from their class strings'
     rmSync(root, { recursive: true, force: true });
   }
 });
+
+test('--help prints the usage and exits 0; an unknown command points to it', () => {
+  for (const args of [['--help'], ['-h'], ['help'], ['build', '--help']]) {
+    const r = runCli(args);
+    assert.equal(r.status, 0, `${args.join(' ')}: ${r.stderr}`);
+    assert.match(r.stdout, /^halftone-tokens: turns tokens\/tokens\.json/);
+    assert.match(r.stdout, /theme apply <code\|preset\|file\.halftone\.json>/);
+  }
+  const unknown = runCli(['nope']);
+  assert.equal(unknown.status, 2);
+  assert.match(unknown.stderr, /halftone-tokens --help/);
+});

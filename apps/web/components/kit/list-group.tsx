@@ -13,14 +13,18 @@ type Props = {
   className?: string;
 };
 
-/** A group of ListRows with the divider bookkeeping handled: it sets `last` on the final row. */
+/**
+ * A group of ListRows with the divider bookkeeping handled: it sets `last` on the final row, and drops the last
+ * child's divider in CSS too. Wrapping ListRow in your own component? Return the ListRow itself as the root (the
+ * CSS finds it) or forward `last` to it: the prop only reaches direct children.
+ */
 export function ListGroup({ title, footnote, variant = 'card', children, className }: Props) {
   const items = React.Children.toArray(children).filter(React.isValidElement);
   const rows = items.map((child, i) => (i === items.length - 1 ? React.cloneElement(child as React.ReactElement<{ last?: boolean }>, { last: true }) : child));
   return (
     <section className={cn('flex flex-col gap-3', className)}>
       {title ? <h3 className="type-large">{title}</h3> : null}
-      {variant === 'card' ? <Card className="w-full gap-0 px-4 py-0">{rows}</Card> : <div className="w-full">{rows}</div>}
+      {variant === 'card' ? <Card className="w-full gap-0 px-4 py-0 *:last:border-b-0">{rows}</Card> : <div className="w-full *:last:border-b-0">{rows}</div>}
       {footnote ? <p className="text-muted-foreground text-xs leading-5">{footnote}</p> : null}
     </section>
   );

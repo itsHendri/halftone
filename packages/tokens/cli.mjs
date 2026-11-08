@@ -7,6 +7,7 @@
  *   halftone-tokens figma    mirror the tokens into Figma Variables (see push-figma.mjs)
  *   halftone-tokens theme    apply, show or list themes (see lib/theme-cli.mjs)
  *   halftone-tokens --version
+ *   halftone-tokens --help   (USAGE below)
  *
  *   --root <dir>        app root (default: cwd); every path in the config is relative to it
  *   --config <file>     default: tokens/tokens.config.json
@@ -27,6 +28,27 @@ import { scanTintText } from './lib/scan.mjs';
 import { loadTokens } from './lib/resolve.mjs';
 
 const here = dirname(fileURLToPath(import.meta.url));
+
+/** What `halftone-tokens --help` prints. Keep it in step with the comment at the top of this file. */
+export const USAGE = `halftone-tokens: turns tokens/tokens.json into everything an app reads.
+
+Usage: halftone-tokens <command> [options]
+
+Commands:
+  build              resolve, check contrast, write every target in tokens.config.json (the default)
+  check              the same, but write nothing; exit 1 if a generated file is stale (for CI)
+  theme              apply, show or list themes: halftone-tokens theme apply <code|preset|file.halftone.json>
+  figma              mirror the tokens into Figma Variables
+  --version          print the version
+  --help             print this
+
+Options:
+  --root <dir>       app root (default: the current folder); every path in the config is relative to it
+  --config <file>    default: tokens/tokens.config.json
+  --strict           fail on contrast below WCAG AA instead of warning (or HALFTONE_STRICT=1)
+
+tokens.config.json: { "source": "tokens/tokens.json", "targets": { "<target>": { ...options } } }
+Docs: https://halftonedesignsystem.com/install.md`;
 
 /** Flags that take a value; every other --flag is a boolean. */
 const VALUE_FLAGS = new Set(['root', 'config', 'out', 'fonts-url']);
@@ -49,6 +71,10 @@ export async function run(argv = process.argv.slice(2)) {
     console.log(JSON.parse(readFileSync(join(here, 'package.json'), 'utf8')).version);
     return;
   }
+  if (command === '--help' || command === '-h' || command === 'help' || flags.help) {
+    console.log(USAGE);
+    return;
+  }
   const root = resolve(flags.root ?? process.cwd());
 
   if (command === 'figma') {
@@ -57,7 +83,7 @@ export async function run(argv = process.argv.slice(2)) {
     return;
   }
   if (command !== 'build' && command !== 'check' && command !== 'theme') {
-    console.error(`halftone-tokens: unknown command "${command}". Use build, check, theme or figma.`);
+    console.error(`halftone-tokens: unknown command "${command}". Use build, check, theme or figma (halftone-tokens --help for more).`);
     process.exit(2);
   }
 

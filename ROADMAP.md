@@ -102,6 +102,14 @@ layer the `HalftoneSystem` document in `@halftone-ds/tokens`, shipped in 1.3):
 Every rule in both kits' guides and the docs says why, and when to break it (#93; the research behind each rule,
 with sources, is `apps/docs/design/rules-research.md`). New rules are written the same way as they land.
 
+## Planned: the web kit in any React app
+
+From the first real install (Hendri's workspace dashboard, Vite + React Router on Cloudflare Workers): the web kit
+works in any React app, for prototypes and real products. Links go through one place the app sets, the brand file
+arrives with `halftone-tokens init`, and the kit publishes its own copies of the shadcn parts that would otherwise
+swap its button. A CI job builds the kit into a small Vite app. Plan: `feedback/2026-11-08-any-react-app-plan.md`
+(the app sets its link once, in its own code). Feedback: `feedback/2026-11-06-workspace-install.md`.
+
 ## Planned, not started: the thinking beside the screens
 
 A prototype keeps its reasoning next to its screens, in both kits. Learned from Design Studio
