@@ -26,10 +26,14 @@ type Props = {
 export function AppShell({ brand, nav, footer, topbar, children }: Props) {
   const pathname = usePathname();
   const [open, setOpen] = React.useState(false);
+  // The closest match is the current item: on /dashboard/invoices that's Invoices, not Dashboard as well. A page
+  // under an item but not in the menu (/dashboard/invoices/42) keeps its nearest item lit.
+  const matches = (href: string) => pathname === href || (href !== '/' && pathname.startsWith(`${href}/`));
+  const current = nav.reduce<string | undefined>((best, { href }) => (matches(href) && href.length > (best?.length ?? -1) ? href : best), undefined);
   const links = (
     <nav aria-label="Main" className="flex flex-col gap-1">
       {nav.map(({ href, label, icon: Icon }) => {
-        const active = pathname === href || (href !== '/' && pathname.startsWith(`${href}/`));
+        const active = href === current;
         return (
           <KitLink
             key={href}

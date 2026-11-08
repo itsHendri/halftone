@@ -1,9 +1,10 @@
 # Halftone Design System
 
-One brand on phone and web, built by your agent. Halftone is two prototype kits, Expo and Next.js, on one set
-of design tokens. Hand an agent a brief or a meeting transcript and it builds a working, themed prototype for
-either, composed only from the components the kits ship: no invented components, no stray colours (lint stops
-both), light and dark from day one.
+One brand on phone and web, built by your agent. Halftone is two kits, Expo and Next.js, on one set of design
+tokens; the web kit's components also install into any React app. Hand an agent a brief or a meeting transcript
+and it builds a working, themed prototype for either, composed only from the components the kits ship: no
+invented components, no stray colours (lint stops both), light and dark from day one. When the prototype becomes
+the product, it keeps the same components, tokens and checks.
 
 Where it's going: [ROADMAP.md](./ROADMAP.md).
 

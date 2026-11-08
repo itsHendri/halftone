@@ -124,6 +124,10 @@ try {
     await page.evaluate(() => (window.__kept = true));
     await page.locator('nav').first().getByRole('link', { name: 'Settings' }).click();
     await page.waitForURL(`${base}/settings`);
+    // React Router renders the new route in a transition, a moment after the URL changes.
+    await page
+      .waitForFunction(() => document.querySelector('nav a[aria-current="page"]')?.getAttribute('href') === '/settings', null, { timeout: 5000 })
+      .catch(() => {});
     const after = await page.evaluate(() => ({
       kept: window.__kept === true,
       current: [...document.querySelectorAll('nav a[aria-current="page"]')].map((a) => a.getAttribute('href')),

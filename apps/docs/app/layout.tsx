@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   metadataBase: kit.siteUrl ? new URL(kit.siteUrl) : undefined,
   openGraph: { siteName: kit.fullName },
   description:
-    'Two prototype kits, Expo and Next.js, on one set of design tokens. Hand your agent a brief and it builds a themed, working prototype for phone and web from the components the kits ship.',
+    'Two kits, Expo and web, on one set of design tokens. Hand your agent a brief and it builds a themed, working prototype for phone and web from the components the kits ship, and the product keeps building on the same ones.',
 };
 
 export default function Layout({ children }: LayoutProps<'/'>) {
