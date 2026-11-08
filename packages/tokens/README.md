@@ -6,11 +6,25 @@ and every build checks the palette against WCAG AA.
 
 ```bash
 npm install -D @halftone-ds/tokens
+npx halftone-tokens init       # set up an existing web app (below)
 npx halftone-tokens build      # write every output in tokens/tokens.config.json
 npx halftone-tokens check      # write nothing; exit 1 if an output is stale (CI)
 npx halftone-tokens build --strict   # fail on contrast instead of warning (or HALFTONE_STRICT=1)
 npx halftone-tokens figma      # mirror the tokens into Figma Variables
 ```
+
+## Starting in an existing web app
+
+```bash
+npx halftone-tokens init [--theme <code|preset|file.halftone.json>] [--css <stylesheet>] [--force]
+```
+
+For any React app on Tailwind 4 and shadcn (Next.js, Vite, React Router…). It writes `tokens/tokens.json`
+(Halftone's brand) and a `tokens/tokens.config.json`, applies `--theme` if you give one, and builds `tokens.css`
+and `fonts.css` next to the app's main stylesheet (it looks for `app/globals.css`, `src/index.css`, `src/app.css`
+and a few more, or takes `--css`). Then it adds `@import './fonts.css'` at the top of that stylesheet and
+`@import './tokens.css'` after Tailwind, and names any `:root`, `.dark`, `@theme`, `@layer base` or `body` rules
+there that would override the kit, without deleting them. It refuses to replace existing tokens without `--force`.
 
 ## Inputs
 
@@ -45,6 +59,7 @@ npx halftone-tokens figma      # mirror the tokens into Figma Variables
 | `design-md` | a [DESIGN.md](https://github.com/google-labs-code/design.md) (spec alpha) |
 | `llms` | a tokens section for `llms.txt` |
 | `figma` | the input `halftone-tokens figma` pushes to Figma Variables |
+| `fonts` | the theme's fonts as loading code: `platform: 'expo'` (expo-google-fonts), `'next'` (next/font) or `'web'` (a Google Fonts `@import` and `--kit-font-*`, imported first in the app's stylesheet) |
 
 ## Themes
 
