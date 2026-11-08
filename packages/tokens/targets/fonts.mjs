@@ -4,6 +4,9 @@
  *            the family name expo-font registers for each role and weight (FONT_FAMILY)
  *   options: { platform: 'next', out: 'app/fonts.ts' }   next/font/google, exposing --kit-font-heading,
  *            --kit-font-body and --kit-font-mono (app/tokens.css maps them to font-heading / font-sans / font-mono)
+ *   options: { platform: 'web', out: 'src/fonts.css' }   any other web app: a Google Fonts @import and the same
+ *            --kit-font-* variables. Import it FIRST in the app's stylesheet (before tailwindcss): a CSS @import of
+ *            a URL only works at the very top, and the build hoists it there from the first imported file.
  * An empty family (heading, body) or Menlo (mono) is the platform's own font: nothing to load.
  *
  * A curated font (lib/theme/fonts.mjs) loads the weights it lists; any other Google Fonts family (a system's
@@ -84,8 +87,32 @@ export const fontVariables = [${roles.map(([role]) => `${role}.variable`).join('
 `;
 }
 
+const FALLBACK = { serif: 'serif', mono: 'monospace' };
+
+function web(ctx, fonts) {
+  const roles = [];
+  if (fonts.body) roles.push(['body', fonts.body]);
+  if (fonts.heading && fonts.heading.id !== fonts.body?.id) roles.push(['heading', fonts.heading]);
+  if (fonts.mono) roles.push(['mono', fonts.mono]);
+  if (!roles.length) return `/* ${ctx.header} */\n/* The theme uses the system fonts: nothing to load (tokens.css falls back to the system stacks). */\n`;
+  const families = [...new Map(roles.map(([, f]) => [f.id, f])).values()].map((f) => `family=${f.family.replace(/ /g, '+')}:wght@${f.weights.join(';')}`);
+  const stack = (role, f) => `'${f.family}', ${FALLBACK[role === 'mono' ? 'mono' : f.category] ?? 'sans-serif'}`;
+  return `/* ${ctx.header} */
+/* Import this file first in the app's stylesheet, before tailwindcss: a URL @import only works at the top. */
+@import url('https://fonts.googleapis.com/css2?${families.join('&')}&display=swap');
+
+:root {
+${roles.map(([role, f]) => `  --kit-font-${role}: ${stack(role, f)};`).join('\n')}
+}
+`;
+}
+
+const PLATFORMS = { expo, next, web };
+
 export default function fontsTarget(ctx, options) {
   const fonts = themeFonts(ctx);
-  const contents = options.platform === 'next' ? next(ctx, fonts) : expo(ctx, fonts);
+  const platform = PLATFORMS[options.platform ?? 'expo'];
+  if (!platform) throw new Error(`fonts: unknown platform "${options.platform}" (expo, next or web)`);
+  const contents = platform(ctx, fonts);
   return [{ path: options.out, contents }];
 }
