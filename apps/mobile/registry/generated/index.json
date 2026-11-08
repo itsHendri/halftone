@@ -901,8 +901,8 @@
       "files": [
         "components/kit/list-row.tsx"
       ],
-      "notes": "ONE row · the canonical row · `last` on the final row · `select={{mode,selected}}` makes it a radio/checkbox row",
-      "api": "<ListRow leading title subtitle? value? sublabel? trailing? chevron? onPress? last? />",
+      "notes": "ONE row · the canonical row · `last` on the final row · `select={{mode,selected}}` makes it a radio/checkbox row · `wrap` lets long text run onto more lines",
+      "api": "<ListRow leading title subtitle? wrap? value? sublabel? trailing? chevron? onPress? last? />",
       "caption": "The canonical row. Put rows inside a Card with px-4 py-0; mark the last one `last`.",
       "aliases": [
         "row",
@@ -923,7 +923,7 @@
       "files": [
         "components/kit/list-group.tsx"
       ],
-      "notes": "the CONTAINER around rows: owns the title, dividers, footnote and card/plain surface · wraps ListRows and sets `last` for you · `variant` card/plain (plain = settings look)",
+      "notes": "the CONTAINER around rows: owns the title, dividers, footnote and card/plain surface · wraps ListRows and sets `last` for you (wrapping ListRow in your own component? forward `last`) · `variant` card/plain (plain = settings look)",
       "api": "<ListGroup title? footnote? variant=\"card|plain\">{rows}</ListGroup>",
       "caption": "Wraps ListRows and sets `last` on the final one for you. `plain` drops the card for the settings look; pair with ListRow `select` for radio or checkbox rows.",
       "aliases": [

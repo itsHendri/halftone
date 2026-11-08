@@ -12,6 +12,11 @@ type Props = {
   select?: { mode: 'radio' | 'checkbox'; selected: boolean };
   title: string;
   subtitle?: string;
+  /**
+   * Let the title and subtitle run onto more lines instead of cutting them to one, and top-align the leading and
+   * trailing content. For rows whose text is the point (a to-do, a note); keep one line for scannable lists.
+   */
+  wrap?: boolean;
   /** Right-aligned value. */
   value?: string;
   valueClassName?: string;
@@ -38,6 +43,7 @@ export function ListRow({
   select,
   title,
   subtitle,
+  wrap,
   value,
   valueClassName,
   sublabel,
@@ -53,11 +59,11 @@ export function ListRow({
     <>
       {leading}
       <View className="flex-1">
-        <Text className="font-medium" numberOfLines={1}>
+        <Text className="font-medium" numberOfLines={wrap ? undefined : 1}>
           {title}
         </Text>
         {subtitle ? (
-          <Text className="text-muted-foreground text-sm" numberOfLines={1}>
+          <Text className="text-muted-foreground text-sm" numberOfLines={wrap ? undefined : 1}>
             {subtitle}
           </Text>
         ) : null}
@@ -88,7 +94,7 @@ export function ListRow({
       {chevron ? <Icon as={ChevronRightIcon} className="text-muted-foreground" size={18} /> : null}
     </>
   );
-  const base = cn('min-h-14 flex-row items-center gap-3 py-3', !last && 'border-border border-b', disabled && 'opacity-50', className);
+  const base = cn('min-h-14 flex-row gap-3 py-3', wrap ? 'items-start' : 'items-center', !last && 'border-border border-b', disabled && 'opacity-50', className);
   if (onPress) {
     return (
       <Pressable

@@ -222,10 +222,24 @@ function depsOf(files, self) {
   return { dependencies: [...dependencies].sort(), registryDependencies: [...registryDependencies].sort() };
 }
 
+/**
+ * What every kit component needs from the app, said once: shadcn prints the `docs` of each item it installs, so
+ * the note lives on one file-less item that every component depends on, not on every component.
+ */
+const SETUP = 'kit-setup';
 const INSTALL_NOTE =
-  'Needs the kit theme (`@halftone-web/theme`) and a next-themes ThemeProvider (attribute="class") at the root.';
+  'Kit components need the whole generated tokens.css (colours, sizes, type styles, spacing, shadows), built by ' +
+  '@halftone-ds/tokens: see https://halftonedesignsystem.com/install.md, path D, step 2. The theme item alone is ' +
+  'colours and radius only. Dark mode is a `.dark` class on <html> (next-themes with attribute="class" sets it in Next).';
 
 const items = [];
+items.push({
+  name: SETUP,
+  type: 'registry:item',
+  title: 'Kit setup note',
+  description: 'No files: carries the setup note every kit component needs, so shadcn prints it once per add.',
+  docs: INSTALL_NOTE,
+});
 const theme = JSON.parse(read('tokens/generated/theme.registry.json')).web;
 items.push({
   name: 'theme',
@@ -259,6 +273,12 @@ for (const f of hookFiles) {
   });
 }
 
+/** Every component lists the setup note, so a single add prints it once whatever it pulls in. */
+const withSetup = ({ dependencies, registryDependencies }) => ({
+  dependencies,
+  registryDependencies: [...registryDependencies, `${NS}/${SETUP}`].sort(),
+});
+
 const published = new Set();
 for (const c of COMPONENTS) {
   const file = c.files[0];
@@ -272,10 +292,9 @@ for (const c of COMPONENTS) {
     type,
     title: c.title,
     description: c.notes || firstSentence(c.caption),
-    ...depsOf(c.files, c.id),
+    ...withSetup(depsOf(c.files, c.id)),
     files: c.files.map((path) => ({ path, type, target: path })),
     categories: [c.category],
-    docs: INSTALL_NOTE,
     meta: { exports: c.exports, api: c.api },
   });
 }

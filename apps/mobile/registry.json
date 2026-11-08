@@ -1691,7 +1691,7 @@
       "name": "list-row",
       "type": "registry:component",
       "title": "List row",
-      "description": "ONE row · the canonical row · `last` on the final row · `select={{mode,selected}}` makes it a radio/checkbox row",
+      "description": "ONE row · the canonical row · `last` on the final row · `select={{mode,selected}}` makes it a radio/checkbox row · `wrap` lets long text run onto more lines",
       "dependencies": [
         "lucide-react-native@^1.21.0"
       ],
@@ -1715,14 +1715,14 @@
         "exports": [
           "ListRow"
         ],
-        "api": "<ListRow leading title subtitle? value? sublabel? trailing? chevron? onPress? last? />"
+        "api": "<ListRow leading title subtitle? wrap? value? sublabel? trailing? chevron? onPress? last? />"
       }
     },
     {
       "name": "list-group",
       "type": "registry:component",
       "title": "List group",
-      "description": "the CONTAINER around rows: owns the title, dividers, footnote and card/plain surface · wraps ListRows and sets `last` for you · `variant` card/plain (plain = settings look)",
+      "description": "the CONTAINER around rows: owns the title, dividers, footnote and card/plain surface · wraps ListRows and sets `last` for you (wrapping ListRow in your own component? forward `last`) · `variant` card/plain (plain = settings look)",
       "dependencies": [],
       "registryDependencies": [
         "@halftone-native/card",

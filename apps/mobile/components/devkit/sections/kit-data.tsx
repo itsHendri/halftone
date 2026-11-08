@@ -28,7 +28,14 @@ function ListRowDemo() {
       <ListRow leading={<IconCircle as={BellIcon} />} title="Notifications" subtitle="Push and email" value="On" />
       <ListRow leading={<IconCircle as={UsersIcon} />} title="Members" subtitle="3 pending invites" value="12" sublabel="+2 this week" sublabelClassName="text-success" />
       <ListRow leading={<IconCircle as={CreditCardIcon} />} title="Plan" subtitle="Renews on 1 October" chevron onPress={() => {}} />
-      <ListRow leading={<IconCircle as={FolderIcon} />} title="Shared folder" trailing={<Badge variant="secondary"><Text>New</Text></Badge>} last onPress={() => {}} />
+      <ListRow leading={<IconCircle as={FolderIcon} />} title="Shared folder" trailing={<Badge variant="secondary"><Text>New</Text></Badge>} onPress={() => {}} />
+      <ListRow
+        wrap
+        leading={<IconCircle as={BellIcon} />}
+        title="Send the revised quote to the client before Friday's review"
+        subtitle="They asked for the delivery dates to be split by phase, with the second phase priced separately."
+        last
+      />
     </Card>
   );
 }

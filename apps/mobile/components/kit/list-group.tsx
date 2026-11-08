@@ -18,7 +18,8 @@ type Props = {
 /**
  * A group of `ListRow`s, with the divider bookkeeping handled.
  *
- * It sets `last` on the final row for you, so a mapped list needs no index maths.
+ * It sets `last` on the final row for you, so a mapped list needs no index maths. The prop only reaches direct
+ * children: if you wrap ListRow in your own component, forward `last` to it.
  * `plain` is the settings look: hairline dividers on the background, no card.
  */
 export function ListGroup({ title, footnote, variant = 'card', children, className }: Props) {
