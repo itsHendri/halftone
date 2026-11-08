@@ -14,7 +14,7 @@ import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const SOURCE = 'apps/mobile/tokens/tokens.json';
-const COPIES = ['apps/web/tokens/tokens.json', 'packages/tokens/templates/tokens.json'];
+const COPIES = ['apps/web/tokens/tokens.json', 'apps/vite/tokens/tokens.json', 'packages/tokens/templates/tokens.json'];
 const check = process.argv.includes('--check');
 
 const source = readFileSync(join(root, SOURCE), 'utf8');

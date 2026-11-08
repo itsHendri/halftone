@@ -38,6 +38,15 @@ npm run dev    # http://localhost:3100
 Then rename it, re-brand it and remove the samples: see [Native setup](/docs/mobile) or
 [Web setup](/docs/web).
 
+On Vite and Cloudflare Workers instead of Next.js, a dashboard with an API and the kit's components already in it
+(its `AGENTS.md` is the guide, and `npm run deploy` puts it on Workers):
+
+```bash
+npx giget@latest gh:itsHendri/halftone/apps/vite my-app
+cd my-app && npm install
+npm run dev    # http://localhost:5173, the Worker included
+```
+
 </Tab>
 <Tab value="Existing app">
 

@@ -39,6 +39,14 @@ its own copies of the shadcn parts that would otherwise swap its button; both ki
 real product; and CI's `react-app` job installs the kit into a Vite + React Router app and opens it. Plan:
 `feedback/2026-11-08-any-react-app-plan.md`. Feedback: `feedback/2026-11-06-workspace-install.md`.
 
+## Done: doctor, one cn and a Vite + Workers starter
+
+The rest of the workspace-install feedback. `halftone-tokens doctor` checks an app's setup for kit components (tokens
+built and wired, aliases, the style, a stock shadcn file over a kit one, dark mode, links, fonts) and prints the fix
+for each. The web kit and shadcn now share one `cn` (the `cn` package); an older `lib/utils.ts` is the only second
+copy, and install.md and `doctor` say how to fold it in. `apps/vite` is a dashboard starter on Vite, React Router and
+a Cloudflare Worker, with the kit's components generated from the registry, so it can't drift from the kit.
+
 ## Removed: a brief wizard on the site
 
 Removed on 2026-11-05 (docs nav round two, `apps/docs/design/navigation-wireframes.md`): it was over-built for

@@ -164,6 +164,33 @@ jobs:
       - name: The kit works in a plain Expo app
         run: npm run check:expo-app
 
+  # The Vite + Workers starter (apps/vite): its kit files must be what this commit's registry hands out
+  # (scripts/vite-sync.mjs), and copied out on its own it must pass every gate and run, Worker and all, in Chromium
+  # (scripts/vite-check.mjs).
+  vite:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - name: Chromium for Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Build the web registry
+        run: npm run registry:dist -w apps/web
+
+      - name: The starter's kit files match the registry
+        run: npm run vite:sync -- --check
+
+      - name: The starter works copied out on its own
+        run: npm run check:vite
+
   tokens:
     runs-on: ubuntu-latest
     steps:

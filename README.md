@@ -14,6 +14,7 @@ Where it's going: [ROADMAP.md](./ROADMAP.md).
 |---|---|
 | [`apps/mobile`](./apps/mobile) | **Native kit**: Expo + React Native, NativeWind, react-native-reusables. 101 components, three sample apps (Shop, Habits, Northwind), a live Components page. |
 | [`apps/web`](./apps/web) | **Web kit**: Next.js + shadcn/ui on the same tokens. 96 components for dashboards, marketing pages and AI product UI, five sample apps (Northwind as a dashboard, a landing page and an assistant; Shop; Habits), a live Components page. |
+| [`apps/vite`](./apps/vite) | **Vite + Workers starter**: the web kit on Vite, React Router and a Cloudflare Worker for `/api`. A dashboard (overview, a table, settings) to start an internal tool or a prototype from; its kit components come from the registry. |
 | [`apps/docs`](./apps/docs) | **Docs site**: how it works, setup, every component live in a phone or browser frame. Static, on Cloudflare. |
 
 One token file drives every kit. `tokens.json` (W3C design-token format) builds the CSS variables and

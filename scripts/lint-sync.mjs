@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 /**
  * One set of guardrails across the kits: the halftone/* lint rules and the lint-on-edit hook live in
- * apps/mobile; apps/web keeps copies so it stays self-contained when copied out of the monorepo. The two kits
+ * apps/mobile; apps/web and apps/vite keep copies so they stay self-contained when copied out of the monorepo. The kits
  * differ only in the options their eslint config passes.
  *
- *   npm run lint:sync            copy them to apps/web
+ *   npm run lint:sync            copy them to apps/web and apps/vite
  *   npm run lint:sync -- --check exit 1 if any copy differs (CI)
  */
 import { copyFileSync, existsSync, mkdirSync, readFileSync } from 'node:fs';
@@ -14,7 +14,7 @@ import { fileURLToPath } from 'node:url';
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const FILES = ['eslint/halftone.mjs', 'eslint/halftone.test.mjs', '.claude/hooks/lint-edited.mjs'];
 const FROM = 'apps/mobile';
-const TO = ['apps/web'];
+const TO = ['apps/web', 'apps/vite'];
 const check = process.argv.includes('--check');
 
 const stale = TO.flatMap((app) =>
