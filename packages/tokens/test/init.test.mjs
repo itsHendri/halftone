@@ -140,6 +140,8 @@ test('wirePreset adds the preset next to nativewind/preset, once; another shape 
   assert.equal(wirePreset(wired, './tokens/generated/tailwind.preset'), wired);
   assert.equal(wirePreset('module.exports = { presets: [base, require("nativewind/preset")] };', './x'), null);
   assert.deepEqual(overridingExtends("theme: { extend: { colors: {}, borderRadius: {}, keyframes: {} } }"), ['colors', 'borderRadius']);
+  // A height inside keyframes is an animation, not the theme's heights.
+  assert.deepEqual(overridingExtends("theme: { extend: { keyframes: { up: { from: { height: '0' } } }, 'spacing': { 1: '4px' } } }"), ['spacing']);
 });
 
 test('init in an Expo app: tokens.css imported first, the preset wired, lib/ where @/ points, overrides named', () => {

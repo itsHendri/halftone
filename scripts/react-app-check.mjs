@@ -9,9 +9,11 @@
  * 2. installs the app's pinned packages and the workspace's @halftone-ds/tokens (packed, as npm would ship it);
  * 3. `halftone-tokens init --theme editorial` (a theme with its own fonts, so fonts.css is exercised);
  * 4. `shadcn add` every kit component: the setup note must print once, and the kit's button must survive;
+ *    `halftone-tokens doctor` finds nothing wrong and every kit file matches the registry;
  * 5. `tsc --noEmit && vite build`, then `vite preview` and Playwright: no console errors, the kit's tokens and the
  *    theme's heading font apply, AppShell marks the open page, a kit link navigates without reloading the page,
- *    and the kit's alert dialog opens.
+ *    and the kit's alert dialog opens;
+ * 6. shadcn's stock button over the kit's: doctor must name it and the command that fixes it.
  */
 import { spawn } from 'node:child_process';
 import { cpSync, existsSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync, createReadStream } from 'node:fs';
@@ -89,6 +91,10 @@ try {
   check((added.match(/Kit components need the whole generated tokens\.css/g) ?? []).length === 1, `the setup note printed once for ${names.length} components`);
   check(readFileSync(join(app, 'src/components/ui/button.tsx'), 'utf8').includes('h-(--button-h-md)'), "the kit's button survived (not shadcn's stock one)");
 
+  console.log('\n▸ halftone-tokens doctor');
+  const healthy = await sh('npx', ['halftone-tokens', 'doctor', '--json'], app, { quiet: true }).then((out) => JSON.parse(out.slice(out.indexOf('{'))), (e) => ({ ok: false, results: [{ message: e.message }] }));
+  check(healthy.ok && healthy.results.some((r) => /kit file\(s\) .* match the kit's registry/.test(r.message)), `doctor finds nothing wrong${healthy.ok ? '' : `:\n  ${healthy.results.filter((r) => r.level === 'problem').map((r) => r.message).join('\n  ')}`}`);
+
   console.log('\n▸ tsc --noEmit && vite build');
   await sh('npm', ['run', 'build'], app);
 
@@ -143,6 +149,15 @@ try {
   } finally {
     await browser.close();
   }
+
+  // Last, as it breaks the app: shadcn's stock button over the kit's, the accident install.md warns about.
+  console.log('\n▸ shadcn add button --overwrite (stock), then doctor');
+  await sh('npx', ['-y', SHADCN, 'add', 'button', '--overwrite', '--yes'], app, { quiet: true });
+  const broken = await sh('npx', ['halftone-tokens', 'doctor', '--json'], app, { quiet: true }).then(
+    () => null,
+    (e) => e.message
+  );
+  check(broken !== null && /button\.tsx: shadcn\/ui's stock version replaced the kit's/.test(broken) && broken.includes('@halftone-web/button --overwrite'), "doctor names the stock button and the command that puts the kit's back");
 } catch (error) {
   failures.push(error.message);
   console.error(`\n${error.message}`);
