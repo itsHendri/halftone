@@ -1,0 +1,11 @@
+{
+  "$description": "What `npm run tokens:build` writes, and where. In the Halftone monorepo tokens.json is a copy of apps/mobile's (one brand): edit that one and run `npm run tokens:sync` at the root. Copied out, this is your brand file: edit it, or `npm run theme -- apply <code>`.",
+  "source": "tokens/tokens.json",
+  "scan": ["src"],
+  "targets": {
+    "shadcn-web": { "out": "src/tokens.css" },
+    "fonts": { "platform": "web", "out": "src/fonts.css" },
+    "ts-theme": { "out": "src/lib/theme.ts", "navTheme": false },
+    "design-md": { "out": "DESIGN.md", "name": "Halftone (Vite + Workers)", "platform": "web" }
+  }
+}

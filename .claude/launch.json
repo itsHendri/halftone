@@ -125,6 +125,17 @@
         "127.0.0.1"
       ],
       "port": 8095
+    },
+    {
+      "name": "vite-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": [
+        "run",
+        "dev",
+        "-w",
+        "apps/vite"
+      ],
+      "port": 5173
     }
   ]
 }

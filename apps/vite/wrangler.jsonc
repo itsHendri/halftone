@@ -1,0 +1,15 @@
+// Cloudflare Workers: the built app as static assets, and worker/index.ts for /api. No account in here: `wrangler
+// deploy` asks you to log in, and secrets go in with `wrangler secret put` (locally in .dev.vars, which git ignores).
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "halftone-vite",
+  "main": "./worker/index.ts",
+  "compatibility_date": "2026-11-01",
+  "assets": {
+    // Any path that isn't a file gets index.html, so React Router's routes work on a reload or a shared link.
+    "not_found_handling": "single-page-application",
+    // /api/* reaches the Worker first; everything else is served straight from the assets, without running it.
+    "run_worker_first": ["/api/*"]
+  },
+  "observability": { "enabled": true }
+}

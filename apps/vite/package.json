@@ -1,0 +1,51 @@
+{
+  "name": "halftone-vite",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=22.18"
+  },
+  "scripts": {
+    "dev": "vite --port 5173",
+    "build": "vite build",
+    "preview": "vite preview --port 4173",
+    "deploy": "npm run build && wrangler deploy",
+    "typecheck": "tsc -p tsconfig.app.json && tsc -p tsconfig.worker.json",
+    "lint": "eslint .",
+    "lint:rules": "node --test eslint/*.test.mjs",
+    "tokens:build": "halftone-tokens build",
+    "tokens:check": "halftone-tokens check",
+    "theme": "halftone-tokens theme",
+    "doctor": "halftone-tokens doctor"
+  },
+  "dependencies": {
+    "class-variance-authority": "^0.7.1",
+    "cn": "^0.5.2",
+    "lucide-react": "^1.52.0",
+    "radix-ui": "^1.7.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-router": "^7.18.5",
+    "recharts": "^3.8.0"
+  },
+  "devDependencies": {
+    "@cloudflare/vite-plugin": "^1.67.0",
+    "@cloudflare/workers-types": "^5.20261101.0",
+    "@halftone-ds/tokens": "^1.4.0",
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^26.6.4",
+    "@types/react": "~19.2.10",
+    "@types/react-dom": "~19.2.3",
+    "@vitejs/plugin-react": "^6.2.1",
+    "eslint": "^9.39.5",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "globals": "^17.14.0",
+    "tailwindcss": "^4.3.3",
+    "tw-animate-css": "^1.4.0",
+    "typescript": "~6.0.3",
+    "typescript-eslint": "^8.71.1",
+    "vite": "^8.3.5",
+    "wrangler": "^4.158.0"
+  }
+}
