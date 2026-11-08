@@ -26,7 +26,11 @@ export type Platform = 'mobile' | 'web';
 export const PLATFORMS: Platform[] = ['mobile', 'web'];
 
 type CategoryMeta = Mobile.CategoryMeta | Web.CategoryMeta;
-export type KitComponent = (Mobile.ComponentMeta | Web.ComponentMeta) & { install: string | null };
+export type KitComponent = (Mobile.ComponentMeta | Web.ComponentMeta) & {
+  install: string | null;
+  /** Unchanged from shadcn/ui, but published by the kit so it depends on the kit's versions of what it imports. */
+  republished?: boolean;
+};
 type RegistryItem = { name: string; dependencies?: string[]; registryDependencies?: string[] };
 
 export type KitInfo = {

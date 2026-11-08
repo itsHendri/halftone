@@ -91,9 +91,11 @@ npm run dev        # http://localhost:3100
    \`npx halftone-tokens theme apply <code>\`. (\`${kit.registry.web}/theme\` is colours and radius only, for a
    plain shadcn app that wants the brand without kit components.)
 3. Dark mode is a \`.dark\` class on \`<html>\`: next-themes with \`attribute="class"\`, or any code that sets it.
-4. Add plain shadcn items first and kit items last: \`npx shadcn@latest add dialog\`, then
-   \`npx shadcn@latest add ${kit.registry.web}/data-table\`. A plain item that depends on \`button\` (alert-dialog,
-   calendar, pagination, …) brings stock \`button.tsx\` with it and replaces the kit's without a warning. If that
+4. Add every component the kit lists from the kit: \`npx shadcn@latest add ${kit.registry.web}/data-table
+   ${kit.registry.web}/dialog\`. The kit publishes its own copy of shadcn parts that use a kit file (dialog,
+   alert-dialog, pagination, command), so they bring the kit's button, not shadcn's. Parts the kit doesn't list are
+   plain shadcn items (\`npx shadcn@latest add accordion\`); add those before kit items, because one that depends on
+   \`button\` (carousel, sidebar, …) brings stock \`button.tsx\` and replaces the kit's without a warning. If that
    happened, run \`npx shadcn@latest add ${kit.registry.web}/button --overwrite\`.
 5. When shadcn asks to overwrite \`button.tsx\`, \`badge.tsx\` or \`slider.tsx\` with the kit's, answer yes: the kit's
    versions fix colour contrast that kit components rely on.
