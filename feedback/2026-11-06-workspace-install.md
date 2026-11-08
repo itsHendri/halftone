@@ -63,6 +63,35 @@ What follows is everything that got in the way or needed a workaround, most impo
 - `halftone-tokens --help` answers "unknown command".
 - Two `cn` conventions: kit files import `cn` from the `cn` package, while plain shadcn files import it from `@/lib/utils`. Path D adopters need both. A `lib-utils` item that re-exports from `cn` would tidy this up.
 
+## Building Social and Sites on the kit (same day, later)
+
+The social calendar (a list by day, a month view and a side-panel post editor) and a Sites uptime page were built next, on the same install. New friction:
+
+### 13. No calendar or agenda view
+- A content calendar needs a month grid and a list grouped by day. The list was fine with SectionHeader, ListGroup and ListRow. The month grid had to be composed from Card and raw divs, with its own borders, today marker and event chips.
+- Suggested fix: a `MonthGrid` (or `Agenda`) kit component: day cells, an event chip slot and month navigation. It would also cover bookings and schedules.
+
+### 14. Sheet doesn't work as an edit panel out of the box
+- `SheetContent` caps at `sm:max-w-sm`, which is too narrow for a form. Its body doesn't scroll, and `SheetFooter` isn't sticky, so on a phone the Approve and Save buttons scroll out of reach.
+- Workaround: `className="w-full overflow-y-auto sm:max-w-xl"` on the content, and `sticky bottom-0 bg-background border-t` on the footer.
+- Suggested fix: a `size` prop (sm, md, lg) and a layout with a scrolling body and a pinned footer.
+
+### 15. Alert has only default and destructive
+- The theme ships info, warning and success tokens (`bg-info`, `text-warning-foreground`…), but Alert can't use them. A "Buffer isn't connected yet" notice had to use the default look.
+- Suggested fix: `info`, `warning` and `success` variants.
+
+### 16. Dates without times
+- `DatePicker` picks a date only. Scheduling a post needs a date and a time, so the editor fell back to native `type="date"` and `type="time"` inputs (styled by Input, which works, but it's two different pickers).
+- Suggested fix: a `DateTimePicker`, or a time-slot list fed by suggested times (a brand's best posting times).
+
+### 17. No way to show a data-driven colour
+- Each brand has a colour. The token rules (rightly) ban raw hex in className, and StatusDot only has fixed tones, so the lists can't show which brand a row belongs to by colour.
+- Suggested fix: a `ColorSwatch` (or a `tone` that accepts a value from data) as the one sanctioned place for a data colour.
+
+### 18. No file picker or upload component
+- An Inbox page for photos and videos needed a hidden `<input type="file">`, a Button to open it, a file count and per-file progress. Progress exists; the rest was assembled by hand.
+- Suggested fix: a `FilePicker` (or `Dropzone`) kit component: a button and drop area, accept and multiple, a list of picked files with size, and room for per-file progress or errors.
+
 ## What worked well
 - Once tokens.css was in place, every component looked right first time, in light and dark, at 375px and at desktop width.
 - `AppShell` gave a proper sidebar and a mobile sheet with no extra work.
@@ -110,3 +139,8 @@ fixed on the way: `Logo` pulled in `lib/embed.ts`, whose `process.env` read brok
 **Later**
 - #6 `halftone-tokens init` (after the #1 decision), #11 a `web` fonts platform, #12b a `lib-utils` item,
   the Vite + Workers starter and `halftone-tokens doctor`.
+
+**Not triaged yet (added 2026-11-08)**
+- #13 to #18 came from the same install a few hours later but only reached this copy now: a month grid,
+  Sheet as an edit panel, Alert info, warning and success variants, a date-and-time picker, a colour from data,
+  and a file picker. None of them is in the kit yet.
