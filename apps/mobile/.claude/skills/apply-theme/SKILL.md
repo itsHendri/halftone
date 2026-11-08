@@ -70,7 +70,7 @@ and the component layer, and 1.3.1 lets a kit typecheck once a system with overr
    running dev server must be restarted (`npm run dev`), and Expo Go reloads.
 3. Run the **qc-pass** skill. Look at Foundations (colour, type, radius) and one sample screen in light and
    dark on the simulator.
-4. `git diff --stat`: only `tokens/tokens.json` and generated files (global.css, lib/theme.ts,
+4. `git diff --stat`: only `tokens/tokens.json` and generated files (lib/theme.ts,
    tokens/generated/*, DESIGN.md, lib/fonts.ts) should change,
    plus what `registry:build` writes (apply runs it: DESIGN_SYSTEM.md, llms.txt, registry.json,
    registry/generated/token-usage.json), since which components draw a colour follows the roles a system maps, plus package.json for new fonts.

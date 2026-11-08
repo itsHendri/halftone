@@ -268,7 +268,7 @@ function GetIt({ platform, c, ours, replacesUpstream }: { platform: Platform; c:
               </>
             )}
           </p>
-          <DynamicCodeBlock options={{ themes: codeThemes }} lang="bash" code={platform === 'mobile' ? `${command}\nnpx expo install --fix` : command} />
+          <DynamicCodeBlock options={{ themes: codeThemes }} lang="bash" code={platform === 'mobile' ? `${command}\nnpx expo install --fix\nnpx halftone-tokens build` : command} />
           {replacesUpstream ? (
             <p className="text-muted-foreground mt-3 text-sm">
               Replaces some {upstreamName(platform)} files with the kit&apos;s refined versions; answer yes when asked to

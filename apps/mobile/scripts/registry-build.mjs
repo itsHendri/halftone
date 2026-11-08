@@ -228,7 +228,11 @@ function depsOf(files, self) {
  */
 const SETUP = 'kit-setup';
 const INSTALL_NOTE =
-  'Run `npx expo install --fix` afterwards so Expo SDK packages match your SDK. Needs the kit theme (`@halftone-native/theme`) and `KitThemeProvider` from `@halftone-native/lib-theme-context` at the root.';
+  'Kit components need the whole generated theme (colours, sizes, type styles, spacing, shadows, fonts), set up once with ' +
+  '`npx halftone-tokens init` from @halftone-ds/tokens: see https://halftonedesignsystem.com/install.md, path C. The theme ' +
+  'item alone is colours and radius only. After every add, run `npx expo install --fix` (Expo packages to your SDK) and ' +
+  '`npx halftone-tokens build` (lib/theme.ts and lib/fonts.ts arrive with Halftone\'s default brand). Wrap the root in ' +
+  '`KitThemeProvider` from `@halftone-native/lib-theme-context`.';
 
 const items = [];
 items.push({

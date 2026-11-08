@@ -18,8 +18,9 @@ the why doesn't settle it, ask.
 ## Tokens
 
 Single source of truth: `tokens/tokens.json` (DTCG). `npm run tokens:build` regenerates
-`global.css` (CSS variables), `lib/theme.ts` (TS mirror), `tokens/generated/tailwind.theme.js`, the
-web theme `tokens/generated/web.css` (Tailwind 4 / shadcn, oklch) and `DESIGN.md`.
+`tokens/generated/tokens.css` (CSS variables, imported first by `global.css`), `tokens/generated/tailwind.preset.js`
+(the Tailwind preset `tailwind.config.js` lists), `lib/theme.ts` (TS mirror), the web theme
+`tokens/generated/web.css` (Tailwind 4 / shadcn, oklch) and `DESIGN.md`.
 To re-brand a project, apply a theme (`npx halftone-tokens theme apply <code>`, see the `apply-theme` skill), or change
 `tokens.json` and rebuild.
 
@@ -153,7 +154,7 @@ add `font-heading` to make any Text a heading.
 
 - **Text is `<Text variant>` from `components/ui/text`:** `h1 h2 h3 h4 lead p large small muted code blockquote`.
   Never `Text` from `react-native` in a screen (lint). Each variant is one of the theme's text styles (size, line
-  height, weight, tracking from `--type-<variant>-*` in global.css; font role and weight in `TOKENS.textStyles`).
+  height, weight, tracking from `--type-<variant>-*` in tokens/generated/tokens.css; font role and weight in `TOKENS.textStyles`).
   *Why:* an edited style in tokens.json then changes every use of it, and react-native's `Text` takes none of the
   theme's fonts or colours. *Break it only for* a size no variant fits: `text-xs sm base lg xl 2xl 3xl 4xl` on `<Text>`.
 - **Weights: `font-medium` for row titles, `font-semibold` for headings and values, `font-bold` for the hero amount

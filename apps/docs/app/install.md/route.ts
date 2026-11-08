@@ -44,15 +44,28 @@ cd <project-name> && npm install
 npm run dev        # http://localhost:3100
 \`\`\`
 
-**C. Add kit components to an existing Expo app** that already uses react-native-reusables:
+**C. Add kit components to an existing Expo app** on NativeWind 4 with react-native-reusables:
 
 1. Add the registry to \`components.json\`:
    \`"registries": { "${kit.registry.native}": "${site('/r/native/{name}.json')}" }\`
-2. \`npx shadcn@latest add ${kit.registry.native}/theme ${kit.registry.native}/lib-theme-context\`, wrap the root
-   layout in \`<KitThemeProvider>\`, then add components: \`npx shadcn@latest add ${kit.registry.native}/list-row\`.
-3. When shadcn asks to overwrite a react-native-reusables file (\`text.tsx\`, \`button.tsx\`, …), answer yes or
-   pass \`--overwrite\`: kit components expect the kit's refined versions.
-4. \`npx expo install --fix\` so Expo packages match the project's SDK.
+2. The tokens: the kit's colours, sizes, type styles, spacing, shadows and fonts.
+
+   \`\`\`bash
+   npm install -D @halftone-ds/tokens
+   npx halftone-tokens init            # or: npx halftone-tokens init --theme <code from Studio>
+   \`\`\`
+
+   \`init\` writes \`tokens/\`, builds \`tokens/generated/tokens.css\` (imported first by \`global.css\`) and a Tailwind
+   preset (added to \`tailwind.config.js\` next to \`nativewind/preset\`), and \`lib/theme.ts\` and \`lib/fonts.ts\`. It
+   installs a theme's font packages and lists any \`:root\` / \`.dark:root\` rules in \`global.css\` and any \`colors\`
+   or \`borderRadius\` in \`tailwind.config.js\` that would win over the kit's: delete them.
+3. \`npx shadcn@latest add ${kit.registry.native}/lib-theme-context\`, wrap the root layout in \`<KitThemeProvider>\`,
+   and load the theme's fonts there with \`useFonts(FONT_ASSETS)\` from \`@/lib/fonts\` (expo-font).
+4. Add components: \`npx shadcn@latest add ${kit.registry.native}/list-row\`. When shadcn asks to overwrite a
+   react-native-reusables file (\`text.tsx\`, \`button.tsx\`, …), answer yes or pass \`--overwrite\`: kit components
+   expect the kit's refined versions.
+5. After every add: \`npx expo install --fix\` (Expo packages to the project's SDK) and \`npx halftone-tokens build\`
+   (the registry brings \`lib/theme.ts\` and \`lib/fonts.ts\` with Halftone's default brand; the build puts yours back).
 
 **D. Add kit components to an existing React app** on Tailwind 4: Next.js, Vite, React Router, or any other.
 The steps are the same everywhere; where they differ, the note says so. This also covers a real product, not

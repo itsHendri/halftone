@@ -7,8 +7,9 @@
   ],
   "targets": {
     "nativewind3": {
-      "css": "global.css",
-      "tailwind": "tokens/generated/tailwind.theme.js"
+      "css": "tokens/generated/tokens.css",
+      "partial": true,
+      "preset": "tokens/generated/tailwind.preset.js"
     },
     "ts-theme": {
       "out": "lib/theme.ts",
