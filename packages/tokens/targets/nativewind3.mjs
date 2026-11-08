@@ -1,7 +1,13 @@
 /**
- * NativeWind 4 / Tailwind 3 (shadcn v3 shape): bare HSL triplets in `:root` and `.dark:root`, plus the
- * colour + radius maps tailwind.config.js spreads in.
- *   options: { css: 'global.css', tailwind: 'tokens/generated/tailwind.theme.js' }
+ * NativeWind 4 / Tailwind 3 (shadcn v3 shape): bare HSL triplets in `:root` and `.dark:root`, plus the theme
+ * extension Tailwind needs (colours, radius, sizes, type, shadows…).
+ *   options: { css: 'global.css', tailwind: 'tokens/generated/tailwind.theme.js' }   the whole stylesheet, and the
+ *            extension as a map tailwind.config.js spreads in, key by key
+ *   options: { css: 'tokens/generated/tokens.css', partial: true, preset: 'tokens/generated/tailwind.preset.js' }
+ *            only the variables, for the app's own global.css to import first (`@import './tokens/generated/tokens.css';`
+ *            before `@tailwind base;`: Tailwind's build inlines it, so it reaches native too), and the extension as a
+ *            Tailwind preset the app's tailwind.config.js lists once (`presets: [require('nativewind/preset'),
+ *            require('./tokens/generated/tailwind.preset')]`). `tailwind` and `preset` can both be written.
  */
 import { hexToHslTriplet } from '../lib/color.mjs';
 import { cssName, group, isColor, radiusCss } from '../lib/resolve.mjs';
@@ -49,11 +55,11 @@ function cssBlock(selector, tokens, shape, mode, colors) {
 }
 
 export default function nativewind3(ctx, options) {
+  const directives = options.partial
+    ? '/* Import this file first in global.css, before `@tailwind base;`. */\n'
+    : '@tailwind base;\n@tailwind components;\n@tailwind utilities;\n';
   const css = `/* ${ctx.header} */
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
+${directives}
 @layer base {
 ${cssBlock(':root', ctx.semLight, { ...ctx.shape, styleShape: ctx.shape, textStyles: ctx.textStyles, extras: ctx.extras, components: ctx.components }, 'light', ctx.colors)}
 
@@ -132,9 +138,25 @@ ${cssBlock('.dark:root', ctx.semDark, { styleShape: ctx.shape, extras: ctx.extra
     letterSpacing[`type-${name}`] = `var(--type-${name}-tracking)`;
     fontWeight[`type-${name}`] = `var(--type-${name}-weight)`;
   }
-  const tailwind = `// ${ctx.header}\nmodule.exports = ${JSON.stringify({ colors, borderRadius, borderWidth, boxShadow, height, minHeight: height, width: height, spacing, fontSize, lineHeight, letterSpacing, fontWeight, maxWidth }, null, 2)};\n`;
-  return [
-    { path: options.css, contents: css },
-    { path: options.tailwind, contents: tailwind },
-  ];
+  const extend = { colors, borderRadius, borderWidth, boxShadow, height, minHeight: height, width: height, spacing, fontSize, lineHeight, letterSpacing, fontWeight, maxWidth };
+  const files = [{ path: options.css, contents: css }];
+  if (options.tailwind) files.push({ path: options.tailwind, contents: `// ${ctx.header}\nmodule.exports = ${JSON.stringify(extend, null, 2)};\n` });
+  if (options.preset) {
+    // A preset merges into the app's config: its `extend` adds to the app's own, with the hairline border NativeWind
+    // computes per device.
+    files.push({
+      path: options.preset,
+      contents: `// ${ctx.header}
+// A Tailwind preset: list it in tailwind.config.js after nativewind/preset.
+const { hairlineWidth } = require('nativewind/theme');
+
+const extend = ${JSON.stringify(extend, null, 2)};
+extend.borderWidth.hairline = hairlineWidth();
+
+/** @type {import('tailwindcss').Config} */
+module.exports = { darkMode: 'class', theme: { extend } };
+`,
+    });
+  }
+  return files;
 }

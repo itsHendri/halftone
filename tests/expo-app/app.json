@@ -1,0 +1,10 @@
+{
+  "expo": {
+    "name": "Halftone in an Expo app",
+    "slug": "halftone-expo-app-check",
+    "scheme": "halftonecheck",
+    "userInterfaceStyle": "automatic",
+    "web": { "bundler": "metro", "output": "single" },
+    "plugins": ["expo-router", "expo-font"]
+  }
+}

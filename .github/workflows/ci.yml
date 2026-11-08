@@ -140,6 +140,30 @@ jobs:
       - name: The kit works in a Vite + React Router app
         run: npm run check:react-app
 
+  # The native kit in an app that isn't the kit: tests/expo-app (Expo + NativeWind) set up the way install.md path C
+  # says, with `halftone-tokens init` from this commit and every kit component from this commit's registry, then
+  # exported for the web and opened in Chromium (scripts/expo-app-check.mjs). The native look is checked by hand.
+  expo-app:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+
+      - run: npm ci
+
+      - name: Chromium for Playwright
+        run: npx playwright install --with-deps chromium
+
+      - name: Build the native registry
+        run: npm run registry:dist -w apps/mobile
+
+      - name: The kit works in a plain Expo app
+        run: npm run check:expo-app
+
   tokens:
     runs-on: ubuntu-latest
     steps:

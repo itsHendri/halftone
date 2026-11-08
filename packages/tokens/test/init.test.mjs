@@ -7,7 +7,7 @@ import { dirname, join } from 'node:path';
 import { test } from 'node:test';
 import { fileURLToPath } from 'node:url';
 
-import { overridingRules, TEMPLATE, wireStylesheet } from '../lib/init.mjs';
+import { detectPlatform, overridingExtends, overridingRules, TEMPLATE, wirePreset, wireStylesheet } from '../lib/init.mjs';
 
 const cli = join(dirname(fileURLToPath(import.meta.url)), '..', 'cli.mjs');
 const run = (args) => spawnSync(process.execPath, [cli, ...args], { encoding: 'utf8' });
@@ -112,6 +112,90 @@ test('the fonts target refuses an unknown platform', () => {
     const r = run(['build', '--root', root]);
     assert.notEqual(r.status, 0);
     assert.match(r.stderr, /unknown platform "svelte"/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+/** A throwaway Expo app with NativeWind, set up the way react-native-reusables does it. */
+function expoApp({ config = "module.exports = {\n  darkMode: 'class',\n  presets: [require('nativewind/preset')],\n  theme: { extend: { colors: { background: 'hsl(var(--background))' } } },\n};\n", paths = './*' } = {}) {
+  const root = app('global.css', '@tailwind base;\n@tailwind components;\n@tailwind utilities;\n\n@layer base {\n  :root {\n    --background: 0 0% 100%;\n  }\n  .dark:root {\n    --background: 0 0% 4%;\n  }\n}\n');
+  writeFileSync(join(root, 'package.json'), JSON.stringify({ dependencies: { expo: '~57.0.0', 'expo-router': '~6.0.0', nativewind: '^4.2.0' } }));
+  writeFileSync(join(root, 'tsconfig.json'), JSON.stringify({ compilerOptions: { paths: { '@/*': [paths] } } }));
+  if (config) writeFileSync(join(root, 'tailwind.config.js'), config);
+  return root;
+}
+
+test('detectPlatform: Expo with NativeWind is the native kit; anything else is web', () => {
+  assert.equal(detectPlatform({ dependencies: { expo: '1', nativewind: '4' } }), 'expo');
+  assert.equal(detectPlatform({ dependencies: { expo: '1' } }), 'web');
+  assert.equal(detectPlatform({ dependencies: { next: '16' } }), 'web');
+  assert.equal(detectPlatform(undefined), 'web');
+});
+
+test('wirePreset adds the preset next to nativewind/preset, once; another shape is left alone', () => {
+  const config = "module.exports = { presets: [require('nativewind/preset')], theme: {} };";
+  const wired = wirePreset(config, './tokens/generated/tailwind.preset');
+  assert.match(wired, /presets: \[require\('nativewind\/preset'\), require\('\.\/tokens\/generated\/tailwind\.preset'\)\]/);
+  assert.equal(wirePreset(wired, './tokens/generated/tailwind.preset'), wired);
+  assert.equal(wirePreset('module.exports = { presets: [base, require("nativewind/preset")] };', './x'), null);
+  assert.deepEqual(overridingExtends("theme: { extend: { colors: {}, borderRadius: {}, keyframes: {} } }"), ['colors', 'borderRadius']);
+});
+
+test('init in an Expo app: tokens.css imported first, the preset wired, lib/ where @/ points, overrides named', () => {
+  const root = expoApp();
+  try {
+    const r = run(['init', '--root', root]);
+    assert.equal(r.status, 0, r.stderr);
+    const config = JSON.parse(readFileSync(join(root, 'tokens/tokens.config.json'), 'utf8'));
+    assert.deepEqual(config.targets, {
+      nativewind3: { css: 'tokens/generated/tokens.css', partial: true, preset: 'tokens/generated/tailwind.preset.js' },
+      'ts-theme': { out: 'lib/theme.ts', navTheme: 'expo-router/react-navigation' },
+      fonts: { platform: 'expo', out: 'lib/fonts.ts' },
+    });
+    const tokensCss = readFileSync(join(root, 'tokens/generated/tokens.css'), 'utf8');
+    assert.doesNotMatch(tokensCss, /^@tailwind/m);
+    assert.match(tokensCss, /--button-h-md:/);
+    const preset = readFileSync(join(root, 'tokens/generated/tailwind.preset.js'), 'utf8');
+    assert.match(preset, /require\('nativewind\/theme'\)/);
+    assert.match(preset, /"button-md": "var\(--button-h-md\)"/);
+    assert.ok(existsSync(join(root, 'lib/theme.ts')) && existsSync(join(root, 'lib/fonts.ts')));
+    assert.match(readFileSync(join(root, 'global.css'), 'utf8'), /^@import '\.\/tokens\/generated\/tokens\.css';\n@tailwind base;/);
+    assert.match(readFileSync(join(root, 'tailwind.config.js'), 'utf8'), /require\('\.\/tokens\/generated\/tailwind\.preset'\)/);
+    assert.match(r.stdout, /line 7: :root/);
+    assert.match(r.stdout, /line 10: \.dark:root/);
+    assert.match(r.stdout, /extends colors itself/);
+    assert.match(r.stdout, /run `npx halftone-tokens build`/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('init in an Expo app with src/ and an unusual tailwind config prints the preset line', () => {
+  const root = expoApp({ config: 'module.exports = require("./base.config");\n', paths: './src/*' });
+  try {
+    const r = run(['init', '--root', root, '--theme', 'editorial', '--no-install']);
+    assert.equal(r.status, 0, r.stderr);
+    assert.ok(existsSync(join(root, 'src/lib/theme.ts')));
+    assert.match(readFileSync(join(root, 'src/lib/fonts.ts'), 'utf8'), /@expo-google-fonts\/fraunces/);
+    assert.match(r.stdout, /npx expo install @expo-google-fonts\/fraunces/);
+    assert.match(r.stdout, /Add the kit's preset to tailwind\.config\.js/);
+    assert.equal(readFileSync(join(root, 'tailwind.config.js'), 'utf8'), 'module.exports = require("./base.config");\n');
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test('--platform web in an Expo app takes the web path; an unknown platform is refused', () => {
+  const root = expoApp();
+  try {
+    writeFileSync(join(root, 'src.css'), "@import 'tailwindcss';\n");
+    const r = run(['init', '--root', root, '--platform', 'web', '--css', 'src.css']);
+    assert.equal(r.status, 0, r.stderr);
+    assert.ok(existsSync(join(root, 'tokens.css')));
+    const bad = run(['init', '--root', root, '--platform', 'svelte', '--force']);
+    assert.equal(bad.status, 2);
+    assert.match(bad.stderr, /--platform is web or expo/);
   } finally {
     rmSync(root, { recursive: true, force: true });
   }

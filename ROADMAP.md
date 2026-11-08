@@ -22,6 +22,14 @@ thinking beside the screens" was passed over for now, and the candidates are und
   `--strict` / `HALFTONE_STRICT=1` fails. Halftone's own CI is strict.
 - **The pitch:** "One brand. Phone and web. Built by your agent."
 
+## Done: the whole brand file for an existing Expo app
+
+The mobile kit's theme item brought colours and radius only, so its parts arrived undersized in someone else's Expo
+app. `halftone-tokens init` now sets up an Expo app too: `tokens/generated/tokens.css` imported first by `global.css`
+(Tailwind's build inlines it, so it reaches native), a Tailwind preset added to `tailwind.config.js`, `lib/theme.ts`
+and `lib/fonts.ts`. The kit itself uses the same shape. CI's `expo-app` job installs every phone part into a plain
+Expo app, exports it for the web and opens it. Plan: `feedback/2026-11-08-mobile-tokens-plan.md`.
+
 ## Done: the web kit in any React app
 
 From the first real install (Hendri's workspace dashboard, Vite + React Router on Cloudflare Workers): the web kit
@@ -110,13 +118,6 @@ layer the `HalftoneSystem` document in `@halftone-ds/tokens`, shipped in 1.3):
 
 Every rule in both kits' guides and the docs says why, and when to break it (#93; the research behind each rule,
 with sources, is `apps/docs/design/rules-research.md`). New rules are written the same way as they land.
-
-## Planned: the whole brand file for an existing Expo app
-
-The mobile kit's theme item brings colours and radius only, so its parts arrive undersized in someone else's Expo
-app (the gap the web kit had before `halftone-tokens init`). `init` learns Expo: the brand file, `global.css`, a
-Tailwind preset the app adds in one line, `lib/theme.ts` and `lib/fonts.ts`, and a CI check on a plain Expo app.
-Plan: `feedback/2026-11-08-mobile-tokens-plan.md`.
 
 ## Planned, not started: the thinking beside the screens
 

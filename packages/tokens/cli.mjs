@@ -2,7 +2,7 @@
 /**
  * halftone-tokens — turns tokens/tokens.json into everything an app reads.
  *
- *   halftone-tokens init     set up tokens in an existing web app (see lib/init.mjs)
+ *   halftone-tokens init     set up tokens in an existing app, web or Expo (see lib/init.mjs)
  *   halftone-tokens build    resolve, check contrast, write every target in tokens.config.json
  *   halftone-tokens check    same, but write nothing; exit 1 if any generated file is stale (CI)
  *   halftone-tokens figma    mirror the tokens into Figma Variables (see push-figma.mjs)
@@ -36,8 +36,8 @@ export const USAGE = `halftone-tokens: turns tokens/tokens.json into everything 
 Usage: halftone-tokens <command> [options]
 
 Commands:
-  init               set up Halftone's tokens in an existing web app: tokens/, tokens.css, the stylesheet imports
-                     [--theme <code|preset|file.halftone.json>] [--css <stylesheet>] [--force]
+  init               set up Halftone's tokens in an existing app (any React app, or Expo with NativeWind)
+                     [--theme <code|preset|file.halftone.json>] [--css <stylesheet>] [--platform web|expo] [--force]
   build              resolve, check contrast, write every target in tokens.config.json (the default)
   check              the same, but write nothing; exit 1 if a generated file is stale (for CI)
   theme              apply, show or list themes: halftone-tokens theme apply <code|preset|file.halftone.json>
@@ -54,7 +54,7 @@ tokens.config.json: { "source": "tokens/tokens.json", "targets": { "<target>": {
 Docs: https://halftonedesignsystem.com/install.md`;
 
 /** Flags that take a value; every other --flag is a boolean. */
-const VALUE_FLAGS = new Set(['root', 'config', 'out', 'fonts-url', 'theme', 'css']);
+const VALUE_FLAGS = new Set(['root', 'config', 'out', 'fonts-url', 'theme', 'css', 'platform']);
 
 function parseArgs(argv) {
   const [command = 'build', ...rest] = argv;

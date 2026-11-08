@@ -8,6 +8,7 @@ apps/docs/      Docs site (Next + Fumadocs, static export for Cloudflare). Reads
 apps/web/       Web kit: Next.js + shadcn/ui. Its AGENTS.md, DESIGN_SYSTEM.md and .claude/skills are the rules for web work.
 packages/tokens/ @halftone-ds/tokens: the token build (DTCG → NativeWind, Tailwind 4, TS, DESIGN.md, Figma) every app uses.
 tests/react-app/ a plain Vite + React Router app the web kit installs into (npm run check:react-app; CI job react-app).
+tests/expo-app/  a plain Expo + NativeWind app the native kit installs into (npm run check:expo-app; CI job expo-app).
 kit.json        The kit's name and addresses, read by the generators.
 ```
 

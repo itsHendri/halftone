@@ -6,14 +6,14 @@ and every build checks the palette against WCAG AA.
 
 ```bash
 npm install -D @halftone-ds/tokens
-npx halftone-tokens init       # set up an existing web app (below)
+npx halftone-tokens init       # set up an existing app, web or Expo (below)
 npx halftone-tokens build      # write every output in tokens/tokens.config.json
 npx halftone-tokens check      # write nothing; exit 1 if an output is stale (CI)
 npx halftone-tokens build --strict   # fail on contrast instead of warning (or HALFTONE_STRICT=1)
 npx halftone-tokens figma      # mirror the tokens into Figma Variables
 ```
 
-## Starting in an existing web app
+## Starting in an existing app
 
 ```bash
 npx halftone-tokens init [--theme <code|preset|file.halftone.json>] [--css <stylesheet>] [--force]
@@ -25,6 +25,14 @@ and `fonts.css` next to the app's main stylesheet (it looks for `app/globals.css
 and a few more, or takes `--css`). Then it adds `@import './fonts.css'` at the top of that stylesheet and
 `@import './tokens.css'` after Tailwind, and names any `:root`, `.dark`, `@theme`, `@layer base` or `body` rules
 there that would override the kit, without deleting them. It refuses to replace existing tokens without `--force`.
+
+In an Expo app on NativeWind (`expo` and `nativewind` in `package.json`, or `--platform expo`) it builds
+`tokens/generated/tokens.css`, imported first by `global.css` (Tailwind's build inlines it, so it reaches native),
+and `tokens/generated/tailwind.preset.js`, which it adds to `tailwind.config.js` next to `nativewind/preset` (or
+prints the line, if the config has another shape). `lib/theme.ts` and `lib/fonts.ts` land where the app's `@/lib`
+points. A theme with its own fonts installs their `@expo-google-fonts` packages (`--no-install` prints the command
+instead). After each `npx shadcn add`, run `npx halftone-tokens build`: the registry brings `lib/theme.ts` and
+`lib/fonts.ts` with Halftone's default brand.
 
 ## Inputs
 
@@ -38,7 +46,7 @@ there that would override the kit, without deleting them. It refuses to replace 
   "source": "tokens/tokens.json",
   "scan": ["app", "components"],
   "targets": {
-    "nativewind3": { "css": "global.css", "tailwind": "tokens/generated/tailwind.theme.js" },
+    "nativewind3": { "css": "tokens/generated/tokens.css", "partial": true, "preset": "tokens/generated/tailwind.preset.js" },
     "ts-theme": { "out": "lib/theme.ts", "navTheme": "expo-router/react-navigation" },
     "shadcn-web": { "out": "app/tokens.css" },
     "design-md": { "out": "DESIGN.md", "name": "My Kit" }
@@ -52,7 +60,7 @@ there that would override the kit, without deleting them. It refuses to replace 
 
 | Target | Writes |
 |---|---|
-| `nativewind3` | NativeWind 4 / Tailwind 3 CSS variables (HSL, `:root` + `.dark:root`) and the Tailwind colour + radius map |
+| `nativewind3` | NativeWind 4 / Tailwind 3 CSS variables (HSL, `:root` + `.dark:root`) and the Tailwind theme extension: `css` + `tailwind` (the whole stylesheet and a map to spread), or `css` + `partial: true` + `preset` (variables only, imported first by the app's `global.css`, and a Tailwind preset) |
 | `shadcn-web` | Tailwind 4 / shadcn v4 CSS: oklch variables in `:root` + `.dark`, `@theme inline`, base layer |
 | `ts-theme` | `THEME` (hex per scheme), `TOKENS` (space, radius, type, motion) and an optional React Navigation theme |
 | `registry-theme` | the theme as shadcn registry `cssVars`, native and web |
