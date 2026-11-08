@@ -11,7 +11,7 @@ import { Pressable, ScrollView, View } from 'react-native';
  * The Components page: every component the kit ships, grouped by function, searchable.
  * Deep links (or halftone://components?…):
  *   /components?open=inputs          expand a category
- *   /components?section=list-row     expand its category, scroll to it, tint it briefly
+ *   /components?section=list-row     expand its category, scroll to it, outline it briefly
  *   /components?section=list-row&embed=1   just that demo, no chrome (the docs' previews)
  *   …&autosize=1                             and report its height (kit:size), for a frame sized to it
  */

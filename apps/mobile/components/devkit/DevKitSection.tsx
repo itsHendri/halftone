@@ -5,7 +5,10 @@ import { type LayoutChangeEvent, View } from 'react-native';
 
 type Props = {
   section: Section;
-  /** Tinted, for a deep link that points at this section (?section=<id>). */
+  /**
+   * Outlined, for a deep link that points at this section (?section=<id>). An outline, not a tinted fill: the demo
+   * stays on the background it was designed for, so its text keeps its contrast (primary text on primary-subtle didn't).
+   */
   highlighted?: boolean;
   /** Just the demo, no title or divider: the docs embed shows its own title. */
   bare?: boolean;
@@ -22,7 +25,7 @@ export function DevKitSection({ section, highlighted, bare, onLayout }: Props) {
   return (
     <View
       onLayout={onLayout}
-      className={cn('gap-3 px-5 py-5', !bare && 'border-border border-t', highlighted && 'bg-primary-subtle')}>
+      className={cn('relative gap-3 px-5 py-5', !bare && 'border-border border-t')}>
       {bare ? null : (
         <Text className="text-muted-foreground text-xs font-semibold uppercase tracking-widest">{section.title}</Text>
       )}
@@ -31,6 +34,7 @@ export function DevKitSection({ section, highlighted, bare, onLayout }: Props) {
           <Demo />
         </View>
       </TextClassContext.Provider>
+      {highlighted ? <View className="border-primary pointer-events-none absolute inset-1 rounded-lg border-2" /> : null}
     </View>
   );
 }

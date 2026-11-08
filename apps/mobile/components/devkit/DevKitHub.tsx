@@ -17,11 +17,11 @@ type Props<Id extends string> = {
   searchPlaceholder: string;
   /** Category to open and scroll to on mount (deep links). Everything else starts collapsed. */
   focus?: Id;
-  /** Section to scroll to and tint on mount (?section=<id>); opens its category. */
+  /** Section to scroll to and outline on mount (?section=<id>); opens its category. */
   focusSection?: string;
 };
 
-/** How long a deep-linked section stays tinted. */
+/** How long a deep-linked section stays outlined. */
 const HIGHLIGHT_MS = 2000;
 
 /**
