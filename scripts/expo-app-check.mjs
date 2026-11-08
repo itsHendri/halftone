@@ -11,6 +11,7 @@
  *    lib/fonts.ts loads them; global.css and tailwind.config.js must be wired;
  * 4. `shadcn add` every kit component (the setup note must print once), `npx expo install --fix`, then
  *    `halftone-tokens build`, which must put the app's brand back into lib/fonts.ts;
+ *    `halftone-tokens doctor` finds nothing wrong;
  * 5. `tsc --noEmit` and `expo export --platform web`, served and opened in Chromium: no console errors, the button
  *    takes the kit's height, headings the theme's font, and ?theme=dark switches the surfaces.
  * CI can't run a simulator: the native look is checked by hand (the qc-pass skill).
@@ -96,6 +97,10 @@ try {
   await sh('npx', ['expo', 'install', '--fix'], app, { quiet: true });
   await sh('npx', ['halftone-tokens', 'build'], app);
   check(readFileSync(join(app, 'lib/fonts.ts'), 'utf8').includes('@expo-google-fonts/fraunces'), "halftone-tokens build put the app's fonts back into lib/fonts.ts");
+
+  console.log('\n▸ halftone-tokens doctor');
+  const healthy = await sh('npx', ['halftone-tokens', 'doctor', '--json'], app, { quiet: true }).then((out) => JSON.parse(out.slice(out.indexOf('{'))), (e) => ({ ok: false, results: [{ level: 'problem', message: e.message }] }));
+  check(healthy.ok, `doctor finds nothing wrong${healthy.ok ? '' : `:\n  ${healthy.results.filter((r) => r.level === 'problem').map((r) => r.message).join('\n  ')}`}`);
 
   console.log('\n▸ tsc --noEmit && expo export --platform web');
   await sh('npm', ['run', 'typecheck'], app);

@@ -7,6 +7,7 @@ and every build checks the palette against WCAG AA.
 ```bash
 npm install -D @halftone-ds/tokens
 npx halftone-tokens init       # set up an existing app, web or Expo (below)
+npx halftone-tokens doctor     # check the app's setup for kit components; says how to fix each problem
 npx halftone-tokens build      # write every output in tokens/tokens.config.json
 npx halftone-tokens check      # write nothing; exit 1 if an output is stale (CI)
 npx halftone-tokens build --strict   # fail on contrast instead of warning (or HALFTONE_STRICT=1)
@@ -33,6 +34,28 @@ prints the line, if the config has another shape). `lib/theme.ts` and `lib/fonts
 points. A theme with its own fonts installs their `@expo-google-fonts` packages (`--no-install` prints the command
 instead). After each `npx shadcn add`, run `npx halftone-tokens build`: the registry brings `lib/theme.ts` and
 `lib/fonts.ts` with Halftone's default brand.
+
+## Checking an app
+
+```bash
+npx halftone-tokens doctor [--platform web|expo] [--offline] [--json]
+```
+
+Read-only. It checks what kit components need and prints a fix for each problem (exit 1 if there is one):
+
+- the tokens are set up and every generated file is up to date (after a `shadcn add` in an Expo app, `lib/theme.ts`
+  and `lib/fonts.ts` are not);
+- the stylesheet imports `tokens.css` after Tailwind and `fonts.css` first (web), or `global.css` imports the
+  tokens first and `tailwind.config.js` uses the kit's preset (Expo);
+- `components.json` is on the new-york style, and the `@/` aliases resolve in `tsconfig.json` (and `vite.config.ts`);
+- no kit file in `components/ui` has been replaced by shadcn's or react-native-reusables' stock version: it compares
+  each one with the kit's registry (the URL in `components.json`) and the upstream one, ignoring the imports shadcn
+  rewrites. `--offline` skips this.
+
+It warns, without failing, about rules in the app's own CSS or Tailwind config that win over the kit's, nothing
+setting the `.dark` class, kit links without `KitLinkProvider`, an Expo app without `KitThemeProvider` or
+`useFonts(FONT_ASSETS)`, and a `lib/utils.ts` with its own `cn` (clsx + tailwind-merge) next to the `cn` package
+that kit and shadcn files import. `--json` prints `{ ok, results: [{ level, message, fix }] }` for an agent or CI.
 
 ## Inputs
 

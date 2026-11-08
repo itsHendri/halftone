@@ -100,11 +100,26 @@ export function wirePreset(config, presetSpec) {
   return config.replace(re, (m, q) => `presets: [require(${q}nativewind/preset${q}), require(${q}${presetSpec}${q})]`);
 }
 
-/** Theme keys the app's own tailwind.config.js extends; they win over the preset's. */
+/**
+ * Theme keys the app's own tailwind.config.js extends; they win over the preset's. Only the keys directly inside
+ * `extend`: a `height` inside `keyframes` is an animation, not the theme's heights.
+ */
 export function overridingExtends(config) {
-  const extend = /extend\s*:\s*\{([\s\S]*)/.exec(config)?.[1] ?? '';
+  const start = /extend\s*:\s*\{/.exec(config);
+  if (!start) return [];
+  const direct = new Set();
+  let depth = 1;
+  let token = '';
+  for (let i = start.index + start[0].length; i < config.length && depth > 0; i++) {
+    const c = config[i];
+    if (c === '{' || c === '[' || c === '(') depth++;
+    else if (c === '}' || c === ']' || c === ')') depth--;
+    else if (depth === 1 && c === ':' && token) direct.add(token);
+    if (/[\w'"-]/.test(c)) token += c === "'" || c === '"' ? '' : c;
+    else if (!/\s/.test(c)) token = '';
+  }
   const keys = ['colors', 'borderRadius', 'borderWidth', 'boxShadow', 'fontSize', 'fontFamily', 'height', 'spacing'];
-  return keys.filter((k) => new RegExp(`\\b${k}\\s*:`).test(extend));
+  return keys.filter((k) => direct.has(k));
 }
 
 /** Where `@/lib` points in this app (tsconfig paths), so lib/theme.ts lands where kit components import it. */

@@ -60,6 +60,7 @@ npx shadcn@latest add @halftone-native/lib-theme-context
 npx shadcn@latest add @halftone-native/list-row @halftone-native/sheet
 npx expo install --fix
 npx halftone-tokens build       # after every add: lib/theme.ts and lib/fonts.ts back to your brand
+npx halftone-tokens doctor      # anything missing, and the command that fixes it
 ```
 
 Wrap the root layout in `<KitThemeProvider>` and load the theme's fonts with `useFonts(FONT_ASSETS)` from
@@ -87,6 +88,7 @@ npm install tw-animate-css
 npm install -D @halftone-ds/tokens
 npx halftone-tokens init        # the kit's tokens and fonts, imported into your stylesheet
 npx shadcn@latest add @halftone-web/data-table @halftone-web/approval-card
+npx halftone-tokens doctor      # anything missing, and the command that fixes it
 ```
 
 Then tell kit components once, at your app's root, how your router links: `<KitLinkProvider link={…}
