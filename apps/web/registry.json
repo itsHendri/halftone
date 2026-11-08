@@ -222,6 +222,20 @@
       ]
     },
     {
+      "name": "lib-link",
+      "type": "registry:lib",
+      "title": "lib/link.tsx",
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "lib/link.tsx",
+          "type": "registry:lib",
+          "target": "lib/link.tsx"
+        }
+      ]
+    },
+    {
       "name": "lib-theme",
       "type": "registry:lib",
       "title": "lib/theme.ts",
@@ -348,7 +362,8 @@
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
-        "@halftone-web/kit-setup"
+        "@halftone-web/kit-setup",
+        "@halftone-web/lib-link"
       ],
       "files": [
         {
@@ -943,6 +958,7 @@
       "registryDependencies": [
         "@halftone-web/button",
         "@halftone-web/kit-setup",
+        "@halftone-web/lib-link",
         "sheet"
       ],
       "files": [
@@ -1106,7 +1122,8 @@
         "cn@^0.4.0"
       ],
       "registryDependencies": [
-        "@halftone-web/kit-setup"
+        "@halftone-web/kit-setup",
+        "@halftone-web/lib-link"
       ],
       "files": [
         {
@@ -1379,7 +1396,8 @@
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
-        "@halftone-web/kit-setup"
+        "@halftone-web/kit-setup",
+        "@halftone-web/lib-link"
       ],
       "files": [
         {
@@ -1874,6 +1892,7 @@
       ],
       "registryDependencies": [
         "@halftone-web/kit-setup",
+        "@halftone-web/lib-link",
         "@halftone-web/placeholder"
       ],
       "files": [
@@ -1902,7 +1921,8 @@
         "cn@^0.4.0"
       ],
       "registryDependencies": [
-        "@halftone-web/kit-setup"
+        "@halftone-web/kit-setup",
+        "@halftone-web/lib-link"
       ],
       "files": [
         {

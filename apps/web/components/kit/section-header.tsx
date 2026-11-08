@@ -1,5 +1,5 @@
 import { cn } from 'cn';
-import Link from 'next/link';
+import { KitLink } from '@/lib/link';
 
 type Props = {
   title: string;
@@ -22,9 +22,9 @@ export function SectionHeader({ title, action, onAction, actionHref, level = 2, 
       <Heading className="type-large">{title}</Heading>
       {action ? (
         actionHref ? (
-          <Link href={actionHref} className={actionClass}>
+          <KitLink href={actionHref} className={actionClass}>
             {action}
-          </Link>
+          </KitLink>
         ) : (
           <button type="button" onClick={onAction} className={actionClass}>
             {action}

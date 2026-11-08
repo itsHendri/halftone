@@ -1,13 +1,17 @@
 'use client';
+import NextLink from 'next/link';
+import { usePathname } from 'next/navigation';
 import { ThemeProvider } from 'next-themes';
 import { Toaster } from '@/components/ui/sonner';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import * as React from 'react';
 import { allowedOrigins, type EmbedScheme, readEmbed } from '@/lib/embed';
+import { KitLinkProvider } from '@/lib/link';
 import { applyEmbedTokens, parseEmbedTokens } from '@/lib/embed-theme';
 
 /**
- * next-themes (class on <html>, system by default) plus the docs-site embed bridge. An embedded or
+ * next-themes (class on <html>, system by default), Next.js's link for kit components (lib/link.tsx), plus the
+ * docs-site embed bridge. An embedded or
  * ?theme= session pins the theme with `forcedTheme`, held in state so the host's `kit:theme` messages can
  * move it, and uses its own storage key so the visitor's saved choice is never touched. The bridge also
  * takes the docs picker's live theme (`kit:tokens`, lib/embed-theme.ts).
@@ -24,7 +28,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
       forcedTheme={forced}
       storageKey={embed.embedded || embed.theme ? 'kit.theme.embedded' : 'kit.theme'}>
       {embed.embedded ? <EmbedBridge onTheme={setForced} /> : null}
-      <TooltipProvider>{children}</TooltipProvider>
+      <KitLinkProvider link={NextLink} usePathname={usePathname}>
+        <TooltipProvider>{children}</TooltipProvider>
+      </KitLinkProvider>
       <Toaster />
     </ThemeProvider>
   );

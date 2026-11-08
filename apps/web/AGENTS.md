@@ -41,7 +41,7 @@ components/devkit/      the Components page: demos.tsx keyed by registry id
 components/site/        the kit shell's own chrome (header, theme toggle, providers) and KitChip, a
                         prototype's way back to the kit
 registry/               components.ts: what the kit ships → DESIGN_SYSTEM.md tables, llms.txt, registry.json
-hooks/, lib/            use-reduced-motion · embed (docs iframe mode) · theme.ts (generated)
+hooks/, lib/            use-reduced-motion · link (how kit components link, any router) · embed (docs iframe mode) · theme.ts (generated)
 DESIGN.md, llms.txt     GENERATED agent-facing summaries
 .claude/skills/         add-component, apply-theme, qc-pass, transcript-to-prototype
 .mcp.json               the Next.js DevTools MCP server, for Claude Code started here
@@ -141,6 +141,10 @@ npm run eject-samples -- shop   # just the ones named (northwind = dashboard, la
   display.
 - Anything theme-dependent rendered on the server (an aria-label that names the current theme) mismatches on
   hydration: switch it in CSS (`dark:`) or render it after mount.
+- Kit components link with `KitLink` and read the path with `usePathname`, both from `@/lib/link`, never
+  `next/link` or `next/navigation` (a lint error in `components/kit`). *Why:* the registry ships them to any React
+  app, and the app sets its router once with `KitLinkProvider` in its own code (this kit: `components/site/providers.tsx`),
+  where `shadcn add --overwrite` can't undo it. Pages in `app/` keep using `next/link`.
 - Kit files import each other through `@/components/kit/…`, never `./…`: the registry build refuses relative
   imports because a consumer could not resolve them.
 - Server components cannot import a module that uses client-only hooks; keep server-safe pieces (like the

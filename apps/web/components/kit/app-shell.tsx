@@ -1,8 +1,7 @@
 'use client';
 import { MenuIcon, type LucideIcon } from 'lucide-react';
 import { cn } from 'cn';
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { KitLink, usePathname } from '@/lib/link';
 import * as React from 'react';
 import { Button } from '@/components/ui/button';
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
@@ -32,7 +31,7 @@ export function AppShell({ brand, nav, footer, topbar, children }: Props) {
       {nav.map(({ href, label, icon: Icon }) => {
         const active = pathname === href || (href !== '/' && pathname.startsWith(`${href}/`));
         return (
-          <Link
+          <KitLink
             key={href}
             href={href}
             onClick={() => setOpen(false)}
@@ -43,7 +42,7 @@ export function AppShell({ brand, nav, footer, topbar, children }: Props) {
             )}>
             <Icon className="size-4" aria-hidden />
             {label}
-          </Link>
+          </KitLink>
         );
       })}
     </nav>
