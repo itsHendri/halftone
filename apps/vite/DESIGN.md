@@ -1,0 +1,292 @@
+---
+version: alpha
+name: "Halftone (Vite + Workers)"
+description: "Brand-agnostic prototype kit: shadcn semantics, light and dark, WCAG AA enforced at build time."
+colors:
+  background: "#ffffff"
+  background-dark: "#09090b"
+  foreground: "#09090b"
+  foreground-dark: "#fafafa"
+  card: "#ffffff"
+  card-dark: "#18181b"
+  card-foreground: "#09090b"
+  card-foreground-dark: "#fafafa"
+  popover: "#ffffff"
+  popover-dark: "#18181b"
+  popover-foreground: "#09090b"
+  popover-foreground-dark: "#fafafa"
+  primary: "#2563eb"
+  primary-dark: "#448bff"
+  primary-foreground: "#ffffff"
+  primary-foreground-dark: "#09090b"
+  secondary: "#f4f4f5"
+  secondary-dark: "#27272a"
+  secondary-foreground: "#18181b"
+  secondary-foreground-dark: "#fafafa"
+  muted: "#f4f4f5"
+  muted-dark: "#27272a"
+  muted-foreground: "#52525b"
+  muted-foreground-dark: "#a1a1aa"
+  accent: "#f4f4f5"
+  accent-dark: "#27272a"
+  accent-foreground: "#18181b"
+  accent-foreground-dark: "#fafafa"
+  destructive: "#d92223"
+  destructive-dark: "#fb504e"
+  destructive-foreground: "#ffffff"
+  destructive-foreground-dark: "#09090b"
+  success: "#15803d"
+  success-dark: "#22c55e"
+  success-foreground: "#ffffff"
+  success-foreground-dark: "#09090b"
+  warning: "#b45309"
+  warning-dark: "#fbbf24"
+  warning-foreground: "#ffffff"
+  warning-foreground-dark: "#09090b"
+  info: "#0369a1"
+  info-dark: "#0ea5e9"
+  info-foreground: "#ffffff"
+  info-foreground-dark: "#09090b"
+  border: "#e4e4e7"
+  border-dark: "#27272a"
+  input: "#e4e4e7"
+  input-dark: "#27272a"
+  ring: "#2563eb"
+  ring-dark: "#448bff"
+  sidebar: "#fafafa"
+  sidebar-dark: "#18181b"
+  sidebar-foreground: "#09090b"
+  sidebar-foreground-dark: "#fafafa"
+  sidebar-primary: "#2563eb"
+  sidebar-primary-dark: "#448bff"
+  sidebar-primary-foreground: "#ffffff"
+  sidebar-primary-foreground-dark: "#09090b"
+  sidebar-accent: "#f4f4f5"
+  sidebar-accent-dark: "#27272a"
+  sidebar-accent-foreground: "#18181b"
+  sidebar-accent-foreground-dark: "#fafafa"
+  sidebar-border: "#e4e4e7"
+  sidebar-border-dark: "#27272a"
+  sidebar-ring: "#2563eb"
+  sidebar-ring-dark: "#448bff"
+  chart-1: "#3b82f6"
+  chart-1-dark: "#60a5fa"
+  chart-2: "#22c55e"
+  chart-2-dark: "#4ade80"
+  chart-3: "#f59e0b"
+  chart-3-dark: "#fbbf24"
+  chart-4: "#ef4444"
+  chart-4-dark: "#f87171"
+  chart-5: "#0ea5e9"
+  chart-5-dark: "#38bdf8"
+  button: "#2563eb"
+  button-dark: "#448bff"
+  button-foreground: "#ffffff"
+  button-foreground-dark: "#09090b"
+  button-edge: "#2563eb"
+  button-edge-dark: "#448bff"
+  field: "#e4e4e7"
+  field-dark: "#27272a"
+  field-edge: "#e4e4e7"
+  field-edge-dark: "#27272a"
+  muted-subtle: "#fafafa"
+  muted-subtle-dark: "#18181b"
+  primary-subtle: "#dbeafe"
+  primary-subtle-dark: "#172554"
+  primary-border: "#93c5fd"
+  primary-border-dark: "#1e3a8a"
+  success-subtle: "#dcfce7"
+  success-subtle-dark: "#052e16"
+  success-border: "#86efac"
+  success-border-dark: "#14532d"
+  warning-subtle: "#fef3c7"
+  warning-subtle-dark: "#451a03"
+  warning-border: "#fcd34d"
+  warning-border-dark: "#78350f"
+  destructive-subtle: "#fee2e2"
+  destructive-subtle-dark: "#450a0a"
+  destructive-border: "#fca5a5"
+  destructive-border-dark: "#7f1d1d"
+  info-subtle: "#e0f2fe"
+  info-subtle-dark: "#082f49"
+  info-border: "#7dd3fc"
+  info-border-dark: "#0c4a6e"
+  primary-pressed: "#1d4ed8"
+  primary-pressed-dark: "#60a5fa"
+  secondary-pressed: "#e4e4e7"
+  secondary-pressed-dark: "#3f3f46"
+typography:
+  h1:
+    fontFamily: "system-ui"
+    fontSize: 36px
+    fontWeight: 800
+    lineHeight: 1.1
+    letterSpacing: -0.025em
+  h2:
+    fontFamily: "system-ui"
+    fontSize: 30px
+    fontWeight: 600
+    lineHeight: 1.2
+    letterSpacing: -0.025em
+  h3:
+    fontFamily: "system-ui"
+    fontSize: 24px
+    fontWeight: 600
+    lineHeight: 1.25
+    letterSpacing: -0.025em
+  h4:
+    fontFamily: "system-ui"
+    fontSize: 20px
+    fontWeight: 600
+    lineHeight: 1.3
+    letterSpacing: -0.025em
+  lead:
+    fontFamily: "system-ui"
+    fontSize: 20px
+    fontWeight: 400
+    lineHeight: 1.4
+  large:
+    fontFamily: "system-ui"
+    fontSize: 18px
+    fontWeight: 600
+    lineHeight: 1.4
+  body:
+    fontFamily: "system-ui"
+    fontSize: 16px
+    fontWeight: 400
+    lineHeight: 1.75
+  small:
+    fontFamily: "system-ui"
+    fontSize: 14px
+    fontWeight: 500
+    lineHeight: 1
+  muted:
+    fontFamily: "system-ui"
+    fontSize: 14px
+    fontWeight: 400
+    lineHeight: 1.4
+  code:
+    fontFamily: "Menlo"
+    fontSize: 14px
+    fontWeight: 600
+    lineHeight: 1.4
+rounded:
+  sm: 6px
+  md: 8px
+  lg: 10px
+  xl: 16px
+  2xl: 20px
+  control: 9999px
+  full: 9999px
+spacing:
+  "0": 0px
+  "1": 4px
+  "2": 8px
+  "3": 12px
+  "4": 16px
+  "5": 20px
+  "6": 24px
+  "8": 32px
+  "10": 40px
+  "12": 48px
+  "16": 64px
+components:
+  button-primary:
+    backgroundColor: "{colors.primary}"
+    textColor: "{colors.primary-foreground}"
+    rounded: "{rounded.full}"
+    height: 48px
+  button-secondary:
+    backgroundColor: "{colors.secondary}"
+    textColor: "{colors.secondary-foreground}"
+    rounded: "{rounded.full}"
+    height: 48px
+  card:
+    backgroundColor: "{colors.card}"
+    textColor: "{colors.card-foreground}"
+    rounded: "{rounded.lg}"
+    padding: 16px
+  input:
+    backgroundColor: "{colors.background}"
+    textColor: "{colors.foreground}"
+    rounded: 8px
+    height: 48px
+---
+
+<!-- GENERATED by `npm run tokens:build` from tokens/tokens.json — do not edit by hand. -->
+
+# Halftone (Vite + Workers)
+
+## Overview
+
+A neutral, brand-agnostic base for clickable prototypes on phone and web. Calm surfaces, one brand
+colour reserved for the primary action and focus, generous spacing, and both light and dark themes
+from day one. The applied theme is `ht1-29B3XC60003T`. Re-branding means applying a
+theme (`npx halftone-tokens theme apply <code|file.halftone.json>`, both from Studio on the docs site) or editing
+`tokens/tokens.json`; everything else follows. The full rules and the component registry are in
+`DESIGN_SYSTEM.md` — read it before building UI.
+
+## Colors
+
+Semantic names only (the shadcn vocabulary), each usable as `bg-`, `text-` and `border-`. Never a
+hex literal or a Tailwind palette colour in UI code. Keys ending in `-dark` are the dark theme.
+
+- **Primary (#2563eb / dark #448bff):** the single most important action, links and focus.
+- **Background (#ffffff) and Card (#ffffff):** the page canvas and raised surfaces.
+- **Muted foreground (#52525b):** helper text, captions, placeholders.
+- **Destructive, Success, Warning, Info:** status only, each with its own `-foreground`.
+- **Tints:** `primary-subtle`, `success-subtle`, `warning-subtle`, `destructive-subtle`, `info-subtle` (a tinted
+  surface: an alert, an icon well, a selected card), each with a `-border` (`border-warning-border`), and
+  `muted-subtle`, a surface a step off the page. Pressed fills: `primary-pressed`, `secondary-pressed`.
+- **Chart 1–5:** data series.
+
+Every `X` / `X-foreground` pairing, muted text on every surface, and every status tone used as text
+clears WCAG AA (4.5:1) in both themes; the build names any pairing that falls short, and `--strict` fails on it.
+
+Colours come from the ramps, not from opacity: a colour at partial opacity (`bg-primary/15`) takes on whatever
+is behind it, so its contrast changes with the surface. Tints are the roles above; transparency is for overlays
+only (the scrim behind a sheet, a frosted bar, a focus ring's halo). Text on a tint is `text-foreground` or
+`text-muted-foreground`; the tone itself goes on the icon or a dot. With this palette a tone's own text clears AA on its tint (`text-success` on `bg-success-subtle`) for success, warning and info only.
+`halftone-tokens check` flags class strings that break this.
+
+## Typography
+
+Headings (h1–h4, titles) use the system font (SF / Roboto); everything else uses the system font (SF / Roboto); code and
+figures (`font-mono`) use the system monospace font. Typeset: body text 16px (every
+`text-*` size scales with it), running text leading 1.75. Long-form text (articles, help, rendered
+markdown) goes in `Prose`: 1.25em between blocks, lines up to 70 characters.
+Use the Text variants (h1–h4, lead, large, body, small, muted, code) rather than raw sizes. Medium weight for row titles, semibold for headings and
+values, bold only for hero amounts.
+
+## Layout
+
+A 4-pt grid, restricted to the steps in `spacing` (0–64px). Screen edge padding 20px, 20px between
+sections, 16px inside cards, 12px vertical in list rows. Siblings are spaced with gaps, not margins,
+and spacing varies to create hierarchy. Interactive targets are at least 44×44.
+
+## Elevation & Depth
+
+Mostly flat: hierarchy comes from surface colour (background → card) and borders. A shadow is only
+for something you can press or something floating above the page (dialogs, sheets, menus, toasts,
+a floating button). Content — inputs included — stays flat.
+
+## Shapes
+
+Buttons are pills. Inputs 8px, cards 10px, larger surfaces 16px, sheet tops
+20px; chips, avatars and dots are fully round.
+
+## Components
+
+Only components listed in the registry in `DESIGN_SYSTEM.md` exist. The primary button is a solid brand fill. Text fields are outlined boxes.
+Button, Chip, Badge and Input draw the theme's component tokens, the same in both kits: Button 48px tall (small 40, large 56), 20px padding, pill, 16px text; Chip 36px, pill; selected is foreground with background text; Badge pill, 14px text; Input, Textarea and Select 48px, 8px corners.
+Never restyle them by hand. Phones raise any tap target under 44px to 44.
+Motion: 150ms for micro-feedback, 200ms for most transitions, 300ms for sheets, and
+nothing moves when the OS asks for reduced motion.
+
+## Do's and Don'ts
+
+- Do keep the brand colour for the primary action and focus; one primary action per screen.
+- Do check every screen in light and dark.
+- Don't nest cards inside cards or put a section title inside its card.
+- Don't use grey-on-grey text below 4.5:1, tap targets under 44×44, or icon-only buttons without a label.
+- Don't invent a component: if it is not in the registry, stop and add it properly.

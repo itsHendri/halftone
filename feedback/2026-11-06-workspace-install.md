@@ -110,3 +110,13 @@ fixed on the way: `Logo` pulled in `lib/embed.ts`, whose `process.env` read brok
 **Later**
 - #6 `halftone-tokens init` (after the #1 decision), #11 a `web` fonts platform, #12b a `lib-utils` item,
   the Vite + Workers starter and `halftone-tokens doctor`.
+
+**Built (2026-11-08, second round):** #6 and #11 came with `init` (#102). Then, on Hendri's go:
+- #12b, one `cn`: no `lib-utils` item after all. shadcn's own items now import `cn` from the `cn` package, as kit
+  files do, so both already share one helper; the second copy in an app is an older `lib/utils.ts` (clsx +
+  tailwind-merge). install.md says to make it `export { cn } from 'cn'`, and `doctor` spots it. The web kit moved to
+  `cn@^0.5.2`, shadcn's range (`^0.4` didn't overlap it), and dropped the unused clsx and tailwind-merge.
+- `halftone-tokens doctor`: checks an app's setup and prints the fix for each problem, including a kit file that a
+  stock shadcn file replaced (#3 for real, alongside the copies from #103).
+- The Vite + Workers starter: `apps/vite`, kit files generated from the registry (`npm run vite:sync`), CI job
+  `vite`.

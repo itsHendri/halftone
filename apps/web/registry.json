@@ -270,7 +270,7 @@
       "description": "`variant` default/secondary/outline/ghost/link/destructive · `size` default/sm/lg/icon · `asChild` for links",
       "dependencies": [
         "class-variance-authority@^0.7.1",
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "radix-ui@^1.7.0"
       ],
       "registryDependencies": [
@@ -300,7 +300,7 @@
       "title": "Floating button",
       "description": "floats OVER the scroll (a Button flows with it) · Material calls it a FAB · `icon label? variant position` · one per page",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -329,7 +329,7 @@
       "title": "Icon badge",
       "description": "icon button with unread count/dot · always labelled",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -358,7 +358,7 @@
       "title": "Action grid",
       "description": "the row of shortcuts under a page hero · 3–4 `items`, one row only, last tile is \"More\"",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -388,7 +388,7 @@
       "title": "Input",
       "description": "always with a `Label` · `aria-invalid` for errors",
       "dependencies": [
-        "cn@^0.4.0"
+        "cn@^0.5.2"
       ],
       "registryDependencies": [
         "@halftone-web/kit-setup"
@@ -416,7 +416,7 @@
       "title": "Textarea",
       "description": "multi-line text, grows with content",
       "dependencies": [
-        "cn@^0.4.0"
+        "cn@^0.5.2"
       ],
       "registryDependencies": [
         "@halftone-web/kit-setup"
@@ -444,7 +444,7 @@
       "title": "Checkbox",
       "description": "`checked onCheckedChange` · pick any",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0",
         "radix-ui@^1.7.0"
       ],
@@ -474,7 +474,7 @@
       "title": "Radio group",
       "description": "pick exactly one · `RadioGroupItem value id`",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0",
         "radix-ui@^1.7.0"
       ],
@@ -505,7 +505,7 @@
       "title": "Switch",
       "description": "a setting that applies at once (no Save button)",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "radix-ui@^1.7.0"
       ],
       "registryDependencies": [
@@ -534,7 +534,7 @@
       "title": "Select",
       "description": "one of 5–15 options in a form; fewer → RadioGroup, more → Command",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0",
         "radix-ui@^1.7.0"
       ],
@@ -568,7 +568,7 @@
       "title": "Date picker",
       "description": "one date in a form · field-styled button → Calendar in a Popover · `value onChange disabled?`",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -600,7 +600,7 @@
       "title": "Calendar",
       "description": "a month grid (react-day-picker) · `mode` single/range/multiple · use DatePicker for a form field",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0",
         "react-day-picker@^10.0.2"
       ],
@@ -632,7 +632,7 @@
       "title": "Slider",
       "description": "a value on a range · two thumbs for a range",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "radix-ui@^1.7.0"
       ],
       "registryDependencies": [
@@ -661,7 +661,7 @@
       "title": "Filter chip",
       "description": "filter chips in a scrolling row · selected is the theme's Chip colour (inverted by default)",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -691,7 +691,7 @@
       "title": "Segmented control",
       "description": "2–4 options, sliding thumb",
       "dependencies": [
-        "cn@^0.4.0"
+        "cn@^0.5.2"
       ],
       "registryDependencies": [
         "@halftone-web/hook-use-reduced-motion",
@@ -720,7 +720,7 @@
       "title": "Search field",
       "description": "Input + search icon + clear",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -750,7 +750,7 @@
       "title": "Quantity stepper",
       "description": "− value + · `min max step`",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -779,7 +779,7 @@
       "title": "Rating",
       "description": "stars · display (half stars, `showValue`, `count`) or input with `onChange`",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -808,7 +808,7 @@
       "title": "Amount input",
       "description": "hero money field · MAX and currency switch",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -837,7 +837,7 @@
       "title": "OTP input",
       "description": "N-digit code, paste-aware",
       "dependencies": [
-        "cn@^0.4.0"
+        "cn@^0.5.2"
       ],
       "registryDependencies": [
         "@halftone-web/kit-setup"
@@ -865,7 +865,7 @@
       "title": "Password input",
       "description": "Input + show/hide",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -895,7 +895,7 @@
       "title": "Selectable card",
       "description": "card as a radio/checkbox choice",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -924,7 +924,7 @@
       "title": "Range selector",
       "description": "chart range (1D·1W·1M·1Y·ALL), the active one inverts",
       "dependencies": [
-        "cn@^0.4.0"
+        "cn@^0.5.2"
       ],
       "registryDependencies": [
         "@halftone-web/kit-setup"
@@ -952,7 +952,7 @@
       "title": "App shell",
       "description": "sidebar of 4–8 destinations on desktop, a sheet on mobile · active item follows the URL",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -985,7 +985,7 @@
       "description": "switch views of the same thing in place; not page navigation",
       "dependencies": [
         "class-variance-authority@^0.7.1",
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "radix-ui@^1.7.0"
       ],
       "registryDependencies": [
@@ -1018,7 +1018,7 @@
       "description": "a marketing site’s top nav with dropdown panels · not for app navigation (AppShell)",
       "dependencies": [
         "class-variance-authority@^0.7.1",
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0",
         "radix-ui@^1.7.0"
       ],
@@ -1054,7 +1054,7 @@
       "title": "Pagination",
       "description": "pages of a long list or table · Previous/Next + page links · `isActive` on the current page (Unchanged from shadcn/ui; published by the kit so it uses the kit's versions of the files it imports.)",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -1091,7 +1091,7 @@
       "description": "search-as-you-type list · `CommandDialog` for a ⌘K palette (Unchanged from shadcn/ui; published by the kit so it uses the kit's versions of the files it imports.)",
       "dependencies": [
         "cmdk@^1.1.1",
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -1127,7 +1127,7 @@
       "title": "Menubar",
       "description": "desktop-app menus (File · Edit · View) across the top of an editor",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0",
         "radix-ui@^1.7.0"
       ],
@@ -1164,7 +1164,7 @@
       "title": "Stepper",
       "description": "`numbered` / `compact` flow progress",
       "dependencies": [
-        "cn@^0.4.0"
+        "cn@^0.5.2"
       ],
       "registryDependencies": [
         "@halftone-web/kit-setup"
@@ -1192,7 +1192,7 @@
       "title": "Section header",
       "description": "title + action, outside the card",
       "dependencies": [
-        "cn@^0.4.0"
+        "cn@^0.5.2"
       ],
       "registryDependencies": [
         "@halftone-web/kit-setup",
@@ -1221,7 +1221,7 @@
       "title": "Pager dots",
       "description": "page indicator · HorizontalPager renders them for you",
       "dependencies": [
-        "cn@^0.4.0"
+        "cn@^0.5.2"
       ],
       "registryDependencies": [
         "@halftone-web/kit-setup"
@@ -1249,7 +1249,7 @@
       "title": "Horizontal pager",
       "description": "CSS scroll-snap pager + dots · keyboard scrollable",
       "dependencies": [
-        "cn@^0.4.0"
+        "cn@^0.5.2"
       ],
       "registryDependencies": [
         "@halftone-web/kit-setup",
@@ -1278,7 +1278,7 @@
       "title": "Data table",
       "description": "sortable columns + built-in empty state · `columns rows rowKey caption?`",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -1309,7 +1309,7 @@
       "title": "Table",
       "description": "the primitive under DataTable; use it directly for small static tables",
       "dependencies": [
-        "cn@^0.4.0"
+        "cn@^0.5.2"
       ],
       "registryDependencies": [
         "@halftone-web/kit-setup"
@@ -1342,7 +1342,7 @@
       "title": "Stat tile",
       "description": "one KPI with a signed change · `invert` when down is good",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -1372,7 +1372,7 @@
       "title": "Chart",
       "description": "Recharts with the theme · series colours from `var(--chart-1)`…`--chart-5`",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "recharts@^3.8.0"
       ],
       "registryDependencies": [
@@ -1406,7 +1406,7 @@
       "description": "a status or tag · a status is an outline Badge with a coloured dot (`bg-success` …), the word in foreground text",
       "dependencies": [
         "class-variance-authority@^0.7.1",
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "radix-ui@^1.7.0"
       ],
       "registryDependencies": [
@@ -1436,7 +1436,7 @@
       "title": "Avatar group",
       "description": "overlapping avatars + \"+N\"",
       "dependencies": [
-        "cn@^0.4.0"
+        "cn@^0.5.2"
       ],
       "registryDependencies": [
         "@halftone-web/kit-setup",
@@ -1465,7 +1465,7 @@
       "title": "List row",
       "description": "ONE row · the canonical row · `last` on the final row · `select={{mode,selected}}` makes it a radio/checkbox row · `wrap` lets long text run onto more lines",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -1495,7 +1495,7 @@
       "title": "List group",
       "description": "the CONTAINER around rows: title, dividers, footnote, card/plain surface · sets `last` for you (wrapping ListRow in your own component? return it as the root, or forward `last`)",
       "dependencies": [
-        "cn@^0.4.0"
+        "cn@^0.5.2"
       ],
       "registryDependencies": [
         "@halftone-web/kit-setup",
@@ -1524,7 +1524,7 @@
       "title": "Icon circle",
       "description": "leading icon well, row scale (≤64px) · `shape` circle/square · `tone`",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -1553,7 +1553,7 @@
       "title": "Summary card",
       "description": "label/value rows, optionally in a Card",
       "dependencies": [
-        "cn@^0.4.0"
+        "cn@^0.5.2"
       ],
       "registryDependencies": [
         "@halftone-web/kit-setup",
@@ -1583,7 +1583,7 @@
       "title": "Percent change",
       "description": "signed % with trend icon",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -1612,7 +1612,7 @@
       "title": "Progress ring",
       "description": "circular determinate progress",
       "dependencies": [
-        "cn@^0.4.0"
+        "cn@^0.5.2"
       ],
       "registryDependencies": [
         "@halftone-web/kit-setup"
@@ -1641,7 +1641,7 @@
       "description": "small semantic status indicator, beside its label",
       "dependencies": [
         "class-variance-authority@^0.7.1",
-        "cn@^0.4.0"
+        "cn@^0.5.2"
       ],
       "registryDependencies": [
         "@halftone-web/kit-setup"
@@ -1669,7 +1669,7 @@
       "title": "Timeline",
       "description": "vertical status steps joined by a line · each `done` / `current` / `upcoming` with time and note",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -1698,7 +1698,7 @@
       "title": "Value header",
       "description": "hero figure + caption · `maskable` adds the eye toggle",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -1728,7 +1728,7 @@
       "description": "inline and persistent · `variant` default/destructive",
       "dependencies": [
         "class-variance-authority@^0.7.1",
-        "cn@^0.4.0"
+        "cn@^0.5.2"
       ],
       "registryDependencies": [
         "@halftone-web/kit-setup"
@@ -1758,7 +1758,7 @@
       "title": "Progress",
       "description": "determinate 0–100",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "radix-ui@^1.7.0"
       ],
       "registryDependencies": [
@@ -1787,7 +1787,7 @@
       "title": "Empty state",
       "description": "nothing here yet, and the way out · `default` page / `compact` in a card",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -1816,7 +1816,7 @@
       "title": "Spinner",
       "description": "themed loading indicator · announced as \"Loading\"",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -1845,7 +1845,7 @@
       "title": "Success screen",
       "description": "the one success template",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -1876,7 +1876,7 @@
       "title": "Page header",
       "description": "title, description and actions · one per page, first in the content",
       "dependencies": [
-        "cn@^0.4.0"
+        "cn@^0.5.2"
       ],
       "registryDependencies": [
         "@halftone-web/kit-setup"
@@ -1904,7 +1904,7 @@
       "title": "Prose",
       "description": "long-form text (articles, docs, rendered markdown) at the theme's typeset: measure, leading, flow",
       "dependencies": [
-        "cn@^0.4.0"
+        "cn@^0.5.2"
       ],
       "registryDependencies": [
         "@halftone-web/kit-setup"
@@ -1932,7 +1932,7 @@
       "title": "Sticky bottom bar",
       "description": "action bar that sticks to the bottom of its scroll container · safe-area aware",
       "dependencies": [
-        "cn@^0.4.0"
+        "cn@^0.5.2"
       ],
       "registryDependencies": [
         "@halftone-web/kit-setup"
@@ -1960,7 +1960,7 @@
       "title": "Promo card",
       "description": "tinted offer/nudge card · arrow CTA, dismiss X, generated art · one per page",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -1991,7 +1991,7 @@
       "title": "Footnote",
       "description": "small print / disclosure, last on the page",
       "dependencies": [
-        "cn@^0.4.0"
+        "cn@^0.5.2"
       ],
       "registryDependencies": [
         "@halftone-web/kit-setup",
@@ -2020,7 +2020,7 @@
       "title": "Dialog",
       "description": "a short task on top of the page (an edit form) (Unchanged from shadcn/ui; published by the kit so it uses the kit's versions of the files it imports.)",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0",
         "radix-ui@^1.7.0"
       ],
@@ -2058,7 +2058,7 @@
       "title": "Alert dialog",
       "description": "confirm something destructive · name the action on the button (Unchanged from shadcn/ui; published by the kit so it uses the kit's versions of the files it imports.)",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "radix-ui@^1.7.0"
       ],
       "registryDependencies": [
@@ -2091,7 +2091,7 @@
       "title": "Dropdown menu",
       "description": "actions on a thing (row menu, account menu) · `variant=\"destructive\"` items last",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0",
         "radix-ui@^1.7.0"
       ],
@@ -2125,7 +2125,7 @@
       "title": "Context menu",
       "description": "right-click menu on a thing",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0",
         "radix-ui@^1.7.0"
       ],
@@ -2160,7 +2160,7 @@
       "title": "Logo",
       "description": "the brand from lib/brand.ts (Studio › Use system › Brand assets) · one-colour logos take the text colour · placeholder + name without one",
       "dependencies": [
-        "cn@^0.4.0"
+        "cn@^0.5.2"
       ],
       "registryDependencies": [
         "@halftone-web/kit-setup",
@@ -2201,7 +2201,7 @@
       "title": "Image tile",
       "description": "rounded image · `seed` draws generated art when there is no `src`",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -2231,7 +2231,7 @@
       "title": "Placeholder",
       "description": "deterministic abstract SVG art from a `seed` · the kit ships no raster imagery",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -2260,7 +2260,7 @@
       "title": "Spot",
       "description": "an icon at illustration scale (≥64px) · SuccessScreen uses it",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -2289,7 +2289,7 @@
       "title": "Hero",
       "description": "one promise, one primary action · `media` for a product shot, omit for centred",
       "dependencies": [
-        "cn@^0.4.0"
+        "cn@^0.5.2"
       ],
       "registryDependencies": [
         "@halftone-web/kit-setup"
@@ -2317,7 +2317,7 @@
       "title": "Feature grid",
       "description": "3–6 short blocks · `columns` 2/3",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -2346,7 +2346,7 @@
       "title": "Pricing card",
       "description": "one plan · 2–4 side by side · `highlighted` on one",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -2377,7 +2377,7 @@
       "title": "Chat message",
       "description": "one turn · user = bubble on the right, assistant = plain text on the left",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -2407,7 +2407,7 @@
       "title": "Chat composer",
       "description": "Enter sends, Shift+Enter breaks · `busy` turns Send into Stop · `accept` turns on attachments (paperclip, drop, chips)",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -2439,7 +2439,7 @@
       "title": "Attachment chip",
       "description": "a file in a conversation: icon by type, name, size · `onRemove` while composing",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -2470,7 +2470,7 @@
       "title": "Chat thread list",
       "description": "past conversations, grouped by when · `threads activeId onSelect onNew?`",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -2500,7 +2500,7 @@
       "title": "Sources",
       "description": "what an answer is based on · numbered chips with previews · `[n]` in text → inline citations",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -2532,7 +2532,7 @@
       "title": "Follow-up suggestions",
       "description": "next questions under the latest answer · picking one sends it",
       "dependencies": [
-        "cn@^0.4.0"
+        "cn@^0.5.2"
       ],
       "registryDependencies": [
         "@halftone-web/button",
@@ -2589,7 +2589,7 @@
       "title": "Thinking indicator",
       "description": "the model is working · say what it is doing when you can",
       "dependencies": [
-        "cn@^0.4.0"
+        "cn@^0.5.2"
       ],
       "registryDependencies": [
         "@halftone-web/kit-setup"
@@ -2617,7 +2617,7 @@
       "title": "Tool call card",
       "description": "an action the assistant took · `status` running/done/error/stopped · details collapsed",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [
@@ -2647,7 +2647,7 @@
       "title": "Approval card",
       "description": "consent before consequence · says what changes and whether it can be undone",
       "dependencies": [
-        "cn@^0.4.0",
+        "cn@^0.5.2",
         "lucide-react@^1.52.0"
       ],
       "registryDependencies": [

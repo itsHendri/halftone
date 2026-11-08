@@ -1,0 +1,8 @@
+@import './fonts.css';
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import './tokens.css';
+
+/* The kit's theme is tokens.css and fonts.css, built by `npm run tokens:build` from tokens/tokens.json: never edit
+   them by hand. This file is the app's own. Don't add :root, .dark or @theme rules here: they would win over the
+   kit's (`npm run doctor` names any). Dark mode is the .dark class on <html> (src/lib/color-scheme.ts). */

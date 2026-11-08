@@ -15,7 +15,8 @@ raw colours, imports outside the registry and other UI libraries. The two kits:
 
 - **Mobile** (\`apps/mobile\`): Expo, React Native, NativeWind, react-native-reusables. Phone apps.
 - **Web** (\`apps/web\`): a Next.js starter on Tailwind 4 and shadcn/ui, whose components also install into any
-  React app (path D). Dashboards, marketing pages, AI product interfaces.
+  React app (path D). Dashboards, marketing pages, AI product interfaces. \`apps/vite\` is the same kit as a
+  Vite + React Router starter with a Cloudflare Worker (path B).
 
 If the person did not say which, ask: "a phone app, a web app, or both?"
 
@@ -42,6 +43,15 @@ npm run ios        # or: npm run web
 npx giget@latest gh:${repoPath}/apps/web <project-name>
 cd <project-name> && npm install
 npm run dev        # http://localhost:3100
+\`\`\`
+
+On Vite + React Router with a Cloudflare Worker for its API, instead of Next.js: a dashboard starter with the kit's
+components already in it (\`AGENTS.md\` there is its guide; no samples to remove, no setup script).
+
+\`\`\`bash
+npx giget@latest gh:${repoPath}/apps/vite <project-name>
+cd <project-name> && npm install
+npm run dev        # http://localhost:5173, the Worker included
 \`\`\`
 
 **C. Add kit components to an existing Expo app** on NativeWind 4 with react-native-reusables:
