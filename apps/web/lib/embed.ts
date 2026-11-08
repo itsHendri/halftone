@@ -32,8 +32,14 @@ export function readEmbed(): { embedded: boolean; theme?: EmbedScheme } {
   }
 }
 
+/**
+ * Next.js inlines `process.env.NEXT_PUBLIC_*` at build time. Other apps (Vite) have no `process` in the browser, and
+ * may have no Node types: declared here so the file typechecks anywhere, guarded so it runs anywhere.
+ */
+declare const process: { env: Record<string, string | undefined> };
+
 export function allowedOrigins(): string[] {
-  const extra = String(process.env.NEXT_PUBLIC_EMBED_ORIGINS ?? '')
+  const extra = String((typeof process === 'undefined' ? undefined : process.env.NEXT_PUBLIC_EMBED_ORIGINS) ?? '')
     .split(',')
     .map((o: string) => o.trim())
     .filter(Boolean);

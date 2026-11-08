@@ -21,6 +21,7 @@
     "lint": "npm run lint -w apps/mobile --",
     "check": "npm run lint:sync -- --check && npm run typecheck -w apps/mobile && npm run lint -w apps/mobile -- --max-warnings 0 && npm run lint:rules -w apps/mobile && npm run tokens:check -w apps/mobile -- --strict && npm run registry:build -w apps/mobile -- --check && npm run typecheck -w apps/web && npm run lint -w apps/web && npm run lint:rules -w apps/web && npm run tokens:check -w apps/web -- --strict && npm run registry:build -w apps/web -- --check && npm run tokens:sync -- --check && npm test -w packages/tokens && npm run typecheck -w apps/docs && npm run lint -w apps/docs && npm test -w apps/docs",
     "test": "npm test -w packages/tokens",
+    "check:react-app": "node scripts/react-app-check.mjs",
     "docs:dev": "npm run dev -w apps/docs",
     "docs:build": "npm run build -w apps/docs",
     "docs:preview": "npm run preview -w apps/docs",

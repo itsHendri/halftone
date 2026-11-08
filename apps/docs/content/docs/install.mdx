@@ -5,7 +5,7 @@ description: Two kits, three ways in, and the one prompt that sets an agent up.
 
 ## Let your agent do it
 
-Paste this into Claude Code, Cursor or any coding agent, in an empty folder or an existing Expo or Next.js project:
+Paste this into Claude Code, Cursor or any coding agent, in an empty folder or an existing Expo or React project:
 
 <CopyPrompt />
 
@@ -67,7 +67,9 @@ expect those versions. When `shadcn add` asks to overwrite one of them, say yes,
 Then run `npx expo install --fix`: the registry pins the kit's Expo SDK versions, and this moves them to
 yours.
 
-**Next.js** with [shadcn/ui](https://ui.shadcn.com) on Tailwind 4. In `components.json`:
+**Any React app** on Tailwind 4 with [shadcn/ui](https://ui.shadcn.com): Next.js, Vite, React Router or
+another, for a prototype or a real product. `components.json` uses Radix and the new-york style (write it rather
+than running `shadcn init`; [install.md](/install.md) has the whole file), with the registry:
 
 ```json
 {
@@ -78,13 +80,16 @@ yours.
 ```
 
 ```bash
-npx shadcn@latest add @halftone-web/theme
+npm install tw-animate-css
+npm install -D @halftone-ds/tokens
+npx halftone-tokens init        # the kit's tokens and fonts, imported into your stylesheet
 npx shadcn@latest add @halftone-web/data-table @halftone-web/approval-card
 ```
 
-Components the kit did not change install from shadcn itself (`npx shadcn@latest add dialog`). The kit's
-Button, Badge and Slider fix colour contrast that its components rely on: say yes when asked to overwrite
-them.
+Then tell kit components once, at your app's root, how your router links: `<KitLinkProvider link={…}
+usePathname={…}>` from `@/lib/link`, with Next.js's or React Router's link (install.md has both). Components
+the kit did not change install from shadcn itself (`npx shadcn@latest add accordion`). The kit's Button, Badge
+and Slider fix colour contrast that its components rely on: say yes when asked to overwrite them.
 
 Only want the look? Any Halftone theme installs into a shadcn project on its own, colours, radius, shadows and
 fonts: `npx shadcn@latest add https://halftonedesignsystem.com/r/theme/editorial.json`, or download your own from

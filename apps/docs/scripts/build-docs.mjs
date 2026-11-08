@@ -5,7 +5,7 @@
  *   1. tokens.css from the kit's tokens.json (halftone-tokens) and the generated MDX pages
  *   2. the mobile kit's web export, under the sub-path /m (embed mode for the phone frames)
  *   3. the web kit's static export, under /w (the browser frames)
- *   4. the shadcn registries: Expo apps at /r/native/*.json, Next.js apps at /r/web/*.json, and Halftone themes
+ *   4. the shadcn registries: Expo apps at /r/native/*.json, React apps at /r/web/*.json, and Halftone themes
  *      for any shadcn project: the presets at /r/theme/<preset>.json, the fonts they use at /r/font/*.json
  *   5. _redirects (SPA fallback for the mobile kit's routes only) and _headers (content types, CORS)
  *   6. next build (static export) and a check that everything above landed in out/

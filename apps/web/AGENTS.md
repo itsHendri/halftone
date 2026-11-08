@@ -80,7 +80,8 @@ npm run eject-samples -- shop   # just the ones named (northwind = dashboard, la
    A record created in the session (an order, a habit) opens by query (`/shop/order?id=…`), not a dynamic
    segment: the static export only has the pages it built.
 3. Mock data lives beside the prototype (`app/<slug>/data.ts` or `components/<slug>/data.ts`). Never call
-   real APIs; a route handler returning fixtures is fine when a flow needs one.
+   real APIs; a route handler returning fixtures is fine when a flow needs one. *Why:* a prototype has to run
+   anywhere, for anyone, without accounts or keys. A real product is different (below).
 4. New component needed? Use the `add-component` skill: it lands in the registry and the docs.
 5. Before saying "done": run the `qc-pass` skill (typecheck, lint, `npm run qc:look` at 375px and 1280px in
    light and dark, then a hands-on pass).
@@ -89,6 +90,17 @@ npm run eject-samples -- shop   # just the ones named (northwind = dashboard, la
    (`.claude/settings.json`) lints each file you edit and hands the errors back. A real exception takes
    `// eslint-disable-next-line <rule> -- <reason>`; the reason is required. The hook runs once the folder is
    trusted, from a session started here or at the monorepo root.
+
+## Using the kit in a real product
+
+The kit isn't only for prototypes, and its components aren't only for this Next.js app: they install into any React
+app on Tailwind 4 (Vite, React Router, another Next.js app) through the registry (install.md, path D;
+`tests/react-app` at the monorepo root is the checked example).
+
+- **Still the same:** pages compose only registry components, colours come only from the tokens, every page works in
+  light and dark at 375px and 1280px, and the `qc-pass` skill runs before "done".
+- **Different:** real data and real APIs are fine. Folders, routing and data loading follow the host app, not
+  `app/<slug>/`. Links from kit components go through the app's `KitLinkProvider` (`lib/link.tsx`).
 
 ## Workflows
 

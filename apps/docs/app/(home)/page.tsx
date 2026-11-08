@@ -308,7 +308,7 @@ export default function HomePage() {
           <p className="text-muted-foreground max-w-3xl leading-7">
             Everything on this site is also available as plain text: the install
             guide an agent follows, an index of every component with its API,
-            and shadcn registries so an existing Expo or Next.js app can pull in
+            and shadcn registries so an existing Expo or React app can pull in
             single components.
           </p>
           <ul className="flex flex-wrap gap-3 text-sm">
