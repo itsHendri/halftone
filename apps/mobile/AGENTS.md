@@ -96,7 +96,7 @@ The kit isn't only for prototypes. When it's the base of a real app:
   launch configs. Deep link a section: `xcrun simctl openurl booted "exp://localhost:8091/--/components?open=inputs"`
   (Expo Go) or `halftone://components?open=inputs` (dev client).
 - **Deep links into the Components page:** `?open=<category>` expands a category; `?section=<id>` (a registry id)
-  expands its category, scrolls to it and tints it for 2s.
+  expands its category, scrolls to it and outlines it for 2s.
 - **Embedding (the docs site's phone frames):** the web export, loaded with `?embed=1`, drops the kit chrome
   (tab bar, header, KitChip) for the whole session; `/components?section=<id>&embed=1` renders just that
   demo. `?theme=light|dark` starts in that theme without persisting it. The host keeps the theme in step by

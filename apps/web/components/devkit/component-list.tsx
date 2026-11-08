@@ -31,7 +31,13 @@ function Section({ c, highlighted, bare }: { c: ComponentMeta; highlighted?: boo
       id={c.id}
       aria-labelledby={bare ? undefined : `${c.id}-title`}
       aria-label={bare ? c.title : undefined}
-      className={cn('scroll-mt-20 rounded-xl transition-colors', !bare && 'border-border border p-5', highlighted && 'bg-primary-subtle')}>
+      // An outline, not a tinted fill: the demo stays on the background it was designed for, so its text keeps its
+      // contrast (primary text on primary-subtle didn't).
+      className={cn(
+        'scroll-mt-20 rounded-xl motion-safe:transition-shadow',
+        !bare && 'border-border border p-5',
+        highlighted && 'ring-primary ring-2',
+      )}>
       {bare ? null : (
         <div className="mb-4 flex flex-col gap-1">
           <h3 id={`${c.id}-title`} className="text-muted-foreground text-xs font-semibold uppercase tracking-widest">
@@ -98,7 +104,7 @@ function readLines(raw: string | null): Record<string, string> {
 
 /**
  * Every component the kit ships, by category, searchable. Deep links: ?section=<id> scrolls to a
- * component and tints it; with ?embed=1 (docs site) only that component's demo renders.
+ * component and outlines it; with ?embed=1 (docs site) only that component's demo renders.
  */
 export function ComponentList({ embedded }: { embedded?: boolean }) {
   const params = useSearchParams();
