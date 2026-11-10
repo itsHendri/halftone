@@ -689,7 +689,7 @@
       "name": "segmented-control",
       "type": "registry:component",
       "title": "Segmented control",
-      "description": "2–4 options, sliding thumb",
+      "description": "2–4 options, sliding thumb; labels never truncate (scrolls inside itself if they cannot fit)",
       "dependencies": [
         "cn@^0.5.2"
       ],

@@ -45,9 +45,31 @@ const SEGMENTS = [
   { value: 'month', label: 'Month' },
 ] as const;
 
+const INBOX = [
+  { value: 'new', label: 'New 4' },
+  { value: 'kept', label: 'Kept 19' },
+  { value: 'all', label: 'All 23' },
+] as const;
+
+const ENDS = [
+  { value: '7', label: 'Ends after 7 days' },
+  { value: '14', label: 'Ends after 14 days' },
+  { value: '30', label: 'Ends after 30 days' },
+] as const;
+
 function SegmentedControlDemo() {
   const [v, setV] = React.useState<'day' | 'week' | 'month'>('week');
-  return <SegmentedControl segments={SEGMENTS} value={v} onChange={setV} className="w-full" />;
+  const [inbox, setInbox] = React.useState<'new' | 'kept' | 'all'>('kept');
+  const [ends, setEnds] = React.useState<'7' | '14' | '30'>('14');
+  return (
+    <View className="w-full gap-3">
+      <SegmentedControl segments={SEGMENTS} value={v} onChange={setV} className="w-full" />
+      {/* Counts never truncate: a segment takes the width its label needs. */}
+      <SegmentedControl segments={INBOX} value={inbox} onChange={setInbox} className="w-full" />
+      {/* Too long to fit: the control scrolls sideways inside itself. */}
+      <SegmentedControl segments={ENDS} value={ends} onChange={setEnds} className="w-56" />
+    </View>
+  );
 }
 
 function SearchFieldDemo() {
