@@ -93,18 +93,44 @@ function FilterChipDemo() {
 
 function SegmentedDemo() {
   const [v, setV] = React.useState<'list' | 'board' | 'calendar'>('list');
+  const [inbox, setInbox] = React.useState<'new' | 'kept' | 'all'>('kept');
+  const [ends, setEnds] = React.useState<'7' | '14' | '30'>('14');
   return (
-    <SegmentedControl
-      aria-label="View"
-      className="w-full max-w-sm"
-      segments={[
-        { value: 'list', label: 'List' },
-        { value: 'board', label: 'Board' },
-        { value: 'calendar', label: 'Calendar' },
-      ]}
-      value={v}
-      onChange={setV}
-    />
+    <div className="flex w-full max-w-sm flex-col gap-3">
+      <SegmentedControl
+        aria-label="View"
+        segments={[
+          { value: 'list', label: 'List' },
+          { value: 'board', label: 'Board' },
+          { value: 'calendar', label: 'Calendar' },
+        ]}
+        value={v}
+        onChange={setV}
+      />
+      {/* Counts never truncate: a segment takes the width its label needs. */}
+      <SegmentedControl
+        aria-label="Inbox"
+        segments={[
+          { value: 'new', label: 'New 4' },
+          { value: 'kept', label: 'Kept 19' },
+          { value: 'all', label: 'All 23' },
+        ]}
+        value={inbox}
+        onChange={setInbox}
+      />
+      {/* Too long to fit: the control scrolls sideways inside itself, the page stays put. */}
+      <SegmentedControl
+        aria-label="Ends after"
+        className="w-56 max-w-full"
+        segments={[
+          { value: '7', label: 'Ends after 7 days' },
+          { value: '14', label: 'Ends after 14 days' },
+          { value: '30', label: 'Ends after 30 days' },
+        ]}
+        value={ends}
+        onChange={setEnds}
+      />
+    </div>
   );
 }
 

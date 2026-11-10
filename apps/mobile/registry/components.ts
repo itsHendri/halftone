@@ -173,7 +173,7 @@ export const COMPONENTS: ComponentMeta[] = [
     exports: ['SegmentedControl'],
     category: 'inputs',
     files: ['components/kit/segmented-control.tsx'],
-    notes: '2–4 options, animated thumb',
+    notes: '2–4 options, animated thumb; labels never truncate (scrolls inside itself if they cannot fit)',
     api: '<SegmentedControl segments={[{value,label}]} value onChange />',
     caption: '2–4 mutually exclusive options. For content panes use Tabs.',
     aliases: ['segment', 'ios', 'switcher'],

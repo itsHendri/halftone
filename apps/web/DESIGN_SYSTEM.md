@@ -225,7 +225,7 @@ the tables. Text between `GENERATED` markers is overwritten.
 | Calendar / CalendarDayButton | `components/ui/calendar.tsx` | a month grid (react-day-picker) · `mode` single/range/multiple · use DatePicker for a form field |
 | Slider | `components/ui/slider.tsx` | a value on a range · two thumbs for a range |
 | FilterChip / FilterChipRow | `components/kit/filter-chip.tsx` | filter chips in a scrolling row · selected is the theme's Chip colour (inverted by default) |
-| SegmentedControl | `components/kit/segmented-control.tsx` | 2–4 options, sliding thumb |
+| SegmentedControl | `components/kit/segmented-control.tsx` | 2–4 options, sliding thumb; labels never truncate (scrolls inside itself if they cannot fit) |
 | SearchField | `components/kit/search-field.tsx` | Input + search icon + clear |
 | QuantityStepper | `components/kit/quantity-stepper.tsx` | − value + · `min max step` |
 | Rating | `components/kit/rating.tsx` | stars · display (half stars, `showValue`, `count`) or input with `onChange` |

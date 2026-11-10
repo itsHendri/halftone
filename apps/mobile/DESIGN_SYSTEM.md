@@ -234,7 +234,7 @@ tables. Text between `GENERATED` markers is overwritten.
 | Switch | `components/ui/switch.tsx` | settings on/off |
 | Select | `components/ui/select.tsx` | pass safe-area `insets` to `SelectContent` |
 | FilterChip / FilterChipRow | `components/kit/filter-chip.tsx` | filter chips · selected is the theme's Chip colour (inverted by default) |
-| SegmentedControl | `components/kit/segmented-control.tsx` | 2–4 options, animated thumb |
+| SegmentedControl | `components/kit/segmented-control.tsx` | 2–4 options, animated thumb; labels never truncate (scrolls inside itself if they cannot fit) |
 | SearchField | `components/kit/search-field.tsx` | Input + search icon + clear |
 | QuantityStepper | `components/kit/quantity-stepper.tsx` | `min max step` |
 | Rating | `components/kit/rating.tsx` | stars · display (half stars, `showValue`, `count`) or input with `onChange` (44pt radio stars) |

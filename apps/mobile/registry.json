@@ -928,7 +928,7 @@
       "name": "segmented-control",
       "type": "registry:component",
       "title": "Segmented control",
-      "description": "2–4 options, animated thumb",
+      "description": "2–4 options, animated thumb; labels never truncate (scrolls inside itself if they cannot fit)",
       "dependencies": [],
       "registryDependencies": [
         "@halftone-native/kit-setup",
