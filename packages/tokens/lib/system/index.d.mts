@@ -1,5 +1,5 @@
 /** Types for @halftone-ds/tokens/system (index.mjs): the HalftoneSystem v1 document. */
-import type { Mode, Neutral, Recipe, RecipeInput, Theme, TokensJson } from '../theme/index.mjs';
+import type { Mode, MotionEdits, Neutral, Recipe, RecipeInput, Theme, TokensJson } from '../theme/index.mjs';
 
 export type ColorRole = 'brand' | 'neutral' | 'danger' | 'success' | 'warning' | 'info';
 export type StatusRole = 'danger' | 'success' | 'warning' | 'info';
@@ -75,6 +75,8 @@ export type HalftoneSystem = {
   brand: SystemBrand;
   /** Component-level edits (Button, Chip, Badge, Input), overrides only. Button and Input styles fold into the recipe. */
   components: SystemComponents;
+  /** Set durations, easings and springs over the recipe's speed, overrides only (empty: as the speed draws them). */
+  motion: MotionEdits;
 };
 
 /** A component colour: a role (any semantic colour), or 'none' for a fill or border. */
@@ -145,6 +147,7 @@ export const RADIUS_STEPS: RadiusStep[];
 export const SHADOW_LEVELS: ShadowLevel[];
 export const BORDER_STYLES: BorderStyle[];
 export const EXTRA_KINDS: ExtraKind[];
+export const MOTION_GROUPS: ['durations', 'easings', 'springs'];
 
 export class SystemError extends Error {
   /** Every problem, as 'path: message'. */

@@ -170,8 +170,10 @@ this); section titles `text-lg`/`text-xl font-semibold`; body `text-base` with `
 
 ### Motion
 
-- **Duration grows with distance:** 150 ms for hover and small feedback, 200 ms for most transitions, 300 ms for
-  sheets. *Why:* a big surface moving as fast as a hover looks like a jump, and a hover as slow as a sheet feels laggy.
+- **Duration grows with distance:** `duration-fast` (150 ms) for hover and small feedback, `duration-base` (200 ms) for
+  most transitions, `duration-slow` (300 ms) for sheets; `ease-standard` for moves, `ease-emphasized` for entering,
+  `ease-exit` for leaving; `spring-snappy` and `spring-gentle` for motion that should feel physical (each sets the easing
+  and its duration). They come from the theme, whose Speed scales them: in JS, `MOTION` from `lib/theme.ts`. *Why:* a big surface moving as fast as a hover looks like a jump, and a hover as slow as a sheet feels laggy.
   *Break it only for* motion that follows the pointer (it tracks the drag) and reduced motion (below).
 - **Anything that moves respects reduced motion:** `motion-safe:`/`motion-reduce:` or `useReducedMotion()` from
   `hooks/use-reduced-motion.ts`. *Why:* the setting is there for people whom motion makes dizzy. There is no exception.

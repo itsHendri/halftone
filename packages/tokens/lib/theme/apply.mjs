@@ -1,6 +1,7 @@
 /**
  * Commit a theme into a tokens.json object. Only the paths a theme owns are written; everything else
- * (status ramps, spacing, type sizes, motion, descriptions) is left exactly as it was. The recipe is
+ * (status ramps, spacing, type sizes, descriptions) is left exactly as it was. Motion (primitive.duration, .easing and
+ * .spring) is the theme's: its speed scales it, and a system can set each value. The recipe is
  * recorded under `$extensions["com.halftonedesignsystem.theme"]`, so the docs picker and `halftone-tokens theme show`
  * can tell which theme is applied, and whether anyone has hand-edited it since (drift).
  *
@@ -13,6 +14,7 @@
 import { generateSystem, systemCode } from '../system/generate.mjs';
 import { normalizeSystem, withoutBrandImages } from '../system/schema.mjs';
 import { generateTheme } from './generate.mjs';
+import { MOTION_USE } from './motion.mjs';
 import { BRAND_RAMPS } from './palettes.mjs';
 import { normalizeRecipe } from './recipe.mjs';
 import { flatten } from './refs.mjs';
@@ -58,6 +60,10 @@ function ownedValues(theme) {
     }
   };
   walk(theme.semantic.component, 'semantic.component');
+  // Motion: durations (ms), easings (cubic-bezier) and springs (stiffness, damping, mass).
+  for (const [name, ms] of Object.entries(theme.motion.durations)) out[`primitive.duration.${name}`] = ms;
+  for (const [name, curve] of Object.entries(theme.motion.easings)) out[`primitive.easing.${name}`] = curve;
+  for (const [name, spring] of Object.entries(theme.motion.springs)) for (const [key, value] of Object.entries(spring)) out[`primitive.spring.${name}.${key}`] = value;
   if (theme.extra) Object.assign(out, flatValues(theme.extra, 'extra'));
   return out;
 }
@@ -65,7 +71,7 @@ function ownedValues(theme) {
 /** The `$type` of each token an `extra` group holds, by path. */
 const extraTypes = (theme) => Object.fromEntries(flatten(theme.extra ?? {}).map((t) => [['extra', ...t.path].join('.'), t.$type]));
 
-const TYPES = { radius: 'number', border: 'number', icon: 'number', density: 'number', type: 'number', button: 'number', field: 'number', shadow: 'shadow', font: 'fontFamily', color: 'color' };
+const TYPES = { duration: 'number', easing: 'cubicBezier', spring: 'number', radius: 'number', border: 'number', icon: 'number', density: 'number', type: 'number', button: 'number', field: 'number', shadow: 'shadow', font: 'fontFamily', color: 'color' };
 const DESCRIPTIONS = {
   'semantic.radius.control': 'Corner radius of mobile buttons and chips: rounded-control. 9999 = pills; otherwise the base radius.',
   'semantic.border.width': 'Width of `border` (px). border-2 and border-hairline stay explicit.',
@@ -149,9 +155,18 @@ const TEXT_DESCRIPTION = {
   tracking: 'letter spacing (em)',
   font: 'font family (a role: heading, body or mono)',
 };
+const SPRING_DESCRIPTION = {
+  stiffness: 'stiffness (how hard it pulls toward rest)',
+  damping: 'damping (how quickly the bounce dies)',
+  mass: 'mass',
+};
 function describe(path) {
   if (DESCRIPTIONS[path]) return DESCRIPTIONS[path];
   const parts = path.split('.');
+  if (parts[0] === 'primitive' && parts[1] === 'duration') return `Duration (ms) for ${MOTION_USE.durations[parts[2]] ?? parts[2]}. Scaled by the theme's speed.`;
+  if (parts[0] === 'primitive' && parts[1] === 'easing') return `Easing for ${MOTION_USE.easings[parts[2]] ?? parts[2]}.`;
+  if (parts[0] === 'primitive' && parts[1] === 'spring' && parts.length === 4)
+    return `Spring ${parts[2]} (${MOTION_USE.springs[parts[2]] ?? 'a spring'}): ${SPRING_DESCRIPTION[parts[3]] ?? parts[3]}. DTCG has no spring type, so it is three numbers.`;
   if (parts[1] === 'type' && parts.length === 4) return `Text ${parts[2]}: ${TEXT_DESCRIPTION[parts[3]] ?? parts[3]}. Edited in the system.`;
   if (parts[1] === 'radius' && parts.length === 3) return `rounded-${parts[2]} (px), edited in the system; otherwise a multiple of the base radius.`;
   if (path === 'semantic.border.style') return 'Border style: solid, dashed or dotted.';

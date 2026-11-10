@@ -11,6 +11,7 @@ export {
   extraNameProblem,
   FONT_ROLES,
   hasOverrides,
+  MOTION_GROUPS,
   isSystem,
   newSystemId,
   normalizeSystem,

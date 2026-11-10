@@ -24,7 +24,7 @@ import {
   themeStatus,
   themeVars,
 } from '../lib/theme/index.mjs';
-import { normalizeRecipe, STYLE_KEYS, TEXT_STYLES } from '../lib/theme/recipe.mjs';
+import { MOTION_KEYS, normalizeRecipe, STYLE_KEYS, TEXT_STYLES } from '../lib/theme/recipe.mjs';
 import { textStyleVars } from '../lib/theme/vars.mjs';
 import { brandRamp, curatedRamp } from '../lib/theme/ramp.mjs';
 import nativewind3 from '../targets/nativewind3.mjs';
@@ -84,7 +84,8 @@ function randomRecipe(rand, { typeset = true, styles = typeset } = {}) {
   for (const [key, list] of Object.entries(OPTIONS)) r[key] = pick(rand, list);
   if (typeset) r.font.mono = pick(rand, MONO_FONTS).id;
   else for (const key of TYPESET_KEYS) r[key] = DEFAULT_RECIPE[key];
-  if (!styles) for (const key of STYLE_KEYS) r[key] = DEFAULT_RECIPE[key];
+  // Motion's speed rides with the styles in ht3 codes.
+  if (!styles) for (const key of [...STYLE_KEYS, ...MOTION_KEYS]) r[key] = DEFAULT_RECIPE[key];
   return r;
 }
 

@@ -27,6 +27,11 @@
  *   extras               { color: [], text: [], radius: [], shadow: [], border: [] } named tokens of your own,
  *                        exported (tokens.json `extra.*`) and never drawn by the kits
  *   brand                { name, iconBackground, logo?, logoDark?, mark?, markDark? } (the Studio's BrandState)
+ *   motion               { durations?, easings?, springs? } set values on top of the recipe's speed (lib/theme/motion.mjs),
+ *                        overrides only; a document without it moves as its speed says, as every system before motion did:
+ *                          durations  { fast|base|slow: ms }
+ *                          easings    { standard|emphasized|exit: [x1, y1, x2, y2] } x within 0–1
+ *                          springs    { snappy|gentle: { stiffness, damping, mass } } all three
  *   components           { button|chip|badge|input: { style?, radius?, border?, size?, text?, weight?, case?, icon?,
  *                        shadow?, ring?, placeholder?, variants? } } component-level edits (lib/theme/components.mjs),
  *                        overrides only, each where the component has it (COMPONENTS[name].props):
@@ -53,6 +58,7 @@ import { FONTS } from '../theme/fonts.mjs';
 import { STEPS } from '../theme/palettes.mjs';
 import { anchorStep, neutralAnchorStep } from '../theme/ramp.mjs';
 import { CASES, COMPONENT_NAMES, COMPONENTS, CORNERS, SHADOWS, WEIGHTS } from '../theme/components.mjs';
+import { DURATION_NAMES, EASING_NAMES, SPRING_KEYS, SPRING_NAMES } from '../theme/motion.mjs';
 import { normalizeRecipe, OPTIONS, TEXT_DEFAULTS, TEXT_STYLES } from '../theme/recipe.mjs';
 import { semanticColors } from '../theme/semantic.mjs';
 
@@ -70,6 +76,8 @@ export const SHADOW_LEVELS = ['1', '2', '3'];
 export const BORDER_STYLES = ['solid', 'dashed', 'dotted'];
 export const EXTRA_KINDS = ['color', 'text', 'radius', 'shadow', 'border'];
 export const TEXT_KEYS = ['font', 'weight', 'size', 'leading', 'tracking'];
+export const MOTION_GROUPS = ['durations', 'easings', 'springs'];
+export { DURATION_NAMES, EASING_NAMES, SPRING_NAMES };
 export { TEXT_DEFAULTS, TEXT_STYLES };
 
 
@@ -405,6 +413,39 @@ function components(r, input, recipe) {
   return out;
 }
 
+/** motion: set durations, easings and springs (each whole), over the recipe's speed. */
+function motion(r, input) {
+  const out = {};
+  const v = r.object('motion', input);
+  for (const [group, value] of r.keys('motion', v, MOTION_GROUPS)) {
+    const path = `motion.${group}`;
+    const entries = {};
+    if (group === 'durations') for (const [name, ms] of r.keys(path, r.object(path, value), DURATION_NAMES)) entries[name] = r.num(`${path}.${name}`, ms, 0, 5000);
+    if (group === 'easings') {
+      for (const [name, curve] of r.keys(path, r.object(path, value), EASING_NAMES)) {
+        const at = `${path}.${name}`;
+        const ok = Array.isArray(curve) && curve.length === 4 && curve.every(isNumber) && curve[0] >= 0 && curve[0] <= 1 && curve[2] >= 0 && curve[2] <= 1 && [curve[1], curve[3]].every((y) => y >= -2 && y <= 3);
+        entries[name] = ok ? curve.map((n) => Number(n.toFixed(3))) : r.fail(at, `must be [x1, y1, x2, y2] with x from 0 to 1 and y from -2 to 3, got ${JSON.stringify(curve)}`);
+      }
+    }
+    if (group === 'springs') {
+      for (const [name, spring] of r.keys(path, r.object(path, value), SPRING_NAMES)) {
+        const at = `${path}.${name}`;
+        const s = r.object(at, spring);
+        r.keys(at, s, SPRING_KEYS);
+        entries[name] = {
+          stiffness: r.num(`${at}.stiffness`, s.stiffness, 1, 2000),
+          damping: r.num(`${at}.damping`, s.damping, 0, 200),
+          mass: r.num(`${at}.mass`, s.mass ?? 1, 0.1, 20),
+        };
+      }
+    }
+    for (const key of Object.keys(entries)) if (entries[key] === undefined) delete entries[key];
+    if (Object.keys(entries).length) out[group] = entries;
+  }
+  return out;
+}
+
 /** Is this a system document (rather than a bare recipe)? */
 export const isSystem = (value) => isObject(value) && (value.kind === SYSTEM_KIND || isObject(value.recipe));
 
@@ -414,7 +455,7 @@ function read(input) {
   if (input.kind !== undefined && input.kind !== SYSTEM_KIND) r.fail('kind', `must be "${SYSTEM_KIND}"`);
   if (input.v !== undefined && !(Number.isInteger(input.v) && input.v >= 1)) r.fail('v', 'must be a version number');
   if (input.v > SYSTEM_VERSION) throw new SystemError([`v: this system is version ${input.v}, from a newer @halftone-ds/tokens; update it to read the system`]);
-  r.keys('', input, ['$schema', 'kind', 'v', 'id', 'name', 'preset', 'updatedAt', 'recipe', 'colors', 'roles', 'type', 'fonts', 'radius', 'shadow', 'border', 'extras', 'brand', 'components']);
+  r.keys('', input, ['$schema', 'kind', 'v', 'id', 'name', 'preset', 'updatedAt', 'recipe', 'colors', 'roles', 'type', 'fonts', 'radius', 'shadow', 'border', 'extras', 'brand', 'components', 'motion']);
 
   let recipe;
   try {
@@ -478,6 +519,7 @@ function read(input) {
   doc.brand = brand(r, input.brand);
 
   doc.components = components(r, input.components, recipe);
+  doc.motion = motion(r, input.motion);
   return { doc, errors: r.errors };
 }
 
@@ -527,6 +569,7 @@ export function systemOverrides(input) {
     for (const key of Object.keys(entry.size ?? {})) paths.push(`components.${name}.size.${key}`);
     for (const [variant, slots] of Object.entries(entry.variants ?? {})) for (const slot of Object.keys(slots)) paths.push(`components.${name}.variants.${variant}.${slot}`);
   }
+  for (const [group, entries] of Object.entries(doc.motion)) for (const name of Object.keys(entries)) paths.push(`motion.${group}.${name}`);
   return paths;
 }
 

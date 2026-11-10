@@ -7,6 +7,7 @@
 import { hexToHslTriplet, hexToOklch } from '../color.mjs';
 import { componentVars } from './components.mjs';
 import { extraList, extraTextStyles } from './extras.mjs';
+import { bezierCss, springCss } from './motion.mjs';
 import { resolveTextStyles, shadowCss, textEdits } from './recipe.mjs';
 
 export const rem = (px) => (px >= 9999 ? '9999px' : `${px / 16}rem`);
@@ -93,6 +94,22 @@ export function extraVars(list, format, font) {
   return { light, dark };
 }
 
+/**
+ * Motion as CSS variables, the same in both modes: --duration-fast|base|slow (ms), --ease-standard|emphasized|exit
+ * (cubic-bezier), and each spring as --spring-<name> (a linear() easing) with --spring-<name>-duration.
+ */
+export function motionVars(motion) {
+  const vars = {};
+  for (const [name, ms] of Object.entries(motion.durations)) vars[`--duration-${name}`] = `${ms}ms`;
+  for (const [name, curve] of Object.entries(motion.easings)) vars[`--ease-${name}`] = bezierCss(curve);
+  for (const [name, spring] of Object.entries(motion.springs)) {
+    const css = springCss(spring);
+    vars[`--spring-${name}`] = css.easing;
+    vars[`--spring-${name}-duration`] = `${css.duration}ms`;
+  }
+  return vars;
+}
+
 /** { light: { '--primary': '…', '--radius': '0.625rem' }, dark: { … } } (a system's extras too) */
 export function themeVars(theme, format) {
   const convert = format === 'hsl' ? hexToHslTriplet : hexToOklch;
@@ -106,6 +123,7 @@ export function themeVars(theme, format) {
       vars['--density'] = String(theme.density.scale);
       for (const size of ['sm', 'md', 'lg', 'x']) vars[`--control-${size}`] = `${theme.density[size]}px`;
       Object.assign(vars, typeVars(theme.type), textStyleVars(themeTextStyles(theme), format));
+      if (theme.motion) Object.assign(vars, motionVars(theme.motion));
     }
     Object.assign(vars, styleVars(theme, format)[m]);
     if (theme.components) Object.assign(vars, componentVars(theme.components, format, convert)[m]);

@@ -1,6 +1,6 @@
 /**
  * lib/theme.ts — semantic colours as hex per scheme, non-colour primitives, and (for Expo Router apps)
- * the React Navigation theme.
+ * the React Navigation theme, and MOTION (durations, easings and springs, typed, for Motion and Reanimated).
  *   options: { out: 'lib/theme.ts', navTheme?: 'expo-router/react-navigation' | false }
  */
 import { camel, group } from '../lib/resolve.mjs';
@@ -144,6 +144,32 @@ ${primitiveGroup(ctx.prim, ['easing'])}
   },
 } as const;
 
+/**
+ * The theme's motion, at its speed: durations (ms), easings (cubic-bezier) and springs (stiffness, damping, mass).
+ * Reanimated: \`withTiming(v, { duration: MOTION.duration.base, easing: Easing.bezier(...MOTION.easing.standard) })\`,
+ * \`withSpring(v, MOTION.spring.snappy)\`. Motion: \`transition={{ type: 'spring', ...MOTION.spring.snappy }}\`, or
+ * \`{ duration: MOTION.duration.base / 1000, ease: MOTION.easing.standard }\`. Respect reduced motion either way.
+ */
+export const MOTION: Motion = ${JSON.stringify(
+    {
+      duration: ctx.motion.durations,
+      easing: ctx.motion.easings,
+      spring: ctx.motion.springs,
+    },
+    null,
+    2
+  )};
+
+export type Spring = { stiffness: number; damping: number; mass: number };
+export type Motion = {
+  /** ms: fast for hover and small feedback, base for most transitions, slow for sheets. */
+  duration: { fast: number; base: number; slow: number };
+  /** cubic-bezier [x1, y1, x2, y2]: standard for most movement, emphasized for entering, exit for leaving. */
+  easing: { standard: readonly [number, number, number, number]; emphasized: readonly [number, number, number, number]; exit: readonly [number, number, number, number] };
+  /** snappy for presses and toggles, gentle for sheets and cards settling in. */
+  spring: { snappy: Spring; gentle: Spring };
+};
+
 /** The component layer's CSS variables (what an embedded kit accepts from the docs site's live theme). */
 export const COMPONENT_VARS = ${JSON.stringify(componentVarNames())} as const;
 
@@ -174,6 +200,7 @@ export type ThemeInfo = {
     measure: string;
     button?: string;
     field?: string;
+    speed?: string;
     preset?: string;
   };
 };

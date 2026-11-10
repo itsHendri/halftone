@@ -138,7 +138,10 @@ ${cssBlock('.dark:root', ctx.semDark, { styleShape: ctx.shape, extras: ctx.extra
     letterSpacing[`type-${name}`] = `var(--type-${name}-tracking)`;
     fontWeight[`type-${name}`] = `var(--type-${name}-weight)`;
   }
-  const extend = { colors, borderRadius, borderWidth, boxShadow, height, minHeight: height, width: height, spacing, fontSize, lineHeight, letterSpacing, fontWeight, maxWidth };
+  // Motion: duration-fast|base|slow and ease-standard|emphasized|exit (springs are in lib/theme.ts MOTION).
+  const transitionDuration = Object.fromEntries(Object.entries(ctx.motion.durations).map(([n, ms]) => [n, `${ms}ms`]));
+  const transitionTimingFunction = Object.fromEntries(Object.entries(ctx.motion.easings).map(([n, c]) => [n, `cubic-bezier(${c.join(', ')})`]));
+  const extend = { colors, borderRadius, borderWidth, boxShadow, height, minHeight: height, width: height, spacing, fontSize, lineHeight, letterSpacing, fontWeight, maxWidth, transitionDuration, transitionTimingFunction };
   const files = [{ path: options.css, contents: css }];
   if (options.tailwind) files.push({ path: options.tailwind, contents: `// ${ctx.header}\nmodule.exports = ${JSON.stringify(extend, null, 2)};\n` });
   if (options.preset) {

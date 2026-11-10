@@ -21,6 +21,17 @@
   --shadow-1: 0px 1px 2px 0px rgba(0, 0, 0, 0.051);
   --shadow-2: 0px 4px 12px -2px rgba(0, 0, 0, 0.078);
   --shadow-3: 0px 12px 24px -6px rgba(0, 0, 0, 0.122);
+  /* Motion: durations, easings and springs (a spring is a linear() easing and the time it takes to settle). */
+  --duration-fast: 150ms;
+  --duration-base: 200ms;
+  --duration-slow: 300ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-emphasized: cubic-bezier(0.3, 0, 0, 1);
+  --ease-exit: cubic-bezier(0.4, 0, 1, 1);
+  --spring-snappy: linear(0, 0.0296, 0.1012, 0.1951, 0.2977, 0.4001, 0.4968, 0.5846, 0.662, 0.7288, 0.7852, 0.8321, 0.8706, 0.9016, 0.9263, 0.9458, 0.9608, 0.9724, 0.9811, 0.9875, 0.9922, 0.9956, 0.9979, 0.9995, 1.0005, 1.0011, 1.0014, 1.0015, 1.0015, 1.0014, 1.0013, 1.0011, 1);
+  --spring-snappy-duration: 421ms;
+  --spring-gentle: linear(0, 0.0317, 0.109, 0.2111, 0.323, 0.4346, 0.5394, 0.6337, 0.7157, 0.7849, 0.842, 0.8878, 0.9238, 0.9514, 0.9719, 0.9867, 0.9969, 1.0037, 1.0078, 1.01, 1.0108, 1.0106, 1.0099, 1.0089, 1.0077, 1.0065, 1.0053, 1.0043, 1.0033, 1.0026, 1.0019, 1.0014, 1);
+  --spring-gentle-duration: 792ms;
   /* The text styles (type-h1…type-blockquote), literal at the typeset: an edited style is one variable. */
   --type-h1-size: 2.25rem;
   --type-h1-leading: 1.111111;
@@ -521,6 +532,9 @@
   --font-sans: var(--kit-font-body, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif);
   --font-heading: var(--kit-font-heading, var(--kit-font-body, ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif));
   --font-mono: var(--kit-font-mono, ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace);
+  --ease-standard: var(--ease-standard);
+  --ease-emphasized: var(--ease-emphasized);
+  --ease-exit: var(--ease-exit);
   /* The theme's typeset scales every text size and its line height (text-sm, text-base…). */
   --text-xs: calc(0.75rem * var(--type-scale));
   --text-xs--line-height: calc(16 / 12 * var(--leading-factor));
@@ -741,6 +755,26 @@
   line-height: var(--tw-leading, var(--type-blockquote-leading));
   letter-spacing: var(--tw-tracking, var(--type-blockquote-tracking));
   font-weight: var(--tw-font-weight, var(--type-blockquote-weight));
+}
+@utility duration-fast {
+  transition-duration: var(--duration-fast);
+  animation-duration: var(--duration-fast);
+}
+@utility duration-base {
+  transition-duration: var(--duration-base);
+  animation-duration: var(--duration-base);
+}
+@utility duration-slow {
+  transition-duration: var(--duration-slow);
+  animation-duration: var(--duration-slow);
+}
+@utility spring-snappy {
+  transition-timing-function: var(--spring-snappy);
+  transition-duration: var(--spring-snappy-duration);
+}
+@utility spring-gentle {
+  transition-timing-function: var(--spring-gentle);
+  transition-duration: var(--spring-gentle-duration);
 }
 @utility type-button {
   font-family: var(--button-text-font);

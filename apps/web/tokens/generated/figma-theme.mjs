@@ -347,6 +347,20 @@ export const NUMBERS = {
       "value": 2,
       "code": "strokeWidth"
     }
+  },
+  "duration": {
+    "fast": {
+      "value": 150,
+      "code": "duration-fast"
+    },
+    "base": {
+      "value": 200,
+      "code": "duration-base"
+    },
+    "slow": {
+      "value": 300,
+      "code": "duration-slow"
+    }
   }
 };
 export const STRINGS = {

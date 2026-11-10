@@ -234,4 +234,4 @@ Text on a tint is `text-foreground`; the tone goes on the icon or a dot. With th
 - Typeset: body 16px, leading 1.75; every `text-*` size below scales by 1
 - Theme: `ht1-29B3XC60003T` (`npx halftone-tokens theme show`)
 - Font sizes (`text-*`): xs 12px · sm 14px · base 16px · lg 18px · xl 20px · 2xl 24px · 3xl 30px · 4xl 36px
-- Durations: fast 150ms · base 200ms · slow 300ms
+- Motion: durations fast 150ms · base 200ms · slow 300ms (`duration-fast`…); easings standard cubic-bezier(0.2, 0, 0, 1) · emphasized cubic-bezier(0.3, 0, 0, 1) · exit cubic-bezier(0.4, 0, 1, 1) (`ease-standard`…); springs snappy stiffness 400, damping 36, mass 1 · gentle stiffness 120, damping 18, mass 1 (`MOTION.spring.snappy` in lib/theme.ts). Nothing moves under reduced motion

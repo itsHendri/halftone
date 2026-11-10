@@ -17,6 +17,7 @@ import { fixContrast } from './fix.mjs';
 import { encodeRecipe } from './codec.mjs';
 import { fontById } from './fonts.mjs';
 import { componentLayer } from './components.mjs';
+import { motionFor } from './motion.mjs';
 import { BORDER, BUTTON, DENSITY, DEPTH, FIELD, fieldWidth, FLOW, LEADING, normalizeRecipe, RADIUS, resolveTextStyles, STROKE, textEdits, typeScale } from './recipe.mjs';
 import { anchorStep, brandRamp, neutralRamp } from './ramp.mjs';
 import { resolvedMap } from './refs.mjs';
@@ -144,6 +145,8 @@ export function generateTheme(input, base, { fix = true, colors: system } = {}) 
     button,
     field: { ...field, radius: lookup(radiusValue) * md * fld.round, radiusBottom: lookup(radiusValue) * md * fld.roundBottom },
     stroke: STROKE[recipe.stroke],
+    // Durations, easings and springs at the recipe's speed (a system's motion edits go on top in generateSystem).
+    motion: motionFor(recipe.speed),
     adjustments,
     warnings,
   };

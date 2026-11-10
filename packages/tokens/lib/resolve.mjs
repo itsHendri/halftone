@@ -8,6 +8,7 @@ import { readFileSync } from 'node:fs';
 import { componentLayer, readComponents } from './theme/components.mjs';
 import { rampsOf } from './theme/generate.mjs';
 import { extraList } from './theme/extras.mjs';
+import { DURATION_NAMES, EASING_NAMES, MOTION_DEFAULTS, SPRING_KEYS, SPRING_NAMES } from './theme/motion.mjs';
 import { isDerived, semanticColors, TINT_ROLES } from './theme/semantic.mjs';
 import { BUTTON, DEFAULT_RECIPE, DENSITY, DEPTH, FIELD, fieldWidth, resolveTextStyles, shadowCss, textEdits, TYPE, typeScale } from './theme/recipe.mjs';
 
@@ -171,7 +172,23 @@ export async function loadTokens(sourcePath) {
   const styles = { button: recorded.button ?? DEFAULT_RECIPE.button, field: recorded.field ?? DEFAULT_RECIPE.field };
   const extras = extraList(source.extra);
   const components = loadComponents({ source, compLight, compDark, prim, colors, radius, shape, type, textStyles, styles, recorded });
-  return { source, semLight, semDark, compLight, compDark, prim, colors, radius, shape, type, textStyles, styles, extras, components };
+  const motion = motionOf(prim);
+  return { source, semLight, semDark, compLight, compDark, prim, colors, radius, shape, type, textStyles, styles, extras, components, motion };
+}
+
+/**
+ * Durations (ms), easings (cubic-bezier) and springs from primitive.duration, .easing and .spring. A file from before
+ * motion was themed (no springs) gets the kits' defaults for what it lacks.
+ */
+function motionOf(prim) {
+  const value = (path) => prim.find((t) => t.path.join('.') === path)?.$value;
+  return {
+    durations: Object.fromEntries(DURATION_NAMES.map((n) => [n, value(`primitive.duration.${n}`) ?? MOTION_DEFAULTS.durations[n]])),
+    easings: Object.fromEntries(EASING_NAMES.map((n) => [n, value(`primitive.easing.${n}`) ?? MOTION_DEFAULTS.easings[n]])),
+    springs: Object.fromEntries(
+      SPRING_NAMES.map((n) => [n, Object.fromEntries(SPRING_KEYS.map((k) => [k, value(`primitive.spring.${n}.${k}`) ?? MOTION_DEFAULTS.springs[n][k]]))])
+    ),
+  };
 }
 
 /** The component layer from the file, or (a file from before it) the defaults on the file's colours and shape. */

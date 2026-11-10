@@ -11,11 +11,13 @@
  *     5. fonts, radius, shadow and border overrides
  *     6. extras, as the `extra` token group (theme.extra)
  *     7. the component layer (semantic.component.<name>), with the system's `components` edits on top
+ *     8. motion: the recipe's speed, with the system's set durations, easings and springs on top
  *
  * A system with no overrides is exactly generateTheme(doc.recipe, base) (a test holds it to that).
  * The theme's `code` is its recipe's: a lossy handle when the system has overrides (systemCode says so).
  */
 import { encodeRecipe } from '../theme/codec.mjs';
+import { motionFor } from '../theme/motion.mjs';
 import { generateTheme, withComponents } from '../theme/generate.mjs';
 import { STEPS } from '../theme/palettes.mjs';
 import { anchorStep, brandRamp, neutralAnchorStep, neutralRamp, neutralSeedRamp } from '../theme/ramp.mjs';
@@ -201,8 +203,10 @@ export function generateSystem(input, base, { fix = true } = {}) {
   }
   // 6. Extras.
   const extra = extraTokens(doc);
+  // 8. Motion.
+  const motion = motionFor(recipe.speed, doc.motion);
   // 7. The component layer again, on the edited corners, border and text styles, with the system's own component edits.
-  return withComponents({ ...theme, semantic, fonts, borderWidth, field, ...(extra ? { extra } : {}) }, base, doc.components);
+  return withComponents({ ...theme, semantic, fonts, borderWidth, field, motion, ...(extra ? { extra } : {}) }, base, doc.components);
 }
 
 /** The ht- code for a system with no overrides; null when one would be lost (a code holds only the recipe). */

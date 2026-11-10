@@ -111,8 +111,10 @@ export function sampleSpring(spring: Spring, { points = 60, duration }: { points
 export function springToCss(spring: Spring, points = 40): { easing: string; duration: number } {
   const samples = sampleSpring(spring, { points });
   const span = samples[samples.length - 1].t;
+  // At rest it is within 0.001 of the end: land exactly on it, so the transition doesn't jump when it finishes.
+  const stops = samples.map((s, i) => (i === samples.length - 1 ? 1 : round(s.value, 4)));
   return {
-    easing: `linear(${samples.map((s) => round(s.value, 4)).join(', ')})`,
+    easing: `linear(${stops.join(', ')})`,
     duration: Math.round(span * 1000),
   };
 }

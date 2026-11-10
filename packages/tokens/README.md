@@ -83,13 +83,13 @@ that kit and shadcn files import. `--json` prints `{ ok, results: [{ level, mess
 
 | Target | Writes |
 |---|---|
-| `nativewind3` | NativeWind 4 / Tailwind 3 CSS variables (HSL, `:root` + `.dark:root`) and the Tailwind theme extension: `css` + `tailwind` (the whole stylesheet and a map to spread), or `css` + `partial: true` + `preset` (variables only, imported first by the app's `global.css`, and a Tailwind preset) |
-| `shadcn-web` | Tailwind 4 / shadcn v4 CSS: oklch variables in `:root` + `.dark`, `@theme inline`, base layer |
-| `ts-theme` | `THEME` (hex per scheme), `TOKENS` (space, radius, type, motion) and an optional React Navigation theme |
+| `nativewind3` | NativeWind 4 / Tailwind 3 CSS variables (HSL, `:root` + `.dark:root`) and the Tailwind theme extension (`duration-fast`, `ease-standard`… included): `css` + `tailwind` (the whole stylesheet and a map to spread), or `css` + `partial: true` + `preset` (variables only, imported first by the app's `global.css`, and a Tailwind preset) |
+| `shadcn-web` | Tailwind 4 / shadcn v4 CSS: oklch variables in `:root` + `.dark`, `@theme inline`, base layer; motion as `--duration-*`, `--ease-*` and `--spring-*` (a `linear()` easing and its duration), with `duration-*`, `ease-*` and `spring-*` classes |
+| `ts-theme` | `THEME` (hex per scheme), `TOKENS` (space, radius, type, motion), `MOTION` (durations, easings and springs, typed for Motion and Reanimated) and an optional React Navigation theme |
 | `registry-theme` | the theme as shadcn registry `cssVars`, native and web |
 | `design-md` | a [DESIGN.md](https://github.com/google-labs-code/design.md) (spec alpha) |
 | `llms` | a tokens section for `llms.txt` |
-| `figma` | the input `halftone-tokens figma` pushes to Figma Variables |
+| `figma` | the input `halftone-tokens figma` pushes to Figma Variables (durations included; easings and springs have no variable type) |
 | `fonts` | the theme's fonts as loading code: `platform: 'expo'` (expo-google-fonts), `'next'` (next/font) or `'web'` (a Google Fonts `@import` and `--kit-font-*`, imported first in the app's stylesheet) |
 
 ## Themes
