@@ -1,0 +1,98 @@
+---
+title: Controls
+description: Controls for products that edit something. Scrub fields, curve and spring editors, a 2D pad, presets, and settings people copy as JSON.
+---
+
+Some products are editors: a theme studio, a type tester, an icon or poster tool. Their people set a corner, a
+shadow's blur, an easing or how much a sheet bounces by moving it and looking. The Controls family is the web kit's
+set of controls for those products: write the values the product edits, and their types pick the controls. It lives
+in the kit's registry like every other component, so it's your code, themed by your tokens, with nothing to install at
+run time.
+
+<ControlsDemo />
+
+Drag a label sideways to scrub it, hold **Shift** for fine steps or **Alt** for coarse ones, then **Copy** the settings
+to share them or paste them into another panel.
+
+## When to use it
+
+- **The inspector or property panel of a product that edits something.** The Studio on this site is built from these
+  controls.
+- **Not a settings form.** A form people fill in uses Field, Input, Switch and Select; it has a submit, no scrubbing
+  and no Reset all.
+- **Not a panel you add to tune a value and then remove.** Finding the right spring for your own animation during
+  development is the tune-live skill's job: a temporary panel that comes out once the numbers are in the code. That
+  panel never ships; these controls do.
+
+## Write a config
+
+`useControls(config)` reads a config once and keeps the values; `<ControlPanel>` draws them. Each value's type says which
+control it gets:
+
+| You write | You get |
+|---|---|
+| `[12, 0, 48]` or `[12, 0, 48, 2]` | a number field with a track: default, min, max, step (inferred when left out) |
+| `0.8`, `24` | a number field, its range inferred (0–1 for a fraction) |
+| `'#2563eb'` | a hex field with the colour picker |
+| `true` | a switch |
+| `{ type: 'select', options: [...] }` | segmented for two or three short options, a menu for more |
+| `{ type: 'easing', default: [0.2, 0, 0, 1] }` | a curve editor with a preview |
+| `{ type: 'spring', default: { visualDuration: 0.3, bounce: 0.2 } }` | a spring editor, in time or physics mode |
+| `{ type: 'vec2', default: [0, 0], min: -1, max: 1 }` | a 2D pad with x and y fields |
+| `{ blur: [8, 0, 40], y: [2, -10, 10] }` | a section holding those controls |
+
+`{ type: 'number', unit: 'px', label, hint }` and `{ type: 'section', collapsed: true, controls }` say more when you need
+to.
+
+```tsx
+'use client';
+import { ControlPanel, useControls } from '@/components/controls/control-panel';
+import type { ControlConfig } from '@/lib/controls/schema';
+
+// A module constant: useControls reads it once.
+const CARD: ControlConfig = {
+  radius: [12, 0, 32],
+  bordered: true,
+  shadow: { blur: [16, 0, 48], offset: { type: 'vec2', default: [0, -0.25] } },
+  entrance: { type: 'spring', default: { visualDuration: 0.35, bounce: 0.2 } },
+};
+
+export function CardInspector() {
+  const c = useControls(CARD);
+  return <ControlPanel title="Card" nodes={c.nodes} values={c.values} onChange={c.setValues} />;
+}
+```
+
+## How the controls behave
+
+- **Off its default, a control says so without colour:** a mark appears beside its label, the label goes from muted to
+  full strength, and a Reset button appears. A closed section says how many controls inside it changed.
+- **Number fields:** type, use the − and + buttons, drag the track, or scrub the label. The scrub locks the pointer, so it
+  keeps going past the screen's edge. Arrows step, Page Up and Down step by ten, Home and End go to the ends.
+- **Curves and points:** drag the handles, or focus one and use the arrows. A curve field takes any CSS
+  `cubic-bezier()` you paste.
+- **Springs:** time mode is Motion's `visualDuration` and `bounce`; physics mode is stiffness, damping and mass, as
+  Reanimated and React Spring take them. Switching converts, so the motion stays the same.
+- **Previews respect reduced motion:** with it on, they stay still and say so.
+
+## Copy and paste settings
+
+**Copy** writes `{ "$controls": 1, "name": "Card", "values": { … } }`. **Paste** takes that, or a bare values object (a
+DialKit export, one you wrote). Every value is checked against its control: out of range is clamped, the wrong type or an
+unknown key is skipped and named, and anything the paste leaves out keeps its value. Where the browser won't read the
+clipboard, a box opens to paste into.
+
+## Install it
+
+Every piece is its own registry item, so you can take the whole panel or one field:
+
+```bash
+npx shadcn@latest add @halftone-web/control-panel
+npx shadcn@latest add @halftone-web/number-field @halftone-web/curve-editor
+```
+
+The headless core comes with them, in `lib/controls/`: `schema.ts` (the config), `scrub.ts` (steps, modifiers, the
+pointer lock), `bezier.ts` and `spring.ts` (curves and springs, sampled for previews and as CSS), and `transfer.ts`
+(copy and paste). None of it needs React.
+
+Every component is on its own page under [Components › Controls](/components#controls).

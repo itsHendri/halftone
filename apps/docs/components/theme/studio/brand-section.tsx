@@ -2,7 +2,7 @@
 import { ImageUpIcon, Trash2Icon } from 'lucide-react';
 import * as React from 'react';
 import { BrandImageView } from '@/components/brand/brand-image';
-import { HexField } from '@/components/theme/studio/fields';
+import { HexField } from '@/components/controls/swatch';
 import { Field, inputClass, ItemPopover, smallButton } from '@/components/theme/studio/item-popover';
 import { FoundationSection, Segmented } from '@/components/theme/studio/section';
 import { headingFamily } from '@/components/theme/studio/systems-menu';

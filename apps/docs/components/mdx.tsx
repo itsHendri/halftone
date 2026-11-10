@@ -4,6 +4,7 @@ import { Step, Steps } from 'fumadocs-ui/components/steps';
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
 import defaultMdxComponents from 'fumadocs-ui/mdx';
 import type { MDXComponents } from 'mdx/types';
+import { ControlsDemo } from './controls-demo';
 import { CopyPrompt } from './copy-prompt';
 import { PhoneFrame } from './phone-frame';
 import { TypeSpecimen } from './theme/specimen';
@@ -19,6 +20,7 @@ export function getMDXComponents(components?: MDXComponents) {
     Steps,
     Tab,
     Tabs,
+    ControlsDemo,
     CopyPrompt,
     PhoneFrame,
     TokenSwatches,

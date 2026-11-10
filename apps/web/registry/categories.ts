@@ -12,4 +12,5 @@ export const CATEGORY_META: CategoryMeta[] = [
   { id: 'media', label: 'Media', blurb: 'Images, placeholders, illustration-scale icons' },
   { id: 'marketing', label: 'Marketing', blurb: 'Heroes, feature grids, pricing' },
   { id: 'ai', label: 'AI product', blurb: 'Chat, history, streaming, tool calls, approvals' },
+  { id: 'controls', label: 'Controls', blurb: 'For editors and design tools: inspectors, scrub fields, curves, springs, copy and paste settings' },
 ];

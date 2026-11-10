@@ -71,8 +71,9 @@ try {
     // shadcn strips a file's leading comment block on install; any other difference is a real change.
     const local = readFileSync(join(copy, file), 'utf8').split('\n');
     const firstCode = local.findIndex((l) => l.trim() && !/^\s*(\/\/|\/\*|\*)/.test(l));
-    // Compared as collapsed text: shadcn's diff output can join two source lines into one.
-    const squash = (t) => t.replace(/\s+/g, ' ').trim();
+    // Compared as collapsed text: shadcn's diff output can join two source lines into one, and prints the stripped
+    // comment's apostrophes as double quotes (`the browser's` as `the browser"s`).
+    const squash = (t) => t.replace(/\s+/g, ' ').replace(/"/g, "'").trim();
     const leading = squash(local.slice(0, firstCode === -1 ? 0 : firstCode).join(' '));
     const changed = diff
       .split('\n')

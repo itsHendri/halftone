@@ -2,7 +2,8 @@
 import { COLOR_ROLES, ROLE_NAMES, type ColorRole, type HalftoneSystem } from '@halftone-ds/tokens/system';
 import { OPTIONS } from '@halftone-ds/tokens/theme';
 import * as React from 'react';
-import { HexField, Swatch, TokenPicker } from '@/components/theme/studio/fields';
+import { HexField, Swatch } from '@/components/controls/swatch';
+import { TokenPicker } from '@/components/theme/studio/fields';
 import { ItemMenu } from '@/components/theme/studio/item-menu';
 import { EditedDot, Field, inputClass, ItemPopover, openItem, smallButton } from '@/components/theme/studio/item-popover';
 import { LABELS } from '@/components/theme/studio/parts';

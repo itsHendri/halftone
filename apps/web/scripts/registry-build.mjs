@@ -6,13 +6,14 @@
  *   npm run registry:build -- --check write nothing; exit 1 if anything is stale (CI)
  *
  * 1. Checks: unique ids, every listed file exists and exports what the entry says, and every
- *    components/ui + components/kit file belongs to an entry (or is a known helper).
+ *    components/ui, components/kit and components/controls file belongs to an entry (or is a known helper).
  * 2. DESIGN_SYSTEM.md: rewrites the blocks between <!-- GENERATED:<name> --> markers (one table per
  *    category, and the radius scale). Everything outside the markers stays hand-written.
  * 3. llms.txt: the agent-facing index (rules pointer, components, tokens).
  * 4. registry.json: the shadcn registry source (`npm run registry:dist` builds dist/r/web from it).
  *    Dependencies are read from each file's imports: unchanged components/ui files are shadcn/ui's own
- *    items (bare names), forked ones, components/kit, lib and hooks are our own `@halftone-web/*` items.
+ *    items (bare names), forked ones, components/kit, components/controls, lib (lib/controls too) and hooks are our
+ *    own `@halftone-web/*` items.
  * 5. registry/generated/index.json: the same data for the docs site.
  */
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -29,7 +30,7 @@ const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const check = process.argv.includes('--check');
 const read = (p) => readFileSync(join(root, p), 'utf8');
 
-/** Files under components/ui and components/kit that are internals, not registry entries. */
+/** Files under components/ui, components/kit and components/controls that are internals, not registry entries. */
 const HELPERS = [];
 
 // ---------- 1. checks ----------------------------------------------------------------------------
@@ -55,7 +56,7 @@ for (const c of COMPONENTS) {
   }
 }
 const listed = new Set([...COMPONENTS.flatMap((c) => c.files), ...HELPERS]);
-for (const dir of ['components/ui', 'components/kit']) {
+for (const dir of ['components/ui', 'components/kit', 'components/controls']) {
   for (const f of readdirSync(join(root, dir))) {
     if (/\.tsx?$/.test(f) && !listed.has(`${dir}/${f}`)) problems.push(`unregistered: ${dir}/${f} — add it to registry/components.ts`);
   }
@@ -218,12 +219,12 @@ function resolveImport(spec, from) {
     // A bare name resolves to shadcn/ui's own registry.
     return { registry: isUpstream(name) ? name : `${NS}/${name}` };
   }
-  if (spec.startsWith('@/components/kit/')) {
+  if (spec.startsWith('@/components/kit/') || spec.startsWith('@/components/controls/')) {
     const file = existing(spec.slice(2));
     if (!file || !owner.has(file)) throw new Error(`${from}: ${spec} is not a registered kit file`);
     return { registry: `${NS}/${owner.get(file)}` };
   }
-  if (spec.startsWith('@/lib/')) return { registry: `${NS}/lib-${spec.slice('@/lib/'.length)}` };
+  if (spec.startsWith('@/lib/')) return { registry: `${NS}/${libItem(spec.slice('@/lib/'.length))}` };
   if (spec.startsWith('@/hooks/')) return { registry: `${NS}/hook-${spec.slice('@/hooks/'.length)}` };
   if (spec.startsWith('@/') || spec.startsWith('.')) throw new Error(`${from}: cannot publish an import of ${spec}`);
   const name = spec.startsWith('@') ? spec.split('/').slice(0, 2).join('/') : spec.split('/')[0];
@@ -271,9 +272,17 @@ items.push({
   cssVars: theme.cssVars,
 });
 
-const libFiles = readdirSync(join(root, 'lib')).filter((f) => /\.tsx?$/.test(f)).sort();
+/** lib/link.tsx → lib-link, lib/controls/scrub.ts → lib-controls-scrub. */
+function libItem(path) {
+  return `lib-${path.replace(/\.tsx?$/, '').replace(/\//g, '-')}`;
+}
+/** lib/*.ts(x) and one folder down (lib/controls), tests left out. */
+const isSource = (f) => /\.tsx?$/.test(f) && !/\.test\.tsx?$/.test(f);
+const libFiles = readdirSync(join(root, 'lib'), { withFileTypes: true })
+  .flatMap((d) => (d.isDirectory() ? readdirSync(join(root, 'lib', d.name)).filter(isSource).map((f) => `${d.name}/${f}`) : isSource(d.name) ? [d.name] : []))
+  .sort();
 for (const f of libFiles) {
-  const name = `lib-${f.replace(/\.tsx?$/, '')}`;
+  const name = libItem(f);
   items.push({
     name,
     type: 'registry:lib',

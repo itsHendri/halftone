@@ -9,8 +9,9 @@ const REGISTERED = JSON.parse(readFileSync(new URL('./registry/generated/index.j
   (c) => c.files
 );
 const CODE = ['app/**/*.{ts,tsx}', 'components/**/*.{ts,tsx}'];
-// The registry's own sources: components/ui and components/kit define the kit, so they may use what pages can't.
-const SOURCES = ['components/ui/**', 'components/kit/**'];
+// The registry's own sources: components/ui, components/kit and components/controls define the kit, so they may use
+// what pages can't.
+const SOURCES = ['components/ui/**', 'components/kit/**', 'components/controls/**'];
 
 export default defineConfig([
   ...nextVitals,
@@ -46,7 +47,7 @@ export default defineConfig([
   // Kit components work in any React app: they link through @/lib/link, which the app points at its router once
   // (KitLinkProvider). A next/link import here would break every app that isn't Next.js.
   {
-    files: ['components/kit/**'],
+    files: ['components/kit/**', 'components/controls/**', 'lib/controls/**'],
     rules: {
       'no-restricted-imports': [
         'error',
@@ -60,6 +61,9 @@ export default defineConfig([
       ],
     },
   },
+  // The controls are new and ours from the first line: tokens only, as a page's code is.
+  // (Tests are data: a hex there is a value under test.)
+  { files: ['components/controls/**', 'lib/controls/**'], ignores: ['**/*.test.ts'], rules: { 'halftone/no-raw-colour': 'error' } },
   {
     files: CODE,
     ignores: SOURCES,

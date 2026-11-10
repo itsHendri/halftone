@@ -194,6 +194,9 @@ next person or agent.
 
 - `components/ui/*` — shadcn/ui (owned source; installed with the shadcn CLI, then ours to edit).
 - `components/kit/*` — ours, composed from `ui` primitives, className-only styling.
+- `components/controls/*`: ours, the Controls family, with its headless core in `lib/controls/`. For products that
+  edit something (a theme studio, a type tester, an icon tool): their inspectors and property panels. Never a settings
+  form, and never a panel added to tune a value and then removed (that is the tune-live skill).
 
 The tables are generated from `registry/components.ts` by `npm run registry:build`: edit that file, not
 the tables. Text between `GENERATED` markers is overwritten.
@@ -354,6 +357,24 @@ the tables. Text between `GENERATED` markers is overwritten.
 | ToolCallCard | `components/kit/tool-call-card.tsx` | an action the assistant took · `status` running/done/error/stopped · details collapsed |
 | ApprovalCard | `components/kit/approval-card.tsx` | consent before consequence · says what changes and whether it can be undone |
 <!-- /GENERATED:registry:ai -->
+
+### Controls
+<!-- GENERATED:registry:controls -->
+| Component | Path | Notes |
+|---|---|---|
+| ControlPanel / `useControls` | `components/controls/control-panel.tsx` | an inspector drawn from a config (`[default, min, max]`, a hex, a boolean, `{ type }`, nested = a section) · Copy, Paste, Reset all |
+| NumberField | `components/controls/number-field.tsx` | scrub the label (pointer lock), type, step or drag the track · Shift fine, Alt coarse · off-default mark and Reset |
+| ControlRow / OffDefaultMark / ResetButton | `components/controls/control-row.tsx` | a control’s label row: label, off-default mark, Reset, trailing slot; the control goes underneath |
+| HexField / Swatch / `readHex` | `components/controls/swatch.tsx` | a colour: the browser’s picker beside the hex as text · six digits apply as you type |
+| ControlSegmented | `components/controls/segmented.tsx` | 2–4 short choices in a panel row · a radio group, arrows move |
+| ControlSwitch | `components/controls/switch.tsx` | on or off in a panel row · the thumb’s side says which |
+| ControlSelect | `components/controls/select.tsx` | a choice from a longer list · the browser’s own select |
+| ControlSection | `components/controls/section.tsx` | a fold in a panel · closed, it still says how many controls inside are changed |
+| Presets / `matchesPreset` | `components/controls/presets.tsx` | named sets of values to jump to · the matching one is pressed and checked |
+| CurveEditor / MotionPreview | `components/controls/curve-editor.tsx` | a cubic-bezier easing: drag or arrow the two handles, pick a preset or paste CSS · a live preview |
+| SpringEditor | `components/controls/spring-editor.tsx` | a spring in time (duration, bounce) or physics (stiffness, damping, mass) · the switch converts · graph and preview |
+| Vec2Pad | `components/controls/vec2-pad.tsx` | a 2D point: drag it, arrow it, or type x and y · y grows upwards |
+<!-- /GENERATED:registry:controls -->
 
 ## Patterns
 
