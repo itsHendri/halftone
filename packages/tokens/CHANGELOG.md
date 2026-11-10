@@ -1,5 +1,16 @@
 # @halftone-ds/tokens
 
+## 1.5.0
+
+### Minor Changes
+
+- 1dfbffb: Motion is part of a theme. A recipe's new `speed` (normal, snappy, relaxed, slow) scales every duration and spring, and rides in ht3 codes in two bits that were reserved, so every older code reads as Speed normal and a theme at normal keeps its code. Themes now write `primitive.duration`, `primitive.easing` and a new `primitive.spring` group (snappy and gentle, as stiffness, damping and mass). A system document takes an optional `motion` section (`durations`, `easings`, `springs`) with set values; documents without it are unchanged. The targets draw it: `--duration-*`, `--ease-*` and `--spring-*` with their classes (shadcn-web), a typed `MOTION` object (ts-theme), `duration-*` and `ease-*` (nativewind3), DESIGN.md and llms, and durations as Figma variables. `motionFor`, `springCss` and `motionVars` are exported.
+- 031af7e: `halftone-tokens doctor`: checks an app's setup for kit components and prints a fix for each problem. It covers the tokens being built and up to date, the stylesheet or `global.css` imports, the Tailwind preset (Expo), the new-york style and the `@/` aliases. It also catches a kit file in `components/ui` that shadcn's or react-native-reusables' stock version has replaced, by comparing it with the registry. It warns about overriding rules, a missing dark mode, `KitLinkProvider` or `KitThemeProvider`, unloaded fonts and a second `cn`. `--offline`, `--json`. `init` no longer counts a `height` inside `keyframes` as overriding the kit's heights.
+
+### Patch Changes
+
+- 05bc875: shadcn-web: a transition or an enter/exit animation without a duration class now takes the theme's motion. Tailwind's default transition duration and easing point at `--duration-fast` and `--ease-standard`, every element's `--tw-duration` defaults to `--duration-fast` (tw-animate-css's popovers, menus and tooltips read it), and the `duration-*` and `spring-*` classes set `--tw-duration` (a spring `--tw-ease` too), as Tailwind's own duration classes do.
+
 ## 1.4.0
 
 ### Minor Changes
