@@ -127,6 +127,25 @@ layer the `HalftoneSystem` document in `@halftone-ds/tokens`, shipped in 1.3):
 Every rule in both kits' guides and the docs says why, and when to break it (#93; the research behind each rule,
 with sources, is `apps/docs/design/rules-research.md`). New rules are written the same way as they land.
 
+## Done: Controls and Motion (2026-11-10, branch `feat/controls-kit`)
+
+From a look at Tweakpane, DialKit and Toolcraft (ideas only: no dependency on any of them). Plan:
+`~/.claude/plans/https-tweakpane-github-io-docs-https-jos-curious-orbit.md`, sections 3 and 4.
+- **A Controls family in the web kit** (registry category Controls, 12 items): ControlPanel drawn from a config
+  (DialKit's `[default, min, max]`, a hex, a boolean, `{ type }`, nested = a section), NumberField with a pointer-lock
+  scrub (Shift fine, Alt coarse), CurveEditor, SpringEditor (time and physics), Vec2Pad, HexField, Presets, and copy
+  and paste of settings as JSON. Off its default, a control shows a mark, a full-strength label and Reset, never colour
+  alone. Its headless core is `lib/controls` (unit tested). They are controls that ship in Halftone apps that edit
+  something; a panel added to tune a value and then removed is the tune-live skill's job.
+- **The Studio is built from them**, installed into the docs site from the registry (`npm run docs:sync`, checked in
+  CI). Docs page: `/docs/controls`.
+- **Motion in the theme.** A recipe's Speed (normal, snappy, relaxed, slow) scales every duration and spring and rides
+  in ht3 codes (two bits that were reserved; older codes read as normal). Themes write durations, easings and a new
+  springs group (snappy, gentle); a system can set each one (`motion` in the document). Both kits get them: the web as
+  `duration-*`, `ease-*` and `spring-*` classes, the phone as a typed `MOTION` in `lib/theme.ts`; DESIGN.md, llms and
+  Figma (durations) too. Studio has a Motion section with the Speed knob and its shuffle lock, a curve editor per
+  easing, a spring editor per spring and a live preview. Waiting to publish with the next `@halftone-ds/tokens` minor.
+
 ## Planned, not started: the thinking beside the screens
 
 A prototype keeps its reasoning next to its screens, in both kits. Learned from Design Studio

@@ -280,8 +280,10 @@ Buttons are pills. Inputs 8px, cards 10px, larger surfaces 16px, sheet tops
 Only components listed in the registry in `DESIGN_SYSTEM.md` exist. The primary button is a solid brand fill. Text fields are outlined boxes.
 Button, Chip, Badge and Input draw the theme's component tokens, the same in both kits: Button 48px tall (small 40, large 56), 20px padding, pill, 16px text; Chip 36px, pill; selected is foreground with background text; Badge pill, 14px text; Input, Textarea and Select 48px, 8px corners.
 Never restyle them by hand. Phones raise any tap target under 44px to 44.
-Motion: 150ms for micro-feedback, 200ms for most transitions, 300ms for sheets, and
-nothing moves when the OS asks for reduced motion.
+Motion: 150ms for micro-feedback, 200ms for most transitions, 300ms for sheets; the
+standard easing (cubic-bezier(0.2, 0, 0, 1)) for most movement, emphasized for entering,
+exit for leaving; springs snappy (stiffness 400, damping 36, mass 1) and gentle (stiffness 120, damping 18, mass 1) for motion that should feel physical. Nothing moves when the OS asks for
+reduced motion.
 
 ## Do's and Don'ts
 

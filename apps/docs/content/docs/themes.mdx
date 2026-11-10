@@ -63,8 +63,8 @@ each one, before and after. A theme from the picker always passes, even in stric
   `npx halftone-tokens theme apply ./my-system.halftone.json`.
 
 `apply` only rewrites what a theme owns: the brand and neutral ramps, the semantic colours, radius, fonts,
-shadows, borders, icon stroke, control sizes and the typeset. Spacing, the base type scale, motion and your
-descriptions stay.
+shadows, borders, icon stroke, control sizes, the typeset and motion (durations, easings and springs, at the theme's
+Speed). Spacing, the base type scale and your descriptions stay.
 It records the theme in `tokens.json`, so `halftone-tokens theme show` (and each kit's Foundations page) can say
 which theme is applied, and whether anyone has edited its tokens by hand since. `apply` won't overwrite hand
 edits without `--force`.

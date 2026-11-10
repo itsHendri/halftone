@@ -104,7 +104,10 @@ export default function designMd(ctx, options) {
   const hex = Object.fromEntries(ctx.colors.map((c) => [c.name, c.light]));
   const darkHex = Object.fromEntries(ctx.colors.map((c) => [c.name, c.dark]));
   const radius = Object.fromEntries(group(ctx.prim, ['radius']).map((t) => [t.key, t.value]));
-  const duration = Object.fromEntries(group(ctx.prim, ['duration']).map((t) => [t.key, t.value]));
+  const duration = ctx.motion.durations;
+  const springLine = Object.entries(ctx.motion.springs)
+    .map(([n, s]) => `${n} (stiffness ${s.stiffness}, damping ${s.damping}, mass ${s.mass})`)
+    .join(' and ');
 
   // A system's own tokens: listed, never in the front matter's shared vocabulary.
   const extras = describeExtras(ctx.extras ?? { color: [], text: [], radius: [], shadow: [], border: [] }, { platform: options.platform ?? 'mobile' });
@@ -220,8 +223,10 @@ ${radius['2xl']}px; chips, avatars and dots are fully round.
 Only components listed in the registry in \`DESIGN_SYSTEM.md\` exist. ${STYLE_TEXT.button[ctx.styles.button]} ${STYLE_TEXT.field[ctx.styles.field]}
 Button, Chip, Badge and Input draw the theme's component tokens, the same in both kits: ${describeComponents(ctx.components).join('; ')}.
 Never restyle them by hand. Phones raise any tap target under 44px to 44.
-Motion: ${duration.fast}ms for micro-feedback, ${duration.base}ms for most transitions, ${duration.slow}ms for sheets, and
-nothing moves when the OS asks for reduced motion.
+Motion: ${duration.fast}ms for micro-feedback, ${duration.base}ms for most transitions, ${duration.slow}ms for sheets; the
+standard easing (cubic-bezier(${ctx.motion.easings.standard.join(', ')})) for most movement, emphasized for entering,
+exit for leaving; springs ${springLine} for motion that should feel physical. Nothing moves when the OS asks for
+reduced motion.
 
 ## Do's and Don'ts
 

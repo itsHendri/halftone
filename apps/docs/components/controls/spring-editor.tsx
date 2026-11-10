@@ -27,6 +27,8 @@ export function SpringEditor({ label, value, onChange, className }: { label: str
   const scaleY = (H - TOP) / Math.max(peak, 1.0001);
   const points = samples.map((s, i) => `${((i / (samples.length - 1)) * W).toFixed(1)},${(H - s.value * scaleY).toFixed(1)}`).join(' ');
   const target = H - scaleY;
+  // Overshoot as a whole percent; under 1% reads as none.
+  const overshoot = Math.round((peak - 1) * 100);
   const set = (patch: Partial<Record<string, number>>) => onChange({ ...value, ...patch } as Spring);
 
   return (
@@ -40,12 +42,12 @@ export function SpringEditor({ label, value, onChange, className }: { label: str
         ]}
         onChange={(mode) => onChange(convertSpring(value, mode))}
       />
-      <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`${label}: settles in ${settle.toFixed(2)} seconds${peak > 1.001 ? `, overshooting by ${Math.round((peak - 1) * 100)}%` : ''}`} className="bg-muted-subtle border-border w-full rounded-md border">
+      <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`${label}: settles in ${settle.toFixed(2)} seconds${overshoot >= 1 ? `, overshooting by ${overshoot}%` : ''}`} className="bg-muted-subtle border-border w-full rounded-md border">
         <line x1={0} x2={W} y1={target} y2={target} className="stroke-border" strokeDasharray="3 3" />
         <polyline points={points} fill="none" className="stroke-foreground" strokeWidth={2} strokeLinejoin="round" />
       </svg>
       <p className="text-muted-foreground text-xs tabular-nums">
-        Settles in {settle.toFixed(2)} s{peak > 1.001 ? ` · overshoots ${Math.round((peak - 1) * 100)}%` : ''}
+        Settles in {settle.toFixed(2)} s{overshoot >= 1 ? ` · overshoots ${overshoot}%` : ''}
       </p>
       {value.mode === 'time' ? (
         <>

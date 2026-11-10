@@ -16,6 +16,17 @@ export type Flow = 'normal' | 'tight' | 'loose';
 export type Measure = '70' | '60' | '80' | '90';
 export type ButtonStyle = 'solid' | 'soft' | 'outline' | 'raised';
 export type FieldStyle = 'outline' | 'filled' | 'underline';
+/** Motion's speed: every duration and spring at ×1, ×0.75, ×1.25 or ×1.5. */
+export type Speed = 'normal' | 'snappy' | 'relaxed' | 'slow';
+export type DurationName = 'fast' | 'base' | 'slow';
+export type EasingName = 'standard' | 'emphasized' | 'exit';
+export type SpringName = 'snappy' | 'gentle';
+export type CubicBezier = [number, number, number, number];
+export type SpringPhysics = { stiffness: number; damping: number; mass: number };
+/** Durations (ms), easings and springs, as a theme draws them. */
+export type Motion = { durations: Record<DurationName, number>; easings: Record<EasingName, CubicBezier>; springs: Record<SpringName, SpringPhysics> };
+/** A system's motion edits: set values, over the speed. */
+export type MotionEdits = { durations?: Partial<Record<DurationName, number>>; easings?: Partial<Record<EasingName, CubicBezier>>; springs?: Partial<Record<SpringName, SpringPhysics>> };
 export type Mode = 'light' | 'dark';
 export type CvdType = 'protanopia' | 'deuteranopia' | 'tritanopia';
 /** A pair of tones as one vision sees them: `fg` and `bg` are the simulated hex of `a` and `b`. */
@@ -41,6 +52,8 @@ export type Recipe = {
   button: ButtonStyle;
   /** Text fields' style (inputs, text areas, select triggers). */
   field: FieldStyle;
+  /** Motion: how quick every duration and spring is. */
+  speed: Speed;
   preset?: string;
 };
 export type RecipeInput = Partial<Omit<Recipe, 'font'>> & { font?: Partial<Recipe['font']> };
@@ -76,6 +89,8 @@ export type Theme = {
   field: { alpha: Record<Mode, number>; border: number; edge: number; inset: number; radius: number; radiusBottom: number };
   /** The component layer (Button, Chip, Badge, Input), resolved: what both kits draw. */
   components: ComponentShapes;
+  /** Durations, easings and springs at the recipe's speed, with a system's motion edits on top. */
+  motion: Motion;
   [key: string]: unknown;
 };
 
@@ -199,9 +214,30 @@ export const OPTIONS: {
   measure: Measure[];
   button: ButtonStyle[];
   field: FieldStyle[];
+  speed: Speed[];
 };
 export const TYPESET_KEYS: ['size', 'leading', 'flow', 'measure'];
 export const STYLE_KEYS: ['button', 'field'];
+export const MOTION_KEYS: ['speed'];
+export function defaultMotion(recipe: Recipe): boolean;
+/** Speed's factor per step. */
+export const SPEED: Record<Speed, number>;
+export const DURATION_NAMES: DurationName[];
+export const EASING_NAMES: EasingName[];
+export const SPRING_NAMES: SpringName[];
+/** The kits' timings at Speed normal. */
+export const MOTION_DEFAULTS: Readonly<Motion>;
+/** What each duration, easing and spring is for. */
+export const MOTION_USE: { durations: Record<DurationName, string>; easings: Record<EasingName, string>; springs: Record<SpringName, string> };
+/** The motion a speed and a system's edits make. */
+export function motionFor(speed?: Speed, edits?: MotionEdits): Motion;
+/** A spring that plays `factor` times as long, with the same bounce. */
+export function scaleSpring(spring: SpringPhysics, factor: number): SpringPhysics;
+/** A spring as CSS: a linear() easing and its duration (ms). */
+export function springCss(spring: SpringPhysics, points?: number): { easing: string; duration: number };
+export function bezierCss(curve: CubicBezier): string;
+/** --duration-*, --ease-* and --spring-* (with --spring-*-duration). */
+export function motionVars(motion: Motion): Record<string, string>;
 export const LEADING: Record<Leading, number>;
 export const FLOW: Record<Flow, number>;
 export const FONTS: Font[];

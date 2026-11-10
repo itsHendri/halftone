@@ -25,6 +25,9 @@ export default function figma(ctx, options) {
     'font-size': num(['font', 'size'], (k) => `text-${k}`),
     border: { width: { value: ctx.shape.borderWidth, code: 'border' } },
     icon: { stroke: { value: ctx.shape.stroke, code: 'strokeWidth' } },
+    // Durations only: Figma variables hold numbers, and easings and springs have no variable type (set them on
+    // prototype transitions by hand: they are in DESIGN.md).
+    duration: Object.fromEntries(Object.entries(ctx.motion.durations).map(([n, ms]) => [n, { value: ms, code: `duration-${n}` }])),
   };
   const fonts = themeFonts(ctx);
   const strings = {

@@ -10,6 +10,7 @@ export const FOUNDATION_SECTIONS = [
   { id: 'corners', label: 'Corners' },
   { id: 'shadows', label: 'Shadows' },
   { id: 'borders', label: 'Borders' },
+  { id: 'motion', label: 'Motion' },
   { id: 'controls', label: 'Controls' },
 ] as const;
 export type SectionId = (typeof FOUNDATION_SECTIONS)[number]['id'];

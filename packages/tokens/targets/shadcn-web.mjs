@@ -6,13 +6,15 @@
  *   options: { out: 'tokens/generated/web.css' }
  *            density: false   leave the spacing scale alone (the docs site)
  *            typeset: false   leave the text sizes alone (the docs site keeps its reading sizes)
+ * Motion: --duration-*, --ease-* and --spring-* in :root, with duration-fast|base|slow, ease-standard|emphasized|exit and
+ * spring-snappy|gentle classes (a spring class sets the easing and its duration together).
  */
 import { hexToOklch } from '../lib/color.mjs';
 import { group, radiusCss } from '../lib/resolve.mjs';
 import { TEXT_LINE_HEIGHT } from '../lib/theme/recipe.mjs';
 import { COMPONENT_NAMES, COMPONENTS, componentColors, componentVars } from '../lib/theme/components.mjs';
 import { hasExtras } from '../lib/theme/extras.mjs';
-import { extraVars, styleVars, textStyleVars, typeVars } from '../lib/theme/vars.mjs';
+import { extraVars, motionVars, styleVars, textStyleVars, typeVars } from '../lib/theme/vars.mjs';
 
 const rem = (px) => (px >= 9999 ? '9999px' : `${px / 16}rem`);
 const SYSTEM_SANS = "ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif";
@@ -112,6 +114,16 @@ function componentsCss(ctx) {
   };
 }
 
+/** The motion classes: durations and springs (an easing class is Tailwind's own, from --ease-* in @theme). */
+function motionUtilities(motion) {
+  return [
+    ...Object.keys(motion.durations).map((n) => `@utility duration-${n} {\n  transition-duration: var(--duration-${n});\n  animation-duration: var(--duration-${n});\n}`),
+    ...Object.keys(motion.springs).map(
+      (n) => `@utility spring-${n} {\n  transition-timing-function: var(--spring-${n});\n  transition-duration: var(--spring-${n}-duration);\n}`
+    ),
+  ].join('\n');
+}
+
 export default function shadcnWeb(ctx, options) {
   const extras = extrasCss(ctx);
   const components = componentsCss(ctx);
@@ -133,6 +145,8 @@ export default function shadcnWeb(ctx, options) {
   }
 ${styles('light')}
 ${shadows('light')}
+  /* Motion: durations, easings and springs (a spring is a linear() easing and the time it takes to settle). */
+${Object.entries(motionVars(ctx.motion)).map(([k, v]) => `  ${k}: ${v};`).join('\n')}
   /* The text styles (type-h1…type-blockquote), literal at the typeset: an edited style is one variable. */
 ${Object.entries(textStyleVars(ctx.textStyles, 'oklch', (role) => FONT_ROLE[role])).map(([k, v]) => `  ${k}: ${v};`).join('\n')}
 ${vars('light')}${components.light}${extras.light}
@@ -161,13 +175,15 @@ ${ctx.radius.steps.map((s) => `  --radius-${s.name}: ${radiusCss(s)};`).join('\n
   --shadow-2xl: var(--shadow-3);
   --font-sans: var(--kit-font-body, ${SYSTEM_SANS});
   --font-heading: var(--kit-font-heading, var(--kit-font-body, ${SYSTEM_SANS}));
-  --font-mono: var(--kit-font-mono, ${SYSTEM_MONO});${
+  --font-mono: var(--kit-font-mono, ${SYSTEM_MONO});
+${Object.keys(ctx.motion.easings).map((n) => `  --ease-${n}: var(--ease-${n});`).join('\n')}${
     options.typeset === false ? '' : `\n  /* The theme's typeset scales every text size and its line height (text-sm, text-base…). */\n${textScale(ctx)}`
   }
 ${ctx.colors.map((c) => `  --color-${c.name}: ${color(c.name)};`).join('\n')}${components.theme}${extras.theme}
 }
 
 ${textStyleUtilities(Object.keys(ctx.textStyles))}
+${motionUtilities(ctx.motion)}
 ${components.utilities}${extras.utilities}
 @layer base {
   * {

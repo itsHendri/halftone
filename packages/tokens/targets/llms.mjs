@@ -42,7 +42,7 @@ ${rows}
 - Fonts: headings ${fonts.heading?.family ?? 'system'}, body ${fonts.body?.family ?? 'system'}, mono ${fonts.mono?.family ?? 'system'} (applied by Text; \`font-heading\` makes any Text a heading, \`font-mono\` code and figures)
 - Typeset: body ${ctx.type.size}px, leading ${ctx.type.leading}; every \`text-*\` size below scales by ${ctx.type.scale}${theme.applied ? `\n- Theme: \`${theme.code}\` (\`npx halftone-tokens theme show\`)` : ''}
 - Font sizes (\`text-*\`): ${steps(['font', 'size'])}
-- Durations: ${steps(['duration'], 'ms')}
+- Motion: durations ${Object.entries(ctx.motion.durations).map(([n, ms]) => `${n} ${ms}ms`).join(' · ')} (\`duration-fast\`…); easings ${Object.entries(ctx.motion.easings).map(([n, c]) => `${n} cubic-bezier(${c.join(', ')})`).join(' · ')} (\`ease-standard\`…); springs ${Object.entries(ctx.motion.springs).map(([n, s]) => `${n} stiffness ${s.stiffness}, damping ${s.damping}, mass ${s.mass}`).join(' · ')} (\`MOTION.spring.snappy\` in lib/theme.ts${options.platform === 'web' ? ', `spring-snappy` on the web' : ''}). Nothing moves under reduced motion
 ${extras.length ? `\n### Extras (this brand's own)\n\nNo kit component uses these; screens may, as classes (never their hex):\n\n${extras.join('\n')}\n` : ''}`;
   return [{ path: options.out, contents }];
 }

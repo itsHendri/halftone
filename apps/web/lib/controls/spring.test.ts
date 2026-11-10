@@ -88,7 +88,7 @@ describe('motion', () => {
 
   test('CSS linear() with a duration', () => {
     const css = springToCss({ mode: 'time', visualDuration: 0.3, bounce: 0.2 }, 10);
-    assert.match(css.easing, /^linear\(0, [\d., ]+\)$/);
+    assert.match(css.easing, /^linear\(0, [\d., ]+, 1\)$/, 'starts at 0 and lands exactly on 1');
     assert.equal(css.easing.split(',').length, 11);
     assert.ok(css.duration > 200 && css.duration < 2000);
   });

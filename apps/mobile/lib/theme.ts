@@ -225,6 +225,62 @@ export const TOKENS = {
   },
 } as const;
 
+/**
+ * The theme's motion, at its speed: durations (ms), easings (cubic-bezier) and springs (stiffness, damping, mass).
+ * Reanimated: `withTiming(v, { duration: MOTION.duration.base, easing: Easing.bezier(...MOTION.easing.standard) })`,
+ * `withSpring(v, MOTION.spring.snappy)`. Motion: `transition={{ type: 'spring', ...MOTION.spring.snappy }}`, or
+ * `{ duration: MOTION.duration.base / 1000, ease: MOTION.easing.standard }`. Respect reduced motion either way.
+ */
+export const MOTION: Motion = {
+  "duration": {
+    "fast": 150,
+    "base": 200,
+    "slow": 300
+  },
+  "easing": {
+    "standard": [
+      0.2,
+      0,
+      0,
+      1
+    ],
+    "emphasized": [
+      0.3,
+      0,
+      0,
+      1
+    ],
+    "exit": [
+      0.4,
+      0,
+      1,
+      1
+    ]
+  },
+  "spring": {
+    "snappy": {
+      "stiffness": 400,
+      "damping": 36,
+      "mass": 1
+    },
+    "gentle": {
+      "stiffness": 120,
+      "damping": 18,
+      "mass": 1
+    }
+  }
+};
+
+export type Spring = { stiffness: number; damping: number; mass: number };
+export type Motion = {
+  /** ms: fast for hover and small feedback, base for most transitions, slow for sheets. */
+  duration: { fast: number; base: number; slow: number };
+  /** cubic-bezier [x1, y1, x2, y2]: standard for most movement, emphasized for entering, exit for leaving. */
+  easing: { standard: readonly [number, number, number, number]; emphasized: readonly [number, number, number, number]; exit: readonly [number, number, number, number] };
+  /** snappy for presses and toggles, gentle for sheets and cards settling in. */
+  spring: { snappy: Spring; gentle: Spring };
+};
+
 /** The component layer's CSS variables (what an embedded kit accepts from the docs site's live theme). */
 export const COMPONENT_VARS = ["--button-radius","--button-text-size","--button-text-leading","--button-text-tracking","--button-text-font","--button-text-weight","--button-text-case","--button-h-sm","--button-h-md","--button-h-lg","--button-x","--button-x-sm","--button-x-lg","--button-gap-sm","--button-gap","--button-icon","--button-ring-w","--button-focus-border","--button-primary-bg","--button-primary-bg-a","--button-primary-fg","--button-primary-border","--button-primary-border-a","--button-primary-pressed","--button-primary-pressed-a","--button-primary-ring","--button-primary-ring-a","--button-primary-border-w","--button-primary-edge-w","--button-primary-shadow","--button-secondary-bg","--button-secondary-bg-a","--button-secondary-fg","--button-secondary-border","--button-secondary-border-a","--button-secondary-pressed","--button-secondary-pressed-a","--button-secondary-ring","--button-secondary-ring-a","--button-secondary-border-w","--button-secondary-edge-w","--button-secondary-shadow","--button-outline-bg","--button-outline-bg-a","--button-outline-fg","--button-outline-border","--button-outline-border-a","--button-outline-pressed","--button-outline-pressed-a","--button-outline-ring","--button-outline-ring-a","--button-outline-border-w","--button-outline-edge-w","--button-outline-shadow","--button-ghost-bg","--button-ghost-bg-a","--button-ghost-fg","--button-ghost-border","--button-ghost-border-a","--button-ghost-pressed","--button-ghost-pressed-a","--button-ghost-ring","--button-ghost-ring-a","--button-ghost-border-w","--button-ghost-edge-w","--button-ghost-shadow","--button-destructive-bg","--button-destructive-bg-a","--button-destructive-fg","--button-destructive-border","--button-destructive-border-a","--button-destructive-pressed","--button-destructive-pressed-a","--button-destructive-ring","--button-destructive-ring-a","--button-destructive-border-w","--button-destructive-edge-w","--button-destructive-shadow","--chip-radius","--chip-text-size","--chip-text-leading","--chip-text-tracking","--chip-text-font","--chip-text-weight","--chip-h-sm","--chip-h-md","--chip-h-lg","--chip-x","--chip-gap","--chip-border-w","--chip-icon","--chip-unselected-bg","--chip-unselected-bg-a","--chip-unselected-fg","--chip-unselected-border","--chip-unselected-border-a","--chip-unselected-pressed","--chip-unselected-pressed-a","--chip-selected-bg","--chip-selected-bg-a","--chip-selected-fg","--chip-selected-border","--chip-selected-border-a","--chip-selected-pressed","--chip-selected-pressed-a","--badge-radius","--badge-text-size","--badge-text-leading","--badge-text-tracking","--badge-text-font","--badge-text-weight","--badge-text-case","--badge-h-sm","--badge-h-md","--badge-x","--badge-gap","--badge-border-w","--badge-icon","--badge-default-bg","--badge-default-bg-a","--badge-default-fg","--badge-default-border","--badge-default-border-a","--badge-default-pressed","--badge-default-pressed-a","--badge-secondary-bg","--badge-secondary-bg-a","--badge-secondary-fg","--badge-secondary-border","--badge-secondary-border-a","--badge-secondary-pressed","--badge-secondary-pressed-a","--badge-destructive-bg","--badge-destructive-bg-a","--badge-destructive-fg","--badge-destructive-border","--badge-destructive-border-a","--badge-destructive-pressed","--badge-destructive-pressed-a","--badge-outline-bg","--badge-outline-bg-a","--badge-outline-fg","--badge-outline-border","--badge-outline-border-a","--badge-outline-pressed","--badge-outline-pressed-a","--field-radius","--field-text-size","--field-text-leading","--field-text-tracking","--field-text-font","--field-text-weight","--field-radius-b","--field-shadow","--field-h-sm","--field-h-md","--field-h-lg","--field-x","--field-ring-w","--field-placeholder","--field-default-bg","--field-default-bg-a","--field-default-fg","--field-default-border","--field-default-border-a","--field-focus-bg","--field-focus-bg-a","--field-focus-fg","--field-focus-border","--field-focus-border-a","--field-focus-ring","--field-focus-ring-a","--field-error-bg","--field-error-bg-a","--field-error-fg","--field-error-border","--field-error-border-a","--field-error-ring","--field-error-ring-a","--field-disabled-bg","--field-disabled-bg-a","--field-disabled-fg","--field-disabled-border","--field-disabled-border-a"] as const;
 
@@ -255,6 +311,7 @@ export const THEME_INFO: ThemeInfo | null = {
     "measure": "70",
     "button": "solid",
     "field": "outline",
+    "speed": "normal",
     "preset": "default"
   }
 };
@@ -282,6 +339,7 @@ export type ThemeInfo = {
     measure: string;
     button?: string;
     field?: string;
+    speed?: string;
     preset?: string;
   };
 };

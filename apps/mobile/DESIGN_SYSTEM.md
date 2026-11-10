@@ -178,7 +178,9 @@ add `font-heading` to make any Text a heading.
 
 - **Duration grows with distance:** `TOKENS.duration.fast` 150 (micro-feedback), `base` 200 (most transitions), `slow`
   300 (sheets, large surfaces). Easings: `standard` for enters and moves, `emphasized` for hero moments, `exit` for
-  leaving. *Why:* a big surface moving as fast as a toggle looks like a jump, and a toggle as slow as a sheet feels
+  leaving. Springs for motion that should feel physical: `MOTION.spring.snappy` (presses, toggles) and `gentle` (sheets,
+  cards settling), as `withSpring(v, MOTION.spring.snappy)`. All of them come from the theme (`MOTION` in `lib/theme.ts`),
+  whose Speed scales them: never type a number. *Why:* a big surface moving as fast as a toggle looks like a jump, and a toggle as slow as a sheet feels
   laggy. The exit easing speeds up as it leaves, which reads as gone. *Break it only for* motion that follows a finger
   (it tracks the gesture) and reduced motion (0 ms, see Patterns).
 - **A haptic marks a change of value or an outcome, never a plain tap:** `haptic()` from `lib/haptics`, `selection` on

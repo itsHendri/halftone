@@ -70,5 +70,8 @@ render it:
 
 ## Motion
 
-150 ms for small feedback, 200 ms for most transitions, 300 ms for sheets and large surfaces. Anything that
-moves stops when the operating system asks for reduced motion.
+150 ms for small feedback, 200 ms for most transitions, 300 ms for sheets and large surfaces; a standard easing for
+moves, an emphasized one for entering and an exit one for leaving; and two springs, snappy and gentle, for motion that
+should feel physical. A theme's Speed scales all of them, and [Studio](/studio#foundations-motion) can set each one.
+The web kit draws them as `duration-*`, `ease-*` and `spring-*` classes, the native kit through `MOTION` in
+`lib/theme.ts`. Anything that moves stops when the operating system asks for reduced motion.

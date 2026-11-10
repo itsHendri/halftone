@@ -7,7 +7,8 @@
  * The typeset (font.mono, size, leading, flow, measure) came later. A recipe without it gets the defaults,
  * which are what the kits always had, and a theme with the default typeset still encodes as a ht1 code.
  * So did the styles (button, field): their defaults are the kits' original look, and a theme that keeps them
- * encodes as ht1 or ht2 as before.
+ * encodes as ht1 or ht2 as before. Motion's speed came last, in two of ht3's reserved bits: a theme at Speed normal
+ * keeps the code it had.
  */
 import { FONTS } from './fonts.mjs';
 
@@ -40,12 +41,16 @@ export const OPTIONS = {
   button: ['solid', 'soft', 'outline', 'raised'],
   /** Style: text fields (inputs, text areas, select triggers). A box, a tinted field with a line, or a line. */
   field: ['outline', 'filled', 'underline'],
+  /** Motion: every duration and spring, quicker or slower than the kits' own (lib/theme/motion.mjs SPEED). */
+  speed: ['normal', 'snappy', 'relaxed', 'slow'],
 };
 
 /** The recipe keys that make up the typeset, besides font.mono. */
 export const TYPESET_KEYS = ['size', 'leading', 'flow', 'measure'];
 /** The recipe keys that are component styles (ht3 codes). */
 export const STYLE_KEYS = ['button', 'field'];
+/** The recipe keys that are motion (ht3 codes, in bits that were reserved). */
+export const MOTION_KEYS = ['speed'];
 
 /** Base radius per option: a primitive radius step (a reference) or 0. */
 export const RADIUS = { none: 0, sm: 'sm', md: 'md', lg: 'lg', xl: 'xl', '2xl': '2xl' };
@@ -238,6 +243,7 @@ export const DEFAULT_RECIPE = Object.freeze({
   measure: '70',
   button: 'solid',
   field: 'outline',
+  speed: 'normal',
 });
 
 const HEX = /^#[0-9a-f]{6}$/;
@@ -247,6 +253,9 @@ export const defaultTypeset = (r) => r.font.mono === DEFAULT_RECIPE.font.mono &&
 
 /** Does the recipe keep the default styles (solid buttons, outline fields: every ht1 and ht2 code)? */
 export const defaultStyles = (r) => STYLE_KEYS.every((k) => r[k] === DEFAULT_RECIPE[k]);
+
+/** Does the recipe keep the default motion (Speed normal: every code before motion)? */
+export const defaultMotion = (r) => MOTION_KEYS.every((k) => r[k] === DEFAULT_RECIPE[k]);
 
 /** Fill in defaults, normalise, and throw on anything invalid. Returns a new, plain recipe. */
 export function normalizeRecipe(input = {}) {
@@ -282,6 +291,7 @@ export function normalizeRecipe(input = {}) {
     measure: r.measure,
     button: r.button,
     field: r.field,
+    speed: r.speed,
   };
   if (input.preset) out.preset = String(input.preset);
   return out;
