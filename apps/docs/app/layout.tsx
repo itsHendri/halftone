@@ -20,6 +20,8 @@ export default function Layout({ children }: LayoutProps<'/'>) {
       </head>
       <body className="flex min-h-screen flex-col">
         <Provider>{children}</Provider>
+        {/* Review comments from Hendri's workspace: does nothing unless the page is opened with a review link. */}
+        <script src="https://review.hendri.design/review.js" defer />
       </body>
     </html>
   );
