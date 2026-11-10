@@ -3,6 +3,7 @@ import { ROLE_NAMES, systemRadii } from '@halftone-ds/tokens/system';
 import { COMPONENTS, CORNERS, ICON_DEFAULT, RING_WIDTH, TOUCH_TARGET, WEIGHTS, type ComponentColor, type ComponentName, type ComponentShape } from '@halftone-ds/tokens/theme';
 import { ChevronDownIcon, ChevronUpIcon, EyeIcon, XIcon } from 'lucide-react';
 import * as React from 'react';
+import { NumberField } from '@/components/controls/number-field';
 import { Ratio } from '@/components/theme/studio/colours-section';
 import { InContext, Specimen, STEP_LABEL, type SpecimenState, type Step } from '@/components/theme/studio/component-specimen';
 import { TokenPicker, type PickerOption } from '@/components/theme/studio/fields';
@@ -173,34 +174,6 @@ function ResetLink({ label, onReset, children = 'reset' }: { label: string; onRe
   );
 }
 
-/** A slider with its value beside it, and a reset while the value is the system's own. */
-function Slider({ label, value, min, max, step = 1, note, shown, edited, onChange, onReset }: { label: string; value: number; min: number; max: number; step?: number; note?: string; shown?: string; edited: boolean; onChange: (v: number) => void; onReset: () => void }) {
-  const id = React.useId();
-  return (
-    <div className="flex flex-col gap-1">
-      <div className="flex items-center gap-2">
-        <label htmlFor={id} className="text-muted-foreground flex-1 text-xs font-medium">
-          {label}
-        </label>
-        {edited ? <ResetLink label={`Reset ${label.toLowerCase()}`} onReset={onReset} /> : null}
-        <span className="text-xs font-medium tabular-nums">{shown ?? `${value}px`}</span>
-      </div>
-      <input
-        id={id}
-        type="range"
-        min={min}
-        max={max}
-        step={step}
-        value={value}
-        aria-valuetext={shown ?? `${value}px`}
-        onChange={(e) => onChange(Number(e.target.value))}
-        className="accent-foreground focus-visible:ring-ring h-6 w-full cursor-pointer rounded focus-visible:outline-none focus-visible:ring-2"
-      />
-      {note ? <p className="text-muted-foreground text-xs">{note}</p> : null}
-    </div>
-  );
-}
-
 /** A labelled row: what the panel's pickers sit in. */
 function Row({ label, children, htmlFor }: { label: string; children: React.ReactNode; htmlFor?: string }) {
   return (
@@ -313,13 +286,14 @@ function ShapeGroup({ name }: { name: ComponentName }) {
           onChange={(c) => setCorner(name, c)}
         />
       </Row>
-      <Slider
+      <NumberField
+        unit="px"
         label="Corner, this component only"
         value={Math.min(px >= 9999 ? 32 : px, 32)}
-        shown={px >= 9999 ? 'Full' : undefined}
+        format={px >= 9999 ? () => 'Full' : undefined}
         min={0}
         max={32}
-        note={typeof e.radius === 'number' ? 'In px: it no longer follows a Foundations corner.' : undefined}
+        hint={typeof e.radius === 'number' ? 'In px: it no longer follows a Foundations corner.' : undefined}
         edited={typeof e.radius === 'number'}
         onChange={(v) => setCorner(name, v)}
         onReset={() => setCorner(name, null)}
@@ -329,13 +303,14 @@ function ShapeGroup({ name }: { name: ComponentName }) {
           <Choice label="Default shape of buttons and chips" value={theme.recipe.controls} options={[{ value: 'pill', label: 'Pills' }, { value: 'match', label: 'Base radius' }]} onChange={(v) => setRecipe({ controls: v as 'pill' | 'match' })} />
         </Row>
       ) : null}
-      <Slider
+      <NumberField
+        unit="px"
         label="Border width"
         value={border}
         min={0}
         max={8}
         step={0.5}
-        note={e.border === undefined ? (name === 'input' ? 'As the field style draws it.' : name === 'button' ? 'Every border a variant draws (Outline, or one you set).' : 'The theme’s border.') : name === 'input' && !shape.borderWidth ? 'A filled or underline field: its bottom line.' : undefined}
+        hint={e.border === undefined ? (name === 'input' ? 'As the field style draws it.' : name === 'button' ? 'Every border a variant draws (Outline, or one you set).' : 'The theme’s border.') : name === 'input' && !shape.borderWidth ? 'A filled or underline field: its bottom line.' : undefined}
         edited={e.border !== undefined}
         onChange={(v) => setProp(name, 'border', v)}
         onReset={() => setProp(name, 'border', null)}
@@ -362,24 +337,26 @@ function SizeGroup({ name, step, onStep }: { name: ComponentName; step: Step; on
   return (
     <>
       <Choice label={`${def.label} size to tune`} value={at} options={def.steps.map((s) => ({ value: s, label: `${STEP_SHORT[s]} ${shape.h[s]}` }))} onChange={onStep} />
-      <Slider
+      <NumberField
+        unit="px"
         label={`${STEP_LABEL[at]} height`}
         value={height}
         min={name === 'badge' ? Math.ceil(shape.text.leading + 2 * (shape.borderWidth ?? 0)) : 20}
         max={name === 'badge' ? 40 : 80}
-        note={note}
+        hint={note}
         edited={size[at] !== undefined}
         onChange={(v) => setSize(name, at, v)}
         onReset={() => setSize(name, at, null)}
       />
-      <Slider label="Padding" value={shape.x.md ?? 0} min={0} max={40} note={name === 'button' ? 'Small is 4 less, Large 4 more.' : 'Every size.'} edited={size.x !== undefined} onChange={(v) => setSize(name, 'x', v)} onReset={() => setSize(name, 'x', null)} />
+      <NumberField unit="px" label="Padding" value={shape.x.md ?? 0} min={0} max={40} hint={name === 'button' ? 'Small is 4 less, Large 4 more.' : 'Every size.'} edited={size.x !== undefined} onChange={(v) => setSize(name, 'x', v)} onReset={() => setSize(name, 'x', null)} />
       {shape.gap ? (
-        <Slider
+        <NumberField
+          unit="px"
           label="Gap"
           value={shape.gap[at] ?? shape.gap.md ?? 0}
           min={0}
           max={24}
-          note={name === 'button' && size.gap === undefined ? 'Between icon and label; Small is 6 until set.' : 'Between icon and label, every size.'}
+          hint={name === 'button' && size.gap === undefined ? 'Between icon and label; Small is 6 until set.' : 'Between icon and label, every size.'}
           edited={size.gap !== undefined}
           onChange={(v) => setSize(name, 'gap', v)}
           onReset={() => setSize(name, 'gap', null)}
@@ -448,12 +425,13 @@ function EffectsGroup({ name }: { name: ComponentName }) {
   return (
     <>
       {def.props.includes('icon') ? (
-        <Slider
+        <NumberField
+          unit="px"
           label="Icon size"
           value={shape.icon ?? ICON_DEFAULT[name as 'button']}
           min={10}
           max={32}
-          note={e.icon === undefined ? 'Both kits, where an icon sets no size of its own.' : undefined}
+          hint={e.icon === undefined ? 'Both kits, where an icon sets no size of its own.' : undefined}
           edited={e.icon !== undefined}
           onChange={(v) => setProp(name, 'icon', v)}
           onReset={() => setProp(name, 'icon', null)}
@@ -472,7 +450,7 @@ function EffectsGroup({ name }: { name: ComponentName }) {
       ) : null}
       {shape.ring ? (
         <>
-          <Slider label="Focus ring width" value={shape.ring.width} min={0} max={8} edited={e.ring?.width !== undefined} onChange={(v) => setRing(name, 'width', v === RING_WIDTH ? null : v)} onReset={() => setRing(name, 'width', null)} />
+          <NumberField unit="px" label="Focus ring width" value={shape.ring.width} min={0} max={8} edited={e.ring?.width !== undefined} onChange={(v) => setRing(name, 'width', v === RING_WIDTH ? null : v)} onReset={() => setRing(name, 'width', null)} />
           <Row label="Focus ring colour">
             <div className="flex items-center gap-2">
               <RolePicker

@@ -49,6 +49,11 @@ kit.json        The kit's name and addresses, read by the generators.
   are what the web kit's registry hands out: `npm run registry:dist -w apps/web && npm run vite:sync` writes them,
   and CI's `vite` job fails when they differ. Change a kit component in `apps/web`, never in `apps/vite`. *Why:* the
   starter is the registry's output, so it can't drift from the kit, and it shows what anyone installing it gets.
+- **The docs site's Controls are generated too.** `apps/docs/components/controls`, `apps/docs/lib/controls` and
+  `apps/docs/hooks` are the web kit's Controls family as its registry hands it out: `npm run registry:dist -w apps/web &&
+  npm run docs:sync` writes them, and CI's `vite` job fails when they differ. Change a Control in `apps/web`, never in
+  `apps/docs`. *Why:* the Studio then runs on exactly what an install gets, and every import resolves in the docs site's
+  own folders.
 - CI's `vite` job also copies apps/vite out, installs it on its own and opens it, Worker included, in Chromium
   (`npm run check:vite`).
 - CI's `extract` job copies apps/mobile out of the repo and runs its checks standalone. If it fails, an app

@@ -19,6 +19,7 @@
   },
   "dependencies": {
     "@halftone-ds/tokens": "^1.4.0",
+    "cn": "^0.5.2",
     "fflate": "0.8.2",
     "fumadocs-core": "16.16.2",
     "fumadocs-mdx": "15.4.6",

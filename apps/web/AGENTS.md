@@ -37,7 +37,10 @@ components/kit/         ours: AppShell, PageHeader, StatTile, DataTable, EmptySt
                         the native kit's own (same ids): ListRow, ListGroup, SegmentedControl, FilterChip, Rating,
                         OtpInput, AmountInput, Timeline, ValueHeader, Stepper, PromoCard, Placeholder, Spot…
                         (registry/components.ts has them all)
-components/devkit/      the Components page: demos.tsx keyed by registry id
+components/controls/   ours: the Controls family, for products that are editors (ControlPanel from a config, NumberField with scrub,
+                        CurveEditor, SpringEditor, Vec2Pad, HexField, Presets…). Its headless core is lib/controls/
+                        (schema, scrub, bezier, spring, transfer), plain TypeScript with unit tests (`npm test`)
+components/devkit/      the Components page: demos.tsx keyed by registry id (demos-controls.tsx for the Controls)
 components/site/        the kit shell's own chrome (header, theme toggle, providers) and KitChip, a
                         prototype's way back to the kit
 registry/               components.ts: what the kit ships → DESIGN_SYSTEM.md tables, llms.txt, registry.json
@@ -56,6 +59,7 @@ Inside the Halftone monorepo, install once at the repo root and run these from `
 npm run dev               # http://localhost:3100
 npm run build && npm start
 npm run typecheck && npm run lint
+npm test                  # unit tests for lib/controls (node --test; scripts/test-alias.mjs resolves @/)
 npm run tokens:build      # after editing tokens/tokens.json (names any pairing below WCAG AA; --strict fails)
 npm run registry:build    # after editing registry/components.ts or a component's classes (also token-usage.json)
 npm run tokens:check && npm run registry:build -- --check   # what CI checks
@@ -157,7 +161,12 @@ app on Tailwind 4 (Vite, React Router, another Next.js app) through the registry
   `next/link` or `next/navigation` (a lint error in `components/kit`). *Why:* the registry ships them to any React
   app, and the app sets its router once with `KitLinkProvider` in its own code (this kit: `components/site/providers.tsx`),
   where `shadcn add --overwrite` can't undo it. Pages in `app/` keep using `next/link`.
-- Kit files import each other through `@/components/kit/…`, never `./…`: the registry build refuses relative
-  imports because a consumer could not resolve them.
+- Kit files import each other through `@/components/kit/…` (and `@/components/controls/…`, `@/lib/controls/…`), never
+  `./…`: the registry build refuses relative imports because a consumer could not resolve them.
+- `shadcn add` strips a file's leading comment block, so a `.ts` file's guide for whoever installs it goes below its
+  imports (`lib/controls/schema.ts`).
+- The docs site's Studio is built from the Controls, installed from this kit's registry into `apps/docs`
+  (`npm run registry:dist && npm run docs:sync` at the root; CI's `vite` job fails when they differ). After changing a
+  Control here, run both, or the docs site keeps the old copy.
 - Server components cannot import a module that uses client-only hooks; keep server-safe pieces (like the
   embed boot script) in their own file.

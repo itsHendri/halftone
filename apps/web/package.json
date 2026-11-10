@@ -18,6 +18,7 @@
     "typecheck": "next typegen && tsc --noEmit",
     "lint": "eslint .",
     "lint:rules": "node --test eslint/*.test.mjs",
+    "test": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --import ./scripts/test-alias.mjs --test lib/controls/*.test.ts",
     "tokens:build": "halftone-tokens build",
     "tokens:check": "halftone-tokens check",
     "theme": "halftone-tokens theme",

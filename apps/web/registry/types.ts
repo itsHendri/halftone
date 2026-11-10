@@ -14,7 +14,8 @@ export type CategoryId =
   | 'overlays'
   | 'media'
   | 'marketing'
-  | 'ai';
+  | 'ai'
+  | 'controls';
 
 export type CategoryMeta = {
   id: CategoryId;

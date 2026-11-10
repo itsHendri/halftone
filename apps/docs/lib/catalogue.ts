@@ -22,6 +22,7 @@ export type GroupId =
   | 'media'
   | 'marketing'
   | 'ai'
+  | 'controls'
   | 'native-only'
   | 'web-only';
 
@@ -37,6 +38,7 @@ export const GROUPS: { id: GroupId; label: string; blurb: string; icon: string }
   { id: 'media', label: 'Media and icons', blurb: 'Icons, images and placeholders', icon: 'Image' },
   { id: 'marketing', label: 'Marketing', blurb: 'Pricing', icon: 'Megaphone' },
   { id: 'ai', label: 'AI product', blurb: 'Chat, streaming, tool calls and approvals', icon: 'Sparkles' },
+  { id: 'controls', label: 'Controls', blurb: 'For editors and design tools: inspectors, curves, springs and settings to copy', icon: 'SlidersHorizontal' },
   { id: 'native-only', label: 'Native only', blurb: 'The device: camera, Face ID, permissions, share, tab bar', icon: 'Smartphone' },
   { id: 'web-only', label: 'Web only', blurb: 'Pages and the browser: app shell, tables, heroes, command', icon: 'Globe' },
 ];

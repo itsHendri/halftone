@@ -108,6 +108,9 @@ jobs:
       - name: Lint rules
         run: npm run lint:rules
 
+      - name: Unit tests (the Controls' headless core, lib/controls)
+        run: npm test
+
       - name: Build
         run: npm run build
 
@@ -188,6 +191,9 @@ jobs:
       - name: The starter's kit files match the registry
         run: npm run vite:sync -- --check
 
+      - name: The docs site's Controls match the registry
+        run: npm run docs:sync -- --check
+
       - name: The starter works copied out on its own
         run: npm run check:vite
 
@@ -229,7 +235,7 @@ jobs:
           - app: web
             tokens: pack
             setup: --yes --name "Acme Portal" --theme calm
-            checks: npm run tokens:check && npm run registry:build -- --check && npm run typecheck && npm run lint && npm run lint:rules && npm run build
+            checks: npm run tokens:check && npm run registry:build -- --check && npm run typecheck && npm run lint && npm run lint:rules && npm test && npm run build
             after-eject: npm run typecheck && npm run lint
           - app: mobile
             tokens: published

@@ -60,6 +60,6 @@ export function demoSources(appsDir) {
   const mobile = join(appsDir, 'mobile/components/devkit/sections');
   const web = join(appsDir, 'web/components/devkit');
   const native = Object.assign({}, ...readdirSync(mobile).filter((f) => f.endsWith('.tsx')).map((f) => demosIn(join(mobile, f))));
-  const webDemos = Object.assign({}, ...['demos-native-twins.tsx', 'demos.tsx'].map((f) => demosIn(join(web, f))));
+  const webDemos = Object.assign({}, ...['demos-native-twins.tsx', 'demos-controls.tsx', 'demos.tsx'].map((f) => demosIn(join(web, f))));
   return { native, web: webDemos };
 }

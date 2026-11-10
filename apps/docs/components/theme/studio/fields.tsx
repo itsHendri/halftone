@@ -2,54 +2,9 @@
 import { COLOR_ROLES, type HalftoneSystem } from '@halftone-ds/tokens/system';
 import { CheckIcon, ChevronDownIcon, SearchIcon } from 'lucide-react';
 import * as React from 'react';
+import { Swatch } from '@/components/controls/swatch';
 import { inputClass } from '@/components/theme/studio/item-popover';
 import { RAMP_LABELS, rampsOf, readHex, targetLabel } from '@/lib/studio/foundations';
-
-/** A colour square with a hairline, so white and black both show. */
-export function Swatch({ hex, className = 'size-5' }: { hex: string | null | undefined; className?: string }) {
-  return <span className={`ring-foreground/15 inline-block shrink-0 rounded ring-1 ring-inset ${className}`} style={{ background: hex ?? 'transparent' }} aria-hidden />;
-}
-
-/**
- * A hex value: the browser's colour picker and the hex as text. Valid text applies as you type; a drag of the picker
- * applies live and is one undo step (the caller coalesces it).
- */
-export function HexField({ id, value, onChange, label }: { id?: string; value: string; onChange: (hex: string) => void; label: string }) {
-  const [draft, setDraft] = React.useState<string | null>(null);
-  const shown = draft ?? value.toUpperCase();
-  const invalid = draft !== null && readHex(draft) === null;
-  return (
-    <div className="flex min-w-0 flex-1 items-center gap-1.5">
-      <input
-        type="color"
-        value={value}
-        aria-label={`${label}, colour picker`}
-        onChange={(e) => onChange(e.target.value.toLowerCase())}
-        className="border-border size-8 shrink-0 cursor-pointer rounded-md border bg-transparent p-0.5 [&::-webkit-color-swatch-wrapper]:p-0 [&::-webkit-color-swatch]:rounded [&::-webkit-color-swatch]:border-0"
-      />
-      <input
-        id={id}
-        value={shown}
-        spellCheck={false}
-        autoComplete="off"
-        aria-label={id ? undefined : label}
-        aria-invalid={invalid}
-        onChange={(e) => {
-          setDraft(e.target.value);
-          // Six digits apply as you type; '#abc' waits for the blur, so typing '#e11d48' doesn't flash #ee1111.
-          const hex = /^#?[0-9a-f]{6}$/i.test(e.target.value.trim()) ? readHex(e.target.value) : null;
-          if (hex && hex !== value) onChange(hex);
-        }}
-        onBlur={() => {
-          const hex = draft === null ? null : readHex(draft);
-          if (hex && hex !== value) onChange(hex);
-          setDraft(null);
-        }}
-        className={`${inputClass} w-full font-mono uppercase`}
-      />
-    </div>
-  );
-}
 
 export type PickerOption = { value: string; label: string; hex: string | null; group: string };
 type Option = PickerOption;

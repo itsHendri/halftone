@@ -40,6 +40,8 @@ const PAGES = [
   '/docs/patterns/',
   '/docs/foundations/',
   '/docs/themes/',
+  '/docs/controls/',
+  '/components/control-panel/',
   '/studio/',
   '/studio/components/',
   '/studio/accessibility/',

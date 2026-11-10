@@ -27,6 +27,7 @@ import type { ComponentType } from 'react';
 import * as React from 'react';
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
 import { toast } from 'sonner';
+import { CONTROL_DEMOS } from './demos-controls';
 import { TWIN_DEMOS } from './demos-native-twins';
 import { AppShell } from '@/components/kit/app-shell';
 import { ApprovalCard } from '@/components/kit/approval-card';
@@ -282,6 +283,7 @@ function ThreadListDemo() {
 
 export const DEMOS: Record<string, ComponentType> = {
   ...TWIN_DEMOS,
+  ...CONTROL_DEMOS,
   logo: () => (
     <div className="flex flex-col gap-4">
       <Logo size={28} />

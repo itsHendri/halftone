@@ -51,6 +51,11 @@
       "id": "ai",
       "label": "AI product",
       "blurb": "Chat, history, streaming, tool calls, approvals"
+    },
+    {
+      "id": "controls",
+      "label": "Controls",
+      "blurb": "For editors and design tools: inspectors, scrub fields, curves, springs, copy and paste settings"
     }
   ],
   "components": [
@@ -1979,6 +1984,263 @@
         "permission"
       ],
       "install": "@halftone-web/approval-card"
+    },
+    {
+      "id": "control-panel",
+      "title": "Control panel",
+      "exports": [
+        "ControlPanel",
+        "useControls"
+      ],
+      "category": "controls",
+      "files": [
+        "components/controls/control-panel.tsx"
+      ],
+      "notes": "an inspector drawn from a config (`[default, min, max]`, a hex, a boolean, `{ type }`, nested = a section) · Copy, Paste, Reset all",
+      "api": "const c = useControls(config); <ControlPanel title nodes={c.nodes} values={c.values} onChange={c.setValues} presets? />",
+      "caption": "The property panel of a product that edits something (a theme studio, a type tester, an icon or poster tool). Not a settings form (Field, Input and Switch), and not a panel you add to tune a value and then remove (that is the tune-live skill). Write the config once as a module constant; its types pick the controls.",
+      "aliases": [
+        "inspector",
+        "property panel",
+        "properties panel",
+        "editor panel",
+        "sliders"
+      ],
+      "install": "@halftone-web/control-panel"
+    },
+    {
+      "id": "number-field",
+      "title": "Number field",
+      "exports": [
+        "NumberField"
+      ],
+      "category": "controls",
+      "files": [
+        "components/controls/number-field.tsx"
+      ],
+      "notes": "scrub the label (pointer lock), type, step or drag the track · Shift fine, Alt coarse · off-default mark and Reset",
+      "api": "<NumberField label value onChange min? max? step? unit? defaultValue? format? track? stepper? />",
+      "caption": "Give it a `defaultValue` so it can show when it has moved and offer Reset. The mark is a shape and the label’s strength, never colour alone.",
+      "aliases": [
+        "scrub",
+        "slider",
+        "stepper",
+        "spinbutton",
+        "number input",
+        "drag value"
+      ],
+      "install": "@halftone-web/number-field"
+    },
+    {
+      "id": "control-row",
+      "title": "Control row",
+      "exports": [
+        "ControlRow",
+        "OffDefaultMark",
+        "ResetButton"
+      ],
+      "category": "controls",
+      "files": [
+        "components/controls/control-row.tsx"
+      ],
+      "notes": "a control’s label row: label, off-default mark, Reset, trailing slot; the control goes underneath",
+      "api": "<ControlRow label htmlFor? edited? onReset? trailing? hint?>{control}</ControlRow>",
+      "caption": "Wrap any control in it so every row in a panel reads and resets the same way.",
+      "aliases": [
+        "label row",
+        "edited dot",
+        "changed mark",
+        "reset"
+      ],
+      "install": "@halftone-web/control-row"
+    },
+    {
+      "id": "swatch",
+      "title": "Swatch and hex field",
+      "exports": [
+        "HexField",
+        "Swatch",
+        "readHex"
+      ],
+      "category": "controls",
+      "files": [
+        "components/controls/swatch.tsx"
+      ],
+      "notes": "a colour: the browser’s picker beside the hex as text · six digits apply as you type",
+      "api": "<HexField label value onChange id? /> · <Swatch hex />",
+      "aliases": [
+        "colour field",
+        "color picker",
+        "hex input",
+        "colour square"
+      ],
+      "install": "@halftone-web/swatch"
+    },
+    {
+      "id": "control-segmented",
+      "title": "Control segmented",
+      "exports": [
+        "ControlSegmented"
+      ],
+      "category": "controls",
+      "files": [
+        "components/controls/segmented.tsx"
+      ],
+      "notes": "2–4 short choices in a panel row · a radio group, arrows move",
+      "api": "<ControlSegmented label value options={[{value,label}]} onChange />",
+      "caption": "The panel-sized SegmentedControl. More than four choices, or long labels: ControlSelect.",
+      "aliases": [
+        "radio group",
+        "toggle group",
+        "choice"
+      ],
+      "install": "@halftone-web/control-segmented"
+    },
+    {
+      "id": "control-switch",
+      "title": "Control switch",
+      "exports": [
+        "ControlSwitch"
+      ],
+      "category": "controls",
+      "files": [
+        "components/controls/switch.tsx"
+      ],
+      "notes": "on or off in a panel row · the thumb’s side says which",
+      "api": "<ControlSwitch label checked onChange id? />",
+      "aliases": [
+        "toggle",
+        "boolean",
+        "checkbox"
+      ],
+      "install": "@halftone-web/control-switch"
+    },
+    {
+      "id": "control-select",
+      "title": "Control select",
+      "exports": [
+        "ControlSelect"
+      ],
+      "category": "controls",
+      "files": [
+        "components/controls/select.tsx"
+      ],
+      "notes": "a choice from a longer list · the browser’s own select",
+      "api": "<ControlSelect label value options onChange id? />",
+      "aliases": [
+        "dropdown",
+        "menu",
+        "enum"
+      ],
+      "install": "@halftone-web/control-select"
+    },
+    {
+      "id": "control-section",
+      "title": "Control section",
+      "exports": [
+        "ControlSection"
+      ],
+      "category": "controls",
+      "files": [
+        "components/controls/section.tsx"
+      ],
+      "notes": "a fold in a panel · closed, it still says how many controls inside are changed",
+      "api": "<ControlSection title defaultOpen? edited? actions?>…</ControlSection>",
+      "aliases": [
+        "folder",
+        "fold",
+        "group",
+        "accordion"
+      ],
+      "install": "@halftone-web/control-section"
+    },
+    {
+      "id": "presets",
+      "title": "Presets",
+      "exports": [
+        "Presets",
+        "matchesPreset"
+      ],
+      "category": "controls",
+      "files": [
+        "components/controls/presets.tsx"
+      ],
+      "notes": "named sets of values to jump to · the matching one is pressed and checked",
+      "api": "<Presets presets={[{name,values}]} values onApply />",
+      "aliases": [
+        "snapshots",
+        "saved settings",
+        "looks"
+      ],
+      "install": "@halftone-web/presets"
+    },
+    {
+      "id": "curve-editor",
+      "title": "Curve editor",
+      "exports": [
+        "CurveEditor",
+        "MotionPreview"
+      ],
+      "category": "controls",
+      "files": [
+        "components/controls/curve-editor.tsx"
+      ],
+      "notes": "a cubic-bezier easing: drag or arrow the two handles, pick a preset or paste CSS · a live preview",
+      "api": "<CurveEditor label value={[x1,y1,x2,y2]} onChange duration? />",
+      "caption": "Easing for a transition that runs a set time. For motion that should feel physical (a sheet, a drag release), a SpringEditor.",
+      "aliases": [
+        "easing",
+        "cubic-bezier",
+        "bezier",
+        "timing function",
+        "ease"
+      ],
+      "install": "@halftone-web/curve-editor"
+    },
+    {
+      "id": "spring-editor",
+      "title": "Spring editor",
+      "exports": [
+        "SpringEditor"
+      ],
+      "category": "controls",
+      "files": [
+        "components/controls/spring-editor.tsx"
+      ],
+      "notes": "a spring in time (duration, bounce) or physics (stiffness, damping, mass) · the switch converts · graph and preview",
+      "api": "<SpringEditor label value={{ mode: 'time', visualDuration, bounce }} onChange />",
+      "caption": "Time mode is Motion’s visualDuration and bounce; physics mode is what Reanimated and React Spring take. Both describe the same spring.",
+      "aliases": [
+        "spring",
+        "physics",
+        "stiffness",
+        "damping",
+        "bounce",
+        "motion"
+      ],
+      "install": "@halftone-web/spring-editor"
+    },
+    {
+      "id": "vec2-pad",
+      "title": "Vector pad",
+      "exports": [
+        "Vec2Pad"
+      ],
+      "category": "controls",
+      "files": [
+        "components/controls/vec2-pad.tsx"
+      ],
+      "notes": "a 2D point: drag it, arrow it, or type x and y · y grows upwards",
+      "api": "<Vec2Pad label value={[x, y]} onChange min? max? step? />",
+      "aliases": [
+        "xy pad",
+        "point",
+        "offset",
+        "position",
+        "direction",
+        "joystick"
+      ],
+      "install": "@halftone-web/vec2-pad"
     }
   ]
 }

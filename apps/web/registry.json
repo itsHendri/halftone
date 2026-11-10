@@ -174,6 +174,82 @@
       ]
     },
     {
+      "name": "lib-controls-bezier",
+      "type": "registry:lib",
+      "title": "lib/controls/bezier.ts",
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "lib/controls/bezier.ts",
+          "type": "registry:lib",
+          "target": "lib/controls/bezier.ts"
+        }
+      ]
+    },
+    {
+      "name": "lib-controls-schema",
+      "type": "registry:lib",
+      "title": "lib/controls/schema.ts",
+      "dependencies": [],
+      "registryDependencies": [
+        "@halftone-web/lib-controls-bezier",
+        "@halftone-web/lib-controls-scrub",
+        "@halftone-web/lib-controls-spring"
+      ],
+      "files": [
+        {
+          "path": "lib/controls/schema.ts",
+          "type": "registry:lib",
+          "target": "lib/controls/schema.ts"
+        }
+      ]
+    },
+    {
+      "name": "lib-controls-scrub",
+      "type": "registry:lib",
+      "title": "lib/controls/scrub.ts",
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "lib/controls/scrub.ts",
+          "type": "registry:lib",
+          "target": "lib/controls/scrub.ts"
+        }
+      ]
+    },
+    {
+      "name": "lib-controls-spring",
+      "type": "registry:lib",
+      "title": "lib/controls/spring.ts",
+      "dependencies": [],
+      "registryDependencies": [],
+      "files": [
+        {
+          "path": "lib/controls/spring.ts",
+          "type": "registry:lib",
+          "target": "lib/controls/spring.ts"
+        }
+      ]
+    },
+    {
+      "name": "lib-controls-transfer",
+      "type": "registry:lib",
+      "title": "lib/controls/transfer.ts",
+      "dependencies": [],
+      "registryDependencies": [
+        "@halftone-web/lib-controls-schema"
+      ],
+      "files": [
+        {
+          "path": "lib/controls/transfer.ts",
+          "type": "registry:lib",
+          "target": "lib/controls/transfer.ts"
+        }
+      ]
+    },
+    {
       "name": "lib-embed-boot",
       "type": "registry:lib",
       "title": "lib/embed-boot.ts",
@@ -2669,6 +2745,385 @@
           "ApprovalCard"
         ],
         "api": "<ApprovalCard title description? details? onApprove onDeny />"
+      }
+    },
+    {
+      "name": "control-panel",
+      "type": "registry:component",
+      "title": "Control panel",
+      "description": "an inspector drawn from a config (`[default, min, max]`, a hex, a boolean, `{ type }`, nested = a section) · Copy, Paste, Reset all",
+      "dependencies": [
+        "cn@^0.5.2",
+        "lucide-react@^1.52.0"
+      ],
+      "registryDependencies": [
+        "@halftone-web/control-row",
+        "@halftone-web/control-section",
+        "@halftone-web/control-segmented",
+        "@halftone-web/control-select",
+        "@halftone-web/control-switch",
+        "@halftone-web/curve-editor",
+        "@halftone-web/kit-setup",
+        "@halftone-web/lib-controls-bezier",
+        "@halftone-web/lib-controls-schema",
+        "@halftone-web/lib-controls-spring",
+        "@halftone-web/lib-controls-transfer",
+        "@halftone-web/number-field",
+        "@halftone-web/presets",
+        "@halftone-web/spring-editor",
+        "@halftone-web/swatch",
+        "@halftone-web/vec2-pad"
+      ],
+      "files": [
+        {
+          "path": "components/controls/control-panel.tsx",
+          "type": "registry:component",
+          "target": "components/controls/control-panel.tsx"
+        }
+      ],
+      "categories": [
+        "controls"
+      ],
+      "meta": {
+        "exports": [
+          "ControlPanel",
+          "useControls"
+        ],
+        "api": "const c = useControls(config); <ControlPanel title nodes={c.nodes} values={c.values} onChange={c.setValues} presets? />"
+      }
+    },
+    {
+      "name": "number-field",
+      "type": "registry:component",
+      "title": "Number field",
+      "description": "scrub the label (pointer lock), type, step or drag the track · Shift fine, Alt coarse · off-default mark and Reset",
+      "dependencies": [
+        "cn@^0.5.2",
+        "lucide-react@^1.52.0"
+      ],
+      "registryDependencies": [
+        "@halftone-web/control-row",
+        "@halftone-web/kit-setup",
+        "@halftone-web/lib-controls-scrub"
+      ],
+      "files": [
+        {
+          "path": "components/controls/number-field.tsx",
+          "type": "registry:component",
+          "target": "components/controls/number-field.tsx"
+        }
+      ],
+      "categories": [
+        "controls"
+      ],
+      "meta": {
+        "exports": [
+          "NumberField"
+        ],
+        "api": "<NumberField label value onChange min? max? step? unit? defaultValue? format? track? stepper? />"
+      }
+    },
+    {
+      "name": "control-row",
+      "type": "registry:component",
+      "title": "Control row",
+      "description": "a control’s label row: label, off-default mark, Reset, trailing slot; the control goes underneath",
+      "dependencies": [
+        "cn@^0.5.2",
+        "lucide-react@^1.52.0"
+      ],
+      "registryDependencies": [
+        "@halftone-web/kit-setup"
+      ],
+      "files": [
+        {
+          "path": "components/controls/control-row.tsx",
+          "type": "registry:component",
+          "target": "components/controls/control-row.tsx"
+        }
+      ],
+      "categories": [
+        "controls"
+      ],
+      "meta": {
+        "exports": [
+          "ControlRow",
+          "OffDefaultMark",
+          "ResetButton"
+        ],
+        "api": "<ControlRow label htmlFor? edited? onReset? trailing? hint?>{control}</ControlRow>"
+      }
+    },
+    {
+      "name": "swatch",
+      "type": "registry:component",
+      "title": "Swatch and hex field",
+      "description": "a colour: the browser’s picker beside the hex as text · six digits apply as you type",
+      "dependencies": [
+        "cn@^0.5.2"
+      ],
+      "registryDependencies": [
+        "@halftone-web/kit-setup"
+      ],
+      "files": [
+        {
+          "path": "components/controls/swatch.tsx",
+          "type": "registry:component",
+          "target": "components/controls/swatch.tsx"
+        }
+      ],
+      "categories": [
+        "controls"
+      ],
+      "meta": {
+        "exports": [
+          "HexField",
+          "Swatch",
+          "readHex"
+        ],
+        "api": "<HexField label value onChange id? /> · <Swatch hex />"
+      }
+    },
+    {
+      "name": "control-segmented",
+      "type": "registry:component",
+      "title": "Control segmented",
+      "description": "2–4 short choices in a panel row · a radio group, arrows move",
+      "dependencies": [
+        "cn@^0.5.2"
+      ],
+      "registryDependencies": [
+        "@halftone-web/kit-setup"
+      ],
+      "files": [
+        {
+          "path": "components/controls/segmented.tsx",
+          "type": "registry:component",
+          "target": "components/controls/segmented.tsx"
+        }
+      ],
+      "categories": [
+        "controls"
+      ],
+      "meta": {
+        "exports": [
+          "ControlSegmented"
+        ],
+        "api": "<ControlSegmented label value options={[{value,label}]} onChange />"
+      }
+    },
+    {
+      "name": "control-switch",
+      "type": "registry:component",
+      "title": "Control switch",
+      "description": "on or off in a panel row · the thumb’s side says which",
+      "dependencies": [
+        "cn@^0.5.2"
+      ],
+      "registryDependencies": [
+        "@halftone-web/kit-setup"
+      ],
+      "files": [
+        {
+          "path": "components/controls/switch.tsx",
+          "type": "registry:component",
+          "target": "components/controls/switch.tsx"
+        }
+      ],
+      "categories": [
+        "controls"
+      ],
+      "meta": {
+        "exports": [
+          "ControlSwitch"
+        ],
+        "api": "<ControlSwitch label checked onChange id? />"
+      }
+    },
+    {
+      "name": "control-select",
+      "type": "registry:component",
+      "title": "Control select",
+      "description": "a choice from a longer list · the browser’s own select",
+      "dependencies": [
+        "cn@^0.5.2",
+        "lucide-react@^1.52.0"
+      ],
+      "registryDependencies": [
+        "@halftone-web/kit-setup"
+      ],
+      "files": [
+        {
+          "path": "components/controls/select.tsx",
+          "type": "registry:component",
+          "target": "components/controls/select.tsx"
+        }
+      ],
+      "categories": [
+        "controls"
+      ],
+      "meta": {
+        "exports": [
+          "ControlSelect"
+        ],
+        "api": "<ControlSelect label value options onChange id? />"
+      }
+    },
+    {
+      "name": "control-section",
+      "type": "registry:component",
+      "title": "Control section",
+      "description": "a fold in a panel · closed, it still says how many controls inside are changed",
+      "dependencies": [
+        "cn@^0.5.2",
+        "lucide-react@^1.52.0"
+      ],
+      "registryDependencies": [
+        "@halftone-web/control-row",
+        "@halftone-web/kit-setup"
+      ],
+      "files": [
+        {
+          "path": "components/controls/section.tsx",
+          "type": "registry:component",
+          "target": "components/controls/section.tsx"
+        }
+      ],
+      "categories": [
+        "controls"
+      ],
+      "meta": {
+        "exports": [
+          "ControlSection"
+        ],
+        "api": "<ControlSection title defaultOpen? edited? actions?>…</ControlSection>"
+      }
+    },
+    {
+      "name": "presets",
+      "type": "registry:component",
+      "title": "Presets",
+      "description": "named sets of values to jump to · the matching one is pressed and checked",
+      "dependencies": [
+        "cn@^0.5.2",
+        "lucide-react@^1.52.0"
+      ],
+      "registryDependencies": [
+        "@halftone-web/kit-setup",
+        "@halftone-web/lib-controls-schema"
+      ],
+      "files": [
+        {
+          "path": "components/controls/presets.tsx",
+          "type": "registry:component",
+          "target": "components/controls/presets.tsx"
+        }
+      ],
+      "categories": [
+        "controls"
+      ],
+      "meta": {
+        "exports": [
+          "Presets",
+          "matchesPreset"
+        ],
+        "api": "<Presets presets={[{name,values}]} values onApply />"
+      }
+    },
+    {
+      "name": "curve-editor",
+      "type": "registry:component",
+      "title": "Curve editor",
+      "description": "a cubic-bezier easing: drag or arrow the two handles, pick a preset or paste CSS · a live preview",
+      "dependencies": [
+        "cn@^0.5.2",
+        "lucide-react@^1.52.0"
+      ],
+      "registryDependencies": [
+        "@halftone-web/control-select",
+        "@halftone-web/hook-use-reduced-motion",
+        "@halftone-web/kit-setup",
+        "@halftone-web/lib-controls-bezier",
+        "@halftone-web/lib-controls-scrub"
+      ],
+      "files": [
+        {
+          "path": "components/controls/curve-editor.tsx",
+          "type": "registry:component",
+          "target": "components/controls/curve-editor.tsx"
+        }
+      ],
+      "categories": [
+        "controls"
+      ],
+      "meta": {
+        "exports": [
+          "CurveEditor",
+          "MotionPreview"
+        ],
+        "api": "<CurveEditor label value={[x1,y1,x2,y2]} onChange duration? />"
+      }
+    },
+    {
+      "name": "spring-editor",
+      "type": "registry:component",
+      "title": "Spring editor",
+      "description": "a spring in time (duration, bounce) or physics (stiffness, damping, mass) · the switch converts · graph and preview",
+      "dependencies": [
+        "cn@^0.5.2"
+      ],
+      "registryDependencies": [
+        "@halftone-web/control-segmented",
+        "@halftone-web/curve-editor",
+        "@halftone-web/kit-setup",
+        "@halftone-web/lib-controls-spring",
+        "@halftone-web/number-field"
+      ],
+      "files": [
+        {
+          "path": "components/controls/spring-editor.tsx",
+          "type": "registry:component",
+          "target": "components/controls/spring-editor.tsx"
+        }
+      ],
+      "categories": [
+        "controls"
+      ],
+      "meta": {
+        "exports": [
+          "SpringEditor"
+        ],
+        "api": "<SpringEditor label value={{ mode: 'time', visualDuration, bounce }} onChange />"
+      }
+    },
+    {
+      "name": "vec2-pad",
+      "type": "registry:component",
+      "title": "Vector pad",
+      "description": "a 2D point: drag it, arrow it, or type x and y · y grows upwards",
+      "dependencies": [
+        "cn@^0.5.2"
+      ],
+      "registryDependencies": [
+        "@halftone-web/kit-setup",
+        "@halftone-web/lib-controls-scrub",
+        "@halftone-web/number-field"
+      ],
+      "files": [
+        {
+          "path": "components/controls/vec2-pad.tsx",
+          "type": "registry:component",
+          "target": "components/controls/vec2-pad.tsx"
+        }
+      ],
+      "categories": [
+        "controls"
+      ],
+      "meta": {
+        "exports": [
+          "Vec2Pad"
+        ],
+        "api": "<Vec2Pad label value={[x, y]} onChange min? max? step? />"
       }
     }
   ]

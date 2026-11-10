@@ -39,6 +39,7 @@ export function siteLlmsHeader(): string {
     `- [Everything in one file](${site('/llms-full.txt')})`,
     `- [shadcn registry for Expo + react-native-reusables (${kit.registry.native})](${site('/r/native/registry.json')})`,
     `- [shadcn registry for React apps + shadcn/ui (${kit.registry.web})](${site('/r/web/registry.json')})`,
+    `- [Controls](${site('/docs/controls/')}): the web kit's controls for products that edit something (\`ControlPanel\` and its fields, registry category Controls): a theme studio's sliders, a type tester's axes, an inspector. Write a config of the values and their types pick the controls. Not for a settings form, and not for a panel you add to tune a value during development and then remove (that is the tune-live skill)`,
     `- [Studio](${site('/studio/')}): people make and keep design systems here (saved in their browser). They hand you an \`ht-\` theme code or a \`.halftone.json\`; apply either with \`npx halftone-tokens theme apply <code|file>\` (the kits' apply-theme skill)`,
     '',
   ].join('\n');
