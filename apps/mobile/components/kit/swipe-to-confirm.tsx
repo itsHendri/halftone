@@ -3,6 +3,7 @@ import { Text } from '@/components/ui/text';
 import { haptic } from '@/lib/haptics';
 import { cn } from '@/lib/utils';
 import { useReducedMotion } from '@/lib/reduced-motion';
+import { MOTION } from '@/lib/theme';
 import { ArrowRightIcon, CheckIcon } from 'lucide-react-native';
 import * as React from 'react';
 import { Animated, Easing, type LayoutChangeEvent, View } from 'react-native';
@@ -48,7 +49,7 @@ export function SwipeToConfirm({ label, onConfirm, confirmLabel = 'Confirmed', t
         translateX.setValue(0);
         return;
       }
-      Animated.spring(translateX, { toValue: 0, friction: 7, tension: 60, useNativeDriver: false }).start();
+      Animated.spring(translateX, { toValue: 0, ...MOTION.spring.gentle, useNativeDriver: false }).start();
     },
     [translateX]
   );
@@ -73,7 +74,7 @@ export function SwipeToConfirm({ label, onConfirm, confirmLabel = 'Confirmed', t
           if (maxX > 0 && clamped / maxX >= COMMIT_RATIO) {
             haptic('success');
             setCompleted(true);
-            Animated.timing(translateX, { toValue: maxX, duration: reduced ? 0 : 120, easing: Easing.out(Easing.cubic), useNativeDriver: false }).start(() => onConfirm());
+            Animated.timing(translateX, { toValue: maxX, duration: reduced ? 0 : MOTION.duration.fast, easing: Easing.bezier(...MOTION.easing.standard), useNativeDriver: false }).start(() => onConfirm());
           } else {
             springBack(reduced);
           }

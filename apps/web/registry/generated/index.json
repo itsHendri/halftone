@@ -1323,7 +1323,7 @@
         "faq",
         "disclosure"
       ],
-      "install": "accordion"
+      "install": "@halftone-web/accordion"
     },
     {
       "id": "collapsible",
@@ -1438,8 +1438,7 @@
       ],
       "notes": "a short task on top of the page (an edit form)",
       "api": "<Dialog><DialogTrigger asChild /><DialogContent><DialogHeader><DialogTitle /></DialogHeader>…</DialogContent></Dialog>",
-      "install": "@halftone-web/dialog",
-      "republished": true
+      "install": "@halftone-web/dialog"
     },
     {
       "id": "alert-dialog",
@@ -1460,8 +1459,7 @@
       "aliases": [
         "confirm"
       ],
-      "install": "@halftone-web/alert-dialog",
-      "republished": true
+      "install": "@halftone-web/alert-dialog"
     },
     {
       "id": "sheet",
@@ -1484,7 +1482,7 @@
         "drawer",
         "side panel"
       ],
-      "install": "sheet"
+      "install": "@halftone-web/sheet"
     },
     {
       "id": "drawer",

@@ -7,7 +7,9 @@
  *            density: false   leave the spacing scale alone (the docs site)
  *            typeset: false   leave the text sizes alone (the docs site keeps its reading sizes)
  * Motion: --duration-*, --ease-* and --spring-* in :root, with duration-fast|base|slow, ease-standard|emphasized|exit and
- * spring-snappy|gentle classes (a spring class sets the easing and its duration together).
+ * spring-snappy|gentle classes (a spring class sets the easing and its duration together). A transition or an enter/exit
+ * animation without a duration class takes the theme's fast duration and standard easing, so the theme's Speed reaches
+ * every component, the overlays tw-animate-css draws included (it reads --tw-duration).
  */
 import { hexToOklch } from '../lib/color.mjs';
 import { group, radiusCss } from '../lib/resolve.mjs';
@@ -114,12 +116,16 @@ function componentsCss(ctx) {
   };
 }
 
-/** The motion classes: durations and springs (an easing class is Tailwind's own, from --ease-* in @theme). */
+/**
+ * The motion classes: durations and springs (an easing class is Tailwind's own, from --ease-* in @theme). Like Tailwind's
+ * duration-200, they set --tw-duration (and a spring --tw-ease) too, which tw-animate-css's animate-in/out read.
+ */
 function motionUtilities(motion) {
   return [
-    ...Object.keys(motion.durations).map((n) => `@utility duration-${n} {\n  transition-duration: var(--duration-${n});\n  animation-duration: var(--duration-${n});\n}`),
+    ...Object.keys(motion.durations).map((n) => `@utility duration-${n} {\n  --tw-duration: var(--duration-${n});\n  transition-duration: var(--duration-${n});\n}`),
     ...Object.keys(motion.springs).map(
-      (n) => `@utility spring-${n} {\n  transition-timing-function: var(--spring-${n});\n  transition-duration: var(--spring-${n}-duration);\n}`
+      (n) =>
+        `@utility spring-${n} {\n  --tw-ease: var(--spring-${n});\n  --tw-duration: var(--spring-${n}-duration);\n  transition-timing-function: var(--spring-${n});\n  transition-duration: var(--spring-${n}-duration);\n}`
     ),
   ].join('\n');
 }
@@ -176,7 +182,10 @@ ${ctx.radius.steps.map((s) => `  --radius-${s.name}: ${radiusCss(s)};`).join('\n
   --font-sans: var(--kit-font-body, ${SYSTEM_SANS});
   --font-heading: var(--kit-font-heading, var(--kit-font-body, ${SYSTEM_SANS}));
   --font-mono: var(--kit-font-mono, ${SYSTEM_MONO});
-${Object.keys(ctx.motion.easings).map((n) => `  --ease-${n}: var(--ease-${n});`).join('\n')}${
+${Object.keys(ctx.motion.easings).map((n) => `  --ease-${n}: var(--ease-${n});`).join('\n')}
+  /* A transition without a duration or easing class takes the theme's (Tailwind's default is 150ms, its own curve). */
+  --default-transition-duration: var(--duration-fast);
+  --default-transition-timing-function: var(--ease-standard);${
     options.typeset === false ? '' : `\n  /* The theme's typeset scales every text size and its line height (text-sm, text-base…). */\n${textScale(ctx)}`
   }
 ${ctx.colors.map((c) => `  --color-${c.name}: ${color(c.name)};`).join('\n')}${components.theme}${extras.theme}
@@ -188,6 +197,11 @@ ${components.utilities}${extras.utilities}
 @layer base {
   * {
     @apply border-border outline-ring/50;
+  }
+  /* An enter or exit animation without a duration class (popovers, menus, tooltips) takes the theme's fast duration:
+     tw-animate-css reads --tw-duration, and its own fallback is a fixed 150ms. A duration-* class still wins. */
+  *, ::before, ::after {
+    --tw-duration: var(--duration-fast);
   }
   body {
     @apply bg-background text-foreground;

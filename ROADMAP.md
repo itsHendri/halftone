@@ -145,6 +145,10 @@ From a look at Tweakpane, DialKit and Toolcraft (ideas only: no dependency on an
   `duration-*`, `ease-*` and `spring-*` classes, the phone as a typed `MOTION` in `lib/theme.ts`; DESIGN.md, llms and
   Figma (durations) too. Studio has a Motion section with the Speed knob and its shuffle lock, a curve editor per
   easing, a spring editor per spring and a live preview. Waiting to publish with the next `@halftone-ds/tokens` minor.
+- **The kits move by the theme** (branch `feat/kit-motion`): no kit component types a duration or an easing. The web kit
+  uses the motion classes, and a transition or overlay animation without one takes the theme's fast duration and
+  standard easing; the native kit's animations read `MOTION`. The docs site's live theme reaches the kit previews' motion
+  too.
 
 ## Planned, not started: the thinking beside the screens
 

@@ -1,3 +1,4 @@
+import { MOTION } from '@/lib/theme';
 import { cn } from '@/lib/utils';
 import * as ProgressPrimitive from '@rn-primitives/progress';
 import { Platform, View } from 'react-native';
@@ -60,7 +61,7 @@ function NativeIndicator({ value, className }: IndicatorProps) {
     return {
       width: withSpring(
         `${interpolate(progress.value, [0, 100], [1, 100], Extrapolation.CLAMP)}%`,
-        { overshootClamping: true }
+        { ...MOTION.spring.gentle, overshootClamping: true }
       ),
     };
   }, [value]);

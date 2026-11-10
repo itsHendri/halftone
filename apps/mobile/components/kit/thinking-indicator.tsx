@@ -1,5 +1,6 @@
 import { Text } from '@/components/ui/text';
 import { useReducedMotion } from '@/lib/reduced-motion';
+import { MOTION } from '@/lib/theme';
 import { cn } from '@/lib/utils';
 import * as React from 'react';
 import { Animated, Easing, View } from 'react-native';
@@ -13,8 +14,8 @@ function Dot({ delay, still }: { delay: number; still: boolean }) {
     const bounce = Animated.loop(
       Animated.sequence([
         Animated.delay(delay),
-        Animated.timing(y, { toValue: -4, duration: 280, easing: Easing.out(Easing.quad), useNativeDriver: true }),
-        Animated.timing(y, { toValue: 0, duration: 280, easing: Easing.in(Easing.quad), useNativeDriver: true }),
+        Animated.timing(y, { toValue: -4, duration: MOTION.duration.slow, easing: Easing.bezier(...MOTION.easing.standard), useNativeDriver: true }),
+        Animated.timing(y, { toValue: 0, duration: MOTION.duration.slow, easing: Easing.bezier(...MOTION.easing.exit), useNativeDriver: true }),
         Animated.delay(450 - delay),
       ])
     );

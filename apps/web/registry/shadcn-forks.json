@@ -4,11 +4,11 @@
   "components": {
     "accordion": {
       "upstream": true,
-      "forked": false
+      "forked": true
     },
     "alert-dialog": {
       "upstream": true,
-      "forked": false
+      "forked": true
     },
     "alert": {
       "upstream": true,
@@ -64,7 +64,7 @@
     },
     "dialog": {
       "upstream": true,
-      "forked": false
+      "forked": true
     },
     "drawer": {
       "upstream": true,
@@ -124,7 +124,7 @@
     },
     "sheet": {
       "upstream": true,
-      "forked": false
+      "forked": true
     },
     "skeleton": {
       "upstream": true,

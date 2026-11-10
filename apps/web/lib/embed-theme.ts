@@ -1,4 +1,4 @@
-import { COMPONENT_VARS, THEME, TOKENS } from '@/lib/theme';
+import { COMPONENT_VARS, MOTION, THEME, TOKENS } from '@/lib/theme';
 
 /**
  * A live theme from the docs site's picker, for the kit inside its browser frame. Same contract as the
@@ -33,15 +33,25 @@ const TEXT_STYLE_VARS = Object.keys(TOKENS.textStyles).flatMap((s) => ['size', '
 /** The button and field styles' numbers (their colours are THEME keys); the component layer's are COMPONENT_VARS. */
 const STYLE_VARS = ['--button-alpha', '--button-border-w', '--button-edge-w', '--field-alpha', '--field-border-w', '--field-edge-w', '--field-radius', '--field-radius-b', '--field-x', '--field-shadow'];
 
+/** Motion (halftone-tokens' motionVars): the duration-*, ease-* and spring-* classes and their defaults read these. */
+const MOTION_VARS = [
+  ...Object.keys(MOTION.duration).map((n) => `--duration-${n}`),
+  ...Object.keys(MOTION.easing).map((n) => `--ease-${n}`),
+  ...Object.keys(MOTION.spring).flatMap((n) => [`--spring-${n}`, `--spring-${n}-duration`]),
+];
+/** A spring is a long linear() easing: numbers only, checked on its own. */
+const SPRING_VALUE = /^linear\([\d.,\s-]{1,600}\)$/;
+
 const kebab = (s: string) => s.replace(/([A-Z])/g, '-$1').replace(/([a-z])(\d)/g, '$1-$2').toLowerCase();
-const ALLOWED_VARS = new Set([...Object.keys(THEME.light).map((k) => `--${kebab(k)}`), '--radius', '--radius-control', '--border-width', '--icon-stroke', '--shadow-1', '--shadow-2', '--shadow-3', '--density', ...TYPE_VARS, ...TEXT_STYLE_VARS, ...STYLE_VARS, ...COMPONENT_VARS]);
+const ALLOWED_VARS = new Set([...Object.keys(THEME.light).map((k) => `--${kebab(k)}`), '--radius', '--radius-control', '--border-width', '--icon-stroke', '--shadow-1', '--shadow-2', '--shadow-3', '--density', ...TYPE_VARS, ...TEXT_STYLE_VARS, ...STYLE_VARS, ...COMPONENT_VARS, ...MOTION_VARS]);
 const SAFE_VALUE = /^[\w.%\s(),#/*-]{1,80}$/;
 
 function cleanVars(map: unknown): Record<string, string> {
   if (!map || typeof map !== 'object') return {};
   return Object.fromEntries(
     Object.entries(map as Record<string, unknown>).filter(
-      ([name, value]) => ALLOWED_VARS.has(name) && typeof value === 'string' && SAFE_VALUE.test(value) && !/url/i.test(value)
+      ([name, value]) =>
+        ALLOWED_VARS.has(name) && typeof value === 'string' && (SAFE_VALUE.test(value) || (/^--spring-[a-z]+$/.test(name) && SPRING_VALUE.test(value))) && !/url/i.test(value)
     ) as [string, string][]
   );
 }

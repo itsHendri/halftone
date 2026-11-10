@@ -1,10 +1,12 @@
 import { Icon } from '@/components/ui/icon';
 import { TextClassContext } from '@/components/ui/text';
+import { MOTION } from '@/lib/theme';
 import { cn } from '@/lib/utils';
 import * as AccordionPrimitive from '@rn-primitives/accordion';
 import { ChevronDown } from 'lucide-react-native';
 import { Platform, Pressable, View } from 'react-native';
 import Animated, {
+  Easing,
   FadeOutUp,
   LayoutAnimationConfig,
   LinearTransition,
@@ -67,7 +69,9 @@ function AccordionTrigger({
   const { isExpanded } = AccordionPrimitive.useItemContext();
 
   const progress = useDerivedValue(
-    () => (isExpanded ? withTiming(1, { duration: 250 }) : withTiming(0, { duration: 200 })),
+    () => (isExpanded
+        ? withTiming(1, { duration: MOTION.duration.base, easing: Easing.bezier(...MOTION.easing.standard) })
+        : withTiming(0, { duration: MOTION.duration.base, easing: Easing.bezier(...MOTION.easing.exit) })),
     [isExpanded]
   );
   const chevronStyle = useAnimatedStyle(
@@ -101,7 +105,7 @@ function AccordionTrigger({
                 className={cn(
                   'text-muted-foreground shrink-0',
                   Platform.select({
-                    web: 'pointer-events-none translate-y-0.5 transition-transform duration-200',
+                    web: 'pointer-events-none translate-y-0.5 transition-transform duration-base',
                   })
                 )}
               />

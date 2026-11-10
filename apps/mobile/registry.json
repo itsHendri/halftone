@@ -617,6 +617,7 @@
         "@halftone-native/kit-setup",
         "@halftone-native/lib-haptics",
         "@halftone-native/lib-reduced-motion",
+        "@halftone-native/lib-theme",
         "@halftone-native/lib-utils",
         "@halftone-native/text"
       ],
@@ -2132,6 +2133,7 @@
       ],
       "registryDependencies": [
         "@halftone-native/kit-setup",
+        "@halftone-native/lib-theme",
         "@halftone-native/lib-utils"
       ],
       "files": [
@@ -2353,6 +2355,7 @@
       "registryDependencies": [
         "@halftone-native/icon",
         "@halftone-native/kit-setup",
+        "@halftone-native/lib-theme",
         "@halftone-native/lib-utils",
         "@halftone-native/text"
       ],
@@ -3165,6 +3168,7 @@
       "registryDependencies": [
         "@halftone-native/kit-setup",
         "@halftone-native/lib-reduced-motion",
+        "@halftone-native/lib-theme",
         "@halftone-native/lib-utils",
         "@halftone-native/text"
       ],
@@ -3442,6 +3446,7 @@
         "@halftone-native/lib-haptics",
         "@halftone-native/lib-native-context",
         "@halftone-native/lib-reduced-motion",
+        "@halftone-native/lib-theme",
         "@halftone-native/lib-utils",
         "@halftone-native/text",
         "@halftone-native/toast"
