@@ -45,7 +45,7 @@ export function ControlSection({
           aria-controls={bodyId}
           onClick={toggle}
           className="text-foreground hover:bg-accent focus-visible:ring-ring/50 -mx-1 flex min-w-0 flex-1 items-center gap-1.5 rounded-md px-1 py-1 text-left text-xs font-semibold outline-none focus-visible:ring-[3px]">
-          <ChevronRightIcon aria-hidden className={cn('text-muted-foreground size-3.5 shrink-0 motion-safe:transition-transform motion-safe:duration-150', open && 'rotate-90')} />
+          <ChevronRightIcon aria-hidden className={cn('text-muted-foreground size-3.5 shrink-0 motion-safe:transition-transform motion-safe:duration-fast', open && 'rotate-90')} />
           <span className="truncate">{title}</span>
           {edited ? (
             <span className="text-muted-foreground ml-auto flex shrink-0 items-center gap-1.5 font-medium">

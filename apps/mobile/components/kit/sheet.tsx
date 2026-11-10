@@ -1,7 +1,7 @@
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { haptic } from '@/lib/haptics';
-import { TOKENS } from '@/lib/theme';
+import { MOTION } from '@/lib/theme';
 import { cn } from '@/lib/utils';
 import { useMotion } from '@/lib/reduced-motion';
 import { CheckIcon, type LucideIcon } from 'lucide-react-native';
@@ -33,8 +33,8 @@ export function Sheet({ open, onClose, title, description, children, className }
     translateY.setValue(400);
     Animated.timing(translateY, {
       toValue: 0,
-      duration: motion(TOKENS.duration.slow),
-      easing: Easing.out(Easing.cubic),
+      duration: motion(MOTION.duration.slow),
+      easing: Easing.bezier(...MOTION.easing.emphasized),
       useNativeDriver: true,
     }).start();
   }, [open, translateY, motion]);

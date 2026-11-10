@@ -77,7 +77,7 @@ function DialogContent({
           className={cn(
             'bg-background border-border z-50 flex flex-col gap-4 rounded-xl border p-6 shadow-lg',
             Platform.select({
-              web: 'animate-in fade-in-0 zoom-in-95 duration-200',
+              web: 'animate-in fade-in-0 zoom-in-95 duration-base',
             }),
             className
           )}

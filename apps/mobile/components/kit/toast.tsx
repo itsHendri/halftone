@@ -1,7 +1,7 @@
 import { Icon } from '@/components/ui/icon';
 import { Text } from '@/components/ui/text';
 import { haptic } from '@/lib/haptics';
-import { TOKENS } from '@/lib/theme';
+import { MOTION } from '@/lib/theme';
 import { cn } from '@/lib/utils';
 import { useMotion } from '@/lib/reduced-motion';
 import { CircleAlertIcon, CircleCheckIcon, InfoIcon, TriangleAlertIcon } from 'lucide-react-native';
@@ -102,7 +102,7 @@ function ToastItem({ toast, onDismiss }: { toast: ToastState; onDismiss: () => v
   const spec = TONE[toast.tone];
   const motion = useMotion();
   React.useEffect(() => {
-    Animated.timing(translateY, { toValue: 0, duration: motion(TOKENS.duration.base), easing: Easing.out(Easing.cubic), useNativeDriver: true }).start();
+    Animated.timing(translateY, { toValue: 0, duration: motion(MOTION.duration.base), easing: Easing.bezier(...MOTION.easing.emphasized), useNativeDriver: true }).start();
   }, [translateY, motion]);
   return (
     <Animated.View style={{ transform: [{ translateY }] }} className="max-w-[90%]">

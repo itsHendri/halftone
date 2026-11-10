@@ -535,6 +535,9 @@
   --ease-standard: var(--ease-standard);
   --ease-emphasized: var(--ease-emphasized);
   --ease-exit: var(--ease-exit);
+  /* A transition without a duration or easing class takes the theme's (Tailwind's default is 150ms, its own curve). */
+  --default-transition-duration: var(--duration-fast);
+  --default-transition-timing-function: var(--ease-standard);
   /* The theme's typeset scales every text size and its line height (text-sm, text-base…). */
   --text-xs: calc(0.75rem * var(--type-scale));
   --text-xs--line-height: calc(16 / 12 * var(--leading-factor));
@@ -757,22 +760,26 @@
   font-weight: var(--tw-font-weight, var(--type-blockquote-weight));
 }
 @utility duration-fast {
+  --tw-duration: var(--duration-fast);
   transition-duration: var(--duration-fast);
-  animation-duration: var(--duration-fast);
 }
 @utility duration-base {
+  --tw-duration: var(--duration-base);
   transition-duration: var(--duration-base);
-  animation-duration: var(--duration-base);
 }
 @utility duration-slow {
+  --tw-duration: var(--duration-slow);
   transition-duration: var(--duration-slow);
-  animation-duration: var(--duration-slow);
 }
 @utility spring-snappy {
+  --tw-ease: var(--spring-snappy);
+  --tw-duration: var(--spring-snappy-duration);
   transition-timing-function: var(--spring-snappy);
   transition-duration: var(--spring-snappy-duration);
 }
 @utility spring-gentle {
+  --tw-ease: var(--spring-gentle);
+  --tw-duration: var(--spring-gentle-duration);
   transition-timing-function: var(--spring-gentle);
   transition-duration: var(--spring-gentle-duration);
 }
@@ -809,6 +816,11 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
+  }
+  /* An enter or exit animation without a duration class (popovers, menus, tooltips) takes the theme's fast duration:
+     tw-animate-css reads --tw-duration, and its own fallback is a fixed 150ms. A duration-* class still wins. */
+  *, ::before, ::after {
+    --tw-duration: var(--duration-fast);
   }
   body {
     @apply bg-background text-foreground;

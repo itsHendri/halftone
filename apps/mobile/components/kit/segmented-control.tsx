@@ -1,6 +1,6 @@
 import { Text } from '@/components/ui/text';
 import { haptic } from '@/lib/haptics';
-import { TOKENS } from '@/lib/theme';
+import { MOTION } from '@/lib/theme';
 import { cn } from '@/lib/utils';
 import { useMotion } from '@/lib/reduced-motion';
 import * as React from 'react';
@@ -38,8 +38,8 @@ export function SegmentedControl<T extends string>({ segments, value, onChange, 
     // Width can't run on the native driver, so the thumb's slide and resize both run on the JS one.
     Animated.timing(anim, {
       toValue: activeIndex,
-      duration: motion(TOKENS.duration.base),
-      easing: Easing.out(Easing.cubic),
+      duration: motion(MOTION.duration.base),
+      easing: Easing.bezier(...MOTION.easing.standard),
       useNativeDriver: false,
     }).start();
   }, [activeIndex, anim, motion]);

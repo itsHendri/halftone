@@ -1035,7 +1035,7 @@
         "@halftone-web/button",
         "@halftone-web/kit-setup",
         "@halftone-web/lib-link",
-        "sheet"
+        "@halftone-web/sheet"
       ],
       "files": [
         {
@@ -2003,6 +2003,38 @@
       }
     },
     {
+      "name": "accordion",
+      "type": "registry:ui",
+      "title": "Accordion",
+      "description": "FAQs and long optional detail",
+      "dependencies": [
+        "cn@^0.5.2",
+        "lucide-react@^1.52.0",
+        "radix-ui@^1.7.0"
+      ],
+      "registryDependencies": [
+        "@halftone-web/kit-setup"
+      ],
+      "files": [
+        {
+          "path": "components/ui/accordion.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/accordion.tsx"
+        }
+      ],
+      "categories": [
+        "layout"
+      ],
+      "meta": {
+        "exports": [
+          "Accordion",
+          "AccordionItem",
+          "AccordionTrigger",
+          "AccordionContent"
+        ]
+      }
+    },
+    {
       "name": "sticky-bottom-bar",
       "type": "registry:component",
       "title": "Sticky bottom bar",
@@ -2094,7 +2126,7 @@
       "name": "dialog",
       "type": "registry:ui",
       "title": "Dialog",
-      "description": "a short task on top of the page (an edit form) (Unchanged from shadcn/ui; published by the kit so it uses the kit's versions of the files it imports.)",
+      "description": "a short task on top of the page (an edit form)",
       "dependencies": [
         "cn@^0.5.2",
         "lucide-react@^1.52.0",
@@ -2132,7 +2164,7 @@
       "name": "alert-dialog",
       "type": "registry:ui",
       "title": "Alert dialog",
-      "description": "confirm something destructive · name the action on the button (Unchanged from shadcn/ui; published by the kit so it uses the kit's versions of the files it imports.)",
+      "description": "confirm something destructive · name the action on the button",
       "dependencies": [
         "cn@^0.5.2",
         "radix-ui@^1.7.0"
@@ -2158,6 +2190,41 @@
           "AlertDialogContent",
           "AlertDialogAction",
           "AlertDialogCancel"
+        ]
+      }
+    },
+    {
+      "name": "sheet",
+      "type": "registry:ui",
+      "title": "Sheet",
+      "description": "a side panel: filters, a record’s details, mobile navigation · `side`",
+      "dependencies": [
+        "cn@^0.5.2",
+        "lucide-react@^1.52.0",
+        "radix-ui@^1.7.0"
+      ],
+      "registryDependencies": [
+        "@halftone-web/kit-setup"
+      ],
+      "files": [
+        {
+          "path": "components/ui/sheet.tsx",
+          "type": "registry:ui",
+          "target": "components/ui/sheet.tsx"
+        }
+      ],
+      "categories": [
+        "overlays"
+      ],
+      "meta": {
+        "exports": [
+          "Sheet",
+          "SheetTrigger",
+          "SheetContent",
+          "SheetHeader",
+          "SheetTitle",
+          "SheetDescription",
+          "SheetFooter"
         ]
       }
     },

@@ -5,6 +5,7 @@ import { haptic } from '@/lib/haptics';
 import { useCapability } from '@/lib/native-context';
 import { cn } from '@/lib/utils';
 import { useMotion } from '@/lib/reduced-motion';
+import { MOTION } from '@/lib/theme';
 import { BellIcon, type LucideIcon } from 'lucide-react-native';
 import * as React from 'react';
 import { Animated, Easing, Pressable, View } from 'react-native';
@@ -142,9 +143,9 @@ function NotificationBanner({ banner, onDismiss }: { banner: BannerState | null;
 
   React.useEffect(() => {
     if (!banner) return;
-    Animated.timing(slide, { toValue: 1, duration: motion(260), easing: Easing.out(Easing.cubic), useNativeDriver: true }).start();
+    Animated.timing(slide, { toValue: 1, duration: motion(MOTION.duration.slow), easing: Easing.bezier(...MOTION.easing.emphasized), useNativeDriver: true }).start();
     const timer = setTimeout(() => {
-      Animated.timing(slide, { toValue: 0, duration: motion(200), easing: Easing.in(Easing.cubic), useNativeDriver: true }).start(
+      Animated.timing(slide, { toValue: 0, duration: motion(MOTION.duration.base), easing: Easing.bezier(...MOTION.easing.exit), useNativeDriver: true }).start(
         ({ finished }) => {
           if (finished) onDismiss();
         }

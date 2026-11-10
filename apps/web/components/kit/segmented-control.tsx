@@ -63,7 +63,7 @@ export function SegmentedControl<T extends string>({ segments, value, onChange, 
         className={cn(
           'bg-card absolute inset-y-[3px] left-0 rounded-md shadow-sm',
           // Slide between segments, not on the first measure.
-          thumb && !reduced && 'transition-[transform,width] duration-200 ease-out'
+          thumb && !reduced && 'transition-[transform,width] duration-base ease-standard'
         )}
         style={
           thumb

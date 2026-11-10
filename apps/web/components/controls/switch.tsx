@@ -19,7 +19,7 @@ export function ControlSwitch({ label, checked, onChange, id, className }: { lab
         checked ? 'bg-primary' : 'bg-input',
         className
       )}>
-      <span aria-hidden className={cn('bg-card block size-4 rounded-full shadow-sm motion-safe:transition-transform motion-safe:duration-150', checked && 'translate-x-4')} />
+      <span aria-hidden className={cn('bg-card block size-4 rounded-full shadow-sm motion-safe:transition-transform motion-safe:spring-snappy', checked && 'translate-x-4')} />
     </button>
   );
 }
