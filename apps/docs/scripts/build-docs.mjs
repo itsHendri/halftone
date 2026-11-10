@@ -35,17 +35,24 @@ step(`mobile kit web export → public${KIT_PATH}`);
 rmSync(join(pub, KIT_PATH.slice(1)), { recursive: true, force: true });
 // Metro reads thousands of files at once (lucide-react-native is one file per icon), and Cloudflare's build machine
 // starts with a low open-file limit: the export failed there with EMFILE now and then. Raise the soft limit to the
-// hard one first, and try once more if it still runs out.
-const exportKit = () =>
-  run('sh', ['-c', 'ulimit -n "$(ulimit -Hn)" 2>/dev/null || true; exec npx expo export --platform web --output-dir "$0"', join(pub, KIT_PATH.slice(1))], mobile, {
-    KIT_WEB_BASE_URL: KIT_PATH,
-  });
-try {
-  exportKit();
-} catch {
-  console.log('\n  the export failed (EMFILE on a busy machine?): trying once more');
-  rmSync(join(pub, KIT_PATH.slice(1)), { recursive: true, force: true });
-  exportKit();
+// hard one first. If it still runs out, try again with fewer Metro workers (each opens files of its own), then with
+// one: slower, but it gets through on a machine whose limit can't be raised.
+const exportKit = (workers) =>
+  run(
+    'sh',
+    ['-c', 'ulimit -n "$(ulimit -Hn)" 2>/dev/null || true; exec npx expo export --platform web --output-dir "$0" "$@"', join(pub, KIT_PATH.slice(1)), ...(workers ? ['--max-workers', String(workers)] : [])],
+    mobile,
+    { KIT_WEB_BASE_URL: KIT_PATH }
+  );
+for (const workers of [undefined, 2, 1]) {
+  try {
+    exportKit(workers);
+    break;
+  } catch (error) {
+    if (workers === 1) throw error;
+    console.log(`\n  the export failed (EMFILE on a busy machine?): trying again with ${workers === 2 ? 'one Metro worker' : 'two Metro workers'}`);
+    rmSync(join(pub, KIT_PATH.slice(1)), { recursive: true, force: true });
+  }
 }
 
 step('shadcn registry → public/r/native');
