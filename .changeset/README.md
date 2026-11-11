@@ -7,6 +7,31 @@ When a change to a package should ship, run `npx changeset` at the repo root, pi
 writes with your change. On `main`, the release workflow opens a "Version Packages" PR; merging it publishes
 to npm through trusted publishing.
 
+## Releasing
+
+The Version Packages PR needs two nudges, every time:
+
+1. **CI never starts on it.** The workflow pushes it with `GITHUB_TOKEN`, and GitHub runs no workflows for
+   those pushes, so the required checks wait forever. Push one commit of your own to `changeset-release/main`:
+   the lockfile sync it needs anyway (the PR bumps the apps' `@halftone-ds/tokens` ranges but not
+   `package-lock.json`).
+
+   ```sh
+   git fetch origin changeset-release/main
+   git switch -c release-sync origin/changeset-release/main
+   npm install --package-lock-only --ignore-scripts
+   git commit -am "chore: sync package-lock.json with the <version> ranges"
+   git push origin release-sync:changeset-release/main
+   git switch main && git branch -D release-sync
+   ```
+
+   CI then runs, and the PR merges (or auto-merges) once the required checks pass.
+
+2. **The "published tokens" checks fail once.** They install the tokens from npm, and the new version isn't
+   there until the release workflow publishes it. They aren't required, so they don't block the PR, but they
+   fail again on `main` for the merge commit, which runs CI while the publish is still going. Once npm shows the
+   new version (`npm view @halftone-ds/tokens version`), re-run the failed jobs of that `main` run.
+
 ## First publish (once, by hand) — done 2026-10-14, 1.0.0
 
 Kept for the record, and for a second package if one is ever added.
