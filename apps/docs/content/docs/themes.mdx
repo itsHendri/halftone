@@ -142,3 +142,29 @@ halftone-theme.json`. It sets the colours for light and dark, the radius, the sh
 theme: density, border, icon stroke and the typeset stay Halftone's, and phone apps take the theme code.
 
 `halftone-tokens theme resolve` prints the code for a kit's tokens as they are, for scripts.
+
+## Bring your own tokens
+
+A brand that already has a `tokens.json` (the W3C DTCG format, from a brand folder, Tokens Studio or another
+design-system tool) comes in as a system:
+
+```bash
+npx halftone-tokens import ./tokens.json --name "Acme"   # writes acme.halftone.json
+npx halftone-tokens theme apply ./acme.halftone.json      # from a kit, as for any system
+```
+
+The import reads the brand's own names, whatever they are, and says what it guessed, one line each:
+
+| The brand's file has | It becomes |
+|---|---|
+| Sets of role colours (`light`, `dark`, or named ones like `sand` and `char`) | The lightest page is light, the darkest dark. A third set becomes extra colours. No dark set: dark is generated |
+| `background`, `card`, `foreground`, `border` and their usual other names (`background-secondary`, `stroke`, `ink`) | The same roles, with the brand's colours exactly |
+| `primary`, else `brand` or `accent` | Primary, and the seed of the brand ramp |
+| A numbered family (`green.50` … `green.900`) holding a role's colour | That ramp, with the family's steps |
+| Colours no role takes | Extra colours, exported for your own use |
+| Fonts | Set when the family is on Google Fonts. A brand's own font file stays out until it can be uploaded |
+| Corners and shadows | Halftone's steps, by name or by size |
+| Everything else (spacing, a line weight, a grid) | Kept inside the system under `tokens`, not drawn by the kits |
+
+Contrast works differently from a theme: the brand chose its colours, so they're kept as they are, and any pairing
+below WCAG AA is listed instead of changed. Fix one in the Studio if you want AA there.

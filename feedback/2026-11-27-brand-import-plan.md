@@ -41,14 +41,14 @@ Steps in order. Each guess becomes a note.
 | Any other colour | An extra colour, named after its path | Always, so a person can promote it |
 | `font` families | `fonts.heading` / `body` / `mono` when on Google Fonts | Not on Google Fonts (kept as a name, for the upload step later) |
 | `radius` | `radius.sm` … `2xl`, nearest steps | Values were snapped |
-| `space`, `line-weight`, `tap-target`, `grid`, `motion` … | Extras, or the leftover file | Always |
+| `space`, `line-weight`, `tap-target`, `grid`, `motion` … | The system's `tokens` section | Always |
 
-Anything that is neither a colour, a font, a radius, a shadow nor a border goes into a **leftover `tokens.json`**
-beside the system, unchanged. The brand package (phase 1) keeps it; the kits never read it.
+Anything that is neither a colour, a font, a radius, a shadow nor a border goes into a new **`tokens` section of
+the system**, aliases resolved and otherwise unchanged, so one file carries the whole brand. The kits never draw it.
 
 ## Steps
 
-1. **`systemFromTokens(dtcg, { name }) → { system, leftover, notes }`** in `packages/tokens/lib/system/import.mjs`.
+1. **`systemFromTokens(dtcg, { name, google }) → { system, notes }`** in `packages/tokens/lib/system/import.mjs`.
    - Pure ESM with no Node APIs, the same rule as `lib/theme/shadcn.mjs`, so the Studio can run it in the browser
      later. Its shape copies `recipeFromShadcn(preset) → { recipe, notes }`.
    - Its own small alias resolver (`{palette.navy}`), since `lib/resolve.mjs` needs Style Dictionary and Node.
@@ -57,9 +57,10 @@ beside the system, unchanged. The brand package (phase 1) keeps it; the kits nev
    - It is exported from `@halftone-ds/tokens/system` next to `migrate`.
 2. **`halftone-tokens import <tokens.json> [--name <name>] [--out <file>.halftone.json] [--json]`** in
    `lib/theme-cli.mjs` and `cli.mjs`.
-   - It writes the system and `<name>.leftover.tokens.json` beside it, then prints the notes and the contrast
+   - It writes the system, then prints the notes and the contrast
      warnings from a dry `generateSystem()` run.
-   - `--json` prints `{ system, leftover, notes, warnings }` for an agent.
+   - `--json` prints `{ file, system, notes, warnings }` for an agent.
+   - It asks Google Fonts about each family the file names (`--offline` skips that; `--google "A,B"` vouches).
    - It never touches the app's own `tokens.json`. Applying stays a separate, deliberate `theme apply ./x.halftone.json`.
 3. **The `apply-theme` skill, in both kits:** a short "Import a brand" section. Run `import`, show the person the
    notes as questions ("navy → brand?", "limestone → background?"), adjust, then `theme apply`.
@@ -84,11 +85,10 @@ beside the system, unchanged. The brand package (phase 1) keeps it; the kits nev
 - Importing from a URL, Figma variables or Tokens Studio files. The same mapping can take them later; DTCG first.
 - Uploaded fonts (Phase 7 of the roadmap): a custom font is kept as a name and noted.
 
-## Open questions
+## Decided (2026-11-27)
 
-- When a brand gives both `brand` and `primary` and they differ, which wins: the one the brand's buttons use (if the
-  file says), or always `primary`?
-- A brand with no dark mode (Lisbon Tag's navy and granite could serve): generate dark from the ramps as Halftone
-  does today, or ask which named mode is dark?
-- Is a leftover file beside the system right, or should leftovers live inside the system document (a new
-  `tokens` section) so one file carries everything?
+- **Primary wins.** When a brand gives both `brand` and `primary`, `primary` is the role and seeds the brand ramp;
+  `brand` becomes an extra colour.
+- **No dark set: generate it.** Dark comes from the ramps, as it does for every recipe, and the import says so.
+- **Leftovers live inside the system** (`tokens`), so one `.halftone.json` carries the whole brand. A system with
+  them has no theme code.

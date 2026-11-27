@@ -8,6 +8,7 @@ and every build checks the palette against WCAG AA.
 npm install -D @halftone-ds/tokens
 npx halftone-tokens init       # set up an existing app, web or Expo (below)
 npx halftone-tokens doctor     # check the app's setup for kit components; says how to fix each problem
+npx halftone-tokens import ./brand/tokens.json   # a brand's own DTCG tokens into a system file (below)
 npx halftone-tokens build      # write every output in tokens/tokens.config.json
 npx halftone-tokens check      # write nothing; exit 1 if an output is stale (CI)
 npx halftone-tokens build --strict   # fail on contrast instead of warning (or HALFTONE_STRICT=1)
@@ -163,8 +164,32 @@ npx halftone-tokens theme encode ./acme.halftone.json  # its ht- code, when it h
 
 From code (`@halftone-ds/tokens/system`, also in `/theme`, browser-safe): `normalizeSystem` / `validateSystem`,
 `createSystem`, `migrate(recipe | code, brand)` and `systemToRecipe`, `generateSystem(system, tokens)` (the same
-shape as `generateTheme`, plus `warnings`), `systemRamps`, `textStyles`, `systemRadii`, `systemCode` and
-`applySystem`. The document's shape is described in `lib/system/schema.mjs`.
+shape as `generateTheme`, plus `warnings`), `systemRamps`, `textStyles`, `systemRadii`, `systemCode`,
+`applySystem`, and `systemFromTokens` / `fontFamiliesToCheck` (the import, below). The document's shape is
+described in `lib/system/schema.mjs`.
+
+### Importing a brand's own tokens
+
+```bash
+npx halftone-tokens import ./brand/tokens.json --name "Acme"   # writes acme.halftone.json
+npx halftone-tokens import ./tokens.json --google "Lato" --offline --json   # for an agent; no network
+```
+
+It reads any DTCG `tokens.json` (hex strings or 2025.10 colour objects, aliases, inherited `$type`) in the brand's own
+words, and writes a system:
+- **Colour sets:** the lightest page is light and the darkest is dark. A third set, or a colour no role takes, is an
+  extra colour. With no dark set, dark is generated.
+- **Roles by name** (`background-secondary` → muted, `stroke` → border, `brand` → primary when there's no `primary`),
+  as the brand's exact hex: the fixer never moves them, so a pairing below AA is a warning. A "muted" that reads as
+  text on the page becomes `muted-foreground`. A see-through colour is mixed onto its page.
+- **Ramps:** brand from primary, neutral and the statuses from a numbered family that holds their colour, its steps
+  kept.
+- **Fonts** when the family is on Google Fonts (the CLI asks; `--offline` skips, `--google` vouches); others stay out.
+  **Corners and shadows** by name or by size.
+- **Everything else** (spacing, a line weight, a grid) goes in the system's `tokens` section, whole: not drawn by the
+  kits, carried into `tokens.json`'s record. A system with it has no `ht-` code.
+
+It prints one line per guess. Check them before `theme apply`.
 
 ## Guarantees
 

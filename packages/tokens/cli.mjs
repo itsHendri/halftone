@@ -8,6 +8,7 @@
  *   halftone-tokens check    same, but write nothing; exit 1 if any generated file is stale (CI)
  *   halftone-tokens figma    mirror the tokens into Figma Variables (see push-figma.mjs)
  *   halftone-tokens theme    apply, show or list themes (see lib/theme-cli.mjs)
+ *   halftone-tokens import   a brand's own tokens.json into a system file (see lib/import-cli.mjs)
  *   halftone-tokens --version
  *   halftone-tokens --help   (USAGE below)
  *
@@ -45,7 +46,9 @@ Commands:
   build              resolve, check contrast, write every target in tokens.config.json (the default)
   check              the same, but write nothing; exit 1 if a generated file is stale (for CI)
   theme              apply, show or list themes: halftone-tokens theme apply <code|preset|file.halftone.json>
-  figma              mirror the tokens into Figma Variables
+  import             a brand's own tokens.json (DTCG) into a system file, and what it guessed:
+                     halftone-tokens import <tokens.json> [--name <name>] [--out <file>] [--google "A,B"] [--offline] [--force] [--json]
+  figma             mirror the tokens into Figma Variables
   --version          print the version
   --help             print this
 
@@ -58,7 +61,7 @@ tokens.config.json: { "source": "tokens/tokens.json", "targets": { "<target>": {
 Docs: https://halftonedesignsystem.com/install.md`;
 
 /** Flags that take a value; every other --flag is a boolean. */
-const VALUE_FLAGS = new Set(['root', 'config', 'out', 'fonts-url', 'theme', 'css', 'platform']);
+const VALUE_FLAGS = new Set(['root', 'config', 'out', 'fonts-url', 'theme', 'css', 'platform', 'name', 'google']);
 
 function parseArgs(argv) {
   const [command = 'build', ...rest] = argv;
@@ -97,8 +100,12 @@ export async function run(argv = process.argv.slice(2)) {
     const { initCommand } = await import('./lib/init.mjs');
     return initCommand({ root, flags, positional, run });
   }
+  if (command === 'import') {
+    const { importCommand } = await import('./lib/import-cli.mjs');
+    return importCommand({ root, flags, positional });
+  }
   if (command !== 'build' && command !== 'check' && command !== 'theme') {
-    console.error(`halftone-tokens: unknown command "${command}". Use init, doctor, build, check, theme or figma (halftone-tokens --help for more).`);
+    console.error(`halftone-tokens: unknown command "${command}". Use init, doctor, build, check, theme, import or figma (halftone-tokens --help for more).`);
     process.exit(2);
   }
 

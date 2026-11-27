@@ -77,6 +77,11 @@ export type HalftoneSystem = {
   components: SystemComponents;
   /** Set durations, easings and springs over the recipe's speed, overrides only (empty: as the speed draws them). */
   motion: MotionEdits;
+  /**
+   * A brand's own DTCG tokens that no slot above holds (spacing, a line weight, a third set of colours), kept whole
+   * and never drawn by the kits: what `halftone-tokens import` couldn't map. Present only when there are some.
+   */
+  tokens?: Record<string, unknown>;
 };
 
 /** A component colour: a role (any semantic colour), or 'none' for a fill or border. */
@@ -179,5 +184,16 @@ export function systemRadii(system: HalftoneSystemInput | HalftoneSystem, base: 
 export function migrate(input: RecipeInput | string | HalftoneSystemInput, brand?: Partial<SystemBrand>, options?: { id?: string; name?: string; updatedAt?: string }): HalftoneSystem;
 /** The recipe under a system, its code (null with overrides) and the overrides a recipe loses. */
 export function systemToRecipe(system: HalftoneSystemInput | HalftoneSystem): { recipe: Recipe; code: string | null; lost: string[] };
+/**
+ * A system from a brand's own tokens.json (DTCG): role colours kept exactly, ramps seeded from them, other colours
+ * as extras, fonts, corners and shadows by name, everything else under `tokens`. `notes` says each guess and loss.
+ * `google`: families known to be on Google Fonts beyond the curated list; others stay under `tokens`.
+ */
+export function systemFromTokens(
+  dtcg: Record<string, unknown>,
+  options?: { name?: string; google?: Iterable<string> | ((family: string) => boolean) }
+): { system: HalftoneSystem; notes: string[] };
+/** The font families a tokens file names that may or may not be on Google Fonts (not the platform's, not curated). */
+export function fontFamiliesToCheck(dtcg: Record<string, unknown>): string[];
 /** Commit a system into tokens.json; the record keeps the document without brand images. */
 export function applySystem(tokens: TokensJson, system: HalftoneSystemInput | HalftoneSystem): { tokens: TokensJson; theme: Theme; system: HalftoneSystem };

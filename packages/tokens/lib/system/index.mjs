@@ -31,4 +31,5 @@ export {
 } from './schema.mjs';
 export { generateSystem, systemCode, systemRadii, systemRamps, textStyles } from './generate.mjs';
 export { migrate, systemToRecipe } from './migrate.mjs';
+export { fontFamiliesToCheck, systemFromTokens } from './import.mjs';
 export { applySystem } from '../theme/apply.mjs';
