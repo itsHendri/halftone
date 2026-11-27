@@ -27,6 +27,9 @@
  *   extras               { color: [], text: [], radius: [], shadow: [], border: [] } named tokens of your own,
  *                        exported (tokens.json `extra.*`) and never drawn by the kits
  *   brand                { name, iconBackground, logo?, logoDark?, mark?, markDark? } (the Studio's BrandState)
+ *   tokens?              a brand's own DTCG tokens that no slot above holds (spacing, a line weight, a grid, a third
+ *                        set of colours), kept whole and never drawn by the kits: what `halftone-tokens import` couldn't
+ *                        map. Present only when there are some; at most 256 KB as JSON.
  *   motion               { durations?, easings?, springs? } set values on top of the recipe's speed (lib/theme/motion.mjs),
  *                        overrides only; a document without it moves as its speed says, as every system before motion did:
  *                          durations  { fast|base|slow: ms }
@@ -446,6 +449,23 @@ function motion(r, input) {
   return out;
 }
 
+const TOKENS_LIMIT = 256 * 1024;
+
+/** tokens: a plain DTCG object, copied as JSON. Undefined when there's nothing in it. */
+function tokens(r, input) {
+  if (input === undefined) return undefined;
+  if (!isObject(input)) return r.fail('tokens', 'must be an object of DTCG tokens');
+  let text;
+  try {
+    text = JSON.stringify(input);
+  } catch {
+    return r.fail('tokens', 'must be plain JSON');
+  }
+  if (text.length > TOKENS_LIMIT) return r.fail('tokens', `is ${Math.round(text.length / 1024)} KB; the most a system keeps is 256 KB`);
+  const copy = JSON.parse(text);
+  return Object.keys(copy).length ? copy : undefined;
+}
+
 /** Is this a system document (rather than a bare recipe)? */
 export const isSystem = (value) => isObject(value) && (value.kind === SYSTEM_KIND || isObject(value.recipe));
 
@@ -455,7 +475,7 @@ function read(input) {
   if (input.kind !== undefined && input.kind !== SYSTEM_KIND) r.fail('kind', `must be "${SYSTEM_KIND}"`);
   if (input.v !== undefined && !(Number.isInteger(input.v) && input.v >= 1)) r.fail('v', 'must be a version number');
   if (input.v > SYSTEM_VERSION) throw new SystemError([`v: this system is version ${input.v}, from a newer @halftone-ds/tokens; update it to read the system`]);
-  r.keys('', input, ['$schema', 'kind', 'v', 'id', 'name', 'preset', 'updatedAt', 'recipe', 'colors', 'roles', 'type', 'fonts', 'radius', 'shadow', 'border', 'extras', 'brand', 'components', 'motion']);
+  r.keys('', input, ['$schema', 'kind', 'v', 'id', 'name', 'preset', 'updatedAt', 'recipe', 'colors', 'roles', 'type', 'fonts', 'radius', 'shadow', 'border', 'extras', 'brand', 'components', 'motion', 'tokens']);
 
   let recipe;
   try {
@@ -520,6 +540,8 @@ function read(input) {
 
   doc.components = components(r, input.components, recipe);
   doc.motion = motion(r, input.motion);
+  const leftover = tokens(r, input.tokens);
+  if (leftover) doc.tokens = leftover;
   return { doc, errors: r.errors };
 }
 
@@ -570,6 +592,7 @@ export function systemOverrides(input) {
     for (const [variant, slots] of Object.entries(entry.variants ?? {})) for (const slot of Object.keys(slots)) paths.push(`components.${name}.variants.${variant}.${slot}`);
   }
   for (const [group, entries] of Object.entries(doc.motion)) for (const name of Object.keys(entries)) paths.push(`motion.${group}.${name}`);
+  for (const key of Object.keys(doc.tokens ?? {})) paths.push(`tokens.${key}`);
   return paths;
 }
 

@@ -45,6 +45,22 @@ list, other icon libraries, chart colours, shadcn's styles). Tell the user what 
 halftonedesignsystem.com/studio (the systems menu › **Import file or code…**), then apply the `ht` code **Use
 system** gives.
 
+**A brand's own `tokens.json`** (a DTCG file from a brand folder or another tool): import it into a system, then
+apply that system as above.
+
+```bash
+npx halftone-tokens import <path/to/tokens.json> --name "<Brand>"   # writes <brand>.halftone.json, lists its guesses
+```
+
+The import keeps the brand's colours exactly. It seeds the ramps from them and turns colours that no role takes
+into extras. Anything Halftone has no slot for (spacing, a line weight, a third set of colours) is kept inside the
+system under `tokens`. It prints one line per guess (`"limestone" is the light theme`, `"brand" → primary`): **ask
+the user about each one before applying**, and fix a wrong guess in the `.halftone.json` or in Studio. Font
+families are checked with Google Fonts (`--offline` skips that; `--google "Family"` vouches for one). A brand's own
+font file stays out until it can be uploaded, and headings use the body font meanwhile. After applying, tell the
+user the contrast warnings the import printed: those pairings use the brand's own colours, so they were kept as
+they are, not changed. Needs `@halftone-ds/tokens` 1.6 or later.
+
 **An `ht3-…` code** carries button and field styles (soft or raised buttons, filled or underline fields). It needs
 `@halftone-ds/tokens` 1.2 or later; an older one says it's a newer theme code: update it
 (`npm i -D @halftone-ds/tokens@^1.2.0`) and apply again. The styles show on every `Button`, `Input`, `Textarea`
