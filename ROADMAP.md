@@ -174,6 +174,11 @@ Plan first. Open UX questions:
 Proposed on 2026-11-03 after a look at Cofounder (cofounder.co; notes in `apps/docs/design/cofounder-research.md`),
 which runs a company through the person's own agent and has shipped a shallow "theme from a URL". None is agreed;
 each needs its plan first.
+- **Halftone as the home for brands** (proposed 2026-11-17; notes in `apps/docs/design/brand-home.md`): a brand
+  package (the system, plain DTCG tokens for what the kits don't read, voice, visual rules, assets) served to any agent
+  through an MCP to any agent, and on to slides, social and charts as well as apps. Identity only, agencies first. It
+  starts with an importer that maps a brand's tokens onto Halftone's roles, then the package and a local MCP, and it
+  gives the Studio MCP and Phase 7 below a sharper purpose.
 - **Component editing, round two.** Feedback from using the open-card editor, then more components as editable
   cards: Card, Tabs, Switch and Checkbox, Avatar, the Select menu (the recipe's reserved card and tab style bits).
 - **A theme from a URL, landing in the Studio** (moved up from "Later: agent reach"): a site becomes a full editable
